@@ -37,7 +37,9 @@ button{cursor:pointer}
 :focus{outline:none}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;
-  padding:max(14px, var(--sa-t)) max(16px, var(--sa-r)) max(14px, var(--sa-b)) max(16px, var(--sa-l))}
+  padding:max(14px, calc(var(--sa-t) + var(--blur-gap))) max(16px, var(--sa-r)) max(14px, var(--sa-b)) max(16px, var(--sa-l))}
+#app{--blur-gap:0px}
+@supports (padding-top:env(safe-area-inset-top)){#app:not(.rot){--blur-gap:22px}}
 .btn{border-radius:999px;padding:.8em 1.5em;font-weight:800;letter-spacing:.02em;background:var(--stage-3);border:1px solid var(--line);transition:transform .12s, background .2s}
 .btn:active{transform:scale(.96)}
 .btn.gold{background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#2a1700;border-color:transparent;box-shadow:0 6px 24px -8px rgba(255,201,74,.7)}
@@ -51,7 +53,7 @@ button{cursor:pointer}
 
 /* ---------- HUB ---------- */
 #hub{align-items:center;justify-content:center;gap:clamp(16px,3.5vh,36px);overflow:auto}
-.hubtop{position:absolute;top:max(12px, var(--sa-t));right:max(16px, var(--sa-r));display:flex;align-items:center;gap:10px}
+.hubtop{position:absolute;top:max(12px, calc(var(--sa-t) + var(--blur-gap)));right:max(16px, var(--sa-r));display:flex;align-items:center;gap:10px}
 .marquee{position:relative;text-align:center;padding:.3em .6em}
 .marquee h1{margin:0;font-family:var(--f-display);font-weight:900;font-size:clamp(3.2rem,12vmin,8.5rem);line-height:.85;letter-spacing:.01em;
   background:linear-gradient(180deg,#fff6d8 0%,var(--gold) 55%,var(--gold-deep) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
@@ -320,14 +322,14 @@ button{cursor:pointer}
 <!-- DUEL -->
 <section class="screen" id="duel" hidden>
   <div class="duelgrid">
-    <div class="side" id="sideA"><span class="role" id="roleA">Challenger</span><div class="who" id="nameA"></div><div class="clock" id="clockA"></div><div class="bar"><i id="barA"></i></div></div>
+    <div class="side" id="sideA"><span id="avA"></span><span class="role" id="roleA">Challenger</span><div class="who" id="nameA"></div><div class="clock" id="clockA"></div><div class="bar"><i id="barA"></i></div></div>
     <div class="center">
       <div class="cathead"><span class="eyebrow" id="catHint"></span><h3 id="catName"></h3></div>
       <div class="card" id="card"><div class="q" id="q"></div><div class="reveal" id="reveal"></div></div>
       <div class="mic" id="mic"></div>
       <div class="controls"><button class="btn passb" id="passBtn">Pass</button><button class="btn okb" id="okBtn">✓ Correct</button></div>
     </div>
-    <div class="side" id="sideB"><span class="role" id="roleB">Defender</span><div class="who" id="nameB"></div><div class="clock" id="clockB"></div><div class="bar"><i id="barB"></i></div></div>
+    <div class="side" id="sideB"><span id="avB"></span><span class="role" id="roleB">Defender</span><div class="who" id="nameB"></div><div class="clock" id="clockB"></div><div class="bar"><i id="barB"></i></div></div>
   </div>
 </section>
 
@@ -366,7 +368,7 @@ button{cursor:pointer}
     <button class="btn ghost" id="hlQuit">Quit</button>
   </div>
   <div class="hlgrid">
-    <div class="hlp" id="hlP0"><span class="role">Player 1</span><div class="who" id="hlN0"></div><div class="pts" id="hlS0">0</div><div class="delta" id="hlD0"></div></div>
+    <div class="hlp" id="hlP0"><span id="hlA0"></span><span class="role">Player 1</span><div class="who" id="hlN0"></div><div class="pts" id="hlS0">0</div><div class="delta" id="hlD0"></div></div>
     <div class="table">
       <div class="info"><span class="eyebrow" id="hlTurnLbl"></span><h3 id="hlPrompt"></h3></div>
       <div class="cards" id="hlCards"></div>
@@ -375,7 +377,7 @@ button{cursor:pointer}
       <div class="hlbtns"><button class="btn lo" id="hlLower">▼ Lower</button><button class="btn hi" id="hlHigher">▲ Higher</button></div>
       <div class="tracker" id="hlTrack"></div>
     </div>
-    <div class="hlp" id="hlP1"><span class="role">Player 2</span><div class="who" id="hlN1"></div><div class="pts" id="hlS1">0</div><div class="delta" id="hlD1"></div></div>
+    <div class="hlp" id="hlP1"><span id="hlA1"></span><span class="role">Player 2</span><div class="who" id="hlN1"></div><div class="pts" id="hlS1">0</div><div class="delta" id="hlD1"></div></div>
   </div>
 </section>
 
@@ -666,7 +668,7 @@ function renderSetup(){
   for(let i=0;i<S.count;i++){
     const row=document.createElement("div");row.className="prow";
     const opts=catOptions(S.cats[i]);
-    row.innerHTML=`<button class="swatchbtn" id="pk${i}" style="background:${S.colors[i]}" aria-label="Player ${i+1} colour"></button><input id="pn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name"><select id="pc${i}" aria-label="Player ${i+1} category">${opts}</select>`;
+    row.innerHTML=`<button class="swatchbtn" id="pk${i}" aria-label="Player ${i+1} look">${avatarHTML({name:S.names[i]||"P",color:S.colors[i],slot:i})}</button><input id="pn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name"><select id="pc${i}" aria-label="Player ${i+1} category">${opts}</select>`;
     row.querySelector("input").oninput=e=>{S.names[i]=e.target.value;save()};
     row.querySelector("select").onchange=e=>{const v=e.target.value,j=S.cats.slice(0,S.count).indexOf(v);if(j>=0&&j!==i)S.cats[j]=S.cats[i];S.cats[i]=v;save();renderSetup()};
     row.querySelector(".swatchbtn").onclick=()=>pickColour(i);
@@ -704,7 +706,7 @@ function startGame(){
   $("floorMode").textContent=S.mode==="tv"?"TAKEOVER · TV GAME":"TAKEOVER · CUSTOM";
   show("floor");renderFloor();
   S.players.forEach(p=>loadPhotos(p.cat));
-  if(S.count===2&&R().bo3)setTimeout(startFinal,400);
+  introContestants(S.players,"Takeover",()=>{renderFloor();if(S.count===2&&R().bo3)setTimeout(startFinal,300)});
 }
 const alive=()=>S.players.filter(p=>p.alive);
 function cellsOf(pid){const r=[];S.grid.owner.forEach((o,i)=>{if(o===pid)r.push(i)});return r}
@@ -725,7 +727,7 @@ function renderFloor(hlSet){
   const W=$("app").classList.contains("rot")?wrap.height:wrap.width,H=$("app").classList.contains("rot")?wrap.width:wrap.height;
   const size=Math.max(30,Math.floor(Math.min((W-12)/vc,(H-12)/vr)));
   b.style.gridTemplateColumns=`repeat(${vc},${size}px)`;b.style.gridAutoRows=size+"px";
-  b.style.setProperty("--fs",Math.max(10,Math.min(26,size*.15))+"px");
+  b.style.setProperty("--fs",Math.max(10,Math.min(26,size*.15))+"px");b.style.setProperty("--cs",Math.round(Math.min(110,size*.42))+"px");
   const anchors=new Set(alive().map(p=>anchorCell(p.id)));
   const nbrs=S.phase==="choose"?new Set(neighbours(S.challenger)):new Set();
   b.classList.toggle("dimmed",S.phase==="choose"||!!hlSet);
@@ -740,7 +742,7 @@ function renderFloor(hlSet){
     const sh=[];if(sides.t)sh.push("inset 0 2px 0 #06050f");if(sides.b)sh.push("inset 0 -2px 0 #06050f");if(sides.l)sh.push("inset 2px 0 0 #06050f");if(sides.r)sh.push("inset -2px 0 0 #06050f");
     el.style.setProperty("--edges",sh.join(",")||"none");
     const cat=CATS[p.cat];
-    el.innerHTML=anchors.has(i)?`${p.boost?'<span class="bst" title="Time Boost">⚡</span>':""}<span class="lbl"><span class="nm">${esc(p.name)}</span><span class="ct">${cat.icon} ${esc(cat.name)}</span></span>`:`<span class="lbl"><span class="ic">${cat.icon}</span></span>`;
+    el.innerHTML=anchors.has(i)?`${p.boost?'<span class="bst" title="Time Boost">⚡</span>':""}<span class="lbl">${size>=58?avatarHTML(p,"cell"):""}<span class="nm">${esc(p.name)}</span><span class="ct">${cat.icon} ${esc(cat.name)}</span></span>`:`<span class="lbl"><span class="ic">${cat.icon}</span></span>`;
     if(anchors.has(i)&&R().fair&&p.duels>0&&alive().some(x=>x.duels===0))el.classList.add("done");
     el.setAttribute("aria-label",`${p.name}, ${cat.name}`);
     if(hlSet&&hlSet.has(o))el.classList.add("hl");
@@ -800,7 +802,7 @@ async function openDuelIntro(){
   const use={a:false,b:false};
   const bb=(p,k)=>R().boost&&p.boost?`<button class="boostbtn" id="boost${k}" aria-pressed="false">⚡ Use Time Boost (+5s)</button>`:"";
   openOverlay(`<span class="eyebrow">Duel</span>
-    <div class="vs"><div class="p" style="--pc:${a.color}"><b>${esc(a.name)}</b><small>Challenger · goes first</small>${bb(a,"A")}</div><span class="x">VS</span><div class="p" style="--pc:${b.color}"><b>${esc(b.name)}</b><small>Defender</small>${bb(b,"B")}</div></div>
+    <div class="vs"><div class="p" style="--pc:${a.color}">${avatarHTML(a,"lg")}<b>${esc(a.name)}</b><small>Challenger · goes first</small>${bb(a,"A")}</div><span class="x">VS</span><div class="p" style="--pc:${b.color}">${avatarHTML(b,"lg")}<b>${esc(b.name)}</b><small>Defender</small>${bb(b,"B")}</div></div>
     <span class="eyebrow">Category</span><h2>${cat.icon} ${esc(cat.name)}</h2>
     ${swapNote}<p class="note">${R().time} seconds each. A correct answer stops your clock and starts theirs. Passing shows the answer and costs ${R().penalty} seconds.</p>
     <div class="row">${R().tapPick?'<button class="btn" id="duelBack">Back</button>':""}<button class="btn gold" id="duelGo">Start duel</button></div>`);
@@ -817,7 +819,7 @@ function startDuel(cfg){
   const T={a:base+(cfg.bonus?cfg.bonus.a:0),b:base+(cfg.bonus?cfg.bonus.b:0)};
   S.duel={a:a.id,b:b.id,cat:cfg.cat,t:{...T},T,active:"a",q:null,state:"count",last:0,lowTick:0,
     deck:shuffle(CATS[cfg.cat].items.map((_,i)=>i))};
-  $("nameA").textContent=a.name;$("nameB").textContent=b.name;$("roleA").textContent=cfg.roles[0];$("roleB").textContent=cfg.roles[1];
+  $("nameA").textContent=a.name;$("nameB").textContent=b.name;$("avA").innerHTML=avatarHTML(a);$("avB").innerHTML=avatarHTML(b);$("roleA").textContent=cfg.roles[0];$("roleB").textContent=cfg.roles[1];
   $("sideA").style.setProperty("--pc",a.color);$("sideB").style.setProperty("--pc",b.color);
   const cat=CATS[cfg.cat];$("catName").textContent=`${cat.icon} ${cat.name}`;$("catHint").textContent=cat.hint;
   $("q").className="q";$("q").innerHTML="";$("reveal").className="reveal";
@@ -909,12 +911,12 @@ function duelOver(wk,W,L,d){
   if(remaining===1)return champion(W);
   SFX.win();if(boosted)setTimeout(SFX.boost,500);
   if(remaining===2&&R().bo3){
-    openOverlay(`<span class="eyebrow">${esc(L.name)} is out</span><h2 style="color:${W.color}">${esc(W.name)} takes the floor</h2>
+    openOverlay(`${avatarHTML(W,"xl")}<span class="eyebrow">${esc(L.name)} is out</span><h2 style="color:${W.color}">${esc(W.name)} takes the floor</h2>
       <p class="note">Two players left. Time for the best-of-three final.</p><button class="btn gold" id="toFinal">Go to the final</button>`);
     $("toFinal").onclick=()=>{closeOverlay();show("floor");startFinal()};return;
   }
   const sq=cellsOf(W.id).length;
-  openOverlay(`<span class="eyebrow">${esc(L.name)} is out</span><h2 style="color:${W.color}">${esc(W.name)} takes the floor</h2>
+  openOverlay(`${avatarHTML(W,"xl")}<span class="eyebrow">${esc(L.name)} is out</span><h2 style="color:${W.color}">${esc(W.name)} takes the floor</h2>
     ${boosted?`<p class="note" style="color:var(--gold);font-weight:800">⚡ Three wins in a row. ${esc(W.name)} earns a 5-second Time Boost.</p>`:""}
     <p class="note">${esc(W.name)} now plays as <b>${CATS[W.cat].icon} ${esc(CATS[W.cat].name)}</b> and owns ${sq} square${sq>1?"s":""}. ${remaining} players left.${R().boost&&!boosted&&W.streak>0?` Win streak: ${W.streak}.`:""}</p>
     <div class="row"><button class="btn" id="toFloor">Back to the floor</button><button class="btn gold" id="again">${esc(W.name)} plays on</button></div>`);
@@ -930,7 +932,7 @@ function startFinal(){
   S.final={ids:[p.id,q.id],wins:{[p.id]:0,[q.id]:0},round:1,leader:leader.id,order:null};
   S.phase="final";renderFloor();
   openOverlay(`<span class="eyebrow">The final · best of three</span>
-    <div class="vs"><div class="p" style="--pc:${p.color}"><b>${esc(p.name)}</b><small>${CATS[p.cat].icon} ${esc(CATS[p.cat].name)}</small></div><span class="x">VS</span><div class="p" style="--pc:${q.color}"><b>${esc(q.name)}</b><small>${CATS[q.cat].icon} ${esc(CATS[q.cat].name)}</small></div></div>
+    <div class="vs"><div class="p" style="--pc:${p.color}">${avatarHTML(p,"lg")}<b>${esc(p.name)}</b><small>${CATS[p.cat].icon} ${esc(CATS[p.cat].name)}</small></div><span class="x">VS</span><div class="p" style="--pc:${q.color}">${avatarHTML(q,"lg")}<b>${esc(q.name)}</b><small>${CATS[q.cat].icon} ${esc(CATS[q.cat].name)}</small></div></div>
     <p class="note">Each category is played once. First to two round wins owns the floor.<br><b>${esc(leader.name)}</b> ${sp===sq?"won the coin toss":"has more territory"} and picks which category goes first.</p>
     <div class="catpick">${[p,q].map(x=>`<button data-c="${x.cat}">${CATS[x.cat].icon} ${esc(CATS[x.cat].name)} first</button>`).join("")}</div>`);
   $("sheet").querySelectorAll(".catpick button").forEach(b=>b.onclick=()=>{
@@ -966,7 +968,7 @@ async function roundIntro(cat,first,second){
   if(CATS[cat].kind==="photo"){openOverlay(`<h2>Loading pictures…</h2>`);const r=await ensureCat(cat,[first.cat,second.cat]);if(r.swapped){if(F.order)F.order=F.order.map(c=>c===cat?r.id:c);cat=r.id}}
   const c=CATS[cat];
   openOverlay(`<span class="eyebrow">Final · Round ${F.round}</span>
-    <div class="vs"><div class="p" style="--pc:${first.color}"><b>${esc(first.name)}</b><small>Goes first · ${F.wins[first.id]} won</small></div><span class="x">VS</span><div class="p" style="--pc:${second.color}"><b>${esc(second.name)}</b><small>${F.wins[second.id]} won</small></div></div>
+    <div class="vs"><div class="p" style="--pc:${first.color}">${avatarHTML(first,"lg")}<b>${esc(first.name)}</b><small>Goes first · ${F.wins[first.id]} won</small></div><span class="x">VS</span><div class="p" style="--pc:${second.color}">${avatarHTML(second,"lg")}<b>${esc(second.name)}</b><small>${F.wins[second.id]} won</small></div></div>
     <span class="eyebrow">Category</span><h2>${c.icon} ${esc(c.name)}</h2>
     <button class="btn gold" id="roundGo">Start round ${F.round}</button>`);
   $("roundGo").onclick=()=>{ac();startDuel({a:first.id,b:second.id,cat,roles:[`Round ${F.round} · first`,`Round ${F.round}`]})};
@@ -976,7 +978,7 @@ function finalRoundOver(W,L){
   if(F.wins[W.id]>=2){transfer(W,L);S.final=null;return champion(W)}
   SFX.win();
   const [p,q]=F.ids.map(id=>S.players[id]);
-  openOverlay(`<span class="eyebrow">Round ${F.round} to</span><h2 style="color:${W.color}">${esc(W.name)}</h2>
+  openOverlay(`${avatarHTML(W,"xl")}<span class="eyebrow">Round ${F.round} to</span><h2 style="color:${W.color}">${esc(W.name)}</h2>
     <div class="score">${esc(p.name)} ${F.wins[p.id]} – ${F.wins[q.id]} ${esc(q.name)}</div>
     <button class="btn gold" id="nextRound">Next round</button>`);
   $("nextRound").onclick=()=>{F.round++;show("floor");finalRound()};
@@ -984,7 +986,7 @@ function finalRoundOver(W,L){
 function champion(W){
   SFX.win();setTimeout(SFX.win,600);
   S.phase="over";show("floor");renderFloor();$("status").innerHTML="";
-  openOverlay(`<span class="eyebrow">Champion</span><h2 style="color:${W.color}">${esc(W.name)} owns the floor</h2>
+  openOverlay(`${avatarHTML(W,"xl")}<span class="eyebrow">Champion</span><h2 style="color:${W.color}">${esc(W.name)} owns the floor</h2>
     <p class="note">Every square on the board. Well played.</p>
     <div class="row"><button class="btn" id="champHub">Game Night menu</button><button class="btn gold" id="champAgain">Play again</button></div>`);
   $("champHub").onclick=()=>{closeOverlay();stopConfetti();show("hub")};
@@ -1008,7 +1010,7 @@ function renderHLSetup(){
   const w=$("hlPlayers");w.innerHTML="";
   for(let i=0;i<2;i++){
     const row=document.createElement("div");row.className="prow";
-    row.innerHTML=`<button class="swatchbtn" id="pk${i}" style="background:${S.colors[i]}" aria-label="Player ${i+1} colour"></button><input id="hn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name"><span class="note">${i===0?"Calls first":"Calls second"}</span>`;
+    row.innerHTML=`<button class="swatchbtn" id="pk${i}" aria-label="Player ${i+1} look">${avatarHTML({name:S.names[i]||"P",color:S.colors[i],slot:i})}</button><input id="hn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name"><span class="note">${i===0?"Calls first":"Calls second"}</span>`;
     row.querySelector("input").oninput=e=>{S.names[i]=e.target.value;save()};
     row.querySelector(".swatchbtn").onclick=()=>pickColour(i,renderHLSetup);
     w.appendChild(row);
@@ -1017,15 +1019,14 @@ function renderHLSetup(){
 $("hlStart").onclick=()=>{ac();startHL()};
 function startHL(){
   ensureSlots();save();
-  HL.players=[0,1].map(i=>({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],score:0}));
+  HL.players=[0,1].map(i=>({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],score:0,slot:i}));
   const d=[];for(let n=1;n<=10;n++)for(let k=0;k<5;k++)d.push(n);
   HL.deck=shuffle(d);HL.seen={};for(let n=1;n<=10;n++)HL.seen[n]=0;
   HL.cur=HL.deck.pop();HL.seen[HL.cur]++;HL.drawn=1;HL.turn=0;HL.busy=false;HL.over=false;
-  [0,1].forEach(i=>{$("hlN"+i).textContent=HL.players[i].name;$("hlP"+i).style.setProperty("--pc",HL.players[i].color);$("hlD"+i).textContent=""});
+  [0,1].forEach(i=>{$("hlN"+i).textContent=HL.players[i].name;$("hlA"+i).innerHTML=avatarHTML(HL.players[i]);$("hlP"+i).style.setProperty("--pc",HL.players[i].color);$("hlD"+i).textContent=""});
   $("hlRes").textContent="";$("hlRes").className="hlres";
-  show("hl");renderHL(true);SFX.go();
-  voiceStart(hlVoice,$("hlMic"));
-  setTimeout(()=>$("hlHigher").focus({preventScroll:true}),60);
+  show("hl");renderHL(true);
+  introContestants(HL.players,"Higher or Lower",()=>{SFX.go();voiceStart(hlVoice,$("hlMic"));setTimeout(()=>$("hlHigher").focus({preventScroll:true}),60)});
 }
 function cardHTML(n,cls){return `<div class="pcard face ${cls||""}"><span class="c tl">${n}</span><span class="n">${n}</span><span class="c br">${n}</span></div>`}
 function renderHL(dealt,drawn,result){
@@ -1079,7 +1080,7 @@ function hlEnd(){
   const [a,b]=HL.players;
   const draw=a.score===b.score,W=a.score>b.score?a:b;
   SFX.win();setTimeout(SFX.win,600);
-  openOverlay(`<span class="eyebrow">Deck finished</span>
+  openOverlay(`${draw?`<div class="row">${avatarHTML(a,"lg")}${avatarHTML(b,"lg")}</div>`:avatarHTML(W,"xl")}<span class="eyebrow">Deck finished</span>
     <h2 style="color:${draw?"var(--gold)":W.color}">${draw?"It's a draw":esc(W.name)+" wins"}</h2>
     <div class="score">${esc(a.name)} ${a.score} – ${b.score} ${esc(b.name)}</div>
     <div class="row"><button class="btn" id="hlMenu">Game Night menu</button><button class="btn gold" id="hlAgain">Play again</button></div>`);
@@ -1143,6 +1144,7 @@ function stopConfetti(){cancelAnimationFrame(confRaf);$("confetti").hidden=true}
 load();applyScreen();screenSeg($("segScreenHub"));show("hub");
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
+<script src="avatars.js"></script>
 <script src="prices.js"></script>
 <script src="comeondown.js"></script>
 </body>

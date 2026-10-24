@@ -8,7 +8,11 @@ const css=`
 #cd{gap:10px}
 .cdscore{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .cdchip{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 8px;border-radius:999px;background:var(--stage-2);border:2px solid var(--line);transition:border-color .2s,box-shadow .2s}
-.cdchip i{width:22px;height:22px;border-radius:50%;background:var(--pc)}
+.cdchip .av{--s:28px;padding:2px}
+.bid .av{--s:30px;padding:2px;margin-bottom:2px}
+.entry .who{text-align:center}
+.entry .who .av{vertical-align:middle;margin-right:6px}
+.cdhead .eyebrow .av{--s:22px;padding:1px;vertical-align:middle;margin-right:4px}
 .cdchip b{font-weight:800}
 .cdchip span{font-family:var(--f-clock);color:var(--gold);font-variant-numeric:tabular-nums}
 .cdchip.on{border-color:var(--pc);box-shadow:0 0 30px -6px var(--pc)}
@@ -85,7 +89,10 @@ button.prize{cursor:pointer}
 .portrait #cd .floorbar .btn{padding:.45em 1em;font-size:.85rem}
 .portrait .cdscore{gap:5px;flex-wrap:nowrap;overflow:hidden}
 .portrait .cdchip{padding:3px 9px 3px 4px;gap:5px;font-size:.78rem;min-width:0;flex:1 1 0;justify-content:center}
-.portrait .cdchip i{width:14px;height:14px;flex:none}
+.portrait .cdchip .av{--s:20px;padding:1px}
+.portrait .bid .av{--s:22px}
+.portrait .entry .who .av{--s:34px;padding:2px}
+.portrait .cdhead .av.lg{--s:56px}
 .portrait .cdchip b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .portrait .cdstage{gap:7px;padding:0}
 .portrait .cdhead .eyebrow{font-size:.62rem}
@@ -226,7 +233,7 @@ function renderPlayers(){
   const w=$("cdPlayers");w.innerHTML="";
   for(let i=0;i<CD.count;i++){
     const row=document.createElement("div");row.className="prow";
-    row.innerHTML=`<button class="swatchbtn" id="pk${i}" style="background:${S.colors[i]}" aria-label="Contestant ${i+1} colour"></button><input id="cdn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Contestant ${i+1} name"><span class="note">Contestant ${i+1}</span>`;
+    row.innerHTML=`<button class="swatchbtn" id="pk${i}" aria-label="Contestant ${i+1} look">${avatarHTML({name:S.names[i]||"P",color:S.colors[i],slot:i})}</button><input id="cdn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Contestant ${i+1} name"><span class="note">Contestant ${i+1}</span>`;
     row.querySelector("input").oninput=e=>{S.names[i]=e.target.value;save()};
     row.querySelector(".swatchbtn").onclick=()=>{S.count=CD.count;pickColour(i,renderPlayers)};
     w.appendChild(row);
@@ -239,15 +246,15 @@ const GAME_NAMES={double:"Double Prices",most:"Most Expensive",hilo:"Hi-Lo",cloc
 async function startGame(){
   await loadCatalogue();
   S.count=CD.count;ensureSlots();save();
-  CD.players=[];for(let i=0;i<CD.count;i++)CD.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],win:0,prizes:[]});
+  CD.players=[];for(let i=0;i<CD.count;i++)CD.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],win:0,prizes:[],slot:i});
   CD.round=0;CD.used=new Set();CD.games=shuffle(GAMES).slice(0,3);
   if(!CD.games.includes("lucky")&&Math.random()<.5)CD.games[2]="lucky";
-  show("cd");voiceStart(onVoice,$("cdMic"));if(!S.prefs.voice)$("cdMic").innerHTML="";
-  nextRound();
+  show("cd");score();$("cdStage").innerHTML="";
+  introContestants(CD.players,"Come On Down",()=>{voiceStart(onVoice,$("cdMic"));if(!S.prefs.voice)$("cdMic").innerHTML="";nextRound()});
 }
 function endGame(){clearInterval(CD.timer);CD.input=null;voiceStop();stopConfetti()}
 function score(active){
-  $("cdScore").innerHTML=CD.players.map((p,i)=>`<div class="cdchip${active===i?" on":""}" style="--pc:${p.color}"><i></i><b>${esc(p.name)}</b><span>${fmt(Math.round(p.win*100)/100)}</span></div>`).join("");
+  $("cdScore").innerHTML=CD.players.map((p,i)=>`<div class="cdchip${active===i?" on":""}" style="--pc:${p.color}">${avatarHTML(p,"sm")}<b>${esc(p.name)}</b><span>${fmt(Math.round(p.win*100)/100)}</span></div>`).join("");
 }
 function stage(html){$("cdStage").innerHTML=html;$("cdStage").scrollTop=0;
   setTimeout(()=>{const f=$("cdStage").querySelector("[data-focus]")||$("cdStage").querySelector(".keypad .go,.btn.gold,button:not([disabled])");f&&f.focus({preventScroll:true})},40)}
@@ -315,8 +322,8 @@ function bidRound(p,rebidUnder){
     score(order[idx]);
     const pl=CD.players[order[idx]];
     stage(`<div class="cdhead"><span class="eyebrow">Round ${CD.round} · Up for bids</span><h2>Come on down!</h2><p>${rebidUnder?`Everyone went over. Bid again, under ${fmt(rebidUnder)}.`:"Closest to the price without going over wins it."}</p></div>
-      <div class="cdsplit"><div>${prizeCard(p,{cls:"big"})}<div class="bids">${order.filter(i=>bids[i]!=null).map(i=>`<div class="bid" style="--pc:${CD.players[i].color}"><small>${esc(CD.players[i].name)}</small><b>${fmt(bids[i])}</b></div>`).join("")}</div><div class="cdmsg ${cls||""}">${msg||""}</div></div>
-      ${entryHTML(`<span style="color:${pl.color}">${esc(pl.name)}</span>, what's your bid?`)}</div>`);
+      <div class="cdsplit"><div>${prizeCard(p,{cls:"big"})}<div class="bids">${order.filter(i=>bids[i]!=null).map(i=>`<div class="bid" style="--pc:${CD.players[i].color}">${avatarHTML(CD.players[i],"sm")}<small>${esc(CD.players[i].name)}</small><b>${fmt(bids[i])}</b></div>`).join("")}</div><div class="cdmsg ${cls||""}">${msg||""}</div></div>
+      ${entryHTML(`${avatarHTML(pl,"md")} <span style="color:${pl.color}">${esc(pl.name)}</span>, what's your bid?`)}</div>`);
     bindEntry(v=>{
       if(v<=0)return draw("Bids must be more than $0.","down");
       if(Object.values(bids).includes(v))return draw(`Someone already bid ${fmt(v)}. Pick a different amount.`,"down");
@@ -336,9 +343,9 @@ function bidRound(p,rebidUnder){
     const exact=bids[w]===p.p;
     award(w,p);if(exact)CD.players[w].win+=100;
     SFX.win();score(w);
-    stage(`<div class="cdhead"><span class="eyebrow">Actual retail price</span><h2>${fmt(p.p)}</h2><p>${esc(CD.players[w].name)} wins the ${esc(p.n)}!${exact?" Bang on the price: <b style=\"color:var(--gold)\">$100 bonus</b>.":""}</p></div>
+    stage(`<div class="cdhead"><span class="eyebrow">Actual retail price</span><h2>${fmt(p.p)}</h2><p>${avatarHTML(CD.players[w],"md")}<br>${esc(CD.players[w].name)} wins the ${esc(p.n)}!${exact?" Bang on the price: <b style=\"color:var(--gold)\">$100 bonus</b>.":""}</p></div>
       ${prizeCard(p,{cls:"big good",show:true})}
-      <div class="bids">${order.map(i=>`<div class="bid${i===w?" win":""}${bids[i]>p.p?" over":""}" style="--pc:${CD.players[i].color}"><small>${esc(CD.players[i].name)}</small><b>${fmt(bids[i])}</b></div>`).join("")}</div>
+      <div class="bids">${order.map(i=>`<div class="bid${i===w?" win":""}${bids[i]>p.p?" over":""}" style="--pc:${CD.players[i].color}">${avatarHTML(CD.players[i],"sm")}<small>${esc(CD.players[i].name)}</small><b>${fmt(bids[i])}</b></div>`).join("")}</div>
       <button class="btn gold" id="cdPlay">Play ${GAME_NAMES[CD.games[CD.round-1]]}</button>`);
     $("cdPlay").onclick=()=>playGame(CD.games[CD.round-1],w);
   };
@@ -355,7 +362,7 @@ function gameDone(i,won,prizes,msg){
   if(box)box.innerHTML=html;else $("cdStage").insertAdjacentHTML("beforeend",html);
   $("cdNext").onclick=nextRound;setTimeout(()=>{const n=$("cdNext");n&&n.focus({preventScroll:true})},40);
 }
-function gameHead(g,i,sub){return `<div class="cdhead"><span class="eyebrow">${esc(CD.players[i].name)} plays</span><h2>${GAME_NAMES[g]}</h2><p>${sub}</p></div>`}
+function gameHead(g,i,sub){return `<div class="cdhead"><span class="eyebrow">${avatarHTML(CD.players[i],"sm")} ${esc(CD.players[i].name)} plays</span><h2>${GAME_NAMES[g]}</h2><p>${sub}</p></div>`}
 function fakePrice(p){
   for(let k=0;k<20;k++){const r=Math.random()<.5?.55+Math.random()*.25:1.25+Math.random()*.45;let v=p*r;
     v=p<100?Math.round(v)-0.01:(Number.isInteger(p)?Math.round(v/10)*10-1:Math.round(v)-0.01);
@@ -485,7 +492,7 @@ function tiebreak(ids,need,done){
   const p=pick(mid);const bids={};let idx=0;
   const draw=(msg)=>{score(ids[idx]);const pl=CD.players[ids[idx]];
     stage(`<div class="cdhead"><span class="eyebrow">Tiebreak · one bid</span><h2>Who goes through?</h2><p>${ids.map(i=>esc(CD.players[i].name)).join(", ")} are tied. Closest without going over goes through.</p></div>
-    <div class="cdsplit"><div>${prizeCard(p,{cls:"big"})}<div class="cdmsg down">${msg||""}</div></div>${entryHTML(`<span style="color:${pl.color}">${esc(pl.name)}</span>, your bid`)}</div>`);
+    <div class="cdsplit"><div>${prizeCard(p,{cls:"big"})}<div class="cdmsg down">${msg||""}</div></div>${entryHTML(`${avatarHTML(pl,"md")} <span style="color:${pl.color}">${esc(pl.name)}</span>, your bid`)}</div>`);
     bindEntry(v=>{if(Object.values(bids).includes(v))return draw("That bid's taken.");bids[ids[idx]]=v;idx++;if(idx<ids.length)draw();else finish()});
   };
   const finish=()=>{CD.input=null;
@@ -501,11 +508,11 @@ function showdown(two){
   const p=pick(x=>!x.car&&x.p>=300);let turn=0;const hist=[];
   const draw=(msg,cls)=>{const i=two[turn];score(i);const pl=CD.players[i];
     stage(`<div class="cdhead"><span class="eyebrow">Showcase Showdown</span><h2>${esc(CD.players[two[0]].name)} vs ${esc(CD.players[two[1]].name)}</h2><p>Take turns bidding. First bid within $100 of the price goes to the Showcase.</p></div>
-    <div class="cdsplit"><div>${prizeCard(p,{cls:"big"})}<div class="bids">${hist.slice(-6).map(h=>`<div class="bid" style="--pc:${CD.players[h.i].color}"><small>${esc(CD.players[h.i].name)} · ${h.hint}</small><b>${fmt(h.v)}</b></div>`).join("")}</div><div class="cdmsg ${cls||""}">${msg||""}</div></div>
-    ${entryHTML(`<span style="color:${pl.color}">${esc(pl.name)}</span>, your bid`)}</div>`);
+    <div class="cdsplit"><div>${prizeCard(p,{cls:"big"})}<div class="bids">${hist.slice(-6).map(h=>`<div class="bid" style="--pc:${CD.players[h.i].color}">${avatarHTML(CD.players[h.i],"sm")}<small>${esc(CD.players[h.i].name)} · ${h.hint}</small><b>${fmt(h.v)}</b></div>`).join("")}</div><div class="cdmsg ${cls||""}">${msg||""}</div></div>
+    ${entryHTML(`${avatarHTML(pl,"md")} <span style="color:${pl.color}">${esc(pl.name)}</span>, your bid`)}</div>`);
     bindEntry(v=>{
       if(Math.abs(v-p.p)<=100){CD.input=null;SFX.win();
-        stage(`<div class="cdhead"><span class="eyebrow">Actual retail price ${fmt(p.p)}</span><h2 style="color:${pl.color}">${esc(pl.name)} is going to the Showcase!</h2><p>${fmt(v)} is within $100.</p></div>${prizeCard(p,{cls:"big good",show:true})}<button class="btn gold" id="scGo">Play the Showcase</button>`);
+        stage(`<div class="cdhead">${avatarHTML(pl,"lg")}<br><span class="eyebrow">Actual retail price ${fmt(p.p)}</span><h2 style="color:${pl.color}">${esc(pl.name)} is going to the Showcase!</h2><p>${fmt(v)} is within $100.</p></div>${prizeCard(p,{cls:"big good",show:true})}<button class="btn gold" id="scGo">Play the Showcase</button>`);
         $("scGo").onclick=()=>showcase(i);return}
       const hint=v<p.p?"Higher":"Lower";hist.push({i,v,hint});SFX.tick();turn=1-turn;
       draw(`${fmt(v)}? ${hint}!`,v<p.p?"up":"down");
@@ -520,7 +527,7 @@ function showcase(i){
   const car=pick(x=>x.car);const items=pick(x=>!x.car&&x.p>=100&&x.p<car.p,5,.1);
   const slots=[null,null,null,null,null];let left=40,done=false;
   const draw=()=>{
-    stage(`<div class="cdhead"><span class="eyebrow">${esc(CD.players[i].name)}'s Showcase</span><h2>Put them in price order</h2><p>Cheapest first. The car is locked in last. Tap a prize to place it, tap a slot to take it back.</p></div>
+    stage(`<div class="cdhead"><span class="eyebrow">${avatarHTML(CD.players[i],"sm")} ${esc(CD.players[i].name)}'s Showcase</span><h2>Put them in price order</h2><p>Cheapest first. The car is locked in last. Tap a prize to place it, tap a slot to take it back.</p></div>
     <div class="bigclock${left<=10?" low":""}" id="scClk">${left}</div>
     <div class="slots">${slots.map((id,k)=>`<button class="slot${id!=null?" full":""}" data-s="${k}"><span class="n">${k+1}</span>${id!=null?`${pic(P[id])}<span class="nm">${esc(P[id].n)}</span>`:"<span class=\"nm\">Empty</span>"}</button>`).join("")}
       <div class="slot lock"><span class="n">6 · locked</span>${pic(car)}<span class="nm">${esc(car.n)}</span></div></div>
@@ -561,8 +568,8 @@ function finale(i,won,seq){
 function results(){
   voiceStop();stopConfetti();
   const ranked=CD.players.slice().sort((a,b)=>b.win-a.win);
-  openOverlay(`<span class="eyebrow">Tonight's winnings</span><h2 style="color:${ranked[0].color}">${esc(ranked[0].name)} wins!</h2>
-    <div class="catpick">${ranked.map(p=>`<div style="display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:14px;background:var(--stage-3);border-left:6px solid ${p.color}"><b>${esc(p.name)}</b><span style="font-family:var(--f-clock);color:var(--gold)">${fmt(Math.round(p.win*100)/100)}</span></div>`).join("")}</div>
+  openOverlay(`${avatarHTML(ranked[0],"xl")}<span class="eyebrow">Tonight's winnings</span><h2 style="color:${ranked[0].color}">${esc(ranked[0].name)} wins!</h2>
+    <div class="catpick">${ranked.map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;border-radius:14px;background:var(--stage-3);border-left:6px solid ${p.color}"><span style="display:flex;align-items:center;gap:10px">${avatarHTML(p,"sm")}<b>${esc(p.name)}</b></span><span style="font-family:var(--f-clock);color:var(--gold)">${fmt(Math.round(p.win*100)/100)}</span></div>`).join("")}</div>
     <p class="note">Prices from ${esc(retailerLine())}, checked ${esc(CHECKED)}.</p>
     <div class="row"><button class="btn" id="cdMenu">Game Night menu</button><button class="btn gold" id="cdAgain">Play again</button></div>`);
   $("cdMenu").onclick=()=>{closeOverlay();endGame();show("hub")};
