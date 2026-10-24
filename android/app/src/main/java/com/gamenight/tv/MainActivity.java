@@ -92,26 +92,53 @@ public class MainActivity extends Activity {
     // ---- native speech, called from the page's speech shim ----
     void js(String code) { ui.post(() -> web.evaluateJavascript(code, null)); }
 
-    void startListening(String lang) {
+    // The recogniser is driven natively as one endless loop (listen, restart, recreate on trouble),
+    // so the page just sees a continuous stream of results and the mic never gets stuck.
+    boolean want = false;
+    String lang = "en-AU";
+    int errs = 0, gen = 0;
+
+    void startListening(String l) {
+        lang = l;
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            pendingLang = lang; requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1); return;
+            pendingLang = l; requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1); return;
         }
+        want = true; errs = 0; gen++;
+        js("window.__gnSR&&window.__gnSR.started()");
+        begin(gen);
+    }
+
+    void restart(int delay, boolean recreate) {
+        final int g = gen;
+        ui.postDelayed(() -> {
+            if (!want || g != gen) return;
+            if (recreate && rec != null) { try { rec.destroy(); } catch (Exception e) {} rec = null; }
+            begin(g);
+        }, delay);
+    }
+
+    void begin(int g) {
+        if (!want || g != gen) return;
         if (rec == null) {
             rec = SpeechRecognizer.createSpeechRecognizer(this);
             rec.setRecognitionListener(new RecognitionListener() {
-                public void onReadyForSpeech(Bundle p) { js("window.__gnSR&&window.__gnSR.started()"); }
+                public void onReadyForSpeech(Bundle p) { js("window.__gnSR&&window.__gnSR.session()"); }
                 public void onBeginningOfSpeech() {}
                 public void onRmsChanged(float v) {}
                 public void onBufferReceived(byte[] b) {}
                 public void onEndOfSpeech() {}
                 public void onEvent(int t, Bundle p) {}
                 public void onPartialResults(Bundle p) { send(p, false); }
-                public void onResults(Bundle p) { send(p, true); js("window.__gnSR&&window.__gnSR.ended()"); }
+                public void onResults(Bundle p) { errs = 0; send(p, true); restart(120, false); }
                 public void onError(int err) {
-                    String code = err == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS ? "not-allowed" : "";
-                    final String c = code;
-                    // pause briefly so a failing service can't spin the page's auto-restart
-                    ui.postDelayed(() -> js("window.__gnSR&&window.__gnSR.error('" + c + "')"), 300);
+                    if (!want) return;
+                    if (err == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS) {
+                        want = false; js("window.__gnSR&&window.__gnSR.error('not-allowed')"); return;
+                    }
+                    if (err == SpeechRecognizer.ERROR_NO_MATCH || err == SpeechRecognizer.ERROR_SPEECH_TIMEOUT) { restart(80, false); return; }
+                    errs++;
+                    if (errs > 6) { want = false; js("window.__gnSR&&window.__gnSR.error('service-not-allowed')"); return; }
+                    restart(err == SpeechRecognizer.ERROR_RECOGNIZER_BUSY ? 600 : 400, true);
                 }
             });
         }
@@ -120,10 +147,16 @@ public class MainActivity extends Activity {
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang);
         i.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         i.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
-        rec.startListening(i);
+        i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+        i.putExtra("android.speech.extra.SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS", 700);
+        i.putExtra("android.speech.extra.SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS", 500);
+        try { rec.startListening(i); } catch (Exception e) { errs++; restart(600, true); }
     }
 
-    void stopListening() { if (rec != null) { try { rec.cancel(); } catch (Exception e) {} } }
+    void stopListening() {
+        want = false; gen++;
+        if (rec != null) { try { rec.cancel(); } catch (Exception e) {} }
+    }
 
     void send(Bundle p, boolean fin) {
         ArrayList<String> t = p.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
