@@ -1,0 +1,40 @@
+name: Build TV app
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "android/**"
+      - ".github/workflows/build-tv-app.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tv-app
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.7
+      - name: Build APK
+        run: gradle -p android assembleRelease --no-daemon
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk GameNight.apk
+          gh release delete tv-latest --cleanup-tag -y || true
+          gh release create tv-latest GameNight.apk --title "Game Night TV app" \
+            --notes "Android TV app. Download link: https://github.com/${{ github.repository }}/releases/download/tv-latest/GameNight.apk"

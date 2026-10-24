@@ -396,6 +396,7 @@ button{cursor:pointer}
 <canvas id="confetti" hidden></canvas>
 </div>
 
+<script src="native-speech.js"></script>
 <script src="questions.js"></script>
 <script>
 /* =================== CATEGORIES =================== */
@@ -1153,6 +1154,14 @@ function stopConfetti(){cancelAnimationFrame(confRaf);$("confetti").hidden=true}
 
 /* =================== BOOT =================== */
 load();applyScreen();screenSeg($("segScreenHub"));show("hub");
+// Back button on the TV remote: close a sheet, or step out to the menu; false means "on the menu already" so the app can exit
+window.__gnBack=()=>{
+  if(!$("overlay").hidden){closeOverlay();return true}
+  if(!$("hub").hidden)return false;
+  const b=document.querySelector(".screen:not([hidden]) [id$=Back],.screen:not([hidden]) [id$=Quit]");
+  if(b){b.click();return true}
+  show("hub");return true;
+};
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
 <script src="avatars.js"></script>
