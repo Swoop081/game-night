@@ -74,11 +74,95 @@ button.prize{cursor:pointer}
 .qty{display:flex;gap:8px;justify-content:center}
 .qty button{width:56px;height:56px;border-radius:50%;background:var(--stage-3);border:1px solid var(--line);font-family:var(--f-clock);font-size:1.4rem;font-weight:700}
 .total{font-family:var(--f-clock);font-size:2.4rem;font-weight:700}
+.prize .pimg{width:clamp(96px,24vmin,180px);height:clamp(96px,24vmin,180px);object-fit:contain;background:#fff;border-radius:12px}
+.prize.sm .pimg{width:clamp(56px,14vmin,96px);height:clamp(56px,14vmin,96px)}
+.slot .pimg{width:58px;height:58px;object-fit:contain;background:#fff;border-radius:8px}
+/* ---- portrait phone: everything on one screen ---- */
+.portrait #cd{gap:6px;padding-top:max(8px,var(--sa-t));padding-bottom:max(8px,var(--sa-b))}
+.portrait #cd .floorbar{gap:8px}
+.portrait #cd .brand{font-size:1.05rem}.portrait #cd .brand small{display:none}
+.portrait #cd .count{font-size:.8rem}
+.portrait #cd .floorbar .btn{padding:.45em 1em;font-size:.85rem}
+.portrait .cdscore{gap:5px;flex-wrap:nowrap;overflow:hidden}
+.portrait .cdchip{padding:3px 9px 3px 4px;gap:5px;font-size:.78rem;min-width:0;flex:1 1 0;justify-content:center}
+.portrait .cdchip i{width:14px;height:14px;flex:none}
+.portrait .cdchip b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.portrait .cdstage{gap:7px;padding:0}
+.portrait .cdhead .eyebrow{font-size:.62rem}
+.portrait .cdhead h2{font-size:1.45rem}
+.portrait .cdhead p{font-size:.8rem;margin-top:.25em;line-height:1.3}
+.portrait .cdsplit{gap:7px}
+.portrait .cdsplit>div:first-child{gap:7px;width:100%}
+.portrait .prize.big{display:grid;grid-template-columns:auto minmax(0,1fr);grid-auto-rows:auto;column-gap:12px;row-gap:3px;justify-items:start;align-items:center;text-align:left;padding:8px 12px;width:100%}
+.portrait .prize.big>.pimg,.portrait .prize.big>.em{grid-row:1/4}
+.portrait .prize.big .pimg{width:84px;height:84px}
+.portrait .prize.big .em{font-size:3.3rem}
+.portrait .prize .nm{font-size:.88rem}
+.portrait .prize .rt{font-size:.58rem}
+.portrait .prize .pr{font-size:1.25rem}
+.portrait .prize.sm{width:calc(33.3% - 6px);padding:6px 4px;gap:3px;border-radius:12px}
+.portrait .prize.sm .pimg{width:52px;height:52px}
+.portrait .prize.sm .em{font-size:2rem}
+.portrait .prize.sm .nm{font-size:.66rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.portrait .prize.sm .rt{display:none}
+.portrait .prize.sm .pr{font-size:.9rem;min-height:1em}
+.portrait .cdrow{gap:6px}
+.portrait .cdrow .prize:not(.sm){width:calc(33.3% - 6px);padding:8px 5px;gap:4px;border-radius:12px}
+.portrait .cdrow .prize:not(.sm) .pimg{width:64px;height:64px}
+.portrait .cdrow .prize:not(.sm) .em{font-size:2.4rem}
+.portrait .cdrow .prize:not(.sm) .nm{font-size:.7rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.portrait .cdrow .prize:not(.sm) .rt{font-size:.5rem;padding:.2em .5em}
+.portrait .cdrow .prize:not(.sm) .pr{font-size:.95rem}
+.portrait .bids{gap:5px}
+.portrait .bid{min-width:0;padding:3px 9px;border-radius:10px}
+.portrait .bid small{font-size:.68rem}.portrait .bid b{font-size:1.05rem}
+.portrait .entry{gap:6px;width:100%}
+.portrait .entry .who{font-size:.9rem}
+.portrait .entry .disp{font-size:1.9rem;padding:.05em .5em}
+.portrait .keypad{gap:6px}
+.portrait .keypad button{padding:7px 0;font-size:1.15rem;border-radius:10px}
+.portrait .keypad .go{font-size:.95rem}
+.portrait .cdmsg{font-size:1rem;min-height:1.2em}
+.portrait .bigclock{font-size:2.2rem;line-height:1}
+.portrait .digits{gap:5px}
+.portrait .digits button,.portrait .digits span{width:44px;font-size:1.8rem;border-radius:9px}
+.portrait .coins i{width:22px;height:22px}
+.portrait .total{font-size:1.8rem}
+.portrait .qty button{width:46px;height:46px;font-size:1.15rem}
+.portrait .slots{gap:6px}
+.portrait .slot{min-height:0;padding:5px 3px;gap:2px;border-radius:12px}
+.portrait .slot .pimg{width:40px;height:40px}
+.portrait .slot .em{font-size:1.6rem}
+.portrait .slot .nm{font-size:.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.portrait .slot .n{font-size:.62rem}
+.portrait .slot .pr{font-size:.75rem}
+.portrait #cdStage .btn{padding:.6em 1.4em}
+.portrait #cdMic{font-size:.75rem;min-height:1.1em}
 .game.live .tag{position:absolute;top:14px;right:14px;font-family:var(--f-display);font-weight:900;font-size:1.5rem;background:#fffdf6;color:#14532d;padding:.15em .5em;border-radius:8px;transform:rotate(6deg);box-shadow:0 4px 10px rgba(0,0,0,.5)}
 `;
 const st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
-const P=window.CD_PRODUCTS.map((x,i)=>({...x,id:i}));
+let P=window.CD_PRODUCTS.map((x,i)=>({...x,id:i}));
+let CHECKED=window.CD_CHECKED,RETAILERS=["Aldi","IKEA","Apple","car makers"];
+let catLoaded=null;
+function loadCatalogue(){
+  if(catLoaded)return catLoaded;
+  catLoaded=fetch("data/products.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{
+    if(!j||!Array.isArray(j.products))return;
+    const snap=j.products.filter(x=>x&&x.n&&x.r&&x.p>=0.5&&x.p<=20000&&x.img);
+    if(snap.length<30)return;
+    const have=new Set(snap.map(x=>x.r));
+    const base=r=>r.replace(" Special Buys","");
+    const keep=window.CD_PRODUCTS.filter(x=>x.car||x.r==="Apple"||!have.has(base(x.r)));
+    const all=snap.map(x=>({n:x.n,r:x.r,p:x.p,e:x.e||"🎁",img:x.img})).concat(keep);
+    P=all.map((x,i)=>({...x,id:i}));CHECKED=j.checked||CHECKED;
+    RETAILERS=[...new Set(all.filter(x=>!x.car).map(x=>base(x.r)))].concat(["car makers"]);
+  }).catch(()=>{});
+  return catLoaded;
+}
+function retailerLine(){const r=RETAILERS.slice();const last=r.pop();return `${r.join(", ")} and ${last}`}
+function pic(p,cls){return p.img?`<img class="pimg ${cls||""}" src="${esc(p.img)}" data-e="${p.e}" alt="" referrerpolicy="no-referrer">`:`<span class="em">${p.e}</span>`}
+document.addEventListener("error",e=>{const t=e.target;if(t&&t.classList&&t.classList.contains("pimg")){const sp=document.createElement("span");sp.className="em";sp.textContent=t.dataset.e||"🎁";t.replaceWith(sp)}},true);
 const fmt=p=>"$"+(Number.isInteger(p)?p.toLocaleString("en-AU"):p.toLocaleString("en-AU",{minimumFractionDigits:2,maximumFractionDigits:2}));
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const CD={players:[],round:0,used:new Set(),games:[],start:0,input:null,timer:null,count:3};
@@ -90,7 +174,8 @@ function pick(filter,n=1,gap=0){
   if(out.length<n){for(const p of shuffle(P.filter(filter))){if(out.length>=n)break;if(out.includes(p))continue;if(gap&&out.some(o=>Math.abs(o.p-p.p)/Math.max(o.p,p.p)<gap))continue;out.push(p)}}
   out.forEach(p=>CD.used.add(p.id));return n===1?out[0]:out;
 }
-const grocery=p=>!p.car&&p.p<20;
+const SUPER=new Set(["Woolworths","Coles","Aldi","IGA"]);
+const grocery=p=>!p.car&&p.p<20&&SUPER.has(p.r);
 const mid=p=>!p.car&&p.p>=20&&p.p<=900;
 const big=p=>!p.car&&p.p>=100;
 
@@ -119,7 +204,7 @@ function openSetup(){
       <li>The winner plays a <b>pricing game</b> for more prizes.</li>
       <li>The two biggest winners play the <b>Showcase Showdown</b>: take turns bidding, first within <b>$100</b> wins.</li>
       <li>The <b>Showcase</b>: put the prizes in price order in <b>40 seconds</b>. The car is locked in last. Get them all in order to win everything.</li></ul>
-      <p class="note">Real prices from Aldi, IKEA, Apple and car makers, checked ${esc(window.CD_CHECKED)}.</p></div>
+      <p class="note" id="cdSrcNote">Real prices from ${esc(retailerLine())}, checked ${esc(CHECKED)}.</p></div>
     <div class="field"><span class="eyebrow">Voice bids</span><div class="seg" id="cdVoiceSeg"></div></div>
     <div class="field"><span class="eyebrow">Sound</span><div class="seg" id="cdSoundSeg"></div></div>
     <div class="field"><span class="eyebrow">Screen</span><div class="seg" id="cdScreenSeg"></div></div>
@@ -133,6 +218,7 @@ function openSetup(){
   $("cdPlus").onclick=()=>{CD.count=Math.min(4,CD.count+1);openSetup()};
   $("cdMinus").disabled=CD.count<=2;$("cdPlus").disabled=CD.count>=4;
   renderPlayers();show("cdSetup");
+  loadCatalogue().then(()=>{const n=$("cdSrcNote");if(n)n.textContent=`Real prices and photos from ${retailerLine()}, checked ${CHECKED}.`});
 }
 function renderPlayers(){
   const w=$("cdPlayers");w.innerHTML="";
@@ -148,7 +234,8 @@ function renderPlayers(){
 /* ---------- game flow ---------- */
 const GAMES=["double","most","hilo","clock","squeeze","grocery","lucky"];
 const GAME_NAMES={double:"Double Prices",most:"Most Expensive",hilo:"Hi-Lo",clock:"Clock Game",squeeze:"Squeeze Play",grocery:"Grocery Game",lucky:"Lucky $even"};
-function startGame(){
+async function startGame(){
+  await loadCatalogue();
   S.count=CD.count;ensureSlots();save();
   CD.players=[];for(let i=0;i<CD.count;i++)CD.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],win:0,prizes:[]});
   CD.round=0;CD.used=new Set();CD.games=shuffle(GAMES).slice(0,3);
@@ -171,7 +258,7 @@ function nextRound(){
 }
 function prizeCard(p,{cls="",show=false,btn=false,attrs=""}={}){
   const tag=btn?"button":"div";
-  return `<${tag} class="prize ${cls}" ${attrs}><span class="em">${p.e}</span><span class="nm">${esc(p.n)}</span><span class="rt">${esc(p.r)}</span><span class="pr${show?"":" hid"}">${show?fmt(p.p):"&nbsp;"}</span></${tag}>`;
+  return `<${tag} class="prize ${cls}" ${attrs}>${pic(p)}<span class="nm">${esc(p.n)}</span><span class="rt">${esc(p.r)}</span><span class="pr${show?"":" hid"}">${show?fmt(p.p):"&nbsp;"}</span></${tag}>`;
 }
 
 /* ---------- number entry (keypad / keyboard / voice) ---------- */
@@ -433,8 +520,8 @@ function showcase(i){
   const draw=()=>{
     stage(`<div class="cdhead"><span class="eyebrow">${esc(CD.players[i].name)}'s Showcase</span><h2>Put them in price order</h2><p>Cheapest first. The car is locked in last. Tap a prize to place it, tap a slot to take it back.</p></div>
     <div class="bigclock${left<=10?" low":""}" id="scClk">${left}</div>
-    <div class="slots">${slots.map((id,k)=>`<button class="slot${id!=null?" full":""}" data-s="${k}"><span class="n">${k+1}</span>${id!=null?`<span class="em">${P[id].e}</span><span class="nm">${esc(P[id].n)}</span>`:"<span class=\"nm\">Empty</span>"}</button>`).join("")}
-      <div class="slot lock"><span class="n">6 · locked</span><span class="em">${car.e}</span><span class="nm">${esc(car.n)}</span></div></div>
+    <div class="slots">${slots.map((id,k)=>`<button class="slot${id!=null?" full":""}" data-s="${k}"><span class="n">${k+1}</span>${id!=null?`${pic(P[id])}<span class="nm">${esc(P[id].n)}</span>`:"<span class=\"nm\">Empty</span>"}</button>`).join("")}
+      <div class="slot lock"><span class="n">6 · locked</span>${pic(car)}<span class="nm">${esc(car.n)}</span></div></div>
     <div class="cdrow">${items.filter(p=>!slots.includes(p.id)).map(p=>prizeCard(p,{cls:"sm",btn:true,attrs:`data-id="${p.id}"`})).join("")}</div>
     ${slots.every(s=>s!=null)?`<button class="btn gold" id="scLock" data-focus>Lock it in</button>`:""}`);
     $("cdStage").querySelectorAll("button[data-id]").forEach(b=>b.onclick=()=>{const k=slots.indexOf(null);if(k<0)return;slots[k]=+b.dataset.id;SFX.tick();draw()});
@@ -451,7 +538,7 @@ function showcase(i){
     const seq=order();
     stage(`<div class="cdhead"><span class="eyebrow">${esc(CD.players[i].name)}'s Showcase</span><h2>The reveal</h2></div>
     <div class="slots">${seq.map((p,j)=>{const shown=j<k;let cls="slot full";if(shown)cls+=(j===0||seq[j-1].p<=p.p)?" good":" bad";
-      return `<div class="${cls}"><span class="n">${j+1}</span><span class="em">${p.e}</span><span class="nm">${esc(p.n)}</span><span class="pr">${shown?fmt(p.p):"?"}</span></div>`}).join("")}</div>
+      return `<div class="${cls}"><span class="n">${j+1}</span>${pic(p)}<span class="nm">${esc(p.n)}</span><span class="pr">${shown?fmt(p.p):"?"}</span></div>`}).join("")}</div>
     <div class="cdmsg" id="scMsg"></div>`);
     if(k>0&&k<=seq.length&&k>1&&seq[k-1].p<seq[k-2].p){SFX.buzz();
       $("scMsg").className="cdmsg down";$("scMsg").textContent=`The ${seq[k-1].n} is cheaper than the ${seq[k-2].n}. The Showcase is lost.`;return finale(i,false,seq)}
@@ -474,7 +561,7 @@ function results(){
   const ranked=CD.players.slice().sort((a,b)=>b.win-a.win);
   openOverlay(`<span class="eyebrow">Tonight's winnings</span><h2 style="color:${ranked[0].color}">${esc(ranked[0].name)} wins!</h2>
     <div class="catpick">${ranked.map(p=>`<div style="display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:14px;background:var(--stage-3);border-left:6px solid ${p.color}"><b>${esc(p.name)}</b><span style="font-family:var(--f-clock);color:var(--gold)">${fmt(Math.round(p.win*100)/100)}</span></div>`).join("")}</div>
-    <p class="note">Prices from Aldi, IKEA, Apple and car makers, checked ${esc(window.CD_CHECKED)}.</p>
+    <p class="note">Prices from ${esc(retailerLine())}, checked ${esc(CHECKED)}.</p>
     <div class="row"><button class="btn" id="cdMenu">Game Night menu</button><button class="btn gold" id="cdAgain">Play again</button></div>`);
   $("cdMenu").onclick=()=>{closeOverlay();endGame();show("hub")};
   $("cdAgain").onclick=()=>{closeOverlay();endGame();startGame()};
