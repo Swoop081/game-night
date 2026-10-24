@@ -157,6 +157,13 @@ button{cursor:pointer}
 .q.emoji{font-size:min(55cqh,60cqw);line-height:1}
 .q.emoji.multi{font-size:min(40cqh,30cqw)}
 .q.text{font-family:var(--f-display);font-weight:900;font-size:min(16cqh,11cqw);line-height:1}
+.q.photo{padding:3%}
+.q.photo img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 20px 30px rgba(0,0,0,.6))}
+.q.text.long{font-size:min(11cqh,8cqw)}
+.q.text.long2{font-size:min(8.5cqh,6cqw);line-height:1.08;padding:6%}
+.eltile{height:72cqh;aspect-ratio:1;background:linear-gradient(160deg,#5aa8ff,#2b62c9);border-radius:6%;position:relative;box-shadow:0 0 0 4px rgba(255,255,255,.15),0 20px 50px -20px #000;color:#fff;max-width:90cqw}
+.eltile .num{position:absolute;top:7%;left:9%;font-family:var(--f-clock);font-size:12cqh;font-weight:700}
+.eltile .sym{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:36cqh;padding-top:6%}
 .q.color .sw{width:62%;height:68%;border-radius:20px;box-shadow:0 0 0 6px rgba(255,255,255,.08)}
 .q.tiles{gap:2%;flex-wrap:wrap}
 .q.tiles span{font-family:var(--f-display);font-weight:900;font-size:min(22cqh,12cqw);width:min(26cqh,14cqw);aspect-ratio:1;display:grid;place-items:center;background:var(--ink);color:var(--stage);border-radius:12px}
@@ -387,10 +394,50 @@ GN_RAW.forEach(c=>{
   if(c.d)cat.items=parse(c.d).map(it=>({...it,p:it.p.split("/")[0]}));
   if(c.from){cat.items=parse(GN_RAW.find(x=>x.id===c.from).d).map(it=>{const names=it.p.split("/");return {p:cap(it.a),a:names[0],alts:names}})}
   if(c.kind==="math"){cat.items=[];for(let a=2;a<=12;a++)for(let b=a;b<=12;b++)cat.items.push({p:`${a} × ${b}`,a:String(a*b),alts:[String(a*b)]})}
+  if(c.kind==="roman"){const toR=n=>{let r="";[[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]].forEach(([v,s])=>{while(n>=v){r+=s;n-=v}});return r};
+    const ns=[];for(let n=1;n<=50;n++)ns.push(n);ns.push(55,60,64,69,75,77,88,90,94,99,100,150,200,400,450,500,900,1000,1500,2000,2026);
+    cat.items=ns.map(n=>({p:toR(n),a:String(n),alts:[String(n)]}))}
   if(c.kind==="tiles"){cat.items=c.words.split(",").map(w=>{const al=w.split("/");return {p:"",a:al[0],alts:al}})}
   CATS[c.id]=cat;
 });
 const CAT_IDS=Object.keys(CATS);
+const GROUPS=[
+ ["Pictures & emoji",["animals","flags","transport","people","colours","weather","objects","faces"]],
+ ["Aussie",["slang","footy","ausanimals","auslandmarks","bunnings"]],
+ ["Food",["food","fastfood","grocery"]],
+ ["Movies & games",["movies","plots","characters","pokemon","videogames"]],
+ ["Sport",["sports","nba"]],
+ ["Seasonal",["christmas","halloween"]],
+ ["Knowledge",["capitals","countries","elements","roman","times","landmarks","plants","babies","opposites","sayings","scramble"]]];
+(function(){const listed=new Set(GROUPS.flatMap(g=>g[1]));const rest=CAT_IDS.filter(c=>!listed.has(c));if(rest.length)GROUPS.push(["More",rest]);GROUPS.forEach(g=>g[1]=g[1].filter(c=>CATS[c]))})();
+function catOptions(sel){return GROUPS.map(([g,ids])=>`<optgroup label="${g}">${ids.map(id=>`<option value="${id}"${sel===id?" selected":""}>${CATS[id].icon} ${CATS[id].name}</option>`).join("")}</optgroup>`).join("")}
+
+/* Picture categories load photos from Wikipedia when needed */
+function loadPhotos(id){
+  const cat=CATS[id];if(cat.kind!=="photo")return Promise.resolve(true);
+  if(cat.ready)return cat.ready;
+  const all=cat.all||(cat.all=cat.items.slice());
+  const titles=all.map(it=>it.p);
+  const chunks=[];for(let i=0;i<titles.length;i+=45)chunks.push(titles.slice(i,i+45));
+  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),8000);
+  cat.ready=Promise.all(chunks.map(ch=>fetch("https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&piprop=thumbnail&pithumbsize=900&redirects=1&titles="+encodeURIComponent(ch.join("|")),{signal:ctl.signal}).then(r=>r.json())))
+   .then(res=>{
+     const img={};
+     res.forEach(j=>{const q=j.query||{};const map={};(q.normalized||[]).forEach(n=>map[n.from]=n.to);(q.redirects||[]).forEach(n=>map[n.from]=n.to);
+       Object.values(q.pages||{}).forEach(pg=>{if(pg.thumbnail)img[pg.title]=pg.thumbnail.source});
+       Object.keys(map).forEach(f=>{let t=map[f];if(map[t])t=map[t];if(img[t])img[f]=img[t]})});
+     all.forEach(it=>{let t=it.p;it.img=img[t]||img[t.replace(/_/g," ")]||null});
+     cat.items=all.filter(it=>it.img);
+     cat.items.slice(0,12).forEach(it=>{const im=new Image();im.src=it.img});
+     clearTimeout(to);
+     if(cat.items.length<8){cat.ready=null;cat.items=all;return false}
+     return true;
+   }).catch(()=>{clearTimeout(to);cat.ready=null;return false});
+  return cat.ready;
+}
+function fallbackCat(exclude){const pool=shuffle(CAT_IDS.filter(c=>CATS[c].kind!=="photo"&&!S.played.has(c)&&!exclude.includes(c)));return pool[0]||"animals"}
+// make sure a category can be played; photo categories that can't load are swapped
+async function ensureCat(id,exclude){if(CATS[id].kind!=="photo")return {id};const ok=await loadPhotos(id);if(ok)return {id};return {id:fallbackCat(exclude),swapped:id}}
 
 /* =================== ANSWER MATCHING =================== */
 const NUMW={zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
@@ -398,15 +445,16 @@ const FILLER=new Set(["the","a","an","its","it","is","um","uh","er","erm","ah","
 function words(s){
   s=String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/&/g," and ").replace(/['’]/g,"").replace(/[^a-z0-9 ]+/g," ");
   const t=s.split(/\s+/).filter(Boolean);
-  const out=[];let acc=null;
+  const out=[];let tot=null,cur=0;
+  const flush=()=>{if(tot!==null){out.push(String(tot+cur));tot=null;cur=0}};
   for(const w of t){
-    if(w in NUMW){acc=(acc||0)+NUMW[w];continue}
-    if(w==="hundred"&&acc!==null){acc*=100;continue}
-    if(w==="and"&&acc!==null)continue;
-    if(acc!==null){out.push(String(acc));acc=null}
-    out.push(w);
+    if(w in NUMW){if(tot===null)tot=0;cur+=NUMW[w];continue}
+    if(w==="hundred"&&tot!==null){cur=(cur||1)*100;continue}
+    if(w==="thousand"){if(tot===null)tot=0;tot+=(cur||1)*1000;cur=0;continue}
+    if(w==="and"&&tot!==null)continue;
+    flush();out.push(w);
   }
-  if(acc!==null)out.push(String(acc));
+  flush();
   return out.map(w=>w.length>3&&w.endsWith("s")&&!w.endsWith("ss")?w.slice(0,-1):w);
 }
 function norm(s){return words(s).filter(w=>!FILLER.has(w)).join(" ")}
@@ -421,7 +469,7 @@ function heardMatches(heard,answer){
   if(an.length>=5&&hAll.replace(/ /g,"").includes(an))return true;
   // saying the main part of a longer answer ("ambulance" for "ambulance officer")
   const aw=a.split(" "),hw=h.split(" ");
-  if(aw.length>1&&h.length>=5&&h.length>=a.length*.5&&hw.every(w=>aw.includes(w)))return true;
+  if(aw.length>1&&h.length>=5&&h.length>=a.length*.4&&hw.every(w=>aw.includes(w)))return true;
   if(a.length<4)return false;
   const tol=a.length>=8?.25:.2;
   for(let L=Math.max(1,aw.length-1);L<=aw.length+1;L++){
@@ -615,7 +663,7 @@ function renderSetup(){
   wrap.innerHTML="";
   for(let i=0;i<S.count;i++){
     const row=document.createElement("div");row.className="prow";
-    const opts=CAT_IDS.map(id=>`<option value="${id}"${S.cats[i]===id?" selected":""}>${CATS[id].icon} ${CATS[id].name}</option>`).join("");
+    const opts=catOptions(S.cats[i]);
     row.innerHTML=`<button class="swatchbtn" id="pk${i}" style="background:${S.colors[i]}" aria-label="Player ${i+1} colour"></button><input id="pn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name"><select id="pc${i}" aria-label="Player ${i+1} category">${opts}</select>`;
     row.querySelector("input").oninput=e=>{S.names[i]=e.target.value;save()};
     row.querySelector("select").onchange=e=>{const v=e.target.value,j=S.cats.slice(0,S.count).indexOf(v);if(j>=0&&j!==i)S.cats[j]=S.cats[i];S.cats[i]=v;save();renderSetup()};
@@ -653,6 +701,7 @@ function startGame(){
   S.played=new Set();S.phase="idle";S.challenger=null;S.defender=null;S.final=null;
   $("floorMode").textContent=S.mode==="tv"?"TAKEOVER · TV GAME":"TAKEOVER · CUSTOM";
   show("floor");renderFloor();
+  S.players.forEach(p=>loadPhotos(p.cat));
   if(S.count===2&&R().bo3)setTimeout(startFinal,400);
 }
 const alive=()=>S.players.filter(p=>p.alive);
@@ -736,15 +785,22 @@ $("quit").onclick=()=>confirmSheet("Quit this game?","The floor will be lost.","
 function endAll(){if(S.duel){S.duel.state="over";cancelAnimationFrame(raf)}voiceStop();S.duel=null;S.final=null;stopConfetti()}
 
 /* =================== DUEL =================== */
-function openDuelIntro(){
-  const a=S.players[S.challenger],b=S.players[S.defender],cat=CATS[b.cat];
+async function openDuelIntro(){
+  const a=S.players[S.challenger],b=S.players[S.defender];
   S.phase="ready";renderFloor();
+  let swapNote="";
+  if(CATS[b.cat].kind==="photo"){
+    openOverlay(`<span class="eyebrow">Duel</span><h2>Loading pictures…</h2><p class="note">${CATS[b.cat].icon} ${esc(CATS[b.cat].name)}</p>`);
+    const r=await ensureCat(b.cat,[a.cat,b.cat]);
+    if(r.swapped){swapNote=`<p class="note" style="color:var(--hot)">${esc(CATS[r.swapped].name)} pictures couldn't load (check the internet connection), so this duel uses ${esc(CATS[r.id].name)} instead.</p>`;b.cat=r.id}
+  }
+  const cat=CATS[b.cat];
   const use={a:false,b:false};
   const bb=(p,k)=>R().boost&&p.boost?`<button class="boostbtn" id="boost${k}" aria-pressed="false">⚡ Use Time Boost (+5s)</button>`:"";
   openOverlay(`<span class="eyebrow">Duel</span>
     <div class="vs"><div class="p" style="--pc:${a.color}"><b>${esc(a.name)}</b><small>Challenger · goes first</small>${bb(a,"A")}</div><span class="x">VS</span><div class="p" style="--pc:${b.color}"><b>${esc(b.name)}</b><small>Defender</small>${bb(b,"B")}</div></div>
     <span class="eyebrow">Category</span><h2>${cat.icon} ${esc(cat.name)}</h2>
-    <p class="note">${R().time} seconds each. A correct answer stops your clock and starts theirs. Passing shows the answer and costs ${R().penalty} seconds.</p>
+    ${swapNote}<p class="note">${R().time} seconds each. A correct answer stops your clock and starts theirs. Passing shows the answer and costs ${R().penalty} seconds.</p>
     <div class="row">${R().tapPick?'<button class="btn" id="duelBack">Back</button>':""}<button class="btn gold" id="duelGo">Start duel</button></div>`);
   ["A","B"].forEach(K=>{const el=$("boost"+K);if(el)el.onclick=()=>{const k=K.toLowerCase();use[k]=!use[k];el.setAttribute("aria-pressed",use[k]);el.textContent=use[k]?"⚡ Time Boost on (+5s)":"⚡ Use Time Boost (+5s)"}});
   if($("duelBack"))$("duelBack").onclick=()=>{closeOverlay();S.phase="idle";S.challenger=null;S.defender=null;renderFloor()};
@@ -772,9 +828,16 @@ function startDuel(cfg){
 function setButtons(on){$("okBtn").disabled=!on;$("passBtn").disabled=!on}
 function renderQ(){
   const d=S.duel,cat=CATS[d.cat],q=$("q");
-  q.className="q "+({emoji:"emoji",text:"text",color:"color",math:"text",tiles:"tiles"}[cat.kind]);
-  if(cat.kind==="emoji"&&(window.Intl&&Intl.Segmenter?[...new Intl.Segmenter().segment(d.q.p)].length:Math.ceil([...d.q.p].length/2))>1)q.classList.add("multi");
+  let kind=cat.kind;
+  if(kind==="mixed")kind=/^[\p{Extended_Pictographic}\u200d\ufe0f\s]+$/u.test(d.q.p)?"emoji":"text";
+  q.className="q "+({emoji:"emoji",text:"text",color:"color",math:"text",tiles:"tiles",roman:"text",element:"el",photo:"photo"}[kind]);
+  if(kind==="text"&&d.q.p.length>14)q.classList.add(d.q.p.length>30?"long2":"long");
+  if(kind==="photo"){q.innerHTML=`<img alt="" src="${d.q.img}">`;
+    const nx=d.deck.slice(-3);nx.forEach(i=>{const it=cat.items[i];if(it&&it.img){const im=new Image();im.src=it.img}});return}
+  if(kind!==cat.kind&&kind==="emoji"){q.textContent=d.q.p;return}
+  if(kind==="emoji"&&(window.Intl&&Intl.Segmenter?[...new Intl.Segmenter().segment(d.q.p)].length:Math.ceil([...d.q.p].length/2))>1)q.classList.add("multi");
   if(cat.kind==="color")q.innerHTML=`<div class="sw" style="background:${d.q.p}"></div>`;
+  else if(cat.kind==="element"){const [num,sym]=d.q.p.split(" ");q.innerHTML=`<div class="eltile"><span class="num">${num}</span><span class="sym">${esc(sym)}</span></div>`}
   else if(cat.kind==="tiles")q.innerHTML=d.q.p.split("").map(ch=>`<span>${ch}</span>`).join("");
   else q.textContent=d.q.p;
 }
@@ -896,8 +959,10 @@ function finalRound(){
     });
   }
 }
-function roundIntro(cat,first,second){
-  const F=S.final,c=CATS[cat];
+async function roundIntro(cat,first,second){
+  const F=S.final;
+  if(CATS[cat].kind==="photo"){openOverlay(`<h2>Loading pictures…</h2>`);const r=await ensureCat(cat,[first.cat,second.cat]);if(r.swapped){if(F.order)F.order=F.order.map(c=>c===cat?r.id:c);cat=r.id}}
+  const c=CATS[cat];
   openOverlay(`<span class="eyebrow">Final · Round ${F.round}</span>
     <div class="vs"><div class="p" style="--pc:${first.color}"><b>${esc(first.name)}</b><small>Goes first · ${F.wins[first.id]} won</small></div><span class="x">VS</span><div class="p" style="--pc:${second.color}"><b>${esc(second.name)}</b><small>${F.wins[second.id]} won</small></div></div>
     <span class="eyebrow">Category</span><h2>${c.icon} ${esc(c.name)}</h2>

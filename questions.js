@@ -277,49 +277,165 @@ Saudi Arabia|riyadh
 Iran|tehran
 Iraq|baghdad`},
 {id:"countries",name:"Name the Country",kind:"text",hint:"Which country has this capital?",icon:"🗺️",from:"capitals"},
-{id:"elements",name:"Element Symbols",kind:"text",hint:"Name the element",icon:"⚗️",d:`H|hydrogen
-He|helium
-Li|lithium
-C|carbon
-N|nitrogen
-O|oxygen
-F|fluorine
-Ne|neon
-Na|sodium
-Mg|magnesium
-Al|aluminium|aluminum
-Si|silicon
-P|phosphorus
-S|sulphur|sulfur
-Cl|chlorine
-Ar|argon
-K|potassium
-Ca|calcium
-Fe|iron
-Cu|copper
-Zn|zinc
-Ag|silver
-Au|gold
-Pb|lead
-Sn|tin
-Hg|mercury
-Pt|platinum
-Ni|nickel
-U|uranium
-I|iodine
-Co|cobalt
-Ti|titanium
-Mn|manganese
-Cr|chromium
-W|tungsten
-Ra|radium
-Rn|radon
-Kr|krypton
-B|boron
-Be|beryllium
-Xe|xenon
-Br|bromine
-Pu|plutonium`},
+{id:"elements",name:"Periodic Table",kind:"element",hint:"Name the element",icon:"⚗️",d:`1 H|hydrogen
+2 He|helium
+3 Li|lithium
+4 Be|beryllium
+5 B|boron
+6 C|carbon
+7 N|nitrogen
+8 O|oxygen
+9 F|fluorine
+10 Ne|neon
+11 Na|sodium
+12 Mg|magnesium
+13 Al|aluminium|aluminum
+14 Si|silicon
+15 P|phosphorus
+16 S|sulphur|sulfur
+17 Cl|chlorine
+18 Ar|argon
+19 K|potassium
+20 Ca|calcium
+22 Ti|titanium
+24 Cr|chromium
+25 Mn|manganese
+26 Fe|iron
+27 Co|cobalt
+28 Ni|nickel
+29 Cu|copper
+30 Zn|zinc
+33 As|arsenic
+35 Br|bromine
+36 Kr|krypton
+38 Sr|strontium
+46 Pd|palladium
+47 Ag|silver
+48 Cd|cadmium
+50 Sn|tin
+51 Sb|antimony
+53 I|iodine
+54 Xe|xenon
+55 Cs|caesium|cesium
+56 Ba|barium
+74 W|tungsten
+78 Pt|platinum
+79 Au|gold
+80 Hg|mercury
+82 Pb|lead
+83 Bi|bismuth
+86 Rn|radon
+88 Ra|radium
+92 U|uranium
+94 Pu|plutonium
+99 Es|einsteinium`},
+{id:"roman",name:"Roman Numerals",kind:"roman",hint:"What number is it?",icon:"🏛️"},
+{id:"plants",name:"Plants & Flowers",kind:"text",hint:"Name the plant",icon:"🌿",d:`Australia's national flower|golden wattle|wattle
+Tall yellow flower that turns to face the sun|sunflower
+Red flower given on Valentine's Day|rose
+The red flower worn for Remembrance Day|poppy
+Spiky desert plant that stores water|cactus
+Koalas eat its leaves|eucalyptus|gum tree|gum
+Giant pandas eat it|bamboo
+Japan's famous pink spring blossom|cherry blossom|sakura|cherry tree
+Lucky plant with four leaves|four leaf clover|clover
+Ireland's three-leafed symbol|shamrock|clover
+The leaf on Canada's flag|maple|maple leaf|maple tree
+Plant that snaps shut on flies|venus flytrap|flytrap|fly trap
+Holland's most famous flower|tulip
+Purple flower known for its calming scent|lavender
+"Loves me, loves me not" flower|daisy
+Climbing plant that covers old brick walls|ivy
+Gel plant used to soothe sunburn|aloe vera|aloe
+Acorns grow on this tree|oak|oak tree
+Coconuts grow on this tree|palm|palm tree|coconut palm|coconut tree
+Herb that's the base of pesto|basil
+Herb that sounds like a word for time|thyme
+Herb crushed into a mojito|mint|peppermint|spearmint
+Plant that stings when you touch it|nettle|stinging nettle
+Weed with fluffy seeds you blow on|dandelion
+Sacred water flower of India|lotus|water lily
+World's tallest trees, in California|redwood|sequoia|giant sequoia
+African tree with a huge water-storing trunk|baobab
+Trumpet-shaped yellow spring flower|daffodil
+Vanilla comes from this flower|orchid|vanilla orchid
+Chocolate comes from this plant|cacao|cocoa|cacao tree|cocoa tree
+Tall grass that sugar is made from|sugar cane|sugarcane
+Smelly bulb said to scare off vampires|garlic
+Tree whose branches droop into rivers|willow|weeping willow
+Tree that turns Brisbane streets purple in spring|jacaranda
+NSW floral emblem with a big red flower|waratah
+Aussie shrub with red flowers like a cleaning brush|bottlebrush|callistemon
+Red-leafed plant sold at Christmas|poinsettia
+Kiss under it at Christmas|mistletoe
+Spiky Christmas leaves with red berries|holly
+Plant whose fluffy fibres make T-shirts|cotton
+Wine is made from the fruit of this plant|grapevine|grape|vine|grapes
+Plant with white bark, common in Europe|birch|silver birch
+Flower used in Hawaiian leis|hibiscus|plumeria|frangipani|orchid
+Cones and needles, green all year|pine|pine tree|fir|spruce|conifer
+Seaweed-like plant that floats on ponds|duckweed|algae|lily pad|water lily
+Fungus with a cap and stalk|mushroom|toadstool
+Green plant that grows on shady rocks and logs|moss
+Feathery plant with fronds that never flowers|fern
+Big yellow flower and Kansas state flower|sunflower
+Plant famous for growing to the sky in a fairytale|beanstalk|bean|bean stalk`},
+{id:"characters",name:"Movie Characters",kind:"text",hint:"Name the movie",icon:"🎞️",d:`Simba and Nala|the lion king|lion king
+Darth Vader|star wars
+Buzz Lightyear and Woody|toy story
+Donkey and Princess Fiona|shrek
+Elsa and Anna|frozen
+Captain Jack Sparrow|pirates of the caribbean
+Lieutenant Dan and Bubba|forrest gump
+Hermione Granger|harry potter
+Frodo Baggins|lord of the rings|the lord of the rings|the hobbit
+Marty McFly and Doc Brown|back to the future
+Kevin McCallister|home alone
+Rocky Balboa|rocky|creed
+Dorothy and Toto|the wizard of oz|wizard of oz
+Nemo and Dory|finding nemo|finding dory
+Jack and Rose|titanic
+Neo and Trinity|the matrix|matrix
+Lightning McQueen|cars
+Mike and Sulley|monsters inc|monsters university
+Remy the rat|ratatouille
+Carl and Russell|up
+Olaf the snowman|frozen
+Maui|moana
+Hiccup and Toothless|how to train your dragon
+Baymax|big hero 6
+Po the panda|kung fu panda
+Gru and the Minions|despicable me|minions
+Sid the sloth|ice age
+Joy and Sadness|inside out
+Miguel and Hector|coco
+Judy Hopps and Nick Wilde|zootopia|zootropolis
+Mr Incredible|the incredibles|incredibles
+Ariel and Sebastian|the little mermaid|little mermaid
+Belle and the Beast|beauty and the beast
+Jasmine and the Genie|aladdin
+Mowgli and Baloo|the jungle book|jungle book
+Luke Skywalker|star wars
+Tony Stark|iron man|the avengers|avengers
+Katniss Everdeen|the hunger games|hunger games
+Bella and Edward|twilight
+Charlie Bucket|charlie and the chocolate factory|willy wonka|wonka
+John McClane|die hard
+Mick Dundee|crocodile dundee
+Max Rockatansky|mad max|fury road
+Farmer Hoggett|babe
+Peter Venkman|ghostbusters
+Ellen Ripley|alien|aliens
+Sarah Connor|the terminator|terminator
+Barbie and Ken|barbie
+Shrek's ogre swamp neighbour Lord Farquaad|shrek
+Woody and Jessie|toy story
+Wall-E and Eve|wall e|walle
+Tinker Bell|peter pan
+Aragorn and Gandalf|lord of the rings|the lord of the rings|the hobbit
+Ferris Bueller|ferris buellers day off|ferris bueller
+Elle Woods|legally blonde
+Mia Thermopolis|the princess diaries|princess diaries`},
 {id:"sports",name:"Sports",kind:"emoji",hint:"Name the sport",icon:"🏀",d:`⚽|soccer|football|footy
 🏀|basketball|netball
 🏈|american football|gridiron|nfl|football
@@ -898,6 +1014,524 @@ Spider|spiderling
 Camel|calf
 Hippo|calf
 Beaver|kit`},
+{id:"faces",name:"Famous Faces",kind:"photo",hint:"Who is it?",icon:"🌟",d:`Taylor Swift|taylor swift|swift|taylor
+Barack Obama|barack obama|obama
+Albert Einstein|albert einstein|einstein
+Marilyn Monroe|marilyn monroe|monroe|marilyn
+Elvis Presley|elvis presley|elvis|presley
+Michael Jackson|michael jackson|jackson
+Beyoncé|beyonce|beyonce knowles
+Leonardo DiCaprio|leonardo dicaprio|dicaprio|leo
+Tom Hanks|tom hanks|hanks
+Hugh Jackman|hugh jackman|jackman
+Nicole Kidman|nicole kidman|kidman
+Kylie Minogue|kylie minogue|kylie|minogue
+Chris Hemsworth|chris hemsworth|hemsworth
+Margot Robbie|margot robbie|robbie
+Steve Irwin|steve irwin|irwin|crocodile hunter
+Cathy Freeman|cathy freeman|freeman
+Shane Warne|shane warne|warne|warnie
+Don Bradman|don bradman|bradman|the don
+Ash Barty|ash barty|ashleigh barty|barty
+Usain Bolt|usain bolt|bolt
+Serena Williams|serena williams|serena
+LeBron James|lebron james|lebron
+Michael Jordan|michael jordan|jordan
+Cristiano Ronaldo|cristiano ronaldo|ronaldo
+Lionel Messi|lionel messi|messi
+Elizabeth II|queen elizabeth|elizabeth|the queen|queen elizabeth the second
+Charles III|king charles|charles|prince charles
+Diana, Princess of Wales|princess diana|diana|lady di
+Nelson Mandela|nelson mandela|mandela
+Abraham Lincoln|abraham lincoln|lincoln
+Dwayne Johnson|dwayne johnson|the rock|rock
+Ed Sheeran|ed sheeran|sheeran
+Adele|adele
+Lady Gaga|lady gaga|gaga
+Rihanna|rihanna
+Keanu Reeves|keanu reeves|keanu
+Will Smith|will smith
+Oprah Winfrey|oprah winfrey|oprah
+Bill Gates|bill gates|gates
+Steve Jobs|steve jobs|jobs
+Charlie Chaplin|charlie chaplin|chaplin
+Audrey Hepburn|audrey hepburn|hepburn
+Freddie Mercury|freddie mercury|mercury
+John Lennon|john lennon|lennon
+Muhammad Ali|muhammad ali|ali
+Roger Federer|roger federer|federer
+Rowan Atkinson|rowan atkinson|mr bean|atkinson
+Dolly Parton|dolly parton|dolly
+Elton John|elton john|elton`},
+{id:"ausanimals",name:"Australian Animals",kind:"photo",hint:"Name the animal",icon:"🦘",d:`Red kangaroo|kangaroo|red kangaroo|roo
+Koala|koala|koala bear
+Platypus|platypus|duck billed platypus
+Short-beaked echidna|echidna
+Common wombat|wombat
+Emu|emu
+Laughing kookaburra|kookaburra
+Tasmanian devil|tasmanian devil|tassie devil
+Quokka|quokka
+Dingo|dingo|wild dog
+Southern cassowary|cassowary
+Frill-necked lizard|frill necked lizard|frilled lizard|frill neck lizard|lizard
+Thorny devil|thorny devil|thorny dragon|mountain devil
+Sugar glider|sugar glider|glider|possum
+Common brushtail possum|possum|brushtail possum
+Red-necked wallaby|wallaby
+Galah|galah
+Sulphur-crested cockatoo|cockatoo|sulphur crested cockatoo
+Superb lyrebird|lyrebird
+Greater bilby|bilby
+Numbat|numbat
+Lumholtz's tree-kangaroo|tree kangaroo
+Saltwater crocodile|crocodile|saltwater crocodile|saltie|croc
+Redback spider|redback|redback spider
+Sydney funnel-web spider|funnel web|funnel web spider
+Blue-tongued skink|blue tongue|blue tongue lizard|blue tongued lizard|skink
+Little penguin|little penguin|fairy penguin|penguin
+Black swan|black swan|swan
+Rainbow lorikeet|rainbow lorikeet|lorikeet
+Australian magpie|magpie|maggie
+Australian white ibis|ibis|bin chicken|white ibis
+Lace monitor|goanna|lace monitor|monitor lizard
+Eastern brown snake|brown snake|eastern brown snake|snake
+Dugong|dugong|sea cow
+Spotted-tailed quoll|quoll
+Bandicoot|bandicoot
+Inland taipan|taipan|inland taipan|snake
+Huntsman spider|huntsman|huntsman spider
+Box jellyfish|box jellyfish|jellyfish|stinger
+Great white shark|great white|shark|great white shark
+Wedge-tailed eagle|wedge tailed eagle|eagle|wedgie
+Tawny frogmouth|tawny frogmouth|frogmouth|owl
+Cane toad|cane toad|toad`},
+{id:"auslandmarks",name:"Australian Landmarks",kind:"photo",hint:"Name the landmark",icon:"🏞️",d:`Sydney Opera House|opera house|sydney opera house
+Sydney Harbour Bridge|harbour bridge|sydney harbour bridge|coathanger
+Uluru|uluru|ayers rock
+The Twelve Apostles (Victoria)|twelve apostles|12 apostles
+Bondi Beach|bondi|bondi beach
+Big Banana|big banana
+Big Pineapple|big pineapple
+Federation Square|federation square|fed square
+Flinders Street railway station|flinders street station|flinders street
+Melbourne Cricket Ground|mcg|melbourne cricket ground
+Parliament House, Canberra|parliament house|parliament
+Australian War Memorial|war memorial|australian war memorial
+Kata Tjuta|kata tjuta|the olgas|olgas
+Wave Rock|wave rock
+Pinnacles Desert|pinnacles|the pinnacles|pinnacles desert
+Port Arthur, Tasmania|port arthur
+Cradle Mountain|cradle mountain
+Wineglass Bay|wineglass bay
+Whitehaven Beach|whitehaven beach|whitehaven
+Shrine of Remembrance|shrine of remembrance|the shrine
+Story Bridge|story bridge
+Q1 (building)|q1|q1 tower
+Sydney Tower|sydney tower|centrepoint tower|centrepoint
+Luna Park Sydney|luna park
+Three Sisters (Australia)|three sisters
+Purnululu National Park|bungle bungles|bungle bungle|purnululu
+Daintree Rainforest|daintree|daintree rainforest
+Lake Hillier|lake hillier|pink lake
+Hosier Lane|hosier lane
+Royal Exhibition Building|royal exhibition building|exhibition building
+Big Merino|big merino|big sheep
+Great Barrier Reef|great barrier reef|barrier reef|reef
+Eureka Tower|eureka tower|eureka
+Fremantle Prison|fremantle prison
+Sovereign Hill|sovereign hill
+Puffing Billy Railway|puffing billy
+Great Ocean Road|great ocean road
+Mount Kosciuszko|kosciuszko|mount kosciuszko|kosi
+Kings Park, Western Australia|kings park
+Big Prawn|big prawn`},
+{id:"plots",name:"Famous Movies",kind:"text",hint:"Name the movie",icon:"🍿",d:`A shark terrorises a beach town|jaws
+A ship hits an iceberg on its first voyage|titanic
+Dinosaurs are brought back to life on an island|jurassic park|jurassic world
+A boy wizard goes to Hogwarts|harry potter
+Toys come to life when humans leave the room|toy story
+A clownfish dad crosses the ocean to find his son|finding nemo
+A lion cub runs away after his father dies|the lion king|lion king
+A teenager travels back to 1955 in a DeLorean|back to the future
+A boy left home alone at Christmas fights burglars|home alone
+Hobbits travel to destroy a powerful ring|lord of the rings|the lord of the rings
+A man runs across America and meets presidents|forrest gump
+Hackers discover reality is a computer simulation|the matrix|matrix
+A stranded alien wants to phone home|et|e t
+Two royal sisters, one with ice powers|frozen
+A green ogre rescues a princess for a lord|shrek
+Five emotions live inside a girl's head|inside out
+A rat dreams of being a chef in Paris|ratatouille
+An old man flies his house away with balloons|up
+A lonely robot cleans up a deserted Earth|wall e|walle
+A Philadelphia boxer gets a shot at the title|rocky
+Superheroes assemble to stop Thanos|avengers|the avengers|avengers endgame|infinity war
+A farm pig wants to be a sheepdog|babe
+A bushman from the outback visits New York|crocodile dundee
+Teens are forced to fight in a televised arena|the hunger games|hunger games
+A tornado sweeps a girl and her dog to a magical land|the wizard of oz|wizard of oz
+A doll leaves her perfect pink world for the real one|barbie
+Scientists start a ghost-catching business in New York|ghostbusters
+A pirate chases his stolen ship, the Black Pearl|pirates of the caribbean
+A cop fights terrorists at an office Christmas party|die hard
+A mermaid trades her voice for legs|the little mermaid|little mermaid
+A Polynesian girl sails to restore a stolen heart|moana
+A family of superheroes hides their powers|the incredibles|incredibles
+Astronauts travel through a wormhole to save humanity|interstellar
+A dad hunts for a Turbo-Man toy on Christmas Eve|jingle all the way
+A fake substitute teacher forms a kids' rock band|school of rock
+A British spy with the code number 007|james bond|bond|skyfall|casino royale
+A farm boy learns the Force to fight the Empire|star wars
+A weatherman relives the same day over and over|groundhog day
+An archaeologist races Nazis for the Ark of the Covenant|indiana jones|raiders of the lost ark
+A cyborg is sent back in time to kill Sarah Connor|the terminator|terminator
+A road warrior survives a desert wasteland|mad max|fury road
+A golden ticket wins a tour of a chocolate factory|charlie and the chocolate factory|willy wonka|wonka
+A Pixar car learns there's more to life than winning|cars
+A Mexican boy visits the Land of the Dead|coco
+A panda becomes a kung fu master|kung fu panda`},
+{id:"christmas",name:"Christmas Songs",kind:"text",hint:"Finish the song title",icon:"🎄",d:`Jingle…|bells
+Rudolph the Red-Nosed…|reindeer
+Frosty the…|snowman
+Silent…|night
+Deck the…|halls
+Let It…|snow
+Feliz…|navidad
+White…|christmas
+Last…|christmas
+Jingle Bell…|rock
+Rockin' Around the Christmas…|tree
+All I Want for Christmas Is…|you
+Santa Claus Is Coming to…|town
+Have Yourself a Merry Little…|christmas
+Do They Know It's…|christmas|christmas time
+Here Comes Santa…|claus
+Winter…|wonderland
+O Holy…|night
+The Little Drummer…|boy
+The Twelve Days of…|christmas
+Joy to the…|world
+O Come, All Ye…|faithful
+Hark! The Herald Angels…|sing
+We Wish You a Merry…|christmas
+Away in a…|manger
+Mary's Boy…|child
+Blue…|christmas
+It's Beginning to Look a Lot Like…|christmas
+Driving Home for…|christmas
+Merry Xmas…|everybody|everyone
+Step into…|christmas
+Wonderful…|christmastime|christmas time
+Mistletoe and…|wine
+I Saw Mommy Kissing Santa…|claus
+Six White…|boomers
+Christmas Where the Gum Trees…|grow
+Baby, It's Cold…|outside
+Sleigh…|ride
+God Rest Ye Merry…|gentlemen
+The First…|noel|nowell
+Good King…|wenceslas
+Grandma Got Run Over by a…|reindeer
+Underneath the Christmas…|tree
+Happy Xmas (War Is…)|over
+Christmas…|wrapping|time|eve`},
+{id:"halloween",name:"Halloween",kind:"mixed",hint:"Name the spooky thing",icon:"🎃",d:`🎃|jack o lantern|pumpkin|jack o' lantern
+👻|ghost
+🧛|vampire|dracula
+🧟|zombie
+🧙‍♀️|witch
+💀|skull|skeleton
+🦇|bat|vampire bat
+🕷️|spider
+🕸️|spider web|cobweb|web
+🐈‍⬛|black cat|cat
+🧌|troll|ogre
+👹|ogre|demon|oni|monster
+🤡|clown|scary clown
+🐺|werewolf|wolf
+😈|devil|demon|imp
+👽|alien
+⚰️|coffin|casket
+🪦|gravestone|tombstone|headstone|grave
+🔮|crystal ball|fortune teller
+🍬|lolly|candy|sweets|lollies
+🌕|full moon|moon
+🦴|bone
+🧪|potion|poison
+🪄|magic wand|wand
+🏚️|haunted house|house|old house
+🐀|rat
+🦉|owl
+🧹|broomstick|broom
+🎭|mask|masks
+Count who lives in a castle in Transylvania|dracula|count dracula
+Monster built by a scientist from body parts|frankenstein|frankensteins monster
+Wrapped in bandages, from an Egyptian tomb|mummy|the mummy
+Rider with no head from Sleepy Hollow|headless horseman
+Hooded figure who carries a scythe|grim reaper|death|the reaper
+Green witch from The Wizard of Oz|wicked witch|wicked witch of the west|elphaba
+Wednesday's spooky family|addams family|the addams family|addams
+Pumpkin King of Halloween Town|jack skellington|jack
+The friendly ghost|casper
+Green ghost in Ghostbusters who eats everything|slimer
+What kids say at the door on Halloween|trick or treat`},
+{id:"pokemon",name:"Pokémon",kind:"text",hint:"Name the Pokémon",icon:"⚡",d:`Electric mouse and Ash's best friend|pikachu
+Fire lizard starter with a flame on its tail|charmander
+Grass starter with a bulb on its back|bulbasaur
+Water starter turtle|squirtle
+Huge orange fire-breathing dragon|charizard
+Pink balloon that sings you to sleep|jigglypuff
+Giant sleepy Pokémon that blocks roads|snorlax
+Psychic clone created in a lab|mewtwo
+Tiny pink psychic Pokémon, ancestor of all|mew
+Brown fox with many evolutions|eevee
+Fish that can only splash around|magikarp
+Fierce sea serpent that evolves from Magikarp|gyarados
+Purple ghost with a huge grin|gengar
+Team Rocket's talking cat|meowth
+Giant rock snake|onix
+Yellow duck with a constant headache|psyduck
+Spoon-bending psychic Pokémon|alakazam|kadabra|abra
+Four-armed fighting Pokémon|machamp|machoke|machop
+Orange Pokémon that Pikachu evolves into|raichu
+Baby Pokémon that evolves into Pikachu|pichu
+Legendary ice bird|articuno
+Legendary electric bird|zapdos
+Legendary fire bird|moltres
+Purple blob that can copy any Pokémon|ditto
+Pink nurse helper with an egg|chansey|blissey
+Ghost in a homemade Pikachu disguise|mimikyu
+Owl grass starter from Alola|rowlet
+Blue crocodile water starter|totodile
+Blue jackal that reads auras|lucario
+Green caterpillar that becomes Butterfree|caterpie
+Looks just like a Poké Ball|voltorb|electrode
+Floating rock with arms|geodude
+Friendly orange dragon that evolves from Dragonair|dragonite
+Big fire dog Pokémon|arcanine|growlithe
+Gentle sea creature that ferries people across water|lapras
+Electric sheep Pokémon|mareep|ampharos|flaaffy
+Pikachu's Gen 3 lookalike cheerleaders|plusle and minun|plusle|minun
+Pink fairy with a curly tail that loves the moon|clefairy|clefable
+Bat Pokémon found in every cave|zubat|golbat
+Mouse with a sandy shell that rolls into a ball|sandshrew|sandslash`},
+{id:"videogames",name:"Video Games",kind:"text",hint:"Name it",icon:"🎮",d:`Plumber who rescues Princess Peach|mario|super mario
+Mario's taller brother in green|luigi
+Blue hedgehog who runs really fast|sonic|sonic the hedgehog
+Hero in a green tunic in The Legend of Zelda|link
+Yellow circle that eats dots and ghosts|pac man|pacman
+Game where you build in a world of blocks|minecraft
+Minecraft's green creature that explodes|creeper
+Falling blocks puzzle game from Russia|tetris
+Battle royale where you build forts|fortnite
+Gorilla who throws barrels|donkey kong
+Mario's green dinosaur friend|yoshi
+Mario's spiky turtle enemy|bowser
+Game where you catch creatures in balls|pokemon
+Crime game series set in Los Santos|grand theft auto|gta
+Birds launched at pigs with a slingshot|angry birds
+Swipe to slice fruit with a blade|fruit ninja
+Run from a guard along train tracks|subway surfers
+Island life game with Tom Nook|animal crossing
+Space soldier called Master Chief|halo
+Life game where you control little people|the sims|sims
+Sony's games console|playstation|ps5|ps4
+Microsoft's games console|xbox
+Nintendo console you can take on the go|switch|nintendo switch
+Find the impostor among your crewmates|among us
+Kart racing with banana peels and shells|mario kart
+Shoot rows of aliens marching down the screen|space invaders
+Bouncing ball and paddles, one of the first video games|pong
+Pink puffball who inhales enemies|kirby
+Frog crossing busy roads and rivers|frogger
+Lara Croft's game series|tomb raider
+EA's football game series|fifa|ea fc|ea sports fc
+Online platform full of obbies|roblox
+Nintendo fighting game where Mario fights Pikachu|super smash bros|smash bros|smash
+Mario's greedy rival in yellow and purple|wario
+Luigi hunts ghosts with a vacuum|luigis mansion
+Fighting game famous for "Hadouken"|street fighter
+Fighting game famous for "Finish him!"|mortal kombat
+Orange bandicoot in jeans|crash|crash bandicoot
+Purple dragon hero on PlayStation|spyro
+Princess Mario keeps rescuing|peach|princess peach
+Plumber series where the ghost Boo appears|mario|super mario`},
+{id:"nba",name:"NBA",kind:"text",hint:"Name the team's city or the player",icon:"🏀",d:`Lakers|los angeles|la
+Clippers|los angeles|la
+Celtics|boston
+Bulls|chicago
+Warriors|golden state|san francisco
+Knicks|new york
+Nets|brooklyn|new york
+Heat|miami
+Spurs|san antonio
+Mavericks|dallas
+Rockets|houston
+Suns|phoenix
+Nuggets|denver
+Jazz|utah|salt lake city
+Bucks|milwaukee
+76ers|philadelphia|philly
+Raptors|toronto
+Thunder|oklahoma city|oklahoma|okc
+Trail Blazers|portland
+Kings|sacramento
+Timberwolves|minnesota
+Pelicans|new orleans
+Grizzlies|memphis
+Hawks|atlanta
+Hornets|charlotte
+Magic|orlando
+Pistons|detroit
+Cavaliers|cleveland
+Pacers|indiana|indianapolis
+Wizards|washington
+Bulls legend who wore number 23|michael jordan|jordan
+Lakers legend who wore 8 and 24|kobe bryant|kobe
+"King James"|lebron james|lebron
+Warriors sharpshooter nicknamed "Chef"|stephen curry|steph curry|curry
+"The Greek Freak"|giannis antetokounmpo|giannis
+Aussie guard who won a title with the Spurs|patty mills|mills
+Aussie centre drafted No. 1 in 2005|andrew bogut|bogut
+Lakers giant centre called "Shaq"|shaquille oneal|shaq|oneal
+Serbian Nuggets centre "The Joker"|nikola jokic|jokic
+French giant nicknamed "Wemby"|victor wembanyama|wembanyama|wemby
+Slovenian star "Luka Magic"|luka doncic|doncic|luka
+Aussie point guard drafted first overall in 2016|ben simmons|simmons
+Aussie guard drafted 6th by the Thunder in 2021|josh giddey|giddey`},
+{id:"fastfood",name:"Fast Food",kind:"text",hint:"Name the chain or food",icon:"🍟",d:`The golden arches|mcdonalds|maccas
+Home of the Whopper in Australia|hungry jacks|burger king
+Colonel Sanders' fried chicken|kfc|kentucky fried chicken
+Footlong subs made in front of you|subway
+Pizza chain named after a tile game|dominos
+Pizza chain with a red roof logo|pizza hut
+Aussie chicken shop famous for rolls|red rooster
+Peri-peri Portuguese chicken chain|nandos
+Where you'd order a Big Mac|mcdonalds|maccas
+Where you'd order a Zinger burger|kfc
+Mexican chain famous for the Crunchwrap|taco bell
+Coffee chain with a green mermaid logo|starbucks
+Doughnut chain famous for the Original Glazed|krispy kreme
+Ice cream chain famous for 31 flavours|baskin robbins
+Aussie Mexican chain known as GYG|guzman y gomez|gyg
+Gourmet burger chain with "Simply Grill'd"|grilld
+Chicken chain famous for the Bondi burger|oporto
+Smoothie and juice chain|boost|boost juice
+Burger chain with a red-haired girl logo|wendys
+Burger chain with free peanuts|five guys
+Kids' meal with a toy at Maccas|happy meal
+Chicken in a bucket|kfc
+Louisiana fried chicken chain|popeyes
+Schnitzel chain|schnitz
+Aussie Mexican chain with "Meal for a Meal"|zambrero
+Mall bakery chain famous for muffins|muffin break
+Bite-sized chicken pieces at Maccas|chicken mcnuggets|mcnuggets|nuggets
+Fried potato sticks|chips|fries|hot chips
+Meat in pastry, the footy favourite|meat pie|pie
+Wrap of shaved meat and garlic sauce|kebab|doner kebab|yiros|gyros
+Chips, kebab meat and three sauces|halal snack pack|hsp|snack pack
+Battered hot dog on a stick at the show|dagwood dog|corn dog|pluto pup
+Sausage meat rolled in flaky pastry|sausage roll
+Aussie Chinese takeaway dumpling|dim sim
+Battered slice of potato from the fish and chip shop|potato cake|scallop|potato scallop
+Fish and chips wrapped in this|paper|butcher's paper|newspaper
+Burger, chips and a drink|combo|meal|value meal|meal deal
+Frozen dessert at Wendy's|frosty
+Maccas' soft serve with toppings stirred in|mcflurry`},
+{id:"grocery",name:"Grocery Run",kind:"mixed",hint:"Name the grocery item",icon:"🛒",d:`🥛|milk
+🧈|butter
+🍞|bread|loaf
+🥚|eggs|egg
+🧀|cheese
+🥫|tinned food|can|canned food|tin|soup|tin of soup
+🧂|salt|salt shaker
+🍯|honey
+🫒|olives|olive
+🍚|rice
+🥣|cereal|bowl of cereal
+🧻|toilet paper|toilet roll
+🧴|shampoo|lotion|sunscreen|soap
+🥓|bacon
+🍌|bananas|banana
+🥔|potatoes|potato|spuds
+🧅|onions|onion
+🥕|carrots|carrot
+🫐|blueberries|blueberry
+🥬|lettuce|cabbage|bok choy|greens
+🫑|capsicum|bell pepper|pepper
+🍅|tomatoes|tomato
+🫘|beans|baked beans|kidney beans
+🍪|biscuits|cookies|biscuit|cookie
+🧃|juice|juice box|popper
+☕|coffee
+🍫|chocolate
+Black yeast spread for toast|vegemite
+Chocolate biscuit you do a Tim Tam slam with|tim tam|tim tams
+Wheat biscuit breakfast cereal|weet bix|weetbix
+Chocolate malt powder in a green tin|milo
+Orange-flavoured chocolate balls|jaffas
+Chocolate shaped like a frog|freddo|freddo frog
+Lemon squash soft drink in a yellow can|solo
+Supermarket with the "Down Down" ads|coles
+"The fresh food people" supermarket|woolworths|woolies
+German discount supermarket with a middle aisle|aldi
+Sponge cake dipped in chocolate and coconut|lamington|lamingtons
+Oat and golden syrup biscuit named after soldiers|anzac biscuit|anzac biscuits|anzacs
+Sweet spread made from peanuts|peanut butter
+Brown sauce you put on a pie|tomato sauce|sauce|ketchup
+Sliced cheese that comes in plastic wrappers|cheese slices|kraft singles|singles
+Little green frozen vegetables in a bag|peas
+Fizzy water in a bottle|sparkling water|mineral water|soda water`},
+{id:"bunnings",name:"Bunnings Run",kind:"mixed",hint:"Name the tool or item",icon:"🔨",d:`🔨|hammer
+🪛|screwdriver
+🔧|spanner|wrench
+🪚|saw|hand saw|handsaw
+⛏️|pick|pickaxe|mattock
+🪓|axe|hatchet
+🧰|toolbox|tool box|tool kit
+🪜|ladder
+🧱|brick|bricks
+🪵|timber|wood|log|logs
+🪣|bucket
+🔩|nut and bolt|bolt|nut|screw
+🧲|magnet
+🔦|torch|flashlight
+🪤|mouse trap|mousetrap|trap
+🧯|fire extinguisher|extinguisher
+🪴|pot plant|potted plant|plant
+🪝|hook
+🔌|plug|power plug
+💡|light bulb|globe|bulb
+🔒|padlock|lock
+The famous fundraiser out the front on weekends|sausage sizzle|snag|sausage
+Measures length and snaps back|tape measure|measuring tape
+Tool with a bubble that shows if it's straight|spirit level|level
+One-wheeled garden cart|wheelbarrow|barrow
+Power tool that makes holes|drill|power drill
+Paint tool that rolls|paint roller|roller
+Water the garden with it|hose|garden hose
+Rough paper for smoothing wood|sandpaper|sand paper
+Gripping tool with two handles|pliers
+Dig holes with it|shovel|spade
+Gather fallen leaves with it|rake
+Cuts the grass|lawn mower|mower|lawnmower
+Trims the edges of the lawn|whipper snipper|line trimmer|trimmer|edger
+Silver tape that fixes everything|duct tape|gaffer tape|gaffa tape
+Glue that sets in seconds|super glue|superglue
+Bathroom sealant in a tube|silicone|caulk|sealant
+Long power cord|extension lead|extension cord|power board
+Outdoor cooker Aussies love|barbecue|bbq|barbie
+Bunnings: "Lowest prices are just the…"|beginning
+Colour of a Bunnings team member's apron|green
+Cuts through metal|hacksaw|angle grinder|grinder
+Ratcheting tool for nuts and bolts|socket wrench|socket set|ratchet
+Bar with a hooked end for prying|crowbar|pry bar|jemmy
+Wooden or rubber hammer|mallet
+Sharp flat blade for carving wood|chisel
+Weed killer you spray|roundup|weed killer|herbicide
+Bag of dirt for the garden|potting mix|soil|dirt|compost`},
+
 {id:"times",name:"Times Tables",kind:"math",hint:"Quick, multiply",icon:"✖️"},
 {id:"scramble",name:"Unscramble",kind:"tiles",hint:"Unscramble the word",icon:"🔤",words:"apple,beach,chair,dance,eagle,flame,grape,house,juice,knife,lemon/melon,mango,night/thing,ocean/canoe,piano,queen,river,snake,table/bleat,water,zebra,bread/beard,cloud,dream/armed,earth/heart,fruit,ghost,laugh,money,party,robot,smile/slime/miles/limes,tiger,train,watch,plant,sport/ports/strop,storm,candy,horse/shore,mouse,shark,clock,brain,phone,light,music,pizza,happy,funny,green,jelly,lucky,magic,noisy,pasta,quiet,sunny,teeth,uncle,video,woman,young"}
 ];
