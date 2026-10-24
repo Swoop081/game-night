@@ -541,6 +541,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;","
 /* =================== SCREEN ORIENTATION =================== */
 // The chosen layout never changes on its own. If the device is held the other way, the app is turned 90° to match.
 function applyScreen(){
+  if(/GameNightTV/.test(navigator.userAgent))S.prefs.screen="landscape";
   const app=$("app"),W=window.innerWidth,H=window.innerHeight;
   if(!S.prefs.screen)S.prefs.screen=H>W?"portrait":"landscape";
   const wantPortrait=S.prefs.screen==="portrait",isPortrait=H>W;
@@ -1162,6 +1163,8 @@ window.__gnBack=()=>{
   if(b){b.click();return true}
   show("hub");return true;
 };
+// TV app is always landscape: hide every Screen toggle
+if(/GameNightTV/.test(navigator.userAgent))addEventListener("load",()=>document.querySelectorAll('.seg[id*="Screen"]').forEach(e=>{const h=e.closest(".hubtop,.field")||e.parentElement;h.style.display="none"}));
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
 <script src="avatars.js"></script>

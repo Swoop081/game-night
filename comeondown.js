@@ -220,7 +220,7 @@ function openSetup(){
   </div><div class="panel"><span class="eyebrow">Contestants and colours</span><div class="hlsetup" id="cdPlayers"></div></div></div>`;
   seg($("cdVoiceSeg"),[true,false],()=>S.prefs.voice,v=>S.prefs.voice=v,onOff);
   seg($("cdSoundSeg"),[true,false],()=>S.prefs.sound,v=>S.prefs.sound=v,onOff);
-  screenSeg($("cdScreenSeg"));
+  screenSeg($("cdScreenSeg"));if(/GameNightTV/.test(navigator.userAgent))$("cdScreenSeg").parentElement.style.display="none";
   $("cdBack").onclick=()=>show("hub");
   $("cdStart").onclick=()=>{ac();startGame()};
   $("cdMinus").onclick=()=>{CD.count=Math.max(2,CD.count-1);openSetup()};
