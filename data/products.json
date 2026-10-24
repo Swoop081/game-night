@@ -396,7 +396,7 @@
   {
    "n": "LG 65\" QNED86B EVO AI Mini-LED 4K Smart TV [2026]",
    "p": 1995,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/891990-Product-0-I-639082693811591016_32x32.jpg?v=1790122987",
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/891990-Product-0-I-639082693811591016_600x600.jpg?v=1790122987",
    "r": "JB Hi-Fi",
    "e": "📺",
    "d": "25 October 2026"
@@ -426,25 +426,25 @@
    "d": "25 October 2026"
   },
   {
-   "n": "Sony WH-1000XM5 Premium Noise Cancelling Wireless Over-Ear Headphones (Black)",
-   "p": 549,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/592550-Product-0-I-637878553982254808_600x600.jpg?v=1774562838",
-   "r": "JB Hi-Fi",
-   "e": "🎧",
-   "d": "25 October 2026"
-  },
-  {
    "n": "Sony WH-CH730N Wireless Noise Cancelling Over-Ear Headphones (Blue)",
    "p": 229,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/910495-Product-0-I-639226255205444537_b0d39744-646c-4c4d-9e5e-8725bf0a1a77_32x32.jpg?v=1788312005",
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/910495-Product-0-I-639226255205444537_b0d39744-646c-4c4d-9e5e-8725bf0a1a77_600x600.jpg?v=1788312005",
    "r": "JB Hi-Fi",
    "e": "🎧",
    "d": "25 October 2026"
   },
   {
-   "n": "Sony WH-CH730N Wireless Noise Cancelling Over-Ear Headphones (Beige)",
+   "n": "Sony WH-1000XM5 Premium Noise Cancelling Wireless Over-Ear Headphones (Black)",
+   "p": 549,
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/592550-Product-0-I-637878553982254808_32x32.jpg?v=1774562838",
+   "r": "JB Hi-Fi",
+   "e": "🎧",
+   "d": "25 October 2026"
+  },
+  {
+   "n": "Sony WH-CH730N Wireless Noise Cancelling Over-Ear Headphones (Pink)",
    "p": 229,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/910497-Product-0-I-639226256406010936_32x32.jpg?v=1788773946",
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/910496-Product-0-I-639226255804321151_32x32.jpg?v=1788312065",
    "r": "JB Hi-Fi",
    "e": "🎧",
    "d": "25 October 2026"
@@ -466,17 +466,17 @@
    "d": "25 October 2026"
   },
   {
-   "n": "HP 15-fd0758TU 15.6\" Full HD Laptop (Intel Core i5-1334U)[256GB]",
-   "p": 1399,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/897360-Product-0-I-639192559806661990_32x32.jpg?v=1783659246",
+   "n": "Lenovo IdeaPad Slim 3 14\" WUXGA Laptop (Intel Core 5-320)[512GB]",
+   "p": 1499,
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/899164-Product-0-I-639165823202741086_32x32.jpg?v=1780985598",
    "r": "JB Hi-Fi",
    "e": "💻",
    "d": "25 October 2026"
   },
   {
-   "n": "Lenovo IdeaPad S3 15.6\" Full HD Laptop (Ryzen 5)[512GB/8GB]",
-   "p": 849,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/888299-Product-0-I-639143994603700296_32x32.jpg?v=1778802734",
+   "n": "HP Laptop 15-fc0816AU 15.6\" Full HD Laptop (Ryzen 7)[512GB]",
+   "p": 1899,
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/840512-Product-0-I-639119146204752720_600x600.jpg?v=1776317885",
    "r": "JB Hi-Fi",
    "e": "💻",
    "d": "25 October 2026"
@@ -516,7 +516,7 @@
   {
    "n": "ECOVACS X11 Omnicyclone Robotic Vacuum Cleaner",
    "p": 2999,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/834121-Product-0-I-638917575606948825_32x32.jpg?v=1756160862",
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/834121-Product-0-I-638917575606948825_600x600.jpg?v=1756160862",
    "r": "JB Hi-Fi",
    "e": "🤖",
    "d": "25 October 2026"
@@ -548,7 +548,7 @@
   {
    "n": "De'Longhi La Specialista Arte Manual Pump Coffee Machine (Black)",
    "p": 549,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/902227-Product-0-I-639202755010151111_32x32.jpg?v=1784678765",
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/902227-Product-0-I-639202755010151111_600x600.jpg?v=1784678765",
    "r": "JB Hi-Fi",
    "e": "☕",
    "d": "25 October 2026"
@@ -562,17 +562,17 @@
    "d": "25 October 2026"
   },
   {
-   "n": "Sunbeam Iced & Hot Coffee Machine",
-   "p": 149,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/656842-Product-0-I-638259384604966692_32x32.jpg?v=1791492385",
+   "n": "De'Longhi Magnifica Start Fully Automatic Coffee Machine (Silver)",
+   "p": 699,
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/654916-Product-0-I-638252322607209447_32x32.jpg?v=1790977569",
    "r": "JB Hi-Fi",
    "e": "☕",
    "d": "25 October 2026"
   },
   {
-   "n": "Ninja Luxe Café Espresso Machine (Gunmetal)",
-   "p": 799,
-   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/899270-Product-0-I-639163231804223327_32x32.jpg?v=1780726507",
+   "n": "Sunbeam Iced & Hot Coffee Machine",
+   "p": 149,
+   "img": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/656842-Product-0-I-638259384604966692_32x32.jpg?v=1791492385",
    "r": "JB Hi-Fi",
    "e": "☕",
    "d": "25 October 2026"
@@ -850,23 +850,23 @@
    "d": "25 October 2026"
   },
   {
-   "n": "Sleek Sneakers",
+   "n": "Nylon Retro Sneakers - Rita",
    "p": 35,
-   "img": "https://assets.target.com.au/transform/27df3736-bdbd-47a1-85fb-6f8dada37851/475_72585337_1-475T7258?io=transform%3Afit%2Cwidth%3A364%2Cheight%3A455&quality=90&output=webp",
+   "img": "https://assets.target.com.au/transform/4c894768-4705-435a-ac93-674ca911c0a8/475_72555347_1-475T7255?io=transform%3Afit%2Cwidth%3A364%2Cheight%3A455&quality=90&output=webp",
    "r": "Target",
    "e": "👟",
    "d": "25 October 2026"
   },
   {
-   "n": "Fila Sneakers - Lavenzo",
-   "p": 55,
-   "img": "https://assets.target.com.au/transform/503bc0e6-efe3-45ed-b870-8bb13ea7cfec/72745632-IMG-000?io=transform%3Afit%2Cwidth%3A364%2Cheight%3A455&quality=90&output=webp",
+   "n": "Fila Casual Sneakers - Aquino",
+   "p": 35,
+   "img": "https://assets.target.com.au/transform/2628e476-eed6-4592-862a-a0726eb5a962/72703441-IMG-000?io=transform%3Afit%2Cwidth%3A364%2Cheight%3A455&quality=90&output=webp",
    "r": "Target",
    "e": "👟",
    "d": "25 October 2026"
   },
   {
-   "n": "KInder 1/2m Chocolate Tube 300g",
+   "n": "Kinder 1/2m Chocolate Tube 300g",
    "p": 13.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/71886ef4-2357-4aa7-ba26-6b2f28444e88/12m%20Chocolate%20Tube%20300g",
    "r": "Aldi",
@@ -874,7 +874,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "HAribo Mega Roulette 45g",
+   "n": "Haribo Mega Roulette 45g",
    "p": 0.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/f565efbc-67cf-4f99-bbcc-20145ad72315/Mega%20Roulette%2045g",
    "r": "Aldi",
@@ -882,7 +882,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "CHoceur Milk Chocolate Block 200g",
+   "n": "Choceur Milk Chocolate Block 200g",
    "p": 4.49,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/7f798fd3-4856-42fa-a8dd-d5c992ab9531/Milk%20Chocolate%20Block%20200g",
    "r": "Aldi",
@@ -890,7 +890,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "CHoceur Dark Chocolate Block 200g",
+   "n": "Choceur Dark Chocolate Block 200g",
    "p": 4.49,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/e5f8e9df-ab0c-41d0-b8f4-891135a28166/Dark%20Chocolate%20Block%20200g",
    "r": "Aldi",
@@ -906,7 +906,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "DAiry Fine Milk Chocolate Block 180g",
+   "n": "Dairy Fine Milk Chocolate Block 180g",
    "p": 2.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/8f2606a3-09b7-4a0b-8ba5-205994c9405e/Milk%20Chocolate%20Block%20180g",
    "r": "Aldi",
@@ -914,7 +914,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "CUrated Collection Gourmet Soft Nougat Almond and Pistachio 150g",
+   "n": "Curated Collection Gourmet Soft Nougat Almond and Pistachio 150g",
    "p": 4.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/aba4c877-cb73-43b2-88bd-d06c6d7fe70e/Gourmet%20Soft%20Nougat%20Almond%20and%20Pistachio%20150g",
    "r": "Aldi",
@@ -922,7 +922,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "CAdbury Dairy Milk Advent Calendar 90g",
+   "n": "Cadbury Dairy Milk Advent Calendar 90g",
    "p": 4.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/a3a19589-7e2a-413e-9fd1-91f911e8b852/Dairy%20Milk%20Advent%20Calendar%2090g",
    "r": "Aldi",
@@ -930,7 +930,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "DArrell Lea Red and Green Liquorice 275g",
+   "n": "Darrell Lea Red and Green Liquorice 275g",
    "p": 3.49,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/f72a84b8-cabd-48d9-84a7-509d878f15a0/Red%20and%20Green%20Liquorice%20275g",
    "r": "Aldi",
@@ -946,7 +946,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "DOminion Naturals Liquorice Twists 300g",
+   "n": "Dominion Naturals Liquorice Twists 300g",
    "p": 2.59,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/a480e295-a9e4-4c58-8b95-265ee1b8c716/Liquorice%20Twists%20300g",
    "r": "Aldi",
@@ -954,7 +954,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "DAiry Fine Dark Chocolate Block 180g",
+   "n": "Dairy Fine Dark Chocolate Block 180g",
    "p": 2.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/b75c43db-043a-4097-a5b8-9fc9061ee6bc/Dark%20Chocolate%20Block%20180g",
    "r": "Aldi",
@@ -962,7 +962,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "ALcafe Aroma Classic Instant Coffee 200g",
+   "n": "Alcafe Aroma Classic Instant Coffee 200g",
    "p": 6.39,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/c72e7f11-61c5-4eaa-8042-8e88008f60ce/Aroma%20Classic%20Instant%20Coffee%20200g",
    "r": "Aldi",
@@ -970,7 +970,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "ALcafe Gold Decaffeinated Instant Coffee 100g",
+   "n": "Alcafe Gold Decaffeinated Instant Coffee 100g",
    "p": 4.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/cacd7437-968e-4fb9-bd0b-acda837aedb2/Decaffeinated%20Instant%20Coffee%20100g",
    "r": "Aldi",
@@ -978,7 +978,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "DIplomat Tea Cup Bags 100 Pack",
+   "n": "Diplomat Tea Cup Bags 100 Pack",
    "p": 1.75,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/0b6818d8-dfb4-49bb-a98c-e5c6c6ed3c5a/Tea%20Cup%20Bags%20100%20Pack",
    "r": "Aldi",
@@ -986,7 +986,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "SAn Benedetto Italian Mineral Water 1.5L",
+   "n": "San Benedetto Italian Mineral Water 1.5L",
    "p": 2.29,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/62c87fa6-be70-4584-9516-ade28babd4e0/Italian%20Mineral%20Water%201.5L",
    "r": "Aldi",
@@ -994,7 +994,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "COca-Cola Coke Coca Cola Soft Drink 600ml",
+   "n": "Coca-Cola Coke Coca Cola Soft Drink 600ml",
    "p": 4.19,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/aa57968d-26c3-44dd-8dfa-752d343337f9/Coke%20Coca%20Cola%20Soft%20Drink%20600ml",
    "r": "Aldi",
@@ -1002,7 +1002,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "PEpsi Max No Sugar Cola Soft Drink 600ml",
+   "n": "Pepsi Max No Sugar Cola Soft Drink 600ml",
    "p": 4.19,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/6aa3b8bb-1a6c-4f57-98ff-85ef879f5ad3/No%20Sugar%20Cola%20Soft%20Drink%20600ml",
    "r": "Aldi",
@@ -1010,7 +1010,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "WEstcliff Apple And Mango Juice 2L",
+   "n": "Westcliff Apple And Mango Juice 2L",
    "p": 2.59,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/d0b1c842-f2a7-4f6e-88f5-88161f7daef9/Apple%20And%20Mango%20Juice%202L",
    "r": "Aldi",
@@ -1018,7 +1018,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "WEstcliff Apple Juice 2L",
+   "n": "Westcliff Apple Juice 2L",
    "p": 2.59,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/5139fad6-246b-4b25-9776-0f1447a023fb/Apple%20Juice%202L",
    "r": "Aldi",
@@ -1026,7 +1026,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "WEstcliff Apple And Blackcurrant Juice 2L",
+   "n": "Westcliff Apple And Blackcurrant Juice 2L",
    "p": 2.59,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/e08435f0-2e60-4cf2-bc1c-cd401ad4fc32/Apple%20And%20Blackcurrant%20Juice%202L",
    "r": "Aldi",
@@ -1034,7 +1034,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "EXpressi Rich Hot Chocolate Capsule 16 Pack 208g",
+   "n": "Expressi Rich Hot Chocolate Capsule 16 Pack 208g",
    "p": 7.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/ed390675-6665-4751-80ef-775fcc99fa03/Rich%20Hot%20Chocolate%20Capsule%2016%20Pack%20208g",
    "r": "Aldi",
@@ -1042,7 +1042,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "NOrthbrook Natural Australian Still Spring Water 1.5L",
+   "n": "Northbrook Natural Australian Still Spring Water 1.5L",
    "p": 0.89,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/aee7a40e-db37-447e-b568-4d1c1b6866ba/Natural%20Australian%20Still%20Spring%20Water%201.5L",
    "r": "Aldi",
@@ -1050,7 +1050,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "REgal No Sugar Cola 1.25L",
+   "n": "Regal No Sugar Cola 1.25L",
    "p": 1.09,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/ac6ecfcd-4e57-43bb-8945-4a23d5342ced/No%20Sugar%20Cola%201.25L",
    "r": "Aldi",
@@ -1058,7 +1058,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "OH So Natural Organic Organic Extra Virgin Olive Oil 500ml",
+   "n": "Oh So Natural Organic Organic Extra Virgin Olive Oil 500ml",
    "p": 7.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/ce18a1c2-0a82-4534-88d3-a83ebab3db92/Organic%20Extra%20Virgin%20Olive%20Oil%20500ml",
    "r": "Aldi",
@@ -1066,7 +1066,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "PUre Vita Sunflower Oil 1L",
+   "n": "Pure Vita Sunflower Oil 1L",
    "p": 4.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/f315fe90-7075-4f29-b0cb-5abad7510ad9/Sunflower%20Oil%201L",
    "r": "Aldi",
@@ -1074,7 +1074,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "COrale Baked Beans in Tomato Sauce 420g",
+   "n": "Corale Baked Beans in Tomato Sauce 420g",
    "p": 1.09,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/052753ed-d194-4344-be26-b99946f66710/Baked%20Beans%20in%20Tomato%20Sauce%20420g",
    "r": "Aldi",
@@ -1082,7 +1082,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "BRookdale Pure Maple Syrup 250ml",
+   "n": "Brookdale Pure Maple Syrup 250ml",
    "p": 5.49,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/92ab7023-6cb8-43c0-a258-a4fb5645c959/Pure%20Maple%20Syrup%20250ml",
    "r": "Aldi",
@@ -1090,7 +1090,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "IMperial Grain Jasmine Rice 1kg",
+   "n": "Imperial Grain Jasmine Rice 1kg",
    "p": 2.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/f8c80679-b4ba-46fe-af9f-058b76d5cf08/Jasmine%20Rice%201kg",
    "r": "Aldi",
@@ -1098,7 +1098,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "IMperial Grain Basmati Rice 1kg",
+   "n": "Imperial Grain Basmati Rice 1kg",
    "p": 3.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/a560b507-81e7-4363-8287-50db45da54a0/Basmati%20Rice%201kg",
    "r": "Aldi",
@@ -1106,7 +1106,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "IMperial Grain Long Grain Rice 2kg",
+   "n": "Imperial Grain Long Grain Rice 2kg",
    "p": 3.59,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/f741576a-2c44-4fa6-98ce-06a083c58a94/Long%20Grain%20Rice%202kg",
    "r": "Aldi",
@@ -1114,7 +1114,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "SWeet Vine Pitted Prunes 500g",
+   "n": "Sweet Vine Pitted Prunes 500g",
    "p": 5.49,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/85581f2f-c0b5-422b-93d2-8a73c8b5415c/Pitted%20Prunes%20500g",
    "r": "Aldi",
@@ -1122,7 +1122,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "PErtzborn Gingerbread Train DIY Kit 450g",
+   "n": "Pertzborn Gingerbread Train DIY Kit 450g",
    "p": 12.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/5ef672d6-4fb5-489a-a6fd-584a3e4b2913/Gingerbread%20Train%20DIY%20Kit%20450g",
    "r": "Aldi",
@@ -1130,7 +1130,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "PErtzborn Gingerbread House DIY Kit 500g",
+   "n": "Pertzborn Gingerbread House DIY Kit 500g",
    "p": 12.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/0b4a2582-924d-43f6-a46d-4c9bd2a87e4f/Gingerbread%20House%20DIY%20Kit%20500g",
    "r": "Aldi",
@@ -1138,7 +1138,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "ACtiv Energy AA Batteries 10 Pack",
+   "n": "Activ Energy AA Batteries 10 Pack",
    "p": 5.69,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/f005559a-149e-43d3-b42f-1815ea642026/AA%20Batteries%2010%20Pack",
    "r": "Aldi",
@@ -1146,7 +1146,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "ACtiv Energy 9V Batteries 4 Pack",
+   "n": "Activ Energy 9V Batteries 4 Pack",
    "p": 7.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/37da68cc-bdfa-4350-92d6-26200c4ea938/9V%20Batteries%204%20Pack",
    "r": "Aldi",
@@ -1154,7 +1154,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "ACtiv Energy AAA Batteries 14 Pack",
+   "n": "Activ Energy AAA Batteries 14 Pack",
    "p": 6.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/9b84d6bc-b086-4368-9f5e-fae3339d6aa6/AAA%20Batteries%2014%20Pack",
    "r": "Aldi",
@@ -1162,7 +1162,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "ATlas Kill & Protect Flying Insect Spray Fast Knockdown 300g",
+   "n": "Atlas Kill & Protect Flying Insect Spray Fast Knockdown 300g",
    "p": 3.49,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/5540544c-69c2-4f9c-ba4b-8db394671f88/Flying%20Insect%20Spray%20Fast%20Knockdown%20300g",
    "r": "Aldi",
@@ -1170,7 +1170,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "ATlas Kill & Protect High Performance Crawling Insect Spray 350g",
+   "n": "Atlas Kill & Protect High Performance Crawling Insect Spray 350g",
    "p": 3.49,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/73ebd1fe-b6a2-4029-a356-eebc2bcec1f4/High%20Performance%20Crawling%20Insect%20Spray%20350g",
    "r": "Aldi",
@@ -1178,7 +1178,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "POwer Force Disposable Gloves 25 Pack",
+   "n": "Power Force Disposable Gloves 25 Pack",
    "p": 2.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/0fca3542-456b-4ed5-ae79-449ac84bd8bf/Disposable%20Gloves%2025%20Pack",
    "r": "Aldi",
@@ -1186,7 +1186,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "ATlas Kill & Protect High Performance Barrier Spray 350g",
+   "n": "Atlas Kill & Protect High Performance Barrier Spray 350g",
    "p": 5.99,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/3b5d38a3-cf67-4a2b-bc6e-f9894e3782ac/High%20Performance%20Barrier%20Spray%20%20350g",
    "r": "Aldi",
@@ -1194,7 +1194,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "ATlas Rapid Kill Multi Insect Spray 350g",
+   "n": "Atlas Rapid Kill Multi Insect Spray 350g",
    "p": 4.19,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/9f2ea97e-4190-4f92-a73e-9cb40ef8f413/Rapid%20Kill%20Multi%20Insect%20Spray%20350g",
    "r": "Aldi",
@@ -1202,7 +1202,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "POwer Force Mould Away 500ml",
+   "n": "Power Force Mould Away 500ml",
    "p": 2.79,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/36d15c47-46f1-4e1d-9d25-3fb92ac8e7ce/Mould%20Away%20500ml",
    "r": "Aldi",
@@ -1210,7 +1210,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "KLeenex Aloe Vera Tissues 80 Pack",
+   "n": "Kleenex Aloe Vera Tissues 80 Pack",
    "p": 2.19,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/e1e57bf8-409c-47f1-b387-354bde6a933c/Aloe%20Vera%20Tissues%2080%20Pack",
    "r": "Aldi",
@@ -1218,7 +1218,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "HAndee Ultra Paper Towel 3 Pack",
+   "n": "Handee Ultra Paper Towel 3 Pack",
    "p": 4.49,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/jpg/scaleWidth/306/06ad0c2d-103e-42d6-9aab-ef62a35e66c9/Ultra%20Paper%20Towel%203%20Pack",
    "r": "Aldi",
@@ -1226,7 +1226,7 @@
    "d": "25 October 2026"
   },
   {
-   "n": "KLeenex Toilet Tissue 18 Pack",
+   "n": "Kleenex Toilet Tissue 18 Pack",
    "p": 8.49,
    "img": "https://dm.apac.cms.aldi.cx/is/image/aldiprodapac/product/png/scaleWidth/306/1749850b-fa2b-4466-8c0a-12725bee0e8d/Toilet%20Tissue%2018%20Pack",
    "r": "Aldi",
@@ -1250,6 +1250,14 @@
    "d": "25 October 2026"
   },
   {
+   "n": "VIMLE 4-seat sofa with chaise longue, Gunnared beige",
+   "p": 1699,
+   "img": "https://www.ikea.com/au/en/images/products/vimle-4-seat-sofa-with-chaise-longue-gunnared-beige__0514363_pe639433_s5.jpg?f=xxs",
+   "r": "IKEA",
+   "e": "🛋️",
+   "d": "25 October 2026"
+  },
+  {
    "n": "GLOSTAD 3-seat sofa, Knisa dark grey",
    "p": 219,
    "img": "https://www.ikea.com/au/en/images/products/glostad-3-seat-sofa-knisa-dark-grey__1234948_pe917261_s5.jpg?f=xxs",
@@ -1261,14 +1269,6 @@
    "n": "KIVIK 3-seat sofa, Tibbleby beige/grey",
    "p": 699,
    "img": "https://www.ikea.com/au/en/images/products/kivik-3-seat-sofa-tibbleby-beige-grey__1577303_pe1033081_s5.jpg?f=xxs",
-   "r": "IKEA",
-   "e": "🛋️",
-   "d": "25 October 2026"
-  },
-  {
-   "n": "VIMLE 4-seat sofa with chaise longue, Gunnared beige",
-   "p": 1699,
-   "img": "https://www.ikea.com/au/en/images/products/vimle-4-seat-sofa-with-chaise-longue-gunnared-beige__0514363_pe639433_s5.jpg?f=xxs",
    "r": "IKEA",
    "e": "🛋️",
    "d": "25 October 2026"
@@ -1290,9 +1290,9 @@
    "d": "25 October 2026"
   },
   {
-   "n": "GLOSTAD 2-seat sofa, Knisa dark grey",
-   "p": 159,
-   "img": "https://www.ikea.com/au/en/images/products/glostad-2-seat-sofa-knisa-dark-grey__1577178_pe1033002_s5.jpg?f=xxs",
+   "n": "EKTORP 2-seat sofa, Kilanda light beige",
+   "p": 599,
+   "img": "https://www.ikea.com/au/en/images/products/ektorp-2-seat-sofa-kilanda-light-beige__1577714_pe1033461_s5.jpg?f=xxs",
    "r": "IKEA",
    "e": "🛋️",
    "d": "25 October 2026"
@@ -1354,9 +1354,9 @@
    "d": "25 October 2026"
   },
   {
-   "n": "BRIMNES Bed frame with storage, white/Luröy, Queen",
-   "p": 499,
-   "img": "https://www.ikea.com/au/en/images/products/brimnes-bed-frame-with-storage-white-luroey__1151024_pe884762_s5.jpg?f=xxs",
+   "n": "RAMNEFJÄLL Upholstered bed frame, Idekulla beige/Luröy, Queen",
+   "p": 399,
+   "img": "https://www.ikea.com/au/en/images/products/ramnefjaell-upholstered-bed-frame-idekulla-beige-luroey__1540717_pe1017855_s5.jpg?f=xxs",
    "r": "IKEA",
    "e": "🛏️",
    "d": "25 October 2026"
@@ -1378,14 +1378,6 @@
    "d": "25 October 2026"
   },
   {
-   "n": "VIHALS Table, white/white, 125x74 cm",
-   "p": 99.99,
-   "img": "https://www.ikea.com/au/en/images/products/vihals-table-white-white__1388805_pe964975_s5.jpg?f=xxs",
-   "r": "IKEA",
-   "e": "🍽️",
-   "d": "25 October 2026"
-  },
-  {
    "n": "VOXLÖV Dining table, light bamboo, 180x90 cm",
    "p": 399.99,
    "img": "https://www.ikea.com/au/en/images/products/voxloev-dining-table-light-bamboo__0997396_pe822660_s5.jpg?f=xxs",
@@ -1394,17 +1386,25 @@
    "d": "25 October 2026"
   },
   {
-   "n": "LISABO Table, ash veneer, 140x78 cm",
-   "p": 299.99,
-   "img": "https://www.ikea.com/au/en/images/products/lisabo-table-ash-veneer__0737105_pe740883_s5.jpg?f=xxs",
+   "n": "PINNTORP Table, light brown stained/white stained pine, 125x75 cm",
+   "p": 199.99,
+   "img": "https://www.ikea.com/au/en/images/products/pinntorp-table-light-brown-stained-white-stained-pine__1118109_pe872932_s5.jpg?f=xxs",
    "r": "IKEA",
    "e": "🍽️",
    "d": "25 October 2026"
   },
   {
-   "n": "PINNTORP Table, light brown stained/white stained pine, 125x75 cm",
-   "p": 199.99,
-   "img": "https://www.ikea.com/au/en/images/products/pinntorp-table-light-brown-stained-white-stained-pine__1118109_pe872932_s5.jpg?f=xxs",
+   "n": "VIHALS Table, white/white, 125x74 cm",
+   "p": 99.99,
+   "img": "https://www.ikea.com/au/en/images/products/vihals-table-white-white__1388805_pe964975_s5.jpg?f=xxs",
+   "r": "IKEA",
+   "e": "🍽️",
+   "d": "25 October 2026"
+  },
+  {
+   "n": "LISABO Table, ash veneer, 140x78 cm",
+   "p": 299.99,
+   "img": "https://www.ikea.com/au/en/images/products/lisabo-table-ash-veneer__0737105_pe740883_s5.jpg?f=xxs",
    "r": "IKEA",
    "e": "🍽️",
    "d": "25 October 2026"
@@ -1458,9 +1458,9 @@
    "d": "25 October 2026"
   },
   {
-   "n": "STRANDMON Wing chair with footstool, Talliden beige/brown",
-   "p": 528,
-   "img": "https://www.ikea.com/au/en/images/products/strandmon-wing-chair-with-footstool-talliden-beige-brown__1547758_pe1020669_s5.jpg?f=xxs",
+   "n": "EKENÄSET Armchair, oak effect/Kilanda light beige",
+   "p": 249,
+   "img": "https://www.ikea.com/au/en/images/products/ekenaeset-armchair-oak-effect-kilanda-light-beige__1489627_pe1003901_s5.jpg?f=xxs",
    "r": "IKEA",
    "e": "🪑",
    "d": "25 October 2026"
@@ -1474,17 +1474,17 @@
    "d": "25 October 2026"
   },
   {
-   "n": "HAVBERG Swivel easy chair, Grann/Bomstad golden-brown",
-   "p": 699,
-   "img": "https://www.ikea.com/au/en/images/products/havberg-swivel-easy-chair-grann-bomstad-golden-brown__1070880_pe854782_s5.jpg?f=xxs",
+   "n": "STRANDMON Wing chair with footstool, Talliden beige/brown",
+   "p": 528,
+   "img": "https://www.ikea.com/au/en/images/products/strandmon-wing-chair-with-footstool-talliden-beige-brown__1547758_pe1020669_s5.jpg?f=xxs",
    "r": "IKEA",
    "e": "🪑",
    "d": "25 October 2026"
   },
   {
-   "n": "HERRÅKRA Armchair, Vissle grey",
-   "p": 159,
-   "img": "https://www.ikea.com/au/en/images/products/herrakra-armchair-vissle-grey__1213671_pe911201_s5.jpg?f=xxs",
+   "n": "HAVBERG Swivel easy chair, Grann/Bomstad golden-brown",
+   "p": 699,
+   "img": "https://www.ikea.com/au/en/images/products/havberg-swivel-easy-chair-grann-bomstad-golden-brown__1070880_pe854782_s5.jpg?f=xxs",
    "r": "IKEA",
    "e": "🪑",
    "d": "25 October 2026"
@@ -1522,6 +1522,14 @@
    "d": "25 October 2026"
   },
   {
+   "n": "HEMNES Bookcase, grey-green/light brown stained, 90x197 cm",
+   "p": 399,
+   "img": "https://www.ikea.com/au/en/images/products/hemnes-bookcase-grey-green-light-brown-stained__1590305_pe1038944_s5.jpg?f=xxs",
+   "r": "IKEA",
+   "e": "📚",
+   "d": "25 October 2026"
+  },
+  {
    "n": "LACK Wall shelf unit, white, 30x190 cm",
    "p": 169,
    "img": "https://www.ikea.com/au/en/images/products/lack-wall-shelf-unit-white__0246565_pe385541_s5.jpg?f=xxs",
@@ -1541,14 +1549,6 @@
    "n": "GERSBY Bookcase, white, 60x180 cm",
    "p": 69.99,
    "img": "https://www.ikea.com/au/en/images/products/gersby-bookcase-white__1590290_pe1038929_s5.jpg?f=xxs",
-   "r": "IKEA",
-   "e": "📚",
-   "d": "25 October 2026"
-  },
-  {
-   "n": "HEMNES Bookcase, grey-green/light brown stained, 90x197 cm",
-   "p": 399,
-   "img": "https://www.ikea.com/au/en/images/products/hemnes-bookcase-grey-green-light-brown-stained__1590305_pe1038944_s5.jpg?f=xxs",
    "r": "IKEA",
    "e": "📚",
    "d": "25 October 2026"

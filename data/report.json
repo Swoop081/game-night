@@ -101,20 +101,20 @@
     "noise cancelling headphones: 4 (raw 5, \"Search results: 'noise cancelling headphones' | JB Hi-Fi\")",
     "playstation 5: 0 (raw 2, \"Search results: 'playstation 5' | JB Hi-Fi\")",
     "xbox: 0 (raw 2, \"Search results: 'xbox' | JB Hi-Fi\")",
-    "laptop: 4 (raw 10, \"Search results: 'laptop' | JB Hi-Fi\")",
+    "laptop: 4 (raw 11, \"Search results: 'laptop' | JB Hi-Fi\")",
     "soundbar: 4 (raw 13, \"Search results: 'soundbar' | JB Hi-Fi\")",
     "airpods: 0 (raw 0, \"Search results: 'airpods' | JB Hi-Fi\")",
     "smartwatch: 0 (raw 2, \"Search results: 'smartwatch' | JB Hi-Fi\")",
-    "robot vacuum: 4 (raw 8, \"Search results: 'robot vacuum' | JB Hi-Fi\")",
-    "coffee machine: 4 (raw 6, \"Search results: 'coffee machine' | JB Hi-Fi\")"
+    "robot vacuum: 4 (raw 9, \"Search results: 'robot vacuum' | JB Hi-Fi\")",
+    "coffee machine: 4 (raw 8, \"Search results: 'coffee machine' | JB Hi-Fi\")"
    ]
   },
   "Officeworks": {
    "ok": true,
    "count": 20,
    "notes": [
-    "office chair: 4 (raw 96, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
-    "printer: 4 (raw 72, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "office chair: 4 (raw 72, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "printer: 4 (raw 96, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "standing desk: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "calculator: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "backpack: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
@@ -128,7 +128,7 @@
     "bath towel: 4 (raw 43, \"Search Results | Target Australia\")",
     "pyjamas: 4 (raw 45, \"Search Results | Target Australia\")",
     "toy: 4 (raw 46, \"Search Results | Target Australia\")",
-    "sneakers: 4 (raw 42, \"Search Results | Target Australia\")",
+    "sneakers: 4 (raw 43, \"Search Results | Target Australia\")",
     "bedding: 0 (raw 47, \"Search Results | Target Australia\")"
    ]
   },
