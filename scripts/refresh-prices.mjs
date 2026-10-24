@@ -147,7 +147,7 @@ async function grab(page, url, base) {
             if (cands.length) {
               name = cands.reduce((a, b) => b.length > a.length ? b : a);
               const brand = cands.find(x => x !== name && x.length < 30 && x === x.toUpperCase() && /[A-Z]/.test(x) && !name.toUpperCase().includes(x));
-              if (brand) name = brand.charAt(0) + brand.slice(1).toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) + " " + name;
+              if (brand) name = brand.toLowerCase().replace(/(^|[\s-])\w/g, c => c.toUpperCase()) + " " + name;
             }
             if (!name) { const a = el.querySelector("a[title],a[aria-label]"); name = a ? (a.title || a.getAttribute("aria-label")) : ""; }
             if (!name && im.alt && im.alt.length < 80) name = im.alt;
