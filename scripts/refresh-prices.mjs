@@ -22,7 +22,7 @@ const SOURCES = [
     q: [["cordless drill","🪛"],["barbecue","🍖"],["lawn mower","🌱"],["ladder","🪜"],["wheelbarrow","🛒"],["pressure washer","💦"],["toolbox","🧰"],["garden hose","🚿"],["outdoor setting","🪑"],["paint 10l","🎨"],["pizza oven","🍕"],["ozito","🔧"]] },
   { r: "JB Hi-Fi", url: q => `https://www.jbhifi.com.au/search?query=${enc(q)}`,
     q: [["65 inch tv","📺"],["noise cancelling headphones","🎧"],["playstation 5","🎮"],["xbox","🎮"],["laptop","💻"],["soundbar","🔊"],["airpods","🎧"],["smartwatch","⌚"],["robot vacuum","🤖"],["coffee machine","☕"]] },
-  { r: "Officeworks", url: q => `https://www.officeworks.com.au/shop/officeworks/search?q=${enc(q)}`,
+  { r: "Officeworks", cents: true, url: q => `https://www.officeworks.com.au/shop/officeworks/search?q=${enc(q)}`,
     q: [["office chair","🪑"],["printer","🖨️"],["standing desk","🗄️"],["calculator","🧮"],["backpack","🎒"],["shredder","📄"]] },
   { r: "Target", url: q => `https://www.target.com.au/search?text=${enc(q)}`,
     q: [["bath towel","🛁"],["pyjamas","👕"],["toy","🧸"],["sneakers","👟"],["bedding","🛏️"]] },
@@ -115,6 +115,34 @@ async function grab(page, url, base) {
       return out;
     });
     for (const b of blobs) { try { extract(JSON.parse(b), base, found); } catch {} }
+    if (found.length < 3) {
+      // Fallback: read product cards straight off the page (photo + price + name)
+      await page.mouse.wheel(0, 2500).catch(() => {}); await page.waitForTimeout(1500);
+      const dom = await page.evaluate(() => {
+        const out = [], seen = new Set();
+        const priceRe = /\$\s?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/;
+        document.querySelectorAll("img").forEach(im => {
+          let src = im.currentSrc || im.src || im.getAttribute("data-src") || "";
+          if (!src && im.srcset) src = im.srcset.split(" ")[0];
+          if (!src || src.startsWith("data:")) return;
+          const r = im.getBoundingClientRect(); if (r.width < 60 || r.height < 60) return;
+          let el = im.parentElement;
+          for (let k = 0; k < 7 && el; k++, el = el.parentElement) {
+            const t = el.innerText || ""; const m = t.match(priceRe);
+            if (m && t.length < 700) {
+              let name = im.alt && im.alt.trim().length > 3 ? im.alt : "";
+              if (!name) { const h = el.querySelector("h2,h3,h4,[class*=title],[class*=Title],[class*=name],[class*=Name]"); name = h ? h.innerText : ""; }
+              if (!name) { const a = el.querySelector("a[title],a[aria-label]"); name = a ? (a.title || a.getAttribute("aria-label")) : ""; }
+              name = (name || "").trim().replace(/\s+/g, " ");
+              if (name.length >= 3 && !seen.has(name)) { seen.add(name); out.push({ n: name.slice(0, 140), p: parseFloat(m[1].replace(/,/g, "")), img: new URL(src, location.href).href }); }
+              break;
+            }
+          }
+        });
+        return out;
+      });
+      for (const d of dom) if (d.p > 0 && /^https:/.test(d.img)) found.push(d);
+    }
     const title = await page.title();
     return { found, title };
   } finally { page.off("response", onResp); }
@@ -149,7 +177,7 @@ for (const src of SOURCES) {
     try {
       const { found, title } = await grab(page, j.u, src.imgBase);
       const pickN = src.perPage || PER_QUERY;
-      const items = pickFor(found, j.q, pickN).map(x => ({ ...x, r: src.r, e: j.e, d: today }));
+      const items = pickFor(found, j.q, pickN).map(x => ({ ...x, p: src.cents ? Math.round(x.p) / 100 : x.p, r: src.r, e: j.e, d: today }));
       got.push(...items);
       notes.push(`${j.q || j.u}: ${items.length} (raw ${found.length}, "${title.slice(0, 60)}")`);
     } catch (err) { notes.push(`${j.q || j.u}: ERROR ${String(err.message || err).slice(0, 120)}`); }
