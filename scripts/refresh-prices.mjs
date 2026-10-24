@@ -119,24 +119,40 @@ async function grab(page, url, base) {
       // Fallback: read product cards straight off the page (photo + price + name)
       await page.mouse.wheel(0, 2500).catch(() => {}); await page.waitForTimeout(1500);
       const dom = await page.evaluate(() => {
-        const out = [], seen = new Set();
-        const priceRe = /\$\s?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/;
+        const out = [], seenN = new Set(), seenI = new Set();
+        const skip = /save|was|rrp|off\b|per\s|\/\s?(kg|g|100|ea|each|l|ml|wk|week|mth|month|m)\b|afterpay|zip|klarna|humm|p\/w|weekly|fortnight|interest|deposit|cashback|gift card|delivery|shipping/i;
+        const priceOf = text => {
+          let best = null;
+          for (const line of text.split(/\n+/)) {
+            if (!line.includes("$") || skip.test(line)) continue;
+            const ms = line.match(/\$\s?\d[\d,]*(?:\.\d{2})?/g) || [];
+            for (const m of ms) { const v = parseFloat(m.replace(/[$,\s]/g, "")); if (v > 0 && (best == null || v > best)) best = v; }
+          }
+          return best;
+        };
         document.querySelectorAll("img").forEach(im => {
           let src = im.currentSrc || im.src || im.getAttribute("data-src") || "";
           if (!src && im.srcset) src = im.srcset.split(" ")[0];
           if (!src || src.startsWith("data:")) return;
-          const r = im.getBoundingClientRect(); if (r.width < 60 || r.height < 60) return;
+          const r = im.getBoundingClientRect(); if (r.width < 60 || r.height < 60 || r.width > 700) return;
           let el = im.parentElement;
           for (let k = 0; k < 7 && el; k++, el = el.parentElement) {
-            const t = el.innerText || ""; const m = t.match(priceRe);
-            if (m && t.length < 700) {
-              let name = im.alt && im.alt.trim().length > 3 ? im.alt : "";
-              if (!name) { const h = el.querySelector("h2,h3,h4,[class*=title],[class*=Title],[class*=name],[class*=Name]"); name = h ? h.innerText : ""; }
-              if (!name) { const a = el.querySelector("a[title],a[aria-label]"); name = a ? (a.title || a.getAttribute("aria-label")) : ""; }
-              name = (name || "").trim().replace(/\s+/g, " ");
-              if (name.length >= 3 && !seen.has(name)) { seen.add(name); out.push({ n: name.slice(0, 140), p: parseFloat(m[1].replace(/,/g, "")), img: new URL(src, location.href).href }); }
-              break;
+            const t = el.innerText || "";
+            if (!t.includes("$")) continue;
+            if (t.length > 500) break;
+            const p = priceOf(t); if (!p) continue;
+            let name = "";
+            const h = el.querySelector("[class*=product-name],[class*=productName],[class*=ProductName],[class*=title],[class*=Title],h2,h3,h4,[class*=name],[class*=Name]");
+            if (h) name = h.innerText;
+            if (!name) { const a = el.querySelector("a[title],a[aria-label]"); name = a ? (a.title || a.getAttribute("aria-label")) : ""; }
+            if (!name && im.alt && im.alt.length < 80) name = im.alt;
+            name = (name || "").trim().replace(/\s+/g, " ");
+            const key = src.split("?")[0];
+            if (name.length >= 3 && !/banner|promo|doordash|catalogue|sale$/i.test(name) && !seenN.has(name) && !seenI.has(key)) {
+              seenN.add(name); seenI.add(key);
+              out.push({ n: name.slice(0, 140), p, img: new URL(src, location.href).href });
             }
+            break;
           }
         });
         return out;
