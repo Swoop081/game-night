@@ -181,6 +181,57 @@ button{cursor:pointer}
 .portrait .side .who{font-size:1.4rem}
 .portrait .clock{font-size:clamp(2.4rem,12vmin,4rem)}
 
+/* ---------- HIGHER OR LOWER ---------- */
+#hl{gap:12px}
+.hlgrid{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.8fr) minmax(0,1fr);gap:16px}
+.hlp{border-radius:22px;background:var(--stage-2);border:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;min-width:0;transition:opacity .25s,border-color .25s,box-shadow .25s}
+.hlp .who{font-family:var(--f-display);font-size:clamp(1.6rem,4.2vmin,3rem);font-weight:900;line-height:1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hlp .pts{font-family:var(--f-clock);font-weight:700;font-size:clamp(3rem,14vmin,8rem);line-height:1;font-variant-numeric:tabular-nums}
+.hlp .role{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.hlp.active{border-color:var(--pc);box-shadow:0 0 0 1px var(--pc),0 0 60px -10px var(--pc)}
+.hlp.idle{opacity:.45}
+.hlp .delta{font-family:var(--f-clock);font-weight:700;font-size:1.4rem;min-height:1.4em}
+.hlp .delta.up{color:var(--ok)}.hlp .delta.down{color:var(--hot)}
+.table{display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0}
+.table .info{text-align:center}
+.table .info h3{margin:.1em 0 0;font-family:var(--f-display);font-size:clamp(1.4rem,4vmin,2.2rem);font-weight:900}
+.cards{flex:1;min-height:0;display:flex;gap:5%;justify-content:center;align-items:center;container-type:size;position:relative}
+.pcard{height:min(94cqh,64cqw);aspect-ratio:5/7;border-radius:6%/4.3%;position:relative;container-type:size;flex:none}
+.pcard.face{background:linear-gradient(160deg,#fffdf6,#efe8d6);color:#1a1636;box-shadow:0 20px 50px -20px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.08)}
+.pcard.face .n{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:62cqh;line-height:1}
+.pcard.face .c{position:absolute;font-family:var(--f-display);font-weight:900;font-size:13cqh;line-height:1}
+.pcard.face .c.tl{top:5%;left:8%}.pcard.face .c.br{bottom:5%;right:8%;transform:rotate(180deg)}
+.pcard.back{background:repeating-linear-gradient(45deg,#3a2a8c 0 10px,#2a1f6e 10px 20px);border:6px solid var(--gold);box-shadow:0 20px 50px -20px rgba(0,0,0,.8);display:grid;place-items:center}
+.pcard.back b{font-family:var(--f-clock);font-size:16cqh;color:var(--gold);background:rgba(12,10,29,.8);padding:.15em .4em;border-radius:12px}
+.pcard.deal{animation:deal .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes deal{from{transform:rotateY(90deg) scale(.9)}to{transform:none}}
+.pcard.right{box-shadow:0 0 0 6px var(--ok),0 20px 50px -20px rgba(0,0,0,.8)}
+.pcard.wrong{box-shadow:0 0 0 6px var(--hot),0 20px 50px -20px rgba(0,0,0,.8)}
+.pcard.same{box-shadow:0 0 0 6px var(--gold),0 20px 50px -20px rgba(0,0,0,.8)}
+.hlres{text-align:center;font-weight:800;font-size:clamp(1.1rem,3vmin,1.6rem);min-height:1.5em}
+.hlres.up{color:var(--ok)}.hlres.down{color:var(--hot)}.hlres.same{color:var(--gold)}
+.hlbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hlbtns .btn{font-size:clamp(1rem,2.8vmin,1.4rem);padding:.85em 2.2em}
+.btn.hi{background:var(--ok);color:#03281b;border-color:transparent}
+.btn.lo{background:#5aa8ff;color:#06203d;border-color:transparent}
+.tracker{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px}
+.tracker div{background:var(--stage-2);border:1px solid var(--line);border-radius:10px;padding:6px 2px;text-align:center}
+.tracker b{display:block;font-family:var(--f-display);font-size:1.3rem;line-height:1}
+.tracker span{display:flex;justify-content:center;gap:2px;margin-top:4px}
+.tracker i{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.tracker i.gone{background:var(--stage-3)}
+.tracker div.out{opacity:.4}
+.portrait .hlgrid{grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr)}
+.portrait .table{grid-column:1/-1;grid-row:2}
+.portrait .hlp{padding:10px;border-radius:16px;gap:2px}
+.portrait .hlp .who{font-size:1.4rem}
+.portrait .hlp .pts{font-size:clamp(2.4rem,12vmin,4rem)}
+.portrait .cards{gap:4%}
+.portrait .pcard{height:min(94cqh,64cqw)}
+.hlsetup{display:grid;gap:12px;width:100%;max-width:640px}
+.game.live .minicards{position:absolute;top:14px;right:14px;display:flex}
+.game.live .minicards i{width:30px;height:42px;border-radius:4px;background:#fffdf6;color:#1a1636;font-style:normal;font-family:var(--f-display);font-weight:900;font-size:1.4rem;display:grid;place-items:center;margin-left:-8px;box-shadow:0 4px 10px rgba(0,0,0,.5);transform:rotate(var(--r))}
+
 /* ---------- OVERLAYS ---------- */
 .overlay{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(6,5,15,.84);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   padding:max(16px, var(--sa-t)) max(16px, var(--sa-r)) max(16px, var(--sa-b)) max(16px, var(--sa-l));overflow:auto}
@@ -214,8 +265,9 @@ button{cursor:pointer}
   <p class="tagline">Party quiz games for one screen. Pick a game.</p>
   <div class="games">
     <button class="game live" id="playTakeover"><span class="tiles" id="hubTiles"></span><span class="pill">Play</span><h2>Takeover</h2><p>Duel your neighbours in their category. Win their squares. Own the floor.</p></button>
+    <button class="game live" id="playHL"><span class="minicards"><i style="--r:-10deg">4</i><i style="--r:0deg">7</i><i style="--r:10deg">2</i></span><span class="pill">Play</span><h2>Higher or Lower</h2><p>Two players, fifty cards. Call the next one right for a point.</p></button>
     <div class="game soon"><span class="pill">Coming soon</span><h2>Picture Blitz</h2><p>Name it before the picture fills in.</p></div>
-    <div class="game soon"><span class="pill">Coming soon</span><h2>Higher or Lower</h2><p>Guess the stat, keep the streak.</p></div>
+    
     <div class="game soon"><span class="pill">Coming soon</span><h2>Name Ten</h2><p>Ten answers, one category, one clock.</p></div>
   </div>
 </section>
@@ -267,6 +319,54 @@ button{cursor:pointer}
       <div class="controls"><button class="btn passb" id="passBtn">Pass</button><button class="btn okb" id="okBtn">✓ Correct</button></div>
     </div>
     <div class="side" id="sideB"><span class="role" id="roleB">Defender</span><div class="who" id="nameB"></div><div class="clock" id="clockB"></div><div class="bar"><i id="barB"></i></div></div>
+  </div>
+</section>
+
+<!-- HIGHER OR LOWER SETUP -->
+<section class="screen" id="hlSetup" hidden>
+  <div class="topbar">
+    <button class="btn ghost" id="hlBack">← Back</button>
+    <h2>Higher or Lower · Set up</h2>
+    <button class="btn gold" id="hlStart">Start game</button>
+  </div>
+  <div class="setup-grid">
+    <div class="panel">
+      <div class="field"><span class="eyebrow">How it works</span><ul class="rules">
+        <li>A deck of <b>50 cards</b>: 1 to 10, five of each, shuffled.</li>
+        <li>One card is dealt. Players take turns calling <b>higher</b> or <b>lower</b> for the next card.</li>
+        <li><b>+1</b> for a right call, <b>−1</b> for a wrong one.</li>
+        <li>The highest score when the deck runs out wins.</li></ul></div>
+      <div class="field"><span class="eyebrow">Same number drawn</span><div class="seg" id="segTie"></div></div>
+      <div class="field"><span class="eyebrow">Voice answers</span><div class="seg" id="segVoiceHL"></div></div>
+      <div class="field"><span class="eyebrow">Sound</span><div class="seg" id="segSoundHL"></div></div>
+      <div class="field"><span class="eyebrow">Screen</span><div class="seg" id="segScreenHL"></div></div>
+    </div>
+    <div class="panel">
+      <span class="eyebrow">Players and colours</span>
+      <div class="hlsetup" id="hlPlayers"></div>
+    </div>
+  </div>
+</section>
+
+<!-- HIGHER OR LOWER -->
+<section class="screen" id="hl" hidden>
+  <div class="floorbar">
+    <span class="brand">GAME NIGHT<small>HIGHER OR LOWER</small></span>
+    <span class="spacer"></span>
+    <span class="count" id="hlLeft"></span>
+    <button class="btn ghost" id="hlQuit">Quit</button>
+  </div>
+  <div class="hlgrid">
+    <div class="hlp" id="hlP0"><span class="role">Player 1</span><div class="who" id="hlN0"></div><div class="pts" id="hlS0">0</div><div class="delta" id="hlD0"></div></div>
+    <div class="table">
+      <div class="info"><span class="eyebrow" id="hlTurnLbl"></span><h3 id="hlPrompt"></h3></div>
+      <div class="cards" id="hlCards"></div>
+      <div class="hlres" id="hlRes"></div>
+      <div class="mic" id="hlMic"></div>
+      <div class="hlbtns"><button class="btn lo" id="hlLower">▼ Lower</button><button class="btn hi" id="hlHigher">▲ Higher</button></div>
+      <div class="tracker" id="hlTrack"></div>
+    </div>
+    <div class="hlp" id="hlP1"><span class="role">Player 2</span><div class="who" id="hlN1"></div><div class="pts" id="hlS1">0</div><div class="delta" id="hlD1"></div></div>
   </div>
 </section>
 
@@ -362,7 +462,7 @@ const COLORS=[
  ["#a18072","Mocha"],["#5bb98b","Mint"],["#64748b","Slate"],["#475569","Steel"],["#b45309","Bronze"],["#9f1239","Crimson"]];
 const TV_RULES={time:45,penalty:3,boost:true,bo3:true,fair:true,tapPick:false};
 const S={
-  prefs:{voice:true,sound:true,screen:null},
+  prefs:{voice:true,sound:true,screen:null,hlTie:"push"},
   custom:{time:45,penalty:3,boost:true,bo3:true,fair:true,tapPick:true},
   mode:"tv",count:2,names:[],cats:[],colors:[],
   players:[],grid:null,played:new Set(),
@@ -402,7 +502,7 @@ function screenSeg(el){
 }
 
 /* =================== NAV (touch + TV remote) =================== */
-function show(id){["hub","setup","floor","duel"].forEach(s=>$(s).hidden=s!==id);requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
+function show(id){["hub","setup","floor","duel","hlSetup","hl"].forEach(s=>$(s).hidden=s!==id);requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
 function focusables(){
   const root=!$("overlay").hidden?$("overlay"):document.querySelector(".screen:not([hidden])");
   return [...root.querySelectorAll("button:not([disabled]),input,select")].filter(e=>e.offsetParent!==null);
@@ -413,6 +513,10 @@ document.addEventListener("keydown",e=>{
   if(S.duel&&!$("duel").hidden&&$("overlay").hidden){
     if(k==="c"||k==="C"){hostCorrect();e.preventDefault();return}
     if(k==="p"||k==="P"){hostPass();e.preventDefault();return}
+  }
+  if(!$("hl").hidden&&$("overlay").hidden){
+    if(k==="h"||k==="H"){hlCall("higher");e.preventDefault();return}
+    if(k==="l"||k==="L"){hlCall("lower");e.preventDefault();return}
   }
   if(!(k in dirs))return;
   const a=document.activeElement;
@@ -519,7 +623,7 @@ function renderSetup(){
     wrap.appendChild(row);
   }
 }
-function pickColour(i){
+function pickColour(i,after){
   const name=(S.names[i]||"").trim()||`Player ${i+1}`;
   const owner=c=>{const j=S.colors.slice(0,S.count).indexOf(c);return j>=0&&j!==i?((S.names[j]||"").trim()||`P${j+1}`):""};
   openOverlay(`<span class="eyebrow">Colour for</span><h2>${esc(name)}</h2>
@@ -527,7 +631,7 @@ function pickColour(i){
     <p class="note" style="margin-top:1em">Picking a colour someone else has swaps it with them.</p>
     <button class="btn" id="colDone">Done</button>`,`[aria-pressed="true"]`);
   $("sheet").querySelectorAll(".palette button").forEach(b=>b.onclick=()=>{
-    const c=b.dataset.c,j=S.colors.slice(0,S.count).indexOf(c);if(j>=0&&j!==i)S.colors[j]=S.colors[i];S.colors[i]=c;save();closeOverlay();renderSetup();setTimeout(()=>$("pk"+i)&&$("pk"+i).focus(),40)});
+    const c=b.dataset.c,j=S.colors.slice(0,S.count).indexOf(c);if(j>=0&&j!==i)S.colors[j]=S.colors[i];S.colors[i]=c;save();closeOverlay();(after||renderSetup)();setTimeout(()=>$("pk"+i)&&$("pk"+i).focus(),40)});
   $("colDone").onclick=closeOverlay;
 }
 $("minus").onclick=()=>{S.count=Math.max(2,S.count-1);renderSetup()};
@@ -821,15 +925,113 @@ function champion(W){
   confetti();
 }
 
+/* =================== HIGHER OR LOWER =================== */
+const HL={players:[],deck:[],cur:null,turn:0,busy:false,drawn:0,seen:{},over:false};
+$("playHL").onclick=()=>{ac();openHLSetup()};
+$("hlBack").onclick=()=>show("hub");
+function openHLSetup(){
+  S.count=2;ensureSlots();
+  seg($("segTie"),["push","lose"],()=>S.prefs.hlTie,v=>S.prefs.hlTie=v,v=>v==="push"?"No score":"Lose a point");
+  seg($("segVoiceHL"),[true,false],()=>S.prefs.voice,v=>S.prefs.voice=v,onOff);
+  seg($("segSoundHL"),[true,false],()=>S.prefs.sound,v=>S.prefs.sound=v,onOff);
+  screenSeg($("segScreenHL"));
+  renderHLSetup();show("hlSetup");
+}
+function renderHLSetup(){
+  const w=$("hlPlayers");w.innerHTML="";
+  for(let i=0;i<2;i++){
+    const row=document.createElement("div");row.className="prow";
+    row.innerHTML=`<button class="swatchbtn" id="pk${i}" style="background:${S.colors[i]}" aria-label="Player ${i+1} colour"></button><input id="hn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name"><span class="note">${i===0?"Calls first":"Calls second"}</span>`;
+    row.querySelector("input").oninput=e=>{S.names[i]=e.target.value;save()};
+    row.querySelector(".swatchbtn").onclick=()=>pickColour(i,renderHLSetup);
+    w.appendChild(row);
+  }
+}
+$("hlStart").onclick=()=>{ac();startHL()};
+function startHL(){
+  ensureSlots();save();
+  HL.players=[0,1].map(i=>({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],score:0}));
+  const d=[];for(let n=1;n<=10;n++)for(let k=0;k<5;k++)d.push(n);
+  HL.deck=shuffle(d);HL.seen={};for(let n=1;n<=10;n++)HL.seen[n]=0;
+  HL.cur=HL.deck.pop();HL.seen[HL.cur]++;HL.drawn=1;HL.turn=0;HL.busy=false;HL.over=false;
+  [0,1].forEach(i=>{$("hlN"+i).textContent=HL.players[i].name;$("hlP"+i).style.setProperty("--pc",HL.players[i].color);$("hlD"+i).textContent=""});
+  $("hlRes").textContent="";$("hlRes").className="hlres";
+  show("hl");renderHL(true);SFX.go();
+  voiceStart(hlVoice,$("hlMic"));
+  setTimeout(()=>$("hlHigher").focus({preventScroll:true}),60);
+}
+function cardHTML(n,cls){return `<div class="pcard face ${cls||""}"><span class="c tl">${n}</span><span class="n">${n}</span><span class="c br">${n}</span></div>`}
+function renderHL(dealt,drawn,result){
+  const P=HL.players;
+  [0,1].forEach(i=>{$("hlS"+i).textContent=P[i].score;const el=$("hlP"+i);el.classList.toggle("active",HL.turn===i&&!HL.over);el.classList.toggle("idle",HL.turn!==i&&!HL.over)});
+  const left=HL.deck.length;
+  $("hlLeft").textContent=`${left} card${left===1?"":"s"} left`;
+  const p=P[HL.turn];
+  $("hlTurnLbl").textContent=`${p.name} to call`;
+  $("hlTurnLbl").style.color=p.color;
+  $("hlPrompt").textContent=drawn==null?`Higher or lower than ${HL.cur}?`:`${HL.cur} then ${drawn}`;
+  $("hlCards").innerHTML=cardHTML(HL.cur,dealt&&drawn==null?"deal":"")+(drawn!=null?cardHTML(drawn,"deal "+result):`<div class="pcard back"><b>${left}</b></div>`);
+  const t=$("hlTrack");t.innerHTML="";
+  for(let n=1;n<=10;n++){const rem=5-HL.seen[n];const d=document.createElement("div");if(!rem)d.className="out";
+    d.innerHTML=`<b>${n}</b><span>${Array.from({length:5},(_,k)=>`<i class="${k<rem?"":"gone"}"></i>`).join("")}</span>`;d.title=`${rem} left`;t.appendChild(d)}
+  $("hlHigher").disabled=$("hlLower").disabled=HL.busy||HL.over;
+}
+function hlCall(dir){
+  if(HL.busy||HL.over||!HL.deck.length)return;
+  HL.busy=true;voiceMark();
+  const next=HL.deck.pop();HL.seen[next]++;HL.drawn++;
+  const p=HL.players[HL.turn],pi=HL.turn;
+  let delta,res,msg;
+  if(next===HL.cur){delta=S.prefs.hlTie==="lose"?-1:0;res="same";msg=delta?`Same card. ${p.name} loses a point.`:`Same card. No score.`}
+  else{const right=(next>HL.cur)===(dir==="higher");delta=right?1:-1;res=right?"right":"wrong";msg=right?`${p.name} called ${dir}. +1`:`${p.name} called ${dir}. −1`}
+  p.score+=delta;
+  delta>0?SFX.ok():delta<0?SFX.buzz():SFX.pass();
+  const r=$("hlRes");r.textContent=msg;r.className="hlres "+(delta>0?"up":delta<0?"down":"same");
+  const dl=$("hlD"+pi);dl.textContent=delta>0?"+1":delta<0?"−1":"±0";dl.className="delta "+(delta>0?"up":delta<0?"down":"");
+  renderHL(true,next,res);
+  setTimeout(()=>{
+    HL.cur=next;dl.textContent="";
+    if(!HL.deck.length)return hlEnd();
+    HL.turn=1-HL.turn;HL.busy=false;r.textContent="";r.className="hlres";
+    renderHL(false);voiceMark();
+    setTimeout(()=>{if(document.activeElement===document.body||!document.activeElement||document.activeElement.disabled)$("hlHigher").focus({preventScroll:true})},20);
+  },1500);
+}
+$("hlHigher").onclick=()=>hlCall("higher");$("hlLower").onclick=()=>hlCall("lower");
+function hlVoice(texts){
+  if(HL.busy||HL.over)return;
+  const t=texts[0].toLowerCase();
+  const hi=/\b(higher|high|hire|up|above|bigger|over)\b/,lo=/\b(lower|low|down|below|smaller|under)\b/;
+  const mh=t.match(new RegExp(hi.source,"g")),ml=t.match(new RegExp(lo.source,"g"));
+  if(mh&&!ml)return hlCall("higher");
+  if(ml&&!mh)return hlCall("lower");
+  if(mh&&ml){const lh=t.lastIndexOf(mh[mh.length-1]),ll=t.lastIndexOf(ml[ml.length-1]);hlCall(lh>ll?"higher":"lower")}
+}
+function hlEnd(){
+  HL.over=true;HL.busy=false;voiceStop();renderHL(false);
+  const [a,b]=HL.players;
+  const draw=a.score===b.score,W=a.score>b.score?a:b;
+  SFX.win();setTimeout(SFX.win,600);
+  openOverlay(`<span class="eyebrow">Deck finished</span>
+    <h2 style="color:${draw?"var(--gold)":W.color}">${draw?"It's a draw":esc(W.name)+" wins"}</h2>
+    <div class="score">${esc(a.name)} ${a.score} – ${b.score} ${esc(b.name)}</div>
+    <div class="row"><button class="btn" id="hlMenu">Game Night menu</button><button class="btn gold" id="hlAgain">Play again</button></div>`);
+  $("hlMenu").onclick=()=>{closeOverlay();stopConfetti();show("hub")};
+  $("hlAgain").onclick=()=>{closeOverlay();stopConfetti();startHL()};
+  if(!draw)confetti([W.color,"#ffc94a","#fffdf6"])
+}
+$("hlQuit").onclick=()=>confirmSheet("Quit this game?","The scores will be lost.","Quit",()=>{closeOverlay();HL.over=true;voiceStop();show("hub")});
+
 /* =================== VOICE =================== */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-const V={rec:null,on:false,blocked:false,skipIdx:0,skipText:"",lastIdx:0,lastText:""};
+const V={rec:null,on:false,blocked:false,skipIdx:0,skipText:"",lastIdx:0,lastText:"",handler:null,el:null};
 function micUI(state,text){
-  const m=$("mic");m.className="mic"+(state==="on"?" on":"");
+  const m=V.el||$("mic");m.className="mic"+(state==="on"?" on":"");
   if(state==="off"){m.innerHTML=S.prefs.voice?`<span class="d"></span>${SR?(V.blocked?"Microphone blocked. Allow it in Settings, or use the buttons.":"Voice unavailable here. Use the buttons."):"This browser has no voice recognition. Use the buttons."}`:"";return}
   m.innerHTML=`<span class="d"></span>${text?`<q>${esc(text)}</q>`:"Listening for answers…"}`;
 }
-function voiceStart(){
+function voiceStart(handler,el){
+  V.handler=handler||voiceCheck;V.el=el||$("mic");
   if(!S.prefs.voice||!SR||V.blocked){micUI("off");return}
   try{
     const r=new SR();r.lang=navigator.language&&navigator.language.startsWith("en")?navigator.language:"en-AU";r.continuous=true;r.interimResults=true;r.maxAlternatives=3;
@@ -842,11 +1044,11 @@ function voiceStart(){
         texts=texts.map(t=>t.trim()).filter(Boolean);
         if(!texts.length)continue;
         micUI("on",texts[0]);
-        voiceCheck(texts);
+        V.handler(texts);
       }
     };
     r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){V.blocked=true;V.on=false;micUI("off")}};
-    r.onend=()=>{V.skipIdx=0;V.skipText="";V.lastIdx=0;V.lastText="";if(V.on&&S.duel&&S.duel.state!=="over"){try{r.start()}catch(e){}}};
+    r.onend=()=>{V.skipIdx=0;V.skipText="";V.lastIdx=0;V.lastText="";if(V.on){try{r.start()}catch(e){}}};
     V.rec=r;V.on=true;r.start();micUI("on");
   }catch(e){micUI("off")}
 }
@@ -860,10 +1062,10 @@ function voiceCheck(texts){
 
 /* =================== CONFETTI =================== */
 let confRaf=0;
-function confetti(){
+function confetti(cols){
   if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
   const cv=$("confetti"),c=cv.getContext("2d"),box=$("app");cv.hidden=false;cv.width=box.clientWidth;cv.height=box.clientHeight;
-  const cols=S.players.map(p=>p.color);
+  cols=cols||S.players.map(p=>p.color);
   const P=Array.from({length:180},()=>({x:Math.random()*cv.width,y:-20-Math.random()*cv.height,s:6+Math.random()*8,v:2+Math.random()*3,a:Math.random()*6,w:.05+Math.random()*.1,col:cols[Math.floor(Math.random()*cols.length)]}));
   const f=()=>{c.clearRect(0,0,cv.width,cv.height);P.forEach(p=>{p.y+=p.v;p.a+=p.w;p.x+=Math.sin(p.a)*1.2;if(p.y>cv.height+20){p.y=-20;p.x=Math.random()*cv.width}
     c.save();c.translate(p.x,p.y);c.rotate(p.a);c.fillStyle=p.col;c.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);c.restore()});confRaf=requestAnimationFrame(f)};f();
