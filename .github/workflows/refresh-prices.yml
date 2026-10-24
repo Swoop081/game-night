@@ -1,0 +1,43 @@
+name: Weekly price snapshot
+
+on:
+  schedule:
+    - cron: "17 14 * * 6"   # Sundays ~1am Melbourne time
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/refresh-prices.mjs"
+      - ".github/workflows/refresh-prices.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: price-snapshot
+  cancel-in-progress: true
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install browser
+        run: |
+          npm init -y >/dev/null
+          npm install playwright@1.48.2
+          npx playwright install --with-deps chromium
+      - name: Take snapshot
+        run: node scripts/refresh-prices.mjs
+      - name: Save snapshot
+        run: |
+          git config user.name "Game Night price bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/products.json data/report.json
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Weekly price snapshot"
+          git pull --rebase origin main
+          git push
