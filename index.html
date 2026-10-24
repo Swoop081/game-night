@@ -550,7 +550,7 @@ function screenSeg(el){
 }
 
 /* =================== NAV (touch + TV remote) =================== */
-function show(id){["hub","setup","floor","duel","hlSetup","hl"].forEach(s=>$(s).hidden=s!==id);requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
+function show(id){["hub","setup","floor","duel","hlSetup","hl","cdSetup","cd"].forEach(s=>{const el=$(s);if(el)el.hidden=s!==id});requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
 function focusables(){
   const root=!$("overlay").hidden?$("overlay"):document.querySelector(".screen:not([hidden])");
   return [...root.querySelectorAll("button:not([disabled]),input,select")].filter(e=>e.offsetParent!==null);
@@ -1109,7 +1109,7 @@ function voiceStart(handler,el){
         texts=texts.map(t=>t.trim()).filter(Boolean);
         if(!texts.length)continue;
         micUI("on",texts[0]);
-        V.handler(texts);
+        V.handler(texts,res.isFinal);
       }
     };
     r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){V.blocked=true;V.on=false;micUI("off")}};
@@ -1141,5 +1141,7 @@ function stopConfetti(){cancelAnimationFrame(confRaf);$("confetti").hidden=true}
 load();applyScreen();screenSeg($("segScreenHub"));show("hub");
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
+<script src="prices.js"></script>
+<script src="comeondown.js"></script>
 </body>
 </html>
