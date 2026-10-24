@@ -165,9 +165,35 @@ for (const src of SOURCES) {
   }
   console.log(src.r, report.retailers[src.r].ok ? "OK" : "FAILED", uniq.length);
 }
+// Official photos for the fixed-price items (Apple, cars), read from each page's share image
+const OFFICIAL = {
+  "iPhone 17": "https://www.apple.com/au/iphone-17/",
+  "iPad ": "https://www.apple.com/au/ipad-11/",
+  "iPad mini": "https://www.apple.com/au/ipad-mini/",
+  "iPad Air": "https://www.apple.com/au/ipad-air/",
+  "iPad Pro": "https://www.apple.com/au/ipad-pro/",
+  "MG3": "https://www.mgmotor.com.au/vehicles/mg3",
+  "MGS6": "https://www.mgmotor.com.au/",
+  "Toyota Corolla": "https://www.toyota.com.au/corolla",
+  "Mazda CX-5": "https://www.mazda.com.au/cars/cx-5/",
+};
+const images = {};
+{
+  const page = await ctx.newPage();
+  for (const [k, u] of Object.entries(OFFICIAL)) {
+    try {
+      await page.goto(u, { waitUntil: "domcontentloaded", timeout: PAGE_TIMEOUT });
+      const im = await page.evaluate(() => { const m = document.querySelector('meta[property="og:image"],meta[name="og:image"],meta[name="twitter:image"]'); return m && m.content; });
+      if (im && /^https?:/.test(im)) images[k] = im.replace(/^http:/, "https:");
+      report.official = report.official || {}; report.official[k] = images[k] || "none";
+    } catch (e) { report.official = report.official || {}; report.official[k] = "ERROR " + String(e.message).slice(0, 80); }
+  }
+  await page.close();
+}
+if (prev.images) for (const k in prev.images) if (!images[k]) images[k] = prev.images[k];
 await browser.close();
 
 fs.mkdirSync("data", { recursive: true });
-fs.writeFileSync(OUT, JSON.stringify({ checked: today, products }, null, 1));
+fs.writeFileSync(OUT, JSON.stringify({ checked: today, products, images }, null, 1));
 fs.writeFileSync(REPORT, JSON.stringify(report, null, 1));
 console.log("Total products", products.length);

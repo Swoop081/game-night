@@ -154,6 +154,8 @@ function loadCatalogue(){
     const have=new Set(snap.map(x=>x.r));
     const base=r=>r.replace(" Special Buys","");
     const keep=window.CD_PRODUCTS.filter(x=>x.car||x.r==="Apple"||!have.has(base(x.r)));
+    const imgs=j.images||{};
+    keep.forEach(x=>{if(x.img)return;const k=Object.keys(imgs).sort((a,b)=>b.length-a.length).find(k=>x.n.startsWith(k)||x.n.startsWith(k.trim()+" "));if(k)x.img=imgs[k]});
     const all=snap.map(x=>({n:x.n,r:x.r,p:x.p,e:x.e||"🎁",img:x.img})).concat(keep);
     P=all.map((x,i)=>({...x,id:i}));CHECKED=j.checked||CHECKED;
     RETAILERS=[...new Set(all.filter(x=>!x.car).map(x=>base(x.r)))].concat(["car makers"]);
