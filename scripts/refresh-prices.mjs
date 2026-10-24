@@ -142,11 +142,16 @@ async function grab(page, url, base) {
             if (t.length > 500) break;
             const p = priceOf(t); if (!p) continue;
             let name = "";
-            const h = el.querySelector("[class*=product-name],[class*=productName],[class*=ProductName],[class*=title],[class*=Title],h2,h3,h4,[class*=name],[class*=Name]");
-            if (h) name = h.innerText;
+            const cands = [...el.querySelectorAll("[class*=product-name],[class*=productName],[class*=ProductName],[class*=title],[class*=Title],h2,h3,h4,[class*=name],[class*=Name],[class*=brand],[class*=Brand]")]
+              .map(x => (x.innerText || "").trim().replace(/\s+/g, " ")).filter(x => x.length >= 2 && x.length <= 140 && !x.includes("$"));
+            if (cands.length) {
+              name = cands.reduce((a, b) => b.length > a.length ? b : a);
+              const brand = cands.find(x => x !== name && x.length < 30 && x === x.toUpperCase() && /[A-Z]/.test(x) && !name.toUpperCase().includes(x));
+              if (brand) name = brand.charAt(0) + brand.slice(1).toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) + " " + name;
+            }
             if (!name) { const a = el.querySelector("a[title],a[aria-label]"); name = a ? (a.title || a.getAttribute("aria-label")) : ""; }
             if (!name && im.alt && im.alt.length < 80) name = im.alt;
-            name = (name || "").trim().replace(/\s+/g, " ");
+            name = (name || "").trim().replace(/\s+/g, " ").replace(/^link to /i, "");
             const key = src.split("?")[0];
             if (name.length >= 3 && !/banner|promo|doordash|catalogue|sale$/i.test(name) && !seenN.has(name) && !seenI.has(key)) {
               seenN.add(name); seenI.add(key);
