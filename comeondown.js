@@ -1,4 +1,4 @@
-/* =================== COME ON DOWN (Price Is Right, Australian format) ===================
+/* =================== THE PRICE IS RIGHT (Price Is Right, Australian format) ===================
    Round x3: players bid on an item (closest without going over wins it, exact = $100 bonus),
    the winner plays a pricing game. Then the two biggest winners play the Showcase Showdown
    (alternate bids, first within $100 wins). The winner puts the Showcase in price order in 40 seconds,
@@ -145,7 +145,7 @@ button.prize{cursor:pointer}
 .portrait .slot .pr{font-size:.75rem}
 .portrait #cdStage .btn{padding:.6em 1.4em}
 .portrait #cdMic{font-size:.75rem;min-height:1.1em}
-.game.live .tag{position:absolute;top:14px;right:14px;font-family:var(--f-display);font-weight:900;font-size:1.5rem;background:#fffdf6;color:#14532d;padding:.15em .5em;border-radius:8px;transform:rotate(6deg);box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.game.live .tag{margin-left:6px;font-family:var(--f-display);font-weight:900;font-size:1.5rem;background:#fffdf6;color:#14532d;padding:.15em .5em;border-radius:8px;transform:rotate(6deg);box-shadow:0 4px 10px rgba(0,0,0,.5)}
 `;
 const st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
@@ -192,20 +192,20 @@ const big=p=>!p.car&&p.p>=100;
 const hub=document.querySelector(".games");
 const blitz=[...hub.children].find(c=>c.textContent.includes("Picture Blitz"));
 const tile=document.createElement("button");tile.className="game live";tile.id="playCD";
-tile.innerHTML=`<span class="tag">$1</span><span class="pill">Play</span><h2>Come On Down</h2><p>Bid on real Aussie prices. Win the Showcase.</p>`;
+tile.innerHTML=`<span class="art"><span class="tag">$1</span><span class="pill">Play</span></span><h2>The Price Is Right</h2><p>Bid on real Aussie prices. Win the Showcase.</p>`;
 if(blitz)hub.replaceChild(tile,blitz);else hub.appendChild(tile);
 const app=$("app");
 const secS=document.createElement("section");secS.className="screen";secS.id="cdSetup";secS.hidden=true;
 const sec=document.createElement("section");sec.className="screen";sec.id="cd";sec.hidden=true;
 app.insertBefore(secS,$("overlay"));app.insertBefore(sec,$("overlay"));
-sec.innerHTML=`<div class="floorbar"><span class="brand">GAME NIGHT<small>COME ON DOWN</small></span><span class="spacer"></span><span class="count" id="cdRound"></span><button class="btn ghost" id="cdQuit">Quit</button></div>
+sec.innerHTML=`<div class="floorbar"><span class="brand">GAME NIGHT<small>THE PRICE IS RIGHT</small></span><span class="spacer"></span><span class="count" id="cdRound"></span><button class="btn ghost" id="cdQuit">Quit</button></div>
 <div class="cdscore" id="cdScore"></div><div class="cdstage" id="cdStage"></div><div class="mic" id="cdMic"></div>`;
 tile.onclick=()=>{ac();openSetup()};
 $("cdQuit").onclick=()=>confirmSheet("Quit this game?","Everyone's winnings will be lost.","Quit",()=>{closeOverlay();endGame();show("hub")});
 
 function openSetup(){
   S.count=CD.count;ensureSlots();
-  secS.innerHTML=`<div class="topbar"><button class="btn ghost" id="cdBack">← Back</button><h2>Come On Down · Set up</h2><button class="btn gold" id="cdStart">Start game</button></div>
+  secS.innerHTML=`<div class="topbar"><button class="btn ghost" id="cdBack">← Back</button><h2>The Price Is Right · Set up</h2><button class="btn gold" id="cdStart">Start game</button></div>
   <div class="setup-grid"><div class="panel">
     <div class="field"><span class="eyebrow">Contestants</span><div class="stepper"><button id="cdMinus" aria-label="Fewer players">−</button><output id="cdCount">${CD.count}</output><button id="cdPlus" aria-label="More players">+</button></div></div>
     <div class="field"><span class="eyebrow">Aussie TV show rules</span><ul class="rules">
@@ -250,7 +250,7 @@ async function startGame(){
   CD.round=0;CD.used=new Set();CD.games=shuffle(GAMES).slice(0,3);
   if(!CD.games.includes("lucky")&&Math.random()<.5)CD.games[2]="lucky";
   show("cd");score();$("cdStage").innerHTML="";
-  introContestants(CD.players,"Come On Down",()=>{voiceStart(onVoice,$("cdMic"));if(!S.prefs.voice)$("cdMic").innerHTML="";nextRound()});
+  introContestants(CD.players,"The Price Is Right",()=>{voiceStart(onVoice,$("cdMic"));if(!S.prefs.voice)$("cdMic").innerHTML="";nextRound()});
 }
 function endGame(){clearInterval(CD.timer);CD.input=null;voiceStop();stopConfetti()}
 function score(active){

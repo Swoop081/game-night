@@ -10,7 +10,8 @@
 <meta name="theme-color" content="#0c0a1d">
 <title>Game Night</title>
 <link rel="icon" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Chakra+Petch:wght@600;700&family=Figtree:wght@400;600;800&display=swap">
 <style>
@@ -54,6 +55,13 @@ button{cursor:pointer}
 /* ---------- HUB ---------- */
 #hub{align-items:center;justify-content:center;gap:clamp(16px,3.5vh,36px);overflow:auto}
 .hubtop{position:absolute;top:max(12px, calc(var(--sa-t) + var(--blur-gap)));right:max(16px, var(--sa-r));display:flex;align-items:center;gap:10px}
+.portrait .hubtop{position:static;align-self:flex-end}
+.pill{white-space:nowrap}
+.portrait .game{padding:14px;min-height:0}
+.portrait .game h2{font-size:1.55rem}
+.portrait .game p{font-size:.82rem}
+.portrait .game .art{min-height:56px}
+.portrait #hub{justify-content:flex-start}
 .marquee{position:relative;text-align:center;padding:.3em .6em}
 .marquee h1{margin:0;font-family:var(--f-display);font-weight:900;font-size:clamp(3.2rem,12vmin,8.5rem);line-height:.85;letter-spacing:.01em;
   background:linear-gradient(180deg,#fff6d8 0%,var(--gold) 55%,var(--gold-deep) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
@@ -63,13 +71,16 @@ button{cursor:pointer}
 .tagline{color:var(--muted);margin:.8em 0 0;font-size:clamp(.95rem,2.2vmin,1.2rem)}
 .games{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;width:min(1100px,100%)}
 .portrait .games{grid-template-columns:repeat(2,minmax(0,1fr))}
-.game{position:relative;text-align:left;border-radius:18px;padding:18px;min-height:160px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
+.game{position:relative;text-align:left;border-radius:18px;padding:18px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
   background:var(--stage-2);border:1px solid var(--line);overflow:hidden}
 .game h2{margin:0;font-family:var(--f-display);font-size:2rem;font-weight:900;letter-spacing:.02em;line-height:1}
 .game p{margin:0;color:var(--muted);font-size:.9rem}
 .game.live{background:linear-gradient(160deg,#3a2a8c 0%,#1d1650 60%);border-color:#5a4bc0}
-.game.live .tiles{position:absolute;top:14px;right:14px;display:grid;grid-template-columns:repeat(4,16px);gap:3px}
-.game.live .tiles i{width:16px;height:16px;border-radius:3px}
+.game .art{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:68px;margin-bottom:auto}
+.game .art .pill{align-self:flex-start}
+.game.live .tiles{display:grid;grid-template-columns:repeat(4,14px);gap:3px}
+.game .tenbadge{font-family:var(--f-display);font-weight:900;font-size:2.4rem;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;border:3px solid var(--line);color:var(--muted)}
+.game.live .tiles i{width:14px;height:14px;border-radius:3px}
 .game.soon{opacity:.55;cursor:default}
 .pill{align-self:flex-start;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:.35em .7em;border-radius:999px;background:var(--stage-3);color:var(--muted)}
 .game.live .pill{background:var(--gold);color:#2a1700}
@@ -240,7 +251,7 @@ button{cursor:pointer}
 .portrait .cards{gap:4%}
 .portrait .pcard{height:min(94cqh,64cqw)}
 .hlsetup{display:grid;gap:12px;width:100%;max-width:640px}
-.game.live .minicards{position:absolute;top:14px;right:14px;display:flex}
+.game.live .minicards{display:flex;padding-left:8px}
 .game.live .minicards i{width:30px;height:42px;border-radius:4px;background:#fffdf6;color:#1a1636;font-style:normal;font-family:var(--f-display);font-weight:900;font-size:1.4rem;display:grid;place-items:center;margin-left:-8px;box-shadow:0 4px 10px rgba(0,0,0,.5);transform:rotate(var(--r))}
 
 /* ---------- OVERLAYS ---------- */
@@ -275,11 +286,11 @@ button{cursor:pointer}
   <div class="marquee"><div class="bulbs"></div><h1>GAME<br>NIGHT</h1></div>
   <p class="tagline">Party quiz games for one screen. Pick a game.</p>
   <div class="games">
-    <button class="game live" id="playTakeover"><span class="tiles" id="hubTiles"></span><span class="pill">Play</span><h2>Takeover</h2><p>Duel your neighbours in their category. Win their squares. Own the floor.</p></button>
-    <button class="game live" id="playHL"><span class="minicards"><i style="--r:-10deg">4</i><i style="--r:0deg">7</i><i style="--r:10deg">2</i></span><span class="pill">Play</span><h2>Higher or Lower</h2><p>Two players, fifty cards. Call the next one right for a point.</p></button>
+    <button class="game live" id="playTakeover"><span class="art"><span class="tiles" id="hubTiles"></span><span class="pill">Play</span></span><h2>The Floor</h2><p>Duel your neighbours in their category. Win their squares. Own the floor.</p></button>
+    <button class="game live" id="playHL"><span class="art"><span class="minicards"><i style="--r:-10deg">4</i><i style="--r:0deg">7</i><i style="--r:10deg">2</i></span><span class="pill">Play</span></span><h2>Higher or Lower</h2><p>Two players, fifty cards. Call the next one right for a point.</p></button>
     <div class="game soon"><span class="pill">Coming soon</span><h2>Picture Blitz</h2><p>Name it before the picture fills in.</p></div>
     
-    <div class="game soon"><span class="pill">Coming soon</span><h2>Name Ten</h2><p>Ten answers, one category, one clock.</p></div>
+    <div class="game soon"><span class="art"><span class="tenbadge">10</span><span class="pill">Coming soon</span></span><h2>Name Ten</h2><p>Ten answers, one category, one clock.</p></div>
   </div>
 </section>
 
@@ -287,7 +298,7 @@ button{cursor:pointer}
 <section class="screen" id="setup" hidden>
   <div class="topbar">
     <button class="btn ghost" id="setupBack">← Back</button>
-    <h2 id="setupTitle">Takeover</h2>
+    <h2 id="setupTitle">The Floor</h2>
     <button class="btn gold" id="startGame">Start game</button>
   </div>
   <div class="setup-grid">
@@ -310,7 +321,7 @@ button{cursor:pointer}
 <!-- FLOOR -->
 <section class="screen" id="floor" hidden>
   <div class="floorbar">
-    <span class="brand">GAME NIGHT<small id="floorMode">TAKEOVER</small></span>
+    <span class="brand">GAME NIGHT<small id="floorMode">THE FLOOR</small></span>
     <span class="spacer"></span>
     <span class="count" id="left"></span>
     <button class="btn ghost" id="quit">Quit</button>
@@ -598,7 +609,7 @@ function confirmSheet(title,body,yes,fn){
 /* =================== HUB → MODE → SETUP =================== */
 $("hubTiles").innerHTML=COLORS.slice(0,16).map((c,i)=>`<i style="background:${COLORS[(i*5)%24][0]}"></i>`).join("");
 $("playTakeover").onclick=()=>{ac();
-  openOverlay(`<span class="eyebrow">Takeover</span><h2>How do you want to play?</h2>
+  openOverlay(`<span class="eyebrow">The Floor</span><h2>How do you want to play?</h2>
   <div class="modes">
     <button class="mode tv" id="pickTv"><span class="pill" style="background:var(--gold);color:#2a1700">TV show rules</span><h3>TV Game</h3>
       <ul><li>45 seconds each, 3-second pass</li><li>The Randomizer picks who hasn't played yet</li><li>3 wins in a row earns a 5-second Time Boost</li><li>Best-of-three final with a mystery category</li></ul></button>
@@ -617,7 +628,7 @@ function seg(el,opts,get,set,fmt){
 function onOff(v){return v?"On":"Off"}
 function openSetup(){
   S.count=2;
-  $("setupTitle").textContent=S.mode==="tv"?"TV Game · Set up":"Custom Game · Set up";
+  $("setupTitle").textContent=S.mode==="tv"?"The Floor · TV Game":"The Floor · Custom Game";
   const box=$("rulesBox");
   if(S.mode==="tv"){
     box.innerHTML=`<div class="field"><span class="eyebrow">TV show rules</span><ul class="rules">
@@ -703,10 +714,10 @@ function startGame(){
   const order=shuffle(S.players.map(p=>p.id));
   S.grid={rows,cols,owner:Array.from({length:rows*cols},(_,i)=>i<order.length?order[i]:-1)};
   S.played=new Set();S.phase="idle";S.challenger=null;S.defender=null;S.final=null;
-  $("floorMode").textContent=S.mode==="tv"?"TAKEOVER · TV GAME":"TAKEOVER · CUSTOM";
+  $("floorMode").textContent=S.mode==="tv"?"THE FLOOR · TV GAME":"THE FLOOR · CUSTOM";
   show("floor");renderFloor();
   S.players.forEach(p=>loadPhotos(p.cat));
-  introContestants(S.players,"Takeover",()=>{renderFloor();if(S.count===2&&R().bo3)setTimeout(startFinal,300)});
+  introContestants(S.players,"The Floor",()=>{renderFloor();if(S.count===2&&R().bo3)setTimeout(startFinal,300)});
 }
 const alive=()=>S.players.filter(p=>p.alive);
 function cellsOf(pid){const r=[];S.grid.owner.forEach((o,i)=>{if(o===pid)r.push(i)});return r}
