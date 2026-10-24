@@ -1,0 +1,173 @@
+{
+ "checked": "25 October 2026",
+ "retailers": {
+  "Woolworths": {
+   "ok": false,
+   "count": 0,
+   "keptFromLastWeek": 0,
+   "notes": [
+    "tim tam: 0 (raw 0, \"Access Denied\")",
+    "vegemite: 0 (raw 0, \"Access Denied\")",
+    "milo: 0 (raw 0, \"Access Denied\")",
+    "weet-bix: 0 (raw 0, \"Access Denied\")",
+    "coca cola 1.25l: 0 (raw 0, \"Access Denied\")",
+    "cadbury dairy milk block: 0 (raw 0, \"Access Denied\")",
+    "arnotts shapes: 0 (raw 0, \"Access Denied\")",
+    "smiths chips: 0 (raw 0, \"Access Denied\")",
+    "nescafe blend 43: 0 (raw 0, \"Access Denied\")",
+    "golden gaytime: 0 (raw 0, \"Access Denied\")",
+    "toilet paper: 0 (raw 0, \"Access Denied\")",
+    "laundry liquid: 0 (raw 0, \"Access Denied\")"
+   ]
+  },
+  "Coles": {
+   "ok": true,
+   "count": 48,
+   "notes": [
+    "tim tam: 4 (raw 12, \"Search tim tam | Coles\")",
+    "vegemite: 4 (raw 15, \"Search vegemite | Coles\")",
+    "milo: 4 (raw 21, \"Search milo | Coles\")",
+    "weet-bix: 4 (raw 19, \"Search weet-bix | Coles\")",
+    "pepsi max: 4 (raw 13, \"Search pepsi max | Coles\")",
+    "kit kat: 4 (raw 18, \"Search kit kat | Coles\")",
+    "doritos: 4 (raw 24, \"Search doritos | Coles\")",
+    "ice cream: 4 (raw 56, \"Search ice cream | Coles\")",
+    "coffee pods: 4 (raw 48, \"Search coffee pods | Coles\")",
+    "dishwasher tablets: 4 (raw 41, \"Search dishwasher tablets | Coles\")",
+    "sausages: 4 (raw 49, \"Search sausages | Coles\")",
+    "nutella: 4 (raw 11, \"Search nutella | Coles\")"
+   ]
+  },
+  "Kmart": {
+   "ok": false,
+   "count": 0,
+   "keptFromLastWeek": 0,
+   "notes": [
+    "air fryer: 0 (raw 0, \"Access Denied\")",
+    "kettle: 0 (raw 0, \"Access Denied\")",
+    "toaster: 0 (raw 0, \"Access Denied\")",
+    "lego: 0 (raw 0, \"Access Denied\")",
+    "outdoor chair: 0 (raw 0, \"Access Denied\")",
+    "cushion: 0 (raw 0, \"Access Denied\")",
+    "lamp: 0 (raw 0, \"Access Denied\")",
+    "bluetooth speaker: 0 (raw 0, \"Access Denied\")",
+    "vacuum: 0 (raw 0, \"Access Denied\")",
+    "bike: 0 (raw 0, \"Access Denied\")",
+    "quilt cover: 0 (raw 0, \"Access Denied\")",
+    "storage: 0 (raw 0, \"Access Denied\")"
+   ]
+  },
+  "Big W": {
+   "ok": false,
+   "count": 0,
+   "keptFromLastWeek": 0,
+   "notes": [
+    "lego: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=lego\nCall log:\n  - navigating to \"https:",
+    "barbie: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=barbie\nCall log:\n  - navigating to \"http",
+    "nintendo switch: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=nintendo%20switch\nCall log:\n  - navigati",
+    "trampoline: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=trampoline\nCall log:\n  - navigating to \"",
+    "scooter: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=scooter\nCall log:\n  - navigating to \"htt",
+    "tent: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=tent\nCall log:\n  - navigating to \"https:",
+    "hot wheels: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=hot%20wheels\nCall log:\n  - navigating to",
+    "board game: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=board%20game\nCall log:\n  - navigating to",
+    "pram: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=pram\nCall log:\n  - navigating to \"https:",
+    "electric toothbrush: ERROR page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.bigw.com.au/search?text=electric%20toothbrush\nCall log:\n  - navi"
+   ]
+  },
+  "Bunnings": {
+   "ok": false,
+   "count": 0,
+   "keptFromLastWeek": 0,
+   "notes": [
+    "cordless drill: 0 (raw 0, \"Just a moment...\")",
+    "barbecue: 0 (raw 0, \"Just a moment...\")",
+    "lawn mower: 0 (raw 0, \"Just a moment...\")",
+    "ladder: 0 (raw 0, \"Just a moment...\")",
+    "wheelbarrow: 0 (raw 0, \"Just a moment...\")",
+    "pressure washer: 0 (raw 0, \"Just a moment...\")",
+    "toolbox: 0 (raw 0, \"Just a moment...\")",
+    "garden hose: 0 (raw 0, \"Just a moment...\")",
+    "outdoor setting: 0 (raw 0, \"Just a moment...\")",
+    "paint 10l: 0 (raw 0, \"Just a moment...\")",
+    "pizza oven: 0 (raw 0, \"Just a moment...\")",
+    "ozito: 0 (raw 0, \"Just a moment...\")"
+   ]
+  },
+  "JB Hi-Fi": {
+   "ok": false,
+   "count": 0,
+   "keptFromLastWeek": 0,
+   "notes": [
+    "65 inch tv: 0 (raw 0, \"Search results: '65 inch tv' | JB Hi-Fi\")",
+    "noise cancelling headphones: 0 (raw 0, \"Search results: 'noise cancelling headphones' | JB Hi-Fi\")",
+    "playstation 5: 0 (raw 0, \"Search results: 'playstation 5' | JB Hi-Fi\")",
+    "xbox: 0 (raw 0, \"Search results: 'xbox' | JB Hi-Fi\")",
+    "laptop: 0 (raw 0, \"Search results: 'laptop' | JB Hi-Fi\")",
+    "soundbar: 0 (raw 0, \"Search results: 'soundbar' | JB Hi-Fi\")",
+    "airpods: 0 (raw 0, \"Search results: 'airpods' | JB Hi-Fi\")",
+    "smartwatch: 0 (raw 0, \"Search results: 'smartwatch' | JB Hi-Fi\")",
+    "robot vacuum: 0 (raw 0, \"Search results: 'robot vacuum' | JB Hi-Fi\")",
+    "coffee machine: 0 (raw 0, \"Search results: 'coffee machine' | JB Hi-Fi\")"
+   ]
+  },
+  "Officeworks": {
+   "ok": true,
+   "count": 20,
+   "notes": [
+    "office chair: 4 (raw 96, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "printer: 4 (raw 72, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "standing desk: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "calculator: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "backpack: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "shredder: 0 (raw 0, \"Human Verification\")"
+   ]
+  },
+  "Target": {
+   "ok": false,
+   "count": 0,
+   "keptFromLastWeek": 0,
+   "notes": [
+    "bath towel: 0 (raw 0, \"Search Results | Target Australia\")",
+    "pyjamas: 0 (raw 0, \"Search Results | Target Australia\")",
+    "toy: 0 (raw 0, \"Search Results | Target Australia\")",
+    "sneakers: 0 (raw 0, \"Search Results | Target Australia\")",
+    "bedding: 0 (raw 0, \"Search Results | Target Australia\")"
+   ]
+  },
+  "Aldi": {
+   "ok": false,
+   "count": 0,
+   "keptFromLastWeek": 0,
+   "notes": [
+    "https://www.aldi.com.au/special-buys: 0 (raw 0, \"ALDI Special Buys | New Range Every Wednesday & Saturday\")",
+    "https://www.aldi.com.au/products/snacks-confectionery/confectionery/k/1588161408332088: 0 (raw 0, \"Sweets & Confectionery | Chocolates & Candy for Sharing\")",
+    "https://www.aldi.com.au/products/drinks/k/1000000000: 0 (raw 0, \"Drinks | Cold, Delicious & Refreshing Drinks\")",
+    "https://www.aldi.com.au/products/pantry/k/970000000: 0 (raw 0, \"Pantry Products | Cooking Essentials & Cupboard Staples\")",
+    "https://www.aldi.com.au/products/cleaning-household/k/1050000000: 0 (raw 0, \"Cleaning & Household Products | Essentials for a Spotless Ho\")"
+   ]
+  },
+  "IKEA": {
+   "ok": false,
+   "count": 0,
+   "keptFromLastWeek": 0,
+   "notes": [
+    "https://www.ikea.com/au/en/cat/sofas-fu003/: 0 (raw 0, \"Sofas, Couches, and Lounges: Create a Relaxing Living Space \")",
+    "https://www.ikea.com/au/en/cat/beds-bm003/: 0 (raw 0, \"Beds and Bed Frames: Get a Good Night's Sleep - IKEA\")",
+    "https://www.ikea.com/au/en/cat/dining-tables-21825/: 0 (raw 0, \"Dining Room Tables | Round, Square, Wooden & All Sorts - IKE\")",
+    "https://www.ikea.com/au/en/cat/armchairs-fu006/: 0 (raw 0, \"Armchairs - Accent Chairs - Affordable & Comfortable - IKEA\")",
+    "https://www.ikea.com/au/en/cat/bookcases-shelving-units-st002/: 0 (raw 0, \"Bookcases & shelving units - IKEA\")"
+   ]
+  }
+ },
+ "official": {
+  "iPhone 17": "https://www.apple.com/v/iphone-17/i/images/meta/iphone-17_overview__cg0rlzmbhl7m_og.png?202610160502",
+  "iPad ": "https://www.apple.com/au/ipad-11/images/meta/ipad-11_overview__xfht9uzr5k2i_og.png?202610202050",
+  "iPad mini": "https://www.apple.com/au/ipad-mini/images/meta/ipad-mini_overview__ficvb3cxycmm_og.png?202606301448",
+  "iPad Air": "https://www.apple.com/v/ipad-air/ah/images/meta/ipad-air_overview__bc2fd15uec0y_og.png?202610202050",
+  "iPad Pro": "https://www.apple.com/v/ipad-pro/aw/images/meta/ipad-pro_overview__bu4cql27diaa_og.png?202610202050",
+  "MG3": "https://dealers.virtualyard.com.au/vydata/485843481a7edacbfce101ecb1e4d2a8/d843d37ddf105e87e013c56d7afc8a08.jpg",
+  "MGS6": "https://dealers.virtualyard.com.au/vydata/485843481a7edacbfce101ecb1e4d2a8/5bc3b1a485b0b274dee4a0ec4e8b07ed.jpg",
+  "Toyota Corolla": "none",
+  "Mazda CX-5": "none"
+ }
+}
