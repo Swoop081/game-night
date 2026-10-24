@@ -321,7 +321,7 @@ function bidRound(p,rebidUnder){
   const draw=(msg,cls)=>{
     score(order[idx]);
     const pl=CD.players[order[idx]];
-    stage(`<div class="cdhead"><span class="eyebrow">Round ${CD.round} · Up for bids</span><h2>Come on down!</h2><p>${rebidUnder?`Everyone went over. Bid again, under ${fmt(rebidUnder)}.`:"Closest to the price without going over wins it."}</p></div>
+    stage(`<div class="cdhead"><span class="eyebrow">Round ${CD.round} · Up for bids</span><h2>Come on down!</h2><p>${rebidUnder?`Everyone went over. Here is a different prize. Bid again.`:"Closest to the price without going over wins it."}</p></div>
       <div class="cdsplit"><div>${prizeCard(p,{cls:"big"})}<div class="bids">${order.filter(i=>bids[i]!=null).map(i=>`<div class="bid" style="--pc:${CD.players[i].color}">${avatarHTML(CD.players[i],"sm")}<small>${esc(CD.players[i].name)}</small><b>${fmt(bids[i])}</b></div>`).join("")}</div><div class="cdmsg ${cls||""}">${msg||""}</div></div>
       ${entryHTML(`${avatarHTML(pl,"md")} <span style="color:${pl.color}">${esc(pl.name)}</span>, what's your bid?`)}</div>`);
     bindEntry(v=>{
@@ -336,8 +336,7 @@ function bidRound(p,rebidUnder){
     const under=order.filter(i=>bids[i]<=p.p);
     if(!under.length){SFX.buzz();
       stage(`<div class="cdhead"><span class="eyebrow">Actual retail price</span><h2>${fmt(p.p)}</h2><p>Everyone went over!</p></div>${prizeCard(p,{cls:"big",show:true})}<button class="btn gold" id="cdRebid">Bid again</button>`);
-      const low=Math.min(...Object.values(bids));
-      $("cdRebid").onclick=()=>bidRound(p,low);return;
+      $("cdRebid").onclick=()=>bidRound(pick(mid)||p,true);return;
     }
     const w=under.reduce((a,b)=>bids[b]>bids[a]?b:a);
     const exact=bids[w]===p.p;
