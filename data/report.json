@@ -95,29 +95,29 @@
   },
   "JB Hi-Fi": {
    "ok": true,
-   "count": 39,
+   "count": 24,
    "notes": [
-    "65 inch tv: 4 (raw 35, \"Search results: '65 inch tv' | JB Hi-Fi\")",
-    "noise cancelling headphones: 4 (raw 36, \"Search results: 'noise cancelling headphones' | JB Hi-Fi\")",
-    "playstation 5: 4 (raw 36, \"Search results: 'playstation 5' | JB Hi-Fi\")",
-    "xbox: 4 (raw 36, \"Search results: 'xbox' | JB Hi-Fi\")",
-    "laptop: 4 (raw 36, \"Search results: 'laptop' | JB Hi-Fi\")",
-    "soundbar: 4 (raw 36, \"Search results: 'soundbar' | JB Hi-Fi\")",
-    "airpods: 4 (raw 36, \"Search results: 'airpods' | JB Hi-Fi\")",
-    "smartwatch: 3 (raw 36, \"Search results: 'smartwatch' | JB Hi-Fi\")",
-    "robot vacuum: 4 (raw 36, \"Search results: 'robot vacuum' | JB Hi-Fi\")",
-    "coffee machine: 4 (raw 36, \"Search results: 'coffee machine' | JB Hi-Fi\")"
+    "65 inch tv: 4 (raw 10, \"Search results: '65 inch tv' | JB Hi-Fi\")",
+    "noise cancelling headphones: 4 (raw 5, \"Search results: 'noise cancelling headphones' | JB Hi-Fi\")",
+    "playstation 5: 0 (raw 2, \"Search results: 'playstation 5' | JB Hi-Fi\")",
+    "xbox: 0 (raw 2, \"Search results: 'xbox' | JB Hi-Fi\")",
+    "laptop: 4 (raw 10, \"Search results: 'laptop' | JB Hi-Fi\")",
+    "soundbar: 4 (raw 13, \"Search results: 'soundbar' | JB Hi-Fi\")",
+    "airpods: 0 (raw 0, \"Search results: 'airpods' | JB Hi-Fi\")",
+    "smartwatch: 0 (raw 2, \"Search results: 'smartwatch' | JB Hi-Fi\")",
+    "robot vacuum: 4 (raw 8, \"Search results: 'robot vacuum' | JB Hi-Fi\")",
+    "coffee machine: 4 (raw 6, \"Search results: 'coffee machine' | JB Hi-Fi\")"
    ]
   },
   "Officeworks": {
    "ok": true,
-   "count": 20,
+   "count": 16,
    "notes": [
     "office chair: 4 (raw 72, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "printer: 4 (raw 96, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "standing desk: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "calculator: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
-    "backpack: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "backpack: 0 (raw 0, \"Human Verification\")",
     "shredder: 0 (raw 0, \"Human Verification\")"
    ]
   },
@@ -126,32 +126,32 @@
    "count": 16,
    "notes": [
     "bath towel: 4 (raw 43, \"Search Results | Target Australia\")",
-    "pyjamas: 4 (raw 47, \"Search Results | Target Australia\")",
-    "toy: 4 (raw 48, \"Search Results | Target Australia\")",
+    "pyjamas: 4 (raw 45, \"Search Results | Target Australia\")",
+    "toy: 4 (raw 46, \"Search Results | Target Australia\")",
     "sneakers: 4 (raw 43, \"Search Results | Target Australia\")",
     "bedding: 0 (raw 47, \"Search Results | Target Australia\")"
    ]
   },
   "Aldi": {
    "ok": true,
-   "count": 47,
+   "count": 46,
    "notes": [
-    "https://www.aldi.com.au/special-buys: 1 (raw 1, \"ALDI Special Buys | New Range Every Wednesday & Saturday\")",
-    "https://www.aldi.com.au/products/snacks-confectionery/confectionery/k/1588161408332088: 12 (raw 30, \"Sweets & Confectionery | Chocolates & Candy for Sharing\")",
-    "https://www.aldi.com.au/products/drinks/k/1000000000: 12 (raw 30, \"Drinks | Cold, Delicious & Refreshing Drinks\")",
-    "https://www.aldi.com.au/products/pantry/k/970000000: 12 (raw 30, \"Pantry Products | Cooking Essentials & Cupboard Staples\")",
-    "https://www.aldi.com.au/products/cleaning-household/k/1050000000: 12 (raw 30, \"Cleaning & Household Products | Essentials for a Spotless Ho\")"
+    "https://www.aldi.com.au/special-buys: 0 (raw 0, \"ALDI Special Buys | New Range Every Wednesday & Saturday\")",
+    "https://www.aldi.com.au/products/snacks-confectionery/confectionery/k/1588161408332088: 12 (raw 20, \"Sweets & Confectionery | Chocolates & Candy for Sharing\")",
+    "https://www.aldi.com.au/products/drinks/k/1000000000: 12 (raw 16, \"Drinks | Cold, Delicious & Refreshing Drinks\")",
+    "https://www.aldi.com.au/products/pantry/k/970000000: 12 (raw 21, \"Pantry Products | Cooking Essentials & Cupboard Staples\")",
+    "https://www.aldi.com.au/products/cleaning-household/k/1050000000: 12 (raw 12, \"Cleaning & Household Products | Essentials for a Spotless Ho\")"
    ]
   },
   "IKEA": {
    "ok": true,
    "count": 40,
    "notes": [
-    "https://www.ikea.com/au/en/cat/sofas-fu003/: 8 (raw 14, \"Sofas, Couches, and Lounges: Create a Relaxing Living Space \")",
-    "https://www.ikea.com/au/en/cat/beds-bm003/: 8 (raw 46, \"Beds and Bed Frames: Get a Good Night's Sleep - IKEA\")",
-    "https://www.ikea.com/au/en/cat/dining-tables-21825/: 8 (raw 47, \"Dining Room Tables | Round, Square, Wooden & All Sorts - IKE\")",
-    "https://www.ikea.com/au/en/cat/armchairs-fu006/: 8 (raw 40, \"Armchairs - Accent Chairs - Affordable & Comfortable - IKEA\")",
-    "https://www.ikea.com/au/en/cat/bookcases-shelving-units-st002/: 8 (raw 43, \"Bookcases & shelving units - IKEA\")"
+    "https://www.ikea.com/au/en/cat/sofas-fu003/: 8 (raw 30, \"Sofas, Couches, and Lounges: Create a Relaxing Living Space \")",
+    "https://www.ikea.com/au/en/cat/beds-bm003/: 8 (raw 23, \"Beds and Bed Frames: Get a Good Night's Sleep - IKEA\")",
+    "https://www.ikea.com/au/en/cat/dining-tables-21825/: 8 (raw 25, \"Dining Room Tables | Round, Square, Wooden & All Sorts - IKE\")",
+    "https://www.ikea.com/au/en/cat/armchairs-fu006/: 8 (raw 23, \"Armchairs - Accent Chairs - Affordable & Comfortable - IKEA\")",
+    "https://www.ikea.com/au/en/cat/bookcases-shelving-units-st002/: 8 (raw 22, \"Bookcases & shelving units - IKEA\")"
    ]
   }
  },
