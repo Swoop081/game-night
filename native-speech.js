@@ -17,8 +17,12 @@
     },
     error(code){const r=cur;if(!r||!r.active)return;if(code)r.onerror&&r.onerror({error:code});r.active=false;r.onend&&r.onend()}
   };
+  // TV remotes only open their mic when an app asks for it, so listening is push-to-talk: press Speak (or the remote's mic key)
+  const label=t=>document.querySelectorAll("#talkBtn").forEach(b=>b.textContent=t);
+  window.__gnTalk=function(){if(!cur||!cur.active)return;fresh=true;label("🎤 Listening…");GNAndroid.listen(cur.lang||"en-AU")};
+  window.__gnSR.idle=function(){label("🎤 Speak")};
   function SR(){this.lang="en-AU";this.active=false}
-  SR.prototype.start=function(){if(this.active)return;cur=this;this.active=true;this.results=[];fresh=true;GNAndroid.start(this.lang||"en-AU")};
-  SR.prototype.stop=SR.prototype.abort=function(){if(!this.active)return;this.active=false;GNAndroid.stop()};
+  SR.prototype.start=function(){if(this.active)return;cur=this;this.active=true;this.results=[];fresh=true;this.onstart&&this.onstart()};
+  SR.prototype.stop=SR.prototype.abort=function(){if(!this.active)return;this.active=false;GNAndroid.stop();label('🎤 Speak')};
   window.SpeechRecognition=SR;
 })();

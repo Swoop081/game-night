@@ -196,6 +196,7 @@ button{cursor:pointer}
 .mic .d{width:10px;height:10px;border-radius:50%;background:var(--muted);flex:none}
 .mic.on .d{background:var(--hot);animation:blink 1s infinite}
 @keyframes blink{50%{opacity:.3}}
+.mic .btn{padding:.5em 1.1em;font-size:1rem}
 .mic q{font-style:italic;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60vw}
 .portrait .duelgrid{grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr)}
 .portrait .center{grid-column:1 / -1;grid-row:2}
@@ -1109,7 +1110,9 @@ const V={rec:null,on:false,blocked:false,skipIdx:0,skipText:"",lastIdx:0,lastTex
 function micUI(state,text){
   const m=V.el||$("mic");m.className="mic"+(state==="on"?" on":"");
   if(state==="off"){m.innerHTML=S.prefs.voice?`<span class="d"></span>${SR?(V.blocked?"Microphone blocked. Allow it in Settings, or use the buttons.":"Voice unavailable here. Use the buttons."):"This browser has no voice recognition. Use the buttons."}`:"";return}
-  m.innerHTML=`<span class="d"></span>${text?`<q>${esc(text)}</q>`:"Listening for answers…"}`;
+  const tv=!!window.__gnTalk,had=tv&&document.activeElement&&document.activeElement.id==="talkBtn";
+  m.innerHTML=`<span class="d"></span>${text?`<q>${esc(text)}</q>`:(tv?"Press Speak, then say your answer":"Listening for answers…")}${tv?'<button class="btn gold" id="talkBtn">🎤 Speak</button>':""}`;
+  if(tv){const b=m.querySelector("#talkBtn");b.onclick=()=>window.__gnTalk();if(had)b.focus({preventScroll:true})}
 }
 function voiceStart(handler,el){
   V.handler=handler||voiceCheck;V.el=el||$("mic");

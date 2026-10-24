@@ -69,6 +69,15 @@ public class MainActivity extends Activity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
     }
 
+    @Override public boolean dispatchKeyEvent(KeyEvent e) {
+        int c = e.getKeyCode();
+        if (c == KeyEvent.KEYCODE_SEARCH || c == KeyEvent.KEYCODE_VOICE_ASSIST || c == KeyEvent.KEYCODE_ASSIST) {
+            if (e.getAction() == KeyEvent.ACTION_DOWN && e.getRepeatCount() == 0) js("window.__gnTalk&&window.__gnTalk()");
+            return true;
+        }
+        return super.dispatchKeyEvent(e);
+    }
+
     @Override public boolean onKeyDown(int code, KeyEvent e) {
         if (failed && (code == KeyEvent.KEYCODE_DPAD_CENTER || code == KeyEvent.KEYCODE_ENTER)) {
             failed = false; web.loadUrl(URL); return true;
@@ -94,9 +103,15 @@ public class MainActivity extends Activity {
 
     // The recogniser is driven natively as one endless loop (listen, restart, recreate on trouble),
     // so the page just sees a continuous stream of results and the mic never gets stuck.
-    boolean want = false;
+    boolean want = false, oneShot = false;
     String lang = "en-AU";
     int errs = 0, gen = 0;
+
+    void listenOnce(String l) {
+        if (rec != null) { try { rec.cancel(); } catch (Exception e) {} }
+        oneShot = true;
+        startListening(l);
+    }
 
     void startListening(String l) {
         lang = l;
@@ -129,13 +144,14 @@ public class MainActivity extends Activity {
                 public void onEndOfSpeech() {}
                 public void onEvent(int t, Bundle p) {}
                 public void onPartialResults(Bundle p) { send(p, false); }
-                public void onResults(Bundle p) { errs = 0; send(p, true); restart(120, false); }
+                public void onResults(Bundle p) { errs = 0; send(p, true); if (oneShot) done(); else restart(120, false); }
                 public void onError(int err) {
                     if (!want) return;
                     if (err == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS) {
                         want = false; js("window.__gnSR&&window.__gnSR.error('not-allowed')"); return;
                     }
-                    if (err == SpeechRecognizer.ERROR_NO_MATCH || err == SpeechRecognizer.ERROR_SPEECH_TIMEOUT) { restart(80, false); return; }
+                    if (err == SpeechRecognizer.ERROR_NO_MATCH || err == SpeechRecognizer.ERROR_SPEECH_TIMEOUT) { if (oneShot) done(); else restart(80, false); return; }
+                    if (oneShot) { done(); return; }
                     errs++;
                     if (errs > 6) { want = false; js("window.__gnSR&&window.__gnSR.error('service-not-allowed')"); return; }
                     restart(err == SpeechRecognizer.ERROR_RECOGNIZER_BUSY ? 600 : 400, true);
@@ -154,7 +170,10 @@ public class MainActivity extends Activity {
         try { rec.startListening(i); } catch (Exception e) { errs++; restart(600, true); }
     }
 
+    void done() { want = false; oneShot = false; gen++; js("window.__gnSR&&window.__gnSR.idle&&window.__gnSR.idle()"); }
+
     void stopListening() {
+        oneShot = false;
         want = false; gen++;
         if (rec != null) { try { rec.cancel(); } catch (Exception e) {} }
     }
@@ -167,7 +186,8 @@ public class MainActivity extends Activity {
 
     class Bridge {
         @JavascriptInterface public boolean available() { return SpeechRecognizer.isRecognitionAvailable(MainActivity.this); }
-        @JavascriptInterface public void start(String lang) { ui.post(() -> startListening(lang)); }
+        @JavascriptInterface public void start(String lang) {}
+        @JavascriptInterface public void listen(String lang) { ui.post(() -> listenOnce(lang)); }
         @JavascriptInterface public void stop() { ui.post(() -> stopListening()); }
     }
 }
