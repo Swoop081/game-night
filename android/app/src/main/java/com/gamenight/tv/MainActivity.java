@@ -122,7 +122,7 @@ public class MainActivity extends Activity {
         if (rec == null) {
             rec = SpeechRecognizer.createSpeechRecognizer(this);
             rec.setRecognitionListener(new RecognitionListener() {
-                public void onReadyForSpeech(Bundle p) { js("window.__gnSR&&window.__gnSR.session()"); }
+                public void onReadyForSpeech(Bundle p) {}
                 public void onBeginningOfSpeech() {}
                 public void onRmsChanged(float v) {}
                 public void onBufferReceived(byte[] b) {}
@@ -150,6 +150,7 @@ public class MainActivity extends Activity {
         i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         i.putExtra("android.speech.extra.SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS", 700);
         i.putExtra("android.speech.extra.SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS", 500);
+        js("window.__gnSR&&window.__gnSR.session()");   // every listen starts a fresh result slot, whatever the recogniser reports
         try { rec.startListening(i); } catch (Exception e) { errs++; restart(600, true); }
     }
 
