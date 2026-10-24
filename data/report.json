@@ -97,7 +97,7 @@
    "ok": true,
    "count": 24,
    "notes": [
-    "65 inch tv: 4 (raw 10, \"Search results: '65 inch tv' | JB Hi-Fi\")",
+    "65 inch tv: 4 (raw 11, \"Search results: '65 inch tv' | JB Hi-Fi\")",
     "noise cancelling headphones: 4 (raw 5, \"Search results: 'noise cancelling headphones' | JB Hi-Fi\")",
     "playstation 5: 0 (raw 2, \"Search results: 'playstation 5' | JB Hi-Fi\")",
     "xbox: 0 (raw 2, \"Search results: 'xbox' | JB Hi-Fi\")",
@@ -111,13 +111,13 @@
   },
   "Officeworks": {
    "ok": true,
-   "count": 16,
+   "count": 20,
    "notes": [
-    "office chair: 4 (raw 72, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
-    "printer: 4 (raw 96, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "office chair: 4 (raw 96, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "printer: 4 (raw 72, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "standing desk: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "calculator: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
-    "backpack: 0 (raw 0, \"Human Verification\")",
+    "backpack: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "shredder: 0 (raw 0, \"Human Verification\")"
    ]
   },
@@ -128,7 +128,7 @@
     "bath towel: 4 (raw 43, \"Search Results | Target Australia\")",
     "pyjamas: 4 (raw 45, \"Search Results | Target Australia\")",
     "toy: 4 (raw 46, \"Search Results | Target Australia\")",
-    "sneakers: 4 (raw 43, \"Search Results | Target Australia\")",
+    "sneakers: 4 (raw 42, \"Search Results | Target Australia\")",
     "bedding: 0 (raw 47, \"Search Results | Target Australia\")"
    ]
   },
@@ -137,10 +137,10 @@
    "count": 46,
    "notes": [
     "https://www.aldi.com.au/special-buys: 0 (raw 0, \"ALDI Special Buys | New Range Every Wednesday & Saturday\")",
-    "https://www.aldi.com.au/products/snacks-confectionery/confectionery/k/1588161408332088: 12 (raw 20, \"Sweets & Confectionery | Chocolates & Candy for Sharing\")",
-    "https://www.aldi.com.au/products/drinks/k/1000000000: 12 (raw 16, \"Drinks | Cold, Delicious & Refreshing Drinks\")",
-    "https://www.aldi.com.au/products/pantry/k/970000000: 12 (raw 21, \"Pantry Products | Cooking Essentials & Cupboard Staples\")",
-    "https://www.aldi.com.au/products/cleaning-household/k/1050000000: 12 (raw 12, \"Cleaning & Household Products | Essentials for a Spotless Ho\")"
+    "https://www.aldi.com.au/products/snacks-confectionery/confectionery/k/1588161408332088: 12 (raw 29, \"Sweets & Confectionery | Chocolates & Candy for Sharing\")",
+    "https://www.aldi.com.au/products/drinks/k/1000000000: 12 (raw 30, \"Drinks | Cold, Delicious & Refreshing Drinks\")",
+    "https://www.aldi.com.au/products/pantry/k/970000000: 12 (raw 30, \"Pantry Products | Cooking Essentials & Cupboard Staples\")",
+    "https://www.aldi.com.au/products/cleaning-household/k/1050000000: 12 (raw 30, \"Cleaning & Household Products | Essentials for a Spotless Ho\")"
    ]
   },
   "IKEA": {
@@ -161,7 +161,7 @@
   "iPad mini": "https://www.apple.com/au/ipad-mini/images/meta/ipad-mini_overview__ficvb3cxycmm_og.png?202606301448",
   "iPad Air": "https://www.apple.com/v/ipad-air/ah/images/meta/ipad-air_overview__bc2fd15uec0y_og.png?202610202050",
   "iPad Pro": "https://www.apple.com/v/ipad-pro/aw/images/meta/ipad-pro_overview__bu4cql27diaa_og.png?202610202050",
-  "MG3": "https://dealers.virtualyard.com.au/vydata/485843481a7edacbfce101ecb1e4d2a8/d843d37ddf105e87e013c56d7afc8a08.jpg",
+  "MG3": "none",
   "MGS6": "https://dealers.virtualyard.com.au/vydata/485843481a7edacbfce101ecb1e4d2a8/5bc3b1a485b0b274dee4a0ec4e8b07ed.jpg",
   "Toyota Corolla": "none",
   "Mazda CX-5": "none"
