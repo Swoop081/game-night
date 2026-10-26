@@ -16,6 +16,8 @@ const css=`
 .cdchip b{font-weight:800}
 .cdchip span{font-family:var(--f-clock);color:var(--gold);font-variant-numeric:tabular-nums}
 .cdchip.on{border-color:var(--pc);box-shadow:0 0 30px -6px var(--pc)}
+#cdStage .btn,.cdgameend{align-self:center}
+.cdgameend{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;text-align:center}
 .cdstage{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;align-items:center;gap:12px;padding:4px 0}
 .cdhead{text-align:center}
 .cdhead h2{margin:.1em 0 0;font-family:var(--f-display);font-weight:900;font-size:clamp(1.6rem,5vmin,3rem);line-height:1}
@@ -82,7 +84,7 @@ button.prize{cursor:pointer}
 .prize.sm .pimg{width:clamp(56px,14vmin,96px);height:clamp(56px,14vmin,96px)}
 .slot .pimg{width:58px;height:58px;object-fit:contain;background:#fff;border-radius:8px}
 /* ---- portrait phone: everything on one screen ---- */
-.portrait #cd{gap:6px;padding-top:max(8px,var(--sa-t));padding-bottom:max(8px,var(--sa-b))}
+.portrait #cd{gap:6px;padding-top:max(8px,calc(var(--sa-t) + var(--blur-gap)));padding-bottom:max(8px,var(--sa-b))}
 .portrait #cd .floorbar{gap:8px}
 .portrait #cd .brand{font-size:1.05rem}.portrait #cd .brand small{display:none}
 .portrait #cd .count{font-size:.8rem}
