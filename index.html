@@ -573,7 +573,7 @@ function screenSeg(el){
 }
 
 /* =================== NAV (touch + TV remote) =================== */
-function show(id){["hub","setup","floor","duel","hlSetup","hl","cdSetup","cd"].forEach(s=>{const el=$(s);if(el)el.hidden=s!==id});requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
+function show(id){["hub","setup","floor","duel","hlSetup","hl","cdSetup","cd","ntSetup","nt"].forEach(s=>{const el=$(s);if(el)el.hidden=s!==id});requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
 function focusables(){
   const root=!$("overlay").hidden?$("overlay"):document.querySelector(".screen:not([hidden])");
   return [...root.querySelectorAll("button:not([disabled]),input,select")].filter(e=>e.offsetParent!==null);
@@ -1178,5 +1178,7 @@ window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 <script src="avatars.js"></script>
 <script src="prices.js"></script>
 <script src="comeondown.js"></script>
+<script src="nameten-data.js"></script>
+<script src="nameten.js"></script>
 </body>
 </html>
