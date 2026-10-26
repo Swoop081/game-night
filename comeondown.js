@@ -96,7 +96,20 @@ button.prize{cursor:pointer}
 .portrait .entry .who .av{--s:34px;padding:2px}
 .portrait .cdhead .av.lg{--s:56px}
 .portrait .cdchip b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-.portrait .cdstage{gap:7px;padding:0}
+.portrait .cdstage{gap:clamp(7px,1.6vh,16px);padding:0}
+.portrait .cdstage>:first-child{margin-top:auto}.portrait .cdstage>:last-child{margin-bottom:auto}
+.portrait .keypad button{padding:clamp(12px,2.9vh,30px) 0}
+.portrait .keypad{gap:clamp(6px,1.2vh,12px)}
+.portrait .entry .disp{font-size:clamp(2rem,5.2vh,3.2rem)}
+@media (min-height:760px){
+.portrait .cdchip{font-size:.9rem;padding:5px 12px 5px 6px}.portrait .cdchip .av{--s:26px}
+.portrait .cdhead .eyebrow{font-size:.72rem}.portrait .cdhead h2{font-size:2.1rem}.portrait .cdhead p{font-size:.98rem}
+.portrait .cdhead .av.lg{--s:72px}.portrait .bid{padding:10px 18px}.portrait .bid .av{--s:30px}
+.portrait .prize.big{padding:14px 16px;column-gap:16px;row-gap:5px}.portrait .prize.big .pimg{width:124px;height:124px}.portrait .prize.big .em{font-size:4.6rem}
+.portrait .prize .nm{font-size:1.05rem}.portrait .prize .rt{font-size:.68rem}.portrait .prize .pr{font-size:1.65rem}
+.portrait .prize.sm{padding:10px 6px}.portrait .prize.sm .pimg{width:78px;height:78px}.portrait .prize.sm .nm{font-size:.78rem}.portrait .prize.sm .pr{font-size:1.1rem}
+.portrait .cdrow .prize:not(.sm){padding:12px 6px}.portrait .cdrow .prize:not(.sm) .pimg{width:92px;height:92px}.portrait .cdrow .prize:not(.sm) .nm{font-size:.82rem}.portrait .cdrow .prize:not(.sm) .pr{font-size:1.2rem}.portrait .cdrow .prize:not(.sm) .em{font-size:3rem}
+}
 .portrait .cdhead .eyebrow{font-size:.62rem}
 .portrait .cdhead h2{font-size:1.45rem}
 .portrait .cdhead p{font-size:.8rem;margin-top:.25em;line-height:1.3}

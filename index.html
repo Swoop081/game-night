@@ -62,6 +62,11 @@ button{cursor:pointer}
 .portrait .game p{font-size:.82rem}
 .portrait .game .art{min-height:56px}
 .portrait #hub{justify-content:flex-start}
+.portrait .games{flex:1 1 auto;min-height:0;grid-auto-rows:minmax(0,1fr);align-content:stretch;max-height:68vh}
+.portrait .pill{letter-spacing:.06em;font-size:.62rem;padding:.35em .7em}
+.portrait .marquee h1{font-size:clamp(3.2rem,17vw,5.6rem)}
+.portrait .tagline{font-size:clamp(.95rem,2.2vh,1.15rem)}
+@media (min-height:760px){.portrait .game h2{font-size:1.85rem}.portrait .game p{font-size:.95rem}.portrait .game .art{min-height:72px}.portrait #hub{gap:clamp(14px,2.6vh,28px)}}
 .marquee{position:relative;text-align:center;padding:.3em .6em}
 .marquee h1{margin:0;font-family:var(--f-display);font-weight:900;font-size:clamp(3.2rem,12vmin,8.5rem);line-height:.85;letter-spacing:.01em;
   background:linear-gradient(180deg,#fff6d8 0%,var(--gold) 55%,var(--gold-deep) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
