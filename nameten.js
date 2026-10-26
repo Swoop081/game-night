@@ -17,7 +17,7 @@ const saveCfg=()=>{try{localStorage.setItem("gn.nt",JSON.stringify(CFG))}catch(e
 
 const css=`
 .ntstage{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.8vh,16px);padding:4px 0;text-align:center}
-.ntstage>:first-child{margin-top:auto}.ntstage>:last-child{margin-bottom:auto}
+.ntstage>:first-child{margin-top:auto}.ntstage.play>:first-child{margin-top:0}.ntstage>:last-child{margin-bottom:auto}
 .nthead .eyebrow{display:flex;align-items:center;gap:8px;justify-content:center}
 .nthead .av{--s:28px;padding:2px}
 .nthead h2{font-family:var(--f-display);font-weight:900;font-size:clamp(1.7rem,5.6vmin,3.4rem);margin:.15em 0;line-height:1.02}
@@ -58,7 +58,10 @@ const css=`
 .portrait #nt .floorbar{gap:8px}.portrait #nt .brand{font-size:1.05rem}.portrait #nt .brand small{display:none}
 .portrait #nt .floorbar .btn{padding:.45em 1em;font-size:.85rem}
 .portrait #ntstageScore{gap:5px;flex-wrap:nowrap;overflow:hidden}
-.portrait .ntslot{min-height:clamp(40px,7vh,64px);font-size:.82rem;padding:.35em .5em}
+.portrait .ntslot{min-height:clamp(34px,5.6vh,52px);font-size:.82rem;padding:.3em .5em}
+.portrait .nthead h2{font-size:1.35rem}
+.portrait .nthead .eyebrow{font-size:.62rem}
+.portrait .ntinput input{padding:.55em .9em}
 .portrait .ntstage{gap:clamp(6px,1.3vh,12px)}
 .portrait .nthead h2{font-size:1.6rem}
 .portrait .ntchip{font-size:.8rem}
@@ -131,7 +134,7 @@ function renderPlayers(){
 
 /* ---------- state ---------- */
 const NT={players:[],turn:0,total:0,prompt:null,items:[],found:[],live:false,left:0,timer:null,used:new Set(),lastMiss:""};
-const stage=html=>{$("ntStage").innerHTML=html;$("ntStage").scrollTop=0};
+const stage=(html,cls)=>{$("ntStage").className="ntstage"+(cls?" "+cls:"");$("ntStage").innerHTML=html;$("ntStage").scrollTop=0};
 const norm2=s=>String(s||"").trim();
 function score(active){
   $("ntstageScore").innerHTML=NT.players.map((p,i)=>`<div class="cdchip${active===i?" on":""}" style="--pc:${p.color}">${avatarHTML(p,"sm")}<b>${esc(p.name)}</b><span>${p.pts}</span></div>`).join("");
@@ -232,10 +235,10 @@ function playTurn(pi){
   const p=NT.players[pi];
   stage(`<div class="nthead"><span class="eyebrow">${avatarHTML(p,"sm")} <span style="color:${p.color}">${esc(p.name)}</span></span><h2>${esc(NT.prompt.title)}</h2></div>
     <div class="ntclockrow"><div class="ntclock" id="ntClock">${CFG.secs}</div><div class="ntbar"><i id="ntBar"></i></div><div class="ntcount"><b id="ntFound">0</b>/10</div></div>
-    <div class="ntslots" id="ntSlots">${Array.from({length:10},(_,k)=>`<div class="ntslot"><i>${k+1}</i><span></span></div>`).join("")}</div>
     <form class="ntinput" id="ntForm" autocomplete="off"><input id="ntIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="Type an answer" aria-label="Type an answer"><button class="btn gold" type="submit">Add</button></form>
     <div class="ntfb" id="ntFb"></div>
-    <button class="btn ghost" id="ntDone" type="button">I'm done</button>`);
+    <div class="ntslots" id="ntSlots">${Array.from({length:10},(_,k)=>`<div class="ntslot"><i>${k+1}</i><span></span></div>`).join("")}</div>
+    <button class="btn ghost" id="ntDone" type="button">I'm done</button>`,"play");
   $("ntForm").onsubmit=e=>{e.preventDefault();const v=$("ntIn").value;$("ntIn").value="";if(v.trim())take(v,true);$("ntIn").focus({preventScroll:true})};
   $("ntDone").onclick=()=>finishTurn("done");
   NT.live=true;NT.left=CFG.secs;SFX.go();
