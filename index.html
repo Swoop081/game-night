@@ -99,9 +99,9 @@ button{cursor:pointer}
 .mode.tv{background:linear-gradient(160deg,#3a2a8c,#211d45);border-color:#5a4bc0}
 
 /* ---------- SETUP ---------- */
-#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;gap:16px}
-.portrait #setup .topbar h2,.portrait #hlSetup .topbar h2,.portrait #cdSetup .topbar h2,.portrait #ntSetup .topbar h2,.portrait #ffSetup .topbar h2,.portrait #tpSetup .topbar h2{font-size:1.35rem;line-height:1.05}
-.portrait #setup .topbar .btn,.portrait #hlSetup .topbar .btn,.portrait #cdSetup .topbar .btn,.portrait #ntSetup .topbar .btn,.portrait #ffSetup .topbar .btn,.portrait #tpSetup .topbar .btn{padding:.6em 1.1em}
+#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;gap:16px}
+.portrait #setup .topbar h2,.portrait #hlSetup .topbar h2,.portrait #cdSetup .topbar h2,.portrait #ntSetup .topbar h2,.portrait #ffSetup .topbar h2,.portrait #tpSetup .topbar h2,.portrait #pbSetup .topbar h2{font-size:1.35rem;line-height:1.05}
+.portrait #setup .topbar .btn,.portrait #hlSetup .topbar .btn,.portrait #cdSetup .topbar .btn,.portrait #ntSetup .topbar .btn,.portrait #ffSetup .topbar .btn,.portrait #tpSetup .topbar .btn,.portrait #pbSetup .topbar .btn{padding:.6em 1.1em}
 .topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .topbar h2{margin:0;font-family:var(--f-display);font-size:clamp(1.7rem,4vmin,2.6rem);font-weight:900;flex:1;min-width:0}
 .setup-grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:start}
@@ -573,7 +573,7 @@ function screenSeg(el){
 }
 
 /* =================== NAV (touch + TV remote) =================== */
-function show(id){["hub","setup","floor","duel","hlSetup","hl","cdSetup","cd","ntSetup","nt","ffSetup","ff","tpSetup","tp"].forEach(s=>{const el=$(s);if(el)el.hidden=s!==id});requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
+function show(id){["hub","setup","floor","duel","hlSetup","hl","cdSetup","cd","ntSetup","nt","ffSetup","ff","tpSetup","tp","pbSetup","pb"].forEach(s=>{const el=$(s);if(el)el.hidden=s!==id});requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
 function focusables(){
   const root=!$("overlay").hidden?$("overlay"):document.querySelector(".screen:not([hidden])");
   return [...root.querySelectorAll("button:not([disabled]),input,select")].filter(e=>e.offsetParent!==null);
@@ -1184,5 +1184,6 @@ window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 <script src="feud.js"></script>
 <script src="trivial-data.js"></script>
 <script src="trivial.js"></script>
+<script src="picblitz.js"></script>
 </body>
 </html>
