@@ -1,5 +1,5 @@
 /* =================== PICTURE BLITZ ===================
-   A photo starts as a few big blocks and sharpens as the clock runs. Name it early for more points. */
+   A photo starts blurred and comes into focus as the clock runs. Name it early for more points. */
 (function(){
 const IS_TV=/GameNightTV/.test(navigator.userAgent);
 const SETS=[["faces","🌟","Famous Faces"],["ausanimals","🦘","Aussie Animals"],["auslandmarks","🏞️","Aussie Landmarks"]].filter(s=>CATS[s[0]]);
@@ -70,7 +70,7 @@ function openSetup(){
   <div class="setup-grid"><div class="panel">
     <div class="field"><span class="eyebrow">Players</span><div class="stepper"><button id="pbMinus" aria-label="Fewer players">−</button><output>${CFG.count}</output><button id="pbPlus" aria-label="More players">+</button></div></div>
     <div class="field"><span class="eyebrow">How to play</span><ul class="rules">
-      <li>A photo starts as a few big blocks and <b>sharpens</b> as the clock runs.</li>
+      <li>A photo starts <b>blurred</b> and comes into focus as the clock runs.</li>
       <li>Say it or <b>type</b> it. The sooner you name it, the more points: <b>5 down to 1</b>.</li>
       <li>Wrong guesses are free, but the picture keeps sharpening.</li>
       <li>Most points after the last round wins. On one phone, pass it along.</li></ul></div>
@@ -113,15 +113,13 @@ function score(active){$("pbScore").innerHTML=PB.players.map((p,i)=>`<div class=
 function endGame(){clearInterval(PB.timer);PB.live=false;voiceStop();stopConfetti()}
 const cur=()=>PB.players[PB.turn%PB.players.length];
 
-/* draw the picture at a given clarity 0..1 (blocks -> sharp) */
+/* draw the picture at a given clarity 0..1: a blur that eases off until the photo is sharp */
 function draw(cv,img,t){
-  const W=cv.width,H=cv.height,ctx=cv.getContext("2d");
-  if(t>=1){ctx.imageSmoothingEnabled=true;ctx.drawImage(img,0,0,W,H);return}
-  const s=Math.max(.018,Math.pow(t,2.4));
-  const w=Math.max(2,Math.round(W*s)),h=Math.max(2,Math.round(H*s));
-  const tmp=draw.tmp||(draw.tmp=document.createElement("canvas"));tmp.width=w;tmp.height=h;
-  tmp.getContext("2d").drawImage(img,0,0,w,h);
-  ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,W,H);ctx.drawImage(tmp,0,0,w,h,0,0,W,H);
+  const ctx=cv.getContext("2d");
+  if(!cv.dataset.drawn){ctx.imageSmoothingEnabled=true;ctx.drawImage(img,0,0,cv.width,cv.height);cv.dataset.drawn="1"}
+  if(t>=1){cv.style.filter="none";return}
+  const r=Math.max(cv.width,cv.height)*.075*Math.pow(1-t,1.5);
+  cv.style.filter=r<.4?"none":`blur(${r.toFixed(1)}px)`;
 }
 function loadImg(src){return new Promise((res,rej)=>{const im=new Image();im.crossOrigin="anonymous";im.onload=()=>res(im);im.onerror=()=>rej();im.src=src;setTimeout(()=>rej(),9000)})}
 const pts=()=>Math.max(1,Math.ceil(PB.left/CFG.secs*5));
@@ -197,7 +195,7 @@ function play(pi){
     if(!$("overlay").hidden)return;
     PB.left=Math.max(0,PB.left-.1);
     const c=$("pbCv");if(!c){clearInterval(PB.timer);return}
-    const t=1-PB.left/CFG.secs;draw(c,img,Math.min(1,t*.92));
+    const t=1-PB.left/CFG.secs;draw(c,img,Math.min(1,t/.8));
     $("pbBar").style.width=(PB.left/CFG.secs*100)+"%";$("pbPts").textContent=pts()+" pt"+(pts()===1?"":"s");
     if(PB.left<=0)finish(false,"time");
   },100);
