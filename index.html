@@ -611,7 +611,7 @@ function screenSeg(el){
 }
 
 /* =================== NAV (touch + TV remote) =================== */
-function show(id){["hub","setup","floor","duel","hlSetup","hl","cdSetup","cd","ntSetup","nt","ffSetup","ff","tpSetup","tp","pbSetup","pb"].forEach(s=>{const el=$(s);if(el)el.hidden=s!==id});requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
+function show(id){["hub","setup","floor","duel","hlSetup","hl","cdSetup","cd","ntSetup","nt","ffSetup","ff","tpSetup","tp","pbSetup","pb","lb"].forEach(s=>{const el=$(s);if(el)el.hidden=s!==id});requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
 function focusables(){
   const root=!$("overlay").hidden?$("overlay"):document.querySelector(".screen:not([hidden])");
   return [...root.querySelectorAll("button:not([disabled]),input,select")].filter(e=>e.offsetParent!==null);
@@ -1041,6 +1041,7 @@ function finalRoundOver(W,L){
   $("nextRound").onclick=()=>{F.round++;show("floor");finalRound()};
 }
 function champion(W){
+  window.LB&&LB.record("floor-"+(S.mode==="tv"?"tv":"custom"),S.players.map(p=>({name:p.name,color:p.color,score:null,win:p===W})));
   SFX.win();setTimeout(SFX.win,600);
   S.phase="over";show("floor");renderFloor();$("status").innerHTML="";
   openOverlay(`${avatarHTML(W,"xl")}<span class="eyebrow">Champion</span><h2 style="color:${W.color}">${esc(W.name)} owns the floor</h2>
@@ -1136,6 +1137,7 @@ function hlEnd(){
   HL.over=true;HL.busy=false;voiceStop();renderHL(false);
   const [a,b]=HL.players;
   const draw=a.score===b.score,W=a.score>b.score?a:b;
+  window.LB&&LB.record("hl",[a,b].map(p=>({name:p.name,color:p.color,score:p.score,win:!draw&&p===W})));
   SFX.win();setTimeout(SFX.win,600);
   openOverlay(`${draw?`<div class="row">${avatarHTML(a,"lg")}${avatarHTML(b,"lg")}</div>`:avatarHTML(W,"xl")}<span class="eyebrow">Deck finished</span>
     <h2 style="color:${draw?"var(--gold)":W.color}">${draw?"It's a draw":esc(W.name)+" wins"}</h2>
@@ -1223,6 +1225,7 @@ window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 <script src="trivial-data.js"></script>
 <script src="trivial.js"></script>
 <script src="picblitz.js"></script>
+<script src="leaderboard.js"></script>
 <script src="tvui.js"></script>
 </body>
 </html>

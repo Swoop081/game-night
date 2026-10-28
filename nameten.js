@@ -279,6 +279,7 @@ function results(){
   NT.live=false;
   const order=NT.players.map((p,i)=>({p,i})).sort((a,b)=>b.p.pts-a.p.pts);
   const top=order[0].p.pts,winners=order.filter(x=>x.p.pts===top);
+  window.LB&&LB.record("nt",NT.players.map(p=>({name:p.name,color:p.color,score:p.pts,win:p.pts===top&&NT.players.length>1})));
   score();$("ntRound").textContent="";SFX.win();
   const solo=NT.players.length===1;
   stage(`<div class="nthead"><span class="eyebrow">Name Ten · final</span><h2>${solo?`${esc(winners[0].p.name)} scored ${top}`:winners.length>1?"It's a draw!":`${esc(winners[0].p.name)} wins!`}</h2></div>

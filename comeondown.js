@@ -582,6 +582,7 @@ function finale(i,won,seq){
 function results(){
   voiceStop();stopConfetti();
   const ranked=CD.players.slice().sort((a,b)=>b.win-a.win);
+  window.LB&&LB.record("cd",ranked.map((p,i)=>({name:p.name,color:p.color,score:p.win,win:p.win===ranked[0].win})));
   openOverlay(`${avatarHTML(ranked[0],"xl")}<span class="eyebrow">Tonight's winnings</span><h2 style="color:${ranked[0].color}">${esc(ranked[0].name)} wins!</h2>
     <div class="catpick">${ranked.map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;border-radius:14px;background:var(--stage-3);border-left:6px solid ${p.color}"><span style="display:flex;align-items:center;gap:10px">${avatarHTML(p,"sm")}<b>${esc(p.name)}</b></span><span style="font-family:var(--f-clock);color:var(--gold)">${fmt(Math.round(p.win*100)/100)}</span></div>`).join("")}</div>
     <p class="note">Prices from ${esc(retailerLine())}, checked ${esc(CHECKED)}.</p>

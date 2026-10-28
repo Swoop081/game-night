@@ -225,6 +225,7 @@ function finish(right,why){
 }
 function results(){
   PB.live=false;score();$("pbRound").textContent="";SFX.win();
+  { const o=PB.players.slice().sort((a,b)=>b.pts-a.pts),tp=o[0].pts; window.LB&&LB.record("pb",PB.players.map(p=>({name:p.name,color:p.color,score:p.pts,win:p.pts===tp&&PB.players.length>1}))); }
   const order=PB.players.slice().sort((a,b)=>b.pts-a.pts),top=order[0].pts,winners=order.filter(p=>p.pts===top),solo=PB.players.length===1;
   stage(`<div class="pbhead"><span class="eyebrow">Picture Blitz · final</span><h2>${solo?`${esc(order[0].name)} scored ${top}`:winners.length>1?"It's a draw!":`${esc(winners[0].name)} wins!`}</h2></div>
     <div class="ntrank">${order.map(p=>`<div class="r${p.pts===top&&!solo?" win":""}">${avatarHTML(p,"")}<b style="color:${p.color}">${esc(p.name)}</b><em>${p.pts}</em></div>`).join("")}</div>

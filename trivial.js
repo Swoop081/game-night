@@ -268,6 +268,7 @@ function finish(right,why){
   setTimeout(()=>{const b=$("tpNext");b&&b.focus({preventScroll:true})},60);
 }
 function results(winner){
+  window.LB&&LB.record("tp",TP.players.map(p=>({name:p.name,color:p.color,score:p.wedges.size,win:p===winner})));
   TP.live=false;score();$("tpInfo").textContent="";SFX.win();
   const order=TP.players.slice().sort((a,b)=>b.wedges.size-a.wedges.size);
   stage(`<div class="tphead"><span class="eyebrow">Trivial Pursuit · final</span><h2>${TP.players.length===1?"You filled the pie!":esc(winner.name)+" wins!"}</h2></div>

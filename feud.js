@@ -438,6 +438,7 @@ function fmReveal(){
 function final(w,fmTotal){
   FF.listen=null;voiceStop();$("ffRound").textContent="";
   const T=FF.teams;
+  window.LB&&LB.record("ff",T.flatMap((t,i)=>t.members.map(m=>({name:m.name,color:t.color,score:t.score,win:i===w}))));
   stage(`<div class="ffq">${esc(T[w].name)} wins Family Feud!</div>
     <div class="ntrank" style="display:flex;flex-direction:column;gap:8px;width:min(520px,100%)">${[w,1-w].map(t=>`<div class="r${t===w?" win":""}" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:var(--stage-2);border:2px solid ${t===w?"var(--gold)":"var(--line)"};font-weight:800"><span class="avs" style="display:flex">${T[t].members.map(p=>avatarHTML(p,"sm")).join("")}</span><b style="flex:1;text-align:left;color:${T[t].color}">${esc(T[t].name)}</b><em style="font-style:normal;font-family:var(--f-clock);font-size:1.8rem;color:var(--gold)">${T[t].score}</em></div>`).join("")}</div>
     ${fmTotal!=null?`<p style="margin:0;color:var(--muted)">Fast Money: ${fmTotal} points${fmTotal>=200?" · Jackpot!":""}</p>`:""}
