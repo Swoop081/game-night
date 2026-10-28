@@ -111,9 +111,9 @@ button{cursor:pointer}
 .mode.tv{background:linear-gradient(160deg,#3a2a8c,#211d45);border-color:#5a4bc0}
 
 /* ---------- SETUP ---------- */
-#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;gap:16px}
-.portrait #setup .topbar h2,.portrait #hlSetup .topbar h2,.portrait #cdSetup .topbar h2,.portrait #ntSetup .topbar h2,.portrait #ffSetup .topbar h2,.portrait #tpSetup .topbar h2,.portrait #pbSetup .topbar h2{font-size:1.35rem;line-height:1.05}
-.portrait #setup .topbar .btn,.portrait #hlSetup .topbar .btn,.portrait #cdSetup .topbar .btn,.portrait #ntSetup .topbar .btn,.portrait #ffSetup .topbar .btn,.portrait #tpSetup .topbar .btn,.portrait #pbSetup .topbar .btn{padding:.6em 1.1em}
+#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;gap:16px}
+.portrait #setup .topbar h2,.portrait #hlSetup .topbar h2,.portrait #cdSetup .topbar h2,.portrait #ntSetup .topbar h2,.portrait #ffSetup .topbar h2,.portrait #tpSetup .topbar h2,.portrait #pbSetup .topbar h2,.portrait #wfSetup .topbar h2{font-size:1.35rem;line-height:1.05}
+.portrait #setup .topbar .btn,.portrait #hlSetup .topbar .btn,.portrait #cdSetup .topbar .btn,.portrait #ntSetup .topbar .btn,.portrait #ffSetup .topbar .btn,.portrait #tpSetup .topbar .btn,.portrait #pbSetup .topbar .btn,.portrait #wfSetup .topbar .btn{padding:.6em 1.1em}
 .topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .topbar h2{margin:0;font-family:var(--f-display);font-size:clamp(1.7rem,4vmin,2.6rem);font-weight:900;flex:1;min-width:0}
 .setup-grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:start}
@@ -138,26 +138,26 @@ button{cursor:pointer}
 .swatchbtn{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;line-height:0;width:auto;height:auto;align-self:center}
 .swatchbtn:focus-visible{outline-offset:2px}
 .prow{grid-template-columns:auto minmax(0,1fr)}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup){gap:clamp(6px,1.6vh,12px);overflow-y:auto}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .topbar h2{font-size:clamp(1.3rem,3.6vh,2rem)}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .setup-grid{grid-template-columns:minmax(0,1fr);gap:clamp(6px,1.6vh,12px);align-content:start}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .setup-grid>.panel:last-child{order:-1}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .panel{padding:clamp(8px,1.8vh,14px) clamp(10px,1.6vw,18px);gap:clamp(6px,1.4vh,10px);border-radius:14px}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .setup-grid>.panel:first-child{display:grid;grid-template-columns:repeat(auto-fit,minmax(clamp(150px,19vw,240px),1fr));gap:clamp(6px,1.6vh,12px) clamp(12px,1.8vw,22px);align-items:start;grid-auto-flow:row dense}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .setup-grid>.panel:first-child>:is(.field:has(.rules),#rulesBox){grid-column:span 2}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .field{gap:clamp(3px,.8vh,6px)}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .rules{font-size:clamp(.68rem,1.9vh,.88rem);line-height:1.35}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .eyebrow{font-size:clamp(.58rem,1.5vh,.74rem)}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .seg{gap:5px}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .seg button,.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .ntgroups button,.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .pbgroups button{padding:.4em .8em;font-size:clamp(.72rem,2vh,.95rem)}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .stepper{gap:10px}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .stepper button{width:clamp(36px,6vh,48px);height:clamp(36px,6vh,48px);font-size:1.4rem}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .stepper output{font-size:clamp(1.8rem,5.4vh,2.6rem)}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) :is(.players,.hlsetup){display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(170px,19vw,260px),1fr));gap:clamp(6px,1.2vh,10px);max-width:none}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .prow{padding:clamp(5px,1vh,9px) 10px}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .prow input{font-size:clamp(.85rem,2.2vh,1.05rem)}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .prow select{font-size:clamp(.72rem,1.9vh,.88rem)}
-.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup) .swatchbtn .av{--s:clamp(34px,6.4vh,50px)}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup){gap:clamp(6px,1.6vh,12px);overflow-y:auto}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .topbar h2{font-size:clamp(1.3rem,3.6vh,2rem)}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .setup-grid{grid-template-columns:minmax(0,1fr);gap:clamp(6px,1.6vh,12px);align-content:start}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .setup-grid>.panel:last-child{order:-1}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .panel{padding:clamp(8px,1.8vh,14px) clamp(10px,1.6vw,18px);gap:clamp(6px,1.4vh,10px);border-radius:14px}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .setup-grid>.panel:first-child{display:grid;grid-template-columns:repeat(auto-fit,minmax(clamp(150px,19vw,240px),1fr));gap:clamp(6px,1.6vh,12px) clamp(12px,1.8vw,22px);align-items:start;grid-auto-flow:row dense}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .setup-grid>.panel:first-child>:is(.field:has(.rules),#rulesBox){grid-column:span 2}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .field{gap:clamp(3px,.8vh,6px)}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .rules{font-size:clamp(.68rem,1.9vh,.88rem);line-height:1.35}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .eyebrow{font-size:clamp(.58rem,1.5vh,.74rem)}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .seg{gap:5px}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .seg button,.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .ntgroups button,.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .pbgroups button{padding:.4em .8em;font-size:clamp(.72rem,2vh,.95rem)}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .stepper{gap:10px}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .stepper button{width:clamp(36px,6vh,48px);height:clamp(36px,6vh,48px);font-size:1.4rem}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .stepper output{font-size:clamp(1.8rem,5.4vh,2.6rem)}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) :is(.players,.hlsetup){display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(170px,19vw,260px),1fr));gap:clamp(6px,1.2vh,10px);max-width:none}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .prow{padding:clamp(5px,1vh,9px) 10px}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .prow input{font-size:clamp(.85rem,2.2vh,1.05rem)}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .prow select{font-size:clamp(.72rem,1.9vh,.88rem)}
+.landscape :is(#setup,#hlSetup,#cdSetup,#ntSetup,#ffSetup,#tpSetup,#pbSetup,#wfSetup) .swatchbtn .av{--s:clamp(34px,6.4vh,50px)}
 .tvtoast{position:fixed;left:50%;bottom:6vh;transform:translateX(-50%);background:var(--gold);color:#2a1700;font-weight:800;padding:.6em 1.2em;border-radius:99px;z-index:99;box-shadow:0 10px 30px rgba(0,0,0,.5);pointer-events:none}
 
 .palette{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:28px 10px;width:100%;padding-bottom:18px}
@@ -611,7 +611,7 @@ function screenSeg(el){
 }
 
 /* =================== NAV (touch + TV remote) =================== */
-function show(id){["hub","setup","floor","duel","hlSetup","hl","cdSetup","cd","ntSetup","nt","ffSetup","ff","tpSetup","tp","pbSetup","pb","lb"].forEach(s=>{const el=$(s);if(el)el.hidden=s!==id});requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
+function show(id){["hub","setup","floor","duel","hlSetup","hl","cdSetup","cd","ntSetup","nt","ffSetup","ff","tpSetup","tp","pbSetup","pb","wfSetup","wf","lb"].forEach(s=>{const el=$(s);if(el)el.hidden=s!==id});requestAnimationFrame(()=>{const f=document.querySelector(`#${id} .btn.gold:not([disabled])`)||document.querySelector(`#${id} button:not([disabled])`);f&&f.focus({preventScroll:true})})}
 function focusables(){
   const root=!$("overlay").hidden?$("overlay"):document.querySelector(".screen:not([hidden])");
   return [...root.querySelectorAll("button:not([disabled]),input,select")].filter(e=>e.offsetParent!==null);
@@ -1225,6 +1225,8 @@ window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 <script src="trivial-data.js"></script>
 <script src="trivial.js"></script>
 <script src="picblitz.js"></script>
+<script src="wheel-data.js"></script>
+<script src="wheel.js"></script>
 <script src="leaderboard.js"></script>
 <script src="tvui.js"></script>
 </body>

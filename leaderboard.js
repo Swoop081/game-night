@@ -6,11 +6,11 @@ const MODES=[
   ["floor-tv","🟦","The Floor · TV Game","wins"],["floor-custom","🟦","The Floor · Custom","wins"],
   ["hl","🃏","Higher or Lower","pts"],["cd","💵","The Price Is Right","$"],
   ["nt","🔟","Name Ten","pts"],["ff","👨‍👩‍👧","Family Feud","pts"],
-  ["tp","🥧","Trivial Pursuit","wedges"],["pb","🖼️","Picture Blitz","pts"]];
+  ["tp","🥧","Trivial Pursuit","wedges"],["pb","🖼️","Picture Blitz","pts"],["wf","🎡","Wheel of Fortune","$"]];
 const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return {}}};
 const store=d=>{try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
 const keyOf=n=>String(n||"").trim().toLowerCase();
-const fmt=(mode,v)=>v==null?"–":mode==="cd"?"$"+Number(v).toLocaleString("en-AU"):String(v);
+const fmt=(mode,v)=>v==null?"–":(mode==="cd"||mode==="wf")?"$"+Number(v).toLocaleString("en-AU"):String(v);
 
 /* results: [{name,color,score,win}] ; score may be null */
 function record(mode,results){
