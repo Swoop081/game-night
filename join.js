@@ -5,6 +5,27 @@
   let pid=ls("gn.pid");if(!pid){pid=Math.random().toString(36).slice(2,10);ls("gn.pid",pid)}
   $("code").value=(q.get("c")||ls("gn.joinCode")||"").toUpperCase();
   $("name").value=ls("gn.pname");
+  /* ----- avatar maker ----- */
+  const STYLES=[["avataaars","People"],["lorelei","Sketch"],["bottts","Robots"],["big-ears-neutral","Faces"]];
+  const dice=(st,seed)=>"https://api.dicebear.com/9.x/"+st+"/svg?seed="+encodeURIComponent(seed)+"&radius=50";
+  let av=null;try{av=JSON.parse(ls("gn.pav")||"null")}catch(e){}
+  let style=(av&&av.style)||"avataaars",seeds=[];
+  const newSeeds=()=>{seeds=Array.from({length:8},()=>Math.random().toString(36).slice(2,8))};newSeeds();
+  if(!av)av={type:"cartoon",style,seed:seeds[0]};
+  const avSrc=a=>a.type==="photo"?a.src:dice(a.style,a.seed);
+  const paintAv=()=>{
+    $("avimg").src=avSrc(av);
+    $("avtabs").innerHTML="";STYLES.forEach(([s,l])=>{const b=document.createElement("button");b.className="mini"+(av.type==="cartoon"&&style===s?" on":"");b.textContent=l;b.onclick=()=>{style=s;av={type:"cartoon",style,seed:av.seed||seeds[0]};paintAv()};$("avtabs").appendChild(b)});
+    $("avgrid").innerHTML="";seeds.forEach(sd=>{const b=document.createElement("button");b.className=av.type==="cartoon"&&av.seed===sd&&av.style===style?"on":"";b.innerHTML='<img alt="" src="'+dice(style,sd)+'">';b.onclick=()=>{av={type:"cartoon",style,seed:sd};paintAv()};$("avgrid").appendChild(b)});
+  };
+  $("avshuf").onclick=()=>{newSeeds();av={type:"cartoon",style,seed:seeds[0]};paintAv()};
+  $("avcam").onclick=()=>$("avfile").click();
+  $("avfile").onchange=e=>{
+    const f=e.target.files&&e.target.files[0];if(!f)return;
+    const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=128;const x=c.getContext("2d");const s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,128,128);av={type:"photo",src:c.toDataURL("image/jpeg",.72)};paintAv();URL.revokeObjectURL(im.src)};
+    im.src=URL.createObjectURL(f);
+  };
+  paintAv();
   const SRc=window.SpeechRecognition||window.webkitSpeechRecognition;
   let peer=null,conn=null,mode="wait",uid=0,rec=null,micOK=false,joined=false,retry=null;
 
@@ -81,7 +102,7 @@
     const code=$("code").value.trim().toUpperCase(),name=$("name").value.trim();
     if(code.length!==4){$("code").focus();return}
     if(!name){$("name").focus();return}
-    ls("gn.pname",name);ls("gn.joinCode",code);
+    ls("gn.pname",name);try{ls("gn.pav",JSON.stringify(av))}catch(e){}$("myav").src=avSrc(av);$("myav").classList.remove("hide");ls("gn.joinCode",code);
     $("join").classList.add("hide");$("play").classList.remove("hide");
     $("st").textContent="Connecting…";
     // ask for the mic now, while we have a tap, so it never interrupts a turn

@@ -11,6 +11,7 @@
   const rnd=()=>Array.from({length:4},()=>ALPHA[Math.floor(Math.random()*ALPHA.length)]).join("");
   let code="";try{code=localStorage.getItem("gn.joinCode")||""}catch(e){}
   if(!/^[A-Z]{4}$/.test(code))code=rnd();
+  let orderSeq=0;
   const LINK=window.LINK={code,phones:new Map(),ready:false};   // phones: pid -> {pid,name,conn,live,lastUid,muteUid,mode}
   const css=(el,s)=>{el.style.cssText=s;return el};
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"");
@@ -51,7 +52,7 @@
 
   /* ---------- whose turn is it? (names of the players whose phones should have a live mic, or null = everyone) ---------- */
   const activeNames=()=>{
-    try{const d=S.duel;if(d&&d.state==="run"){const p=S.players[d[d.active]];return p?[p.name]:null}}catch(e){}
+    try{const d=S.duel;if(d&&d.state==="run"){const p=S.players[d[d.active]];return p?(p.pid?{pid:p.pid,name:p.name}:[p.name]):null}}catch(e){}
     try{if(typeof HL!=="undefined"&&HL&&!HL.over&&HL.players&&HL.players[HL.turn])return [HL.players[HL.turn].name]}catch(e){}
     return null;
   };
@@ -64,8 +65,9 @@
     if(!voiceOn())return {live:[],all};
     const act=activeNames();
     if(!act)return {live:all,all};
-    const m=all.filter(p=>act.some(a=>sameName(a,p.name)));
-    return {live:m.length?m:all,all,act:act[0],matched:m.length>0};
+    const byPid=act.pid?all.filter(p=>p.pid===act.pid):[];
+    const m=byPid.length?byPid:all.filter(p=>[].concat(act.pid?[act.name]:act).some(a=>sameName(a,p.name)));
+    return {live:m.length?m:all,all,act:act.pid?act.name:act[0],matched:m.length>0};
   };
   const tick=()=>{
     const {live,all,act,matched}=whoLive();
@@ -110,6 +112,45 @@
   const vm=window.voiceMark;
   if(typeof vm==="function")window.voiceMark=function(){LINK.phones.forEach(p=>{p.muteUid=p.lastUid||0});return vm.apply(this,arguments)};
 
+  /* ---------- lobby: phones are the players, in the order they joined ---------- */
+  const lobby=()=>[...LINK.phones.values()].filter(p=>p.conn&&(p.conn.open||Date.now()-(p.closedAt||0)<60000)).sort((a,b)=>a.order-b.order);
+  LINK.lobby=lobby;
+  let sig="";
+  const syncLobby=()=>{
+    const el=document.getElementById("setup");if(!el||el.hidden)return;
+    const L=lobby();
+    const k=JSON.stringify(L.map(p=>[p.pid,p.name,p.av?(p.av.src?p.av.src.length:p.av.style+p.av.seed):0]));
+    if(k===sig)return;sig=k;if(!L.length)return;
+    S.pids=S.pids||[];S.avatars=S.avatars||[];
+    S.count=Math.min(20,Math.max(2,L.length));
+    L.slice(0,20).forEach((p,i)=>{S.names[i]=p.name;S.pids[i]=p.pid;if(p.av)S.avatars[i]=p.av});
+    for(let i=L.length;i<S.count;i++)S.pids[i]=null;
+    renderSetup();
+  };
+  setInterval(syncLobby,700);
+  const rs=window.renderSetup;
+  if(typeof rs==="function")window.renderSetup=function(){
+    const r=rs.apply(this,arguments);
+    try{
+      const n=Math.min(20,lobby().length);
+      document.querySelectorAll("#players .prow").forEach((row,i)=>{
+        if(i<n){const inp=row.querySelector("input");if(inp){inp.readOnly=true;inp.title="Name comes from the player's phone"}
+          if(!row.querySelector(".phb")){const b=document.createElement("span");b.className="phb";b.textContent="📱";b.style.cssText="font-size:1.1rem;opacity:.85";row.appendChild(b)}}
+      });
+      const mi=document.getElementById("minus"),pl=document.getElementById("plus");
+      if(n>=2){mi&&(mi.disabled=true);pl&&(pl.disabled=true)}
+    }catch(e){}
+    return r;
+  };
+  // players know which phone is theirs
+  const sg=window.startGame;
+  if(typeof sg==="function")window.startGame=function(){const r=sg.apply(this,arguments);try{(S.players||[]).forEach((p,i)=>{p.pid=(S.pids&&S.pids[i])||null})}catch(e){}return r};
+  // a join button on the setup screen
+  const setupBtn=document.createElement("button");setupBtn.className="btn";setupBtn.textContent="📱 Join with phones";setupBtn.onclick=()=>toggle();
+  setupBtn.style.cssText="margin-left:auto;margin-right:12px";
+  const mountSetup=()=>{const tb=document.querySelector("#setup .topbar");if(tb&&!setupBtn.parentNode){const start=document.getElementById("startGame");tb.insertBefore(setupBtn,start||null)}};
+  setTimeout(mountSetup,300);
+
   /* ---------- connections ---------- */
   const onConn=conn=>{
     conn.on("data",m=>{
@@ -117,7 +158,8 @@
       let p=LINK.phones.get(conn.peer);
       if(m.k==="join"){
         const old=[...LINK.phones.values()].find(x=>x.pid===m.pid);
-        p=old||{pid:m.pid,lastUid:0,muteUid:0};
+        p=old||{pid:m.pid,lastUid:0,muteUid:0,order:++orderSeq};
+        p.av=m.av||p.av;p.closedAt=0;
         if(old&&old.conn&&old.conn!==conn)try{old.conn.close()}catch(e){}
         p.conn=conn;p.name=String(m.name||"Player").slice(0,16);p.key="";LINK.phones.set(m.pid,p);conn.__pid=m.pid;
         send(p,{k:"hello",name:p.name});resend();paintChip();if(dlg.style.display==="flex")paintDlg();tick();return;
@@ -126,7 +168,7 @@
       if(m.k==="sp")onSpeech(p,m);
       else if(typeof LINK.onMessage==="function")LINK.onMessage(p,m);
     });
-    conn.on("close",()=>{paintChip();if(dlg.style.display==="flex")paintDlg()});
+    conn.on("close",()=>{const q=LINK.phones.get(conn.__pid);if(q&&q.conn===conn)q.closedAt=Date.now();paintChip();if(dlg.style.display==="flex")paintDlg()});
     conn.on("error",()=>{});
   };
   const start=()=>{
