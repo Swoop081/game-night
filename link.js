@@ -70,6 +70,7 @@
     if(!voiceOn())return {live:[],all};
     const act=activeNames();
     if(!act)return {live:all,all};
+    if(act.pid&&String(act.pid).startsWith("cpu-"))return {live:[],all,act:act.name,matched:true,cpu:true};
     const byPid=act.pid?all.filter(p=>p.pid===act.pid):[];
     const m=byPid.length?byPid:all.filter(p=>[].concat(act.pid?[act.name]:act).some(a=>sameName(a,p.name)));
     return {live:m.length?m:all,all,act:act.pid?act.name:act[0],matched:m.length>0};
@@ -112,12 +113,17 @@
   ["answered","passed","startDuel","endDuel"].forEach(n=>{const f=window[n];if(typeof f==="function")window[n]=function(){try{const d=S.duel;log(n,{q:d&&d.q&&d.q.a,active:d&&d.active,tA:d&&Math.round(d.t.a),tB:d&&Math.round(d.t.b)})}catch(e){}return f.apply(this,arguments)}});
 
   /* ---------- lobby: phones are the players, in the order they joined ---------- */
-  const lobby=()=>[...LINK.phones.values()].filter(p=>p.conn&&(p.conn.open||Date.now()-(p.closedAt||0)<60000)).sort((a,b)=>a.order-b.order);
+  LINK.cpus=[];let cpuSeq=0;
+  const BOTS=["Bot Bazza","Robo Rhonda","Chip","Sparky","Dingbot","Gizmo","Bolt","Pixel"];
+  const lobby=()=>[...LINK.phones.values()].filter(p=>p.conn&&(p.conn.open||Date.now()-(p.closedAt||0)<60000)).sort((a,b)=>a.order-b.order).concat(LINK.cpus);
+  LINK.addCpu=()=>{if(lobby().length>=20)return;const n=++cpuSeq;const used=new Set(lobby().map(p=>p.name));const name=BOTS.find(b=>!used.has(b))||("CPU "+n);
+    LINK.cpus.push({pid:"cpu-"+n,name,cpu:true,av:{type:"cartoon",style:"bottts",seed:"cpu"+n+Math.random().toString(36).slice(2,5)}});log("add cpu",name);syncLobby(true)};
+  LINK.removeCpu=()=>{LINK.cpus.pop();syncLobby(true)};
   LINK.lobby=lobby;
   let sig="",wasVisible=false;
-  const syncLobby=()=>{
+  const syncLobby=(force)=>{
     const el=document.getElementById("setup");if(!el)return;
-    const vis=!el.hidden;if(vis&&!wasVisible)sig="";wasVisible=vis;if(!vis)return;
+    const vis=!el.hidden;if((vis&&!wasVisible)||force)sig="";wasVisible=vis;if(!vis)return;
     const L=lobby();
     const k=JSON.stringify(L.map(p=>[p.pid,p.name,p.av?(p.av.src?p.av.src.length:p.av.style+p.av.seed):0]));
     if(k===sig)return;sig=k;
@@ -138,7 +144,7 @@
         wrap.querySelectorAll(".prow").forEach((row,i)=>{
           if(i>=n){row.remove();return}
           const inp=row.querySelector("input");if(inp){inp.readOnly=true;inp.title="Name comes from the player's phone"}
-          if(!row.querySelector(".phb")){const b=document.createElement("span");b.className="phb";b.textContent="📱";b.style.cssText="font-size:1.1rem;opacity:.85";row.appendChild(b)}
+          if(!row.querySelector(".phb")){const b=document.createElement("span");b.className="phb";b.textContent=(lobby()[i]&&lobby()[i].cpu)?"🤖":"📱";b.style.cssText="font-size:1.1rem;opacity:.85";row.appendChild(b)}
         });
         wrap.querySelectorAll(".lobbyhint").forEach(x=>x.remove());
         const hint=document.createElement("div");hint.className="lobbyhint";
@@ -163,7 +169,27 @@
   const setupBtn=document.createElement("button");setupBtn.className="btn";setupBtn.textContent="📱 Join with phones";setupBtn.onclick=()=>toggle();
   setupBtn.style.cssText="margin-left:auto;margin-right:12px";
   const mountSetup=()=>{const tb=document.querySelector("#setup .topbar");if(tb&&!setupBtn.parentNode){const start=document.getElementById("startGame");tb.insertBefore(setupBtn,start||null)}};
-  setTimeout(mountSetup,300);
+  const cpuBtn=document.createElement("button");cpuBtn.className="btn";cpuBtn.textContent="🤖 Add CPU player";cpuBtn.style.cssText="margin-right:12px";cpuBtn.onclick=()=>LINK.addCpu();
+  const cpuDel=document.createElement("button");cpuDel.className="btn ghost";cpuDel.textContent="Remove CPU";cpuDel.style.cssText="margin-right:12px;display:none";cpuDel.onclick=()=>LINK.removeCpu();
+  setInterval(()=>{cpuDel.style.display=LINK.cpus.length?"":"none"},500);
+  const mountCpu=()=>{const tb=document.querySelector("#setup .topbar");if(tb&&!cpuBtn.parentNode){const start=document.getElementById("startGame");tb.insertBefore(cpuDel,start||null);tb.insertBefore(cpuBtn,cpuDel)}};
+  setTimeout(()=>{mountSetup();mountCpu()},300);
+
+  /* ---------- CPU players answer the floor questions on their own ---------- */
+  let cpuQ=null,cpuT=null;
+  setInterval(()=>{
+    try{
+      const d=S.duel;if(!d||d.state!=="run"||!d.q){cpuQ=null;return}
+      const p=S.players[d[d.active]];if(!p||!p.pid||!String(p.pid).startsWith("cpu-")){cpuQ=null;return}
+      if(cpuQ===d.q)return;cpuQ=d.q;clearTimeout(cpuT);
+      const q=d.q,who=d.active,wait=1300+Math.random()*2700;
+      cpuT=setTimeout(()=>{
+        const e=S.duel;if(!e||e.state!=="run"||e.q!==q||e.active!==who)return;
+        const ok=Math.random()<.72;log("cpu",{name:p.name,ok,ans:q.a});
+        try{ok?hostCorrect():hostPass()}catch(x){}
+      },wait);
+    }catch(e){}
+  },250);
 
   /* ---------- connections ---------- */
   const onConn=conn=>{
