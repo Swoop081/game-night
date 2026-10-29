@@ -4,4 +4,5 @@ N=$1
 sed -i "s/\.js?v=[0-9]*\"/.js?v=$N\"/g" index.html
 sed -i "s/const BUILD=[0-9]*;/const BUILD=$N;/" autoupdate.js
 echo $N > version.txt
-sed -i "s/\\"build [0-9]*\\"/\\"build $N\\"/" showkit.js
+
+sed -i "s/\"build [0-9]*\"/\"build $N\"/" showkit.js
