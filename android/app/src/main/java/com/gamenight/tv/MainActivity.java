@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
         });
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
             requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+        web.clearCache(true);   // always start on the latest published version of the game
         web.loadUrl(URL);
         web.requestFocus();
     }
