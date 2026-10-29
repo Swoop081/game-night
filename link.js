@@ -20,7 +20,7 @@
   chip.tabIndex=0;
   const dlg=css(document.createElement("div"),"position:fixed;inset:0;z-index:99998;background:rgba(10,6,40,.95);color:#fff;font-family:system-ui,sans-serif;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px");
   const paintChip=()=>{const n=[...LINK.phones.values()].filter(p=>p.conn&&p.conn.open);
-    chip.textContent=n.length?"📱 "+n.map(p=>p.name).join(", "):(LINK.ready?"📱 Join with phones · code "+LINK.code:"📱 Phones: connecting…");
+    chip.textContent=n.length?"📱 "+n.map(p=>p.name).join(", "):(LINK.ready?"📱 Join with phones · code "+LINK.code+" · press a colour button":"📱 Phones: connecting…");
     chip.style.borderColor=n.length?"#5dffa0":"rgba(255,255,255,.25)"};
   const paintDlg=()=>{
     const n=[...LINK.phones.values()].filter(p=>p.conn&&p.conn.open);
@@ -30,6 +30,14 @@
   const toggle=()=>{if(dlg.style.display==="flex")dlg.style.display="none";else{paintDlg();dlg.style.display="flex"}};
   const mount=()=>{document.body.appendChild(chip);document.body.appendChild(dlg);paintChip()};
   if(document.body)mount();else addEventListener("DOMContentLoaded",mount);
+  LINK.toggle=toggle;
+  // remote-friendly: a focusable button on the hub, plus colour / menu keys anywhere
+  const hubBtn=document.createElement("button");hubBtn.className="btn";hubBtn.id="phonesBtn";hubBtn.textContent="📱 Phones";
+  hubBtn.style.cssText="position:absolute;top:12px;left:16px;z-index:5;font-size:.85rem;padding:8px 16px";hubBtn.onclick=toggle;
+  const hubEl=()=>document.getElementById("hub");
+  const mountHub=()=>{const h=hubEl();if(h&&!hubBtn.parentNode)h.appendChild(hubBtn)};
+  mountHub();addEventListener("DOMContentLoaded",mountHub);setTimeout(mountHub,500);
+  document.addEventListener("keydown",e=>{if([403,404,405,406,183,184,185,186,82,93].includes(e.keyCode)||e.key==="ContextMenu"||e.key==="p"&&e.altKey){e.preventDefault();toggle()}},true);
   chip.onclick=toggle;chip.onkeydown=e=>{if(e.key==="Enter")toggle()};
   document.addEventListener("keydown",e=>{if(dlg.style.display==="flex"&&(e.key==="Escape"||e.key==="Backspace"||e.keyCode===4)){dlg.style.display="none";e.preventDefault();e.stopPropagation()}},true);
 
