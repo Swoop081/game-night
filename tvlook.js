@@ -26,6 +26,7 @@ body #duel .cathead h3{font-family:${FONT};font-size:clamp(.9rem,2.4vmin,1.5rem)
 body #duel .cathead .eyebrow{font-size:clamp(.55rem,1.5vmin,.8rem);letter-spacing:.2em;color:#4a55a8;order:2}
 body #duel .card{border:0;border-radius:0;box-shadow:none;background:#000;flex:1}
 body #duel .q.photo img{width:100%;height:100%;object-fit:cover}
+body #duel .q.photo.contain img{object-fit:contain}
 body #duel .mic{background:#000;color:rgba(255,255,255,.6);font-size:.8rem;padding:.6vmin 0}
 body #duel .reveal{font-family:${FONT};letter-spacing:.08em;text-transform:uppercase;border-radius:0}
 body #duel .controls{display:none}

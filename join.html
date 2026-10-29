@@ -34,6 +34,7 @@ button{font:800 1.3rem system-ui;padding:16px 34px;border:0;border-radius:999px;
 .q.text{font-size:2.2rem}.q.long{font-size:1.6rem}.q.long2{font-size:1.2rem}
 .q.emoji{font-size:5.5rem}.q.emoji.multi{font-size:3.4rem}
 .q img{width:100%;height:100%;object-fit:cover}
+.q.contain img{object-fit:contain}
 .q .sw{width:70%;aspect-ratio:1}
 .q.tiles{gap:6px;flex-wrap:wrap}.q.tiles span{display:inline-grid;place-items:center;width:1.4em;height:1.4em;background:#fff;color:#1a1636;font-size:1.8rem}
 .q .eltile{display:flex;flex-direction:column;align-items:center;background:#fff;color:#1a1636;padding:10px 26px}.eltile .num{font-size:1rem}.eltile .sym{font-size:3.6rem}
@@ -78,7 +79,7 @@ body.induel #logb{bottom:auto;top:2px;right:2px;z-index:20;padding:3px 8px;font-
 <button class="mini" id="logb" style="position:fixed;bottom:26px;right:10px;opacity:.6">📋 Log</button>
 <div id="net" style="position:fixed;bottom:8px;left:0;right:0;text-align:center;font-size:.7rem;opacity:.45"></div>
 <script>/* reload if a newer build exists (phone browsers cache this page) */
-const JB_BUILD=20;fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.text()).then(t=>{if(parseInt(t,10)>JB_BUILD&&!sessionStorage.getItem("gn.rl"+t)){try{sessionStorage.setItem("gn.rl"+t,"1")}catch(e){}location.replace(location.pathname+location.search.replace(/[&?]r=\d+/,"")+(location.search?"&":"?")+"r="+Date.now())}}).catch(()=>{});</script>
+const JB_BUILD=21;fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.text()).then(t=>{if(parseInt(t,10)>JB_BUILD&&!sessionStorage.getItem("gn.rl"+t)){try{sessionStorage.setItem("gn.rl"+t,"1")}catch(e){}location.replace(location.pathname+location.search.replace(/[&?]r=\d+/,"")+(location.search?"&":"?")+"r="+Date.now())}}).catch(()=>{});</script>
 <script src="peerjs.min.js?v=1"></script>
 <script src="join.js?v=22"></script>
 </body></html>
