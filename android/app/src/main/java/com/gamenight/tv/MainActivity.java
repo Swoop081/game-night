@@ -106,7 +106,7 @@ public class MainActivity extends Activity {
     // so the page just sees a continuous stream of results and the mic never gets stuck.
     boolean want = false, oneShot = false;
     String lang = "en-AU";
-    int errs = 0, gen = 0;
+    int errs = 0, gen = 0; float rmsMax = -99; long rmsT = 0;
 
     void listenOnce(String l) {
         if (rec != null) { try { rec.cancel(); } catch (Exception e) {} }
@@ -139,8 +139,8 @@ public class MainActivity extends Activity {
             rec = SpeechRecognizer.createSpeechRecognizer(this);
             rec.setRecognitionListener(new RecognitionListener() {
                 public void onReadyForSpeech(Bundle p) {}
-                public void onBeginningOfSpeech() {}
-                public void onRmsChanged(float v) {}
+                public void onBeginningOfSpeech() { js("window.__gnSR&&window.__gnSR.dbg&&window.__gnSR.dbg('speech detected')"); }
+                public void onRmsChanged(float v) { long n = System.currentTimeMillis(); if (v > rmsMax) rmsMax = v; if (n - rmsT > 600) { final float m = rmsMax; rmsMax = -99; rmsT = n; js("window.__gnSR&&window.__gnSR.dbg&&window.__gnSR.dbg('mic level " + Math.round(m) + " (about 0-10 means silence)')"); } }
                 public void onBufferReceived(byte[] b) {}
                 public void onEndOfSpeech() {}
                 public void onEvent(int t, Bundle p) {}
