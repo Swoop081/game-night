@@ -19,7 +19,7 @@
       $("heard").textContent=alts[0];
       if(conn&&conn.open)conn.send({k:"sp",uid:mine,alts,f:res.isFinal?1:0});
     };
-    r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){micOK=false;$("st").textContent="Microphone is blocked. Allow it in your browser settings and reload."}};
+    r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){micOK=false;$("st").textContent="Voice blocked ("+e.error+"). On iPhone: open this page in Safari, allow the microphone, and turn on Settings > General > Keyboard > Enable Dictation. Then reload."}};
     r.onend=()=>{rec=null;if(mode==="mic"&&micOK)setTimeout(runMic,120)};
     try{r.start()}catch(e){rec=null;setTimeout(runMic,400)}
   };
