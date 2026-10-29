@@ -102,7 +102,7 @@
     try{conn&&conn.close()}catch(e){}
     conn=peer.connect(target(),{reliable:true});
     const c=conn;
-    c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player"});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
+    c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player",av});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
     c.on("data",m=>{if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="duel")return duel(m);if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
     c.on("close",()=>{if(c!==conn)return;net("link lost");setMode("wait","Reconnecting…");retry=setTimeout(connect,1500)});
     c.on("error",()=>{});
