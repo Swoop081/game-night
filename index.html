@@ -1166,7 +1166,7 @@ function micUI(state,text){
   const m=V.el||$("mic");m.className="mic"+(state==="on"?" on":"");
   if(state==="off"){m.innerHTML=S.prefs.voice?`<span class="d"></span>${SR?(V.blocked?"Microphone blocked. Allow it in Settings, or use the buttons.":"Voice unavailable here. Use the buttons."):"This browser has no voice recognition. Use the buttons."}`:"";return}
   const tv=!!window.__gnTalk,had=tv&&document.activeElement&&document.activeElement.id==="talkBtn";
-  m.innerHTML=`<span class="d"></span>${text?`<q>${esc(text)}</q>`:(tv?"Press Speak, then say your answer":"Listening for answers…")}${tv?'<button class="btn gold" id="talkBtn">🎤 Speak</button>':""}`;
+  m.innerHTML=`<span class="d"></span>${text?`<q>${esc(text)}</q>`:(tv?"Listening… or press Speak":"Listening for answers…")}${tv?'<button class="btn gold" id="talkBtn">🎤 Speak</button>':""}`;
   if(tv){const b=m.querySelector("#talkBtn");b.onclick=()=>window.__gnTalk();if(had)b.focus({preventScroll:true})}
 }
 function voiceStart(handler,el){
