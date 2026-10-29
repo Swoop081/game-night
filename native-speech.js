@@ -13,7 +13,9 @@
   window.__gnSR={
     started(){cur&&cur.onstart&&cur.onstart()},
     session(){fresh=true;accept=true},          // a new listening session began: its words get a new result slot
+    dbg(t){let d=document.getElementById('gnDbg');if(!d){d=document.createElement('div');d.id='gnDbg';d.style.cssText='position:fixed;left:8px;bottom:4px;z-index:99999;font:11px monospace;color:#9fd;opacity:.7;pointer-events:none';document.body.appendChild(d)}d.textContent=t},
     result(texts,fin){
+      this.dbg((fin?'final: ':'heard: ')+texts[0]+(accept?'':' (muted)'));
       if(!accept||!cur||!cur.active)return;
       const alt=texts.map(t=>({transcript:t,confidence:.9}));alt.isFinal=fin;
       if(fresh||!cur.results.length){cur.results.push(alt);fresh=false}else cur.results[cur.results.length-1]=alt;

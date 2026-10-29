@@ -110,7 +110,7 @@ public class MainActivity extends Activity {
 
     void listenOnce(String l) {
         if (rec != null) { try { rec.cancel(); } catch (Exception e) {} }
-        oneShot = true;
+        oneShot = false;   // continuous: keep restarting quietly so speech is never missed between sessions
         startListening(l);
     }
 
@@ -147,6 +147,7 @@ public class MainActivity extends Activity {
                 public void onPartialResults(Bundle p) { send(p, false); }
                 public void onResults(Bundle p) { errs = 0; send(p, true); if (oneShot) done(); else restart(120, false); }
                 public void onError(int err) {
+                    js("window.__gnSR&&window.__gnSR.dbg&&window.__gnSR.dbg('err " + err + "')");
                     if (!want) return;
                     if (err == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS) {
                         want = false; js("window.__gnSR&&window.__gnSR.error('not-allowed')"); return;
