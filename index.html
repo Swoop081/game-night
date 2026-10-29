@@ -1151,7 +1151,17 @@ $("hlQuit").onclick=()=>confirmSheet("Quit this game?","The scores will be lost.
 
 /* =================== VOICE =================== */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-const V={rec:null,on:false,blocked:false,skipIdx:0,skipText:"",lastIdx:0,lastText:"",handler:null,el:null};
+const V={rec:null,on:false,blocked:false,skipIdx:0,skipText:"",lastIdx:0,lastText:"",handler:null,el:null,stale:[]};
+/* Words already used for a finished question must not be heard again. Some recognisers keep one growing
+   transcript ("boost juice" then "boost juice banana"), or re-word what they already sent, so drop the old words by position. */
+const tokn=w=>w.toLowerCase().replace(/[^\p{L}\p{N}']/gu,"");
+function stripStale(t,sameIdx){
+  const sw=V.stale;if(!sw.length)return t;
+  const tw=t.split(/\s+/).filter(Boolean);
+  if(sameIdx)return tw.slice(sw.length).join(" ");        // same transcript being extended or re-worded
+  if(tw.length>sw.length&&sw.every((w,k)=>tokn(w)===tokn(tw[k])))return tw.slice(sw.length).join(" ");  // a new result that repeats the old words first
+  return t;
+}
 function micUI(state,text){
   const m=V.el||$("mic");m.className="mic"+(state==="on"?" on":"");
   if(state==="off"){m.innerHTML=S.prefs.voice?`<span class="d"></span>${SR?(V.blocked?"Microphone blocked. Allow it in Settings, or use the buttons.":"Voice unavailable here. Use the buttons."):"This browser has no voice recognition. Use the buttons."}`:"";return}
@@ -1169,7 +1179,7 @@ function voiceStart(handler,el){
         const res=e.results[i];let texts=[];for(let j=0;j<res.length;j++)texts.push(res[j].transcript);
         V.lastIdx=i;V.lastText=texts[0];
         if(i<V.skipIdx)continue;
-        if(i===V.skipIdx&&V.skipText)texts=texts.map(t=>t.startsWith(V.skipText)?t.slice(V.skipText.length):"");
+        texts=texts.map(t=>stripStale(t,i===V.skipIdx));
         texts=texts.map(t=>t.trim()).filter(Boolean);
         if(!texts.length)continue;
         micUI("on",texts[0]);
@@ -1177,11 +1187,11 @@ function voiceStart(handler,el){
       }
     };
     r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){V.blocked=true;V.on=false;micUI("off")}};
-    r.onend=()=>{V.skipIdx=0;V.skipText="";V.lastIdx=0;V.lastText="";if(V.on){try{r.start()}catch(e){}}};
+    r.onend=()=>{V.skipIdx=0;V.skipText="";V.lastIdx=0;V.lastText="";V.stale=[];if(V.on){try{r.start()}catch(e){}}};
     V.rec=r;V.on=true;r.start();micUI("on");
   }catch(e){micUI("off")}
 }
-function voiceMark(){V.skipIdx=V.lastIdx;V.skipText=V.lastText||"";if(V.on)micUI("on")}
+function voiceMark(){V.skipIdx=V.lastIdx;V.skipText=V.lastText||"";V.stale=(V.lastText||"").split(/\s+/).filter(Boolean);if(V.on)micUI("on")}
 function voiceStop(){V.on=false;try{V.rec&&V.rec.abort()}catch(e){}V.rec=null}
 function voiceCheck(texts){
   const d=S.duel;if(!d||d.state!=="run")return;
