@@ -96,10 +96,12 @@
     duelOn=true;
     const pa=S.players[d.a],pb=S.players[d.b],cat=CATS[d.cat],rv=document.getElementById("reveal"),qe=document.getElementById("q");
     const qk=qe.className+"|"+qe.innerHTML;
-    const m={k:"duel",cat:cat.icon+" "+cat.name,hint:cat.hint,state:d.state,active:d.active,
-      a:{n:pa.name,t:Math.max(0,d.t.a),T:d.T.a,c:pa.color},b:{n:pb.name,t:Math.max(0,d.t.b),T:d.T.b,c:pb.color},
+    const avs=p=>{try{return avatarSrc(p.id)}catch(e){return ""}};
+    const m={k:"duel",cat:cat.name,hint:cat.hint,state:d.state,active:d.active,
+      a:{n:pa.name,t:Math.max(0,d.t.a),T:d.T.a,c:pa.color,pid:pa.pid||"",av:avs(pa)},b:{n:pb.name,t:Math.max(0,d.t.b),T:d.T.b,c:pb.color,pid:pb.pid||"",av:avs(pb)},
       rv:rv&&rv.classList.contains("show")?{c:rv.className,t:rv.textContent}:null};
-    if(qk!==lastQ){lastQ=qk;m.q={c:qe.className,h:qe.innerHTML}}
+    if(qk!==lastQ){lastQ=qk;m.q={c:qe.className,h:qe.innerHTML};
+      try{const g=S.grid;m.map={c:g.cols,r:g.rows,o:g.owner.map(o=>o<0?"":S.players[o].color),hot:[d.a,d.b].map(i=>g.owner.map((o,j)=>o===i?j:-1).filter(j=>j>=0))}}catch(e){}}
     LINK.broadcast(m);
   };
   setInterval(mirror,250);

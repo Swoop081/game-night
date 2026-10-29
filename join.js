@@ -78,17 +78,20 @@
   const fmt=t=>t<10000?(t/1000).toFixed(1):String(Math.ceil(t/1000));
   const duel=m=>{
     const D=$("duel");if(!D||!$("pass"))return;
-    if(m.off){D.classList.add("hide");$("play").classList.remove("hide");return}
-    D.classList.remove("hide");$("play").classList.add("hide");
+    document.body.classList.toggle("induel",!m.off);
+    if(m.off){D.classList.add("hide");$("play").classList.remove("hide");document.body.style.overflow="";return}
+    D.classList.remove("hide");$("play").classList.add("hide");document.body.style.overflow="hidden";
     [["a",$("pa")],["b",$("pb")]].forEach(([k,el])=>{
       const o=m[k];el.style.setProperty("--c",o.c);el.classList.toggle("on",m.active===k);
-      el.querySelector("b").textContent=o.n;el.querySelector("i").textContent=fmt(o.t);el.querySelector("u").style.transform="scaleX("+Math.min(1,o.t/o.T)+")";
+      el.querySelector("b").textContent=o.n+(o.pid&&o.pid===pid?" · you":"");el.querySelector("i").textContent=fmt(o.t);
+      const im=el.querySelector("img");if(o.av&&im.getAttribute("src")!==o.av)im.src=o.av;
     });
     $("cat").textContent=m.cat;$("hint").textContent=m.hint||"";
-    if(m.q){$("q").className=m.q.c;$("q").innerHTML=m.q.h;$("heard").textContent=""}
+    if(m.q){$("q").className=m.q.c;$("q").innerHTML=m.q.h;$("heard").textContent="";
+      if(m.map){const mp=$("map");mp.style.gridTemplateColumns="repeat("+m.map.c+",16px)";mp.innerHTML=m.map.o.map((c,i)=>'<i style="background:'+(c||"transparent")+'" class="'+((m.map.hot[0].includes(i)||m.map.hot[1].includes(i))?"hot":"")+'"></i>').join("")}}
     const rv=$("rv");rv.className=m.rv?(m.rv.c.indexOf("ok")>-1?"ok":"pass"):"";rv.textContent=m.rv?m.rv.t:"";
     $("pass").disabled=!(mode==="mic"&&m.state==="run");
-    $("dst").textContent=mode==="mic"?"🎤 Your turn — say the answer":($("st").textContent||"");
+    $("dst").textContent=mode==="mic"?"Your turn · say the answer out loud":($("st").textContent||"");
     $("dheard").textContent=mode==="mic"?$("heard").textContent:"";
   };
   if($("pass"))$("pass").onclick=()=>{if(conn&&conn.open)conn.send({k:"btn",id:"pass"})};

@@ -19,35 +19,35 @@ button{font:800 1.3rem system-ui;padding:16px 34px;border:0;border-radius:999px;
 @keyframes pulse{50%{transform:scale(1.18)}}
 #heard{min-height:3em;font-size:1.5rem;font-weight:700;max-width:92vw}
 .hide{display:none!important}
-#duel{width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:4px}
+#duel{position:fixed;inset:0;display:flex;flex-direction:column;background:#0a1a7a;gap:0;overflow:hidden}
 #duel.hide{display:none!important}
-.pl{display:flex;gap:10px;width:100%}
-.pc{flex:1;border-radius:14px;padding:8px 6px;background:rgba(255,255,255,.08);border:2px solid transparent;opacity:.6}
-.pc.on{opacity:1;border-color:var(--c,#fff);background:rgba(255,255,255,.16)}
-.pc b{display:block;font-size:.85rem;letter-spacing:.04em}.pc i{display:block;font-style:normal;font-size:2rem;font-weight:900;font-variant-numeric:tabular-nums}
-.pc u{display:block;height:5px;border-radius:3px;background:var(--c,#fff);transform-origin:left;text-decoration:none}
-#cat{font-weight:800;font-size:1.1rem}#hint{opacity:.7;font-size:.8rem;margin-top:-6px}
-.q{width:100%;min-height:36vh;border-radius:20px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:3.2rem;font-weight:900;padding:12px;text-align:center;overflow:hidden;line-height:1.1;word-break:break-word}
+.pl{display:flex;flex:none}
+.pc{flex:1;display:flex;align-items:center;gap:10px;padding:10px 12px;background:color-mix(in srgb,var(--c) 30%,#06104a);color:#fff;text-align:left;min-width:0}
+.pc.on{background:var(--c)}
+.pc img{width:44px;height:44px;background:#fff;object-fit:cover;flex:none}
+.pc b{display:block;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc i{display:block;font-style:normal;font-size:2.1rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+#catbar{flex:none;background:#fff;color:#0a1a7a;padding:7px 10px;font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;display:flex;gap:10px;justify-content:center}
+#catbar #hint{color:#4a55a8;font-weight:700}
+.q{flex:1;min-height:0;background:#000;display:flex;align-items:center;justify-content:center;font-size:3.2rem;font-weight:900;padding:0;text-align:center;overflow:hidden;line-height:1.1;word-break:break-word}
+.q.text,.q.color,.q.tiles,.q.el,.q.emoji{padding:12px}
 .q.text{font-size:2.2rem}.q.long{font-size:1.6rem}.q.long2{font-size:1.2rem}
 .q.emoji{font-size:5.5rem}.q.emoji.multi{font-size:3.4rem}
-.q img{max-width:100%;max-height:44vh;border-radius:12px;object-fit:contain}
-.q .sw{width:70%;aspect-ratio:1;border-radius:16px}
-.q.tiles{gap:6px;flex-wrap:wrap}.q.tiles span{display:inline-grid;place-items:center;width:1.4em;height:1.4em;background:#fff;color:#1a1636;border-radius:8px;font-size:1.8rem}
-.q .eltile{display:flex;flex-direction:column;align-items:center;background:#fff;color:#1a1636;padding:10px 26px;border-radius:12px}.eltile .num{font-size:1rem}.eltile .sym{font-size:3.6rem}
-#rv{min-height:1.6em;font-weight:800;font-size:1.1rem}#rv.ok{color:#5dffa0}#rv.pass{color:#ff9fb0}
-#dst{opacity:.85}#dheard{min-height:1.4em;font-size:1.15rem;font-weight:700;opacity:.9}
-#pass{background:#ff9fb0;color:#3a0016;padding:12px 30px;font-size:1.1rem}
-#pass:disabled{opacity:.35}
-
-.avprev img{border-radius:50%;background:#f4f1ff;border:4px solid var(--g);object-fit:cover}
-.avtabs,.avrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.avgrid{display:grid;grid-template-columns:repeat(4,64px);gap:8px;justify-content:center}
-.avgrid button{width:64px;height:64px;padding:2px;border-radius:50%;border:3px solid transparent;background:rgba(255,255,255,.12)}
-.avgrid button img{width:100%;height:100%;border-radius:50%;background:#f4f1ff}
-.avgrid button.on{border-color:var(--g)}
-.mini{font:700 .9rem system-ui;padding:8px 14px;border-radius:999px;border:0;background:rgba(255,255,255,.18);color:#fff}
-.mini.on{background:var(--g);color:#2a1a00}
-#myav{width:96px;height:96px;border-radius:50%;background:#f4f1ff;border:4px solid var(--g);object-fit:cover}
+.q img{width:100%;height:100%;object-fit:cover}
+.q .sw{width:70%;aspect-ratio:1}
+.q.tiles{gap:6px;flex-wrap:wrap}.q.tiles span{display:inline-grid;place-items:center;width:1.4em;height:1.4em;background:#fff;color:#1a1636;font-size:1.8rem}
+.q .eltile{display:flex;flex-direction:column;align-items:center;background:#fff;color:#1a1636;padding:10px 26px}.eltile .num{font-size:1rem}.eltile .sym{font-size:3.6rem}
+#rv{flex:none;min-height:0;font-weight:800;font-size:1rem;text-align:center;letter-spacing:.06em;text-transform:uppercase}
+#rv.ok{background:#16c784;color:#022;padding:8px}#rv.pass{background:#e5173f;color:#fff;padding:8px}
+#pass{flex:none;border-radius:0;background:#e5173f;color:#fff;font-size:2.2rem;letter-spacing:.2em;padding:0;height:19vh;width:100%;border:0}
+#pass:disabled{background:#3a1a40;color:rgba(255,255,255,.35)}
+#pass:not(:disabled):active{background:#ff3b61}
+#dst{flex:none;background:#06104a;padding:8px;font-size:.85rem;opacity:.95;letter-spacing:.04em;text-align:center}
+#dheard{flex:none;background:#06104a;padding:0 8px 8px;min-height:1.4em;font-size:1rem;font-weight:700;text-align:center}
+#map{flex:none;background:#000;padding:6px 0;display:grid;justify-content:center;gap:2px}
+#map i{width:16px;height:16px;display:block;opacity:.5}#map i.hot{opacity:1;outline:2px solid #fff}
+body.induel #net{display:none}
+body.induel #logb{bottom:auto;top:2px;right:2px;z-index:20;padding:3px 8px;font-size:.6rem;opacity:.35}
 </style></head><body>
 <small>GAME NIGHT</small>
 <div id="join" class="col">
@@ -61,12 +61,13 @@ button{font:800 1.3rem system-ui;padding:16px 34px;border:0;border-radius:999px;
   <button id="go">Join</button>
 </div>
 <div id="duel" class="hide">
-  <div class="pl"><div class="pc" id="pa"><b></b><i></i><u></u></div><div class="pc" id="pb"><b></b><i></i><u></u></div></div>
-  <div id="cat"></div><div id="hint"></div>
+  <div class="pl"><div class="pc" id="pa"><img alt=""><div><b></b><i></i></div></div><div class="pc" id="pb"><img alt=""><div><b></b><i></i></div></div></div>
+  <div id="catbar"><span id="cat"></span><span id="hint"></span></div>
   <div id="q" class="q"></div>
   <div id="rv"></div>
+  <button id="pass">PASS</button>
   <div id="dst"></div><div id="dheard"></div>
-  <button id="pass">Pass</button>
+  <div id="map"></div>
 </div>
 <div id="play" class="col hide">
   <img id="myav" alt="" class="hide"><div id="big">🎤</div>
@@ -77,7 +78,7 @@ button{font:800 1.3rem system-ui;padding:16px 34px;border:0;border-radius:999px;
 <button class="mini" id="logb" style="position:fixed;bottom:26px;right:10px;opacity:.6">📋 Log</button>
 <div id="net" style="position:fixed;bottom:8px;left:0;right:0;text-align:center;font-size:.7rem;opacity:.45"></div>
 <script>/* reload if a newer build exists (phone browsers cache this page) */
-const JB_BUILD=19;fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.text()).then(t=>{if(parseInt(t,10)>JB_BUILD&&!sessionStorage.getItem("gn.rl"+t)){try{sessionStorage.setItem("gn.rl"+t,"1")}catch(e){}location.replace(location.pathname+location.search.replace(/[&?]r=\d+/,"")+(location.search?"&":"?")+"r="+Date.now())}}).catch(()=>{});</script>
+const JB_BUILD=20;fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.text()).then(t=>{if(parseInt(t,10)>JB_BUILD&&!sessionStorage.getItem("gn.rl"+t)){try{sessionStorage.setItem("gn.rl"+t,"1")}catch(e){}location.replace(location.pathname+location.search.replace(/[&?]r=\d+/,"")+(location.search?"&":"?")+"r="+Date.now())}}).catch(()=>{});</script>
 <script src="peerjs.min.js?v=1"></script>
-<script src="join.js?v=20"></script>
+<script src="join.js?v=22"></script>
 </body></html>
