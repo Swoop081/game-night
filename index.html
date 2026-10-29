@@ -1191,7 +1191,7 @@ function voiceStart(handler,el){
     V.rec=r;V.on=true;r.start();micUI("on");
   }catch(e){micUI("off")}
 }
-function voiceMark(){V.skipIdx=V.lastIdx;V.skipText=V.lastText||"";V.stale=(V.lastText||"").split(/\s+/).filter(Boolean);if(V.on)micUI("on")}
+function voiceMark(){if(window.__gnMute)window.__gnMute();V.skipIdx=V.lastIdx;V.skipText=V.lastText||"";V.stale=window.__gnMute?[]:(V.lastText||"").split(/\s+/).filter(Boolean);if(V.on)micUI("on")}
 function voiceStop(){V.on=false;try{V.rec&&V.rec.abort()}catch(e){}V.rec=null}
 function voiceCheck(texts){
   const d=S.duel;if(!d||d.state!=="run")return;
