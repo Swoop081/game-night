@@ -45,10 +45,10 @@
 
   /* ----- microphone: runs only while the TV says it's this player's turn ----- */
   const words=t=>String(t||"").trim().toLowerCase().replace(/[^a-z0-9' ]+/g," ").split(/\s+/).filter(Boolean);
-  let round=-1,cur={uid:0,words:[]},base={uid:-1,words:[]};
+  let voiceActive=false,round=-1,cur={uid:0,words:[]},base={uid:-1,words:[]};
   const setRound=n=>{if(n===round)return;round=n;base={uid:cur.uid,words:cur.words.slice()};plog("round",n)};
   const runMic=()=>{
-    if(!SRc||mode!=="mic"||!micOK||rec)return;
+    if(!SRc||!voiceActive||!micOK||rec)return;
     const r=new SRc();rec=r;r.lang="en-AU";r.interimResults=true;r.continuous=true;r.maxAlternatives=3;
     let sess=0;
     r.onstart=()=>{sess=++uid;plog("rec start",{sess})};
@@ -59,12 +59,12 @@
       // only the words spoken since the current question began
       const alts=raw.map(t=>{const w=words(t);if(uidNow<base.uid)return "";if(uidNow===base.uid)return w.slice(Math.min(base.words.length,w.length)).join(" ");return w.join(" ")}).filter(Boolean);
       plog("result",{uid:uidNow,f:res.isFinal?1:0,raw:raw[0],sent:alts[0]||null,round});
-      if(!alts.length)return;
+      if(!alts.length||mode!=="mic")return;
       $("heard").textContent=alts[0];
       if(conn&&conn.open)conn.send({k:"sp",n:round,f:res.isFinal?1:0,alts});
     };
     r.onerror=e=>{plog("rec onerror",e.error);if(e.error==="not-allowed"||e.error==="service-not-allowed"){micOK=false;$("st").textContent="Voice blocked ("+e.error+"). On iPhone: open this page in Safari, allow the microphone, and turn on Settings > General > Keyboard > Enable Dictation. Then reload."}};
-    r.onend=()=>{plog("rec end");rec=null;if(mode==="mic"&&micOK)setTimeout(runMic,120)};
+    r.onend=()=>{plog("rec end");rec=null;if(voiceActive&&micOK)setTimeout(runMic,120)};
     try{r.start()}catch(e){rec=null;setTimeout(runMic,400)}
   };
   const setMode=(m,sub)=>{
@@ -72,7 +72,6 @@
     mode=m;document.body.classList.toggle("live",m==="mic");
     $("big").textContent=m==="mic"?"🎤":"⏳";
     $("st").textContent=sub||"";if(m!=="mic")$("heard").textContent="";
-    if(m==="mic")runMic();else if(rec){try{rec.abort()}catch(e){}}
   };
 
   /* ----- the duel question mirrored from the TV ----- */
@@ -103,7 +102,7 @@
     conn=peer.connect(target(),{reliable:true});
     const c=conn;
     c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player",av});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
-    c.on("data",m=>{if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="duel")return duel(m);if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
+    c.on("data",m=>{if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="duel")return duel(m);if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
     c.on("close",()=>{if(c!==conn)return;net("link lost");setMode("wait","Reconnecting…");retry=setTimeout(connect,1500)});
     c.on("error",()=>{});
     // a connection that never opens is retried

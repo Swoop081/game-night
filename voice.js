@@ -32,11 +32,6 @@
     if(!V.on||!V.handler){log("  drop","voice off");return}
     if(!p.live){log("  drop","not their turn");return}
     if(m.n!==LINK.round){log("  drop","old round");return}
-    // an unfinished guess must hold steady for a moment before it can score
-    if(!m.f){
-      const k=texts[0].toLowerCase(),now=Date.now();
-      if(!(p.prevK===k&&now-(p.prevT||0)<1500)){p.prevK=k;p.prevT=now;try{micUI("on",texts[0])}catch(e){}log("  held","unstable partial");return}
-    }
     try{micUI("on",texts[0])}catch(e){}
     log("  -> handler",texts);
     try{V.handler(texts,!!m.f)}catch(e){log("handler error",String(e))}

@@ -81,8 +81,8 @@
       const on=live.includes(p);
       const mode=on?"mic":"wait";
       const sub=on?(act&&matched?"Your turn — say your answer":"Say your answer"):(voiceOn()?(act?act+" is answering":"Waiting…"):"Watch the TV");
-      const key=mode+"|"+sub;
-      if(p.key!==key){p.key=key;send(p,{k:"ui",mode,sub,n:LINK.round||0});log('ui',{to:p.name,mode,sub})}
+      const vo=voiceOn()?1:0;const key=mode+"|"+sub+"|"+vo;
+      if(p.key!==key){p.key=key;send(p,{k:"ui",mode,sub,n:LINK.round||0,v:vo});log('ui',{to:p.name,mode,sub})}
       p.live=on;
     });
   };
