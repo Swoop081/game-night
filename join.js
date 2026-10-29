@@ -26,6 +26,20 @@
     im.src=URL.createObjectURL(f);
   };
   paintAv();
+  setTimeout(()=>{const b=$("logb");if(b)b.onclick=()=>wantLog()},0);
+  /* ----- log (for diagnosing problems) ----- */
+  const T0=Date.now(),PL=[];
+  const plog=(ev,d)=>{let x="";try{x=d===undefined?"":(typeof d==="string"?d:JSON.stringify(d))}catch(e){}const l=((Date.now()-T0)/1000).toFixed(2)+"s PHONE "+ev+" "+x;PL.push(l);if(PL.length>400)PL.shift();try{conn&&conn.open&&(ev==="rec onerror"||ev==="rec start"||ev==="rec end")&&conn.send({k:"plog",t:ev+" "+x})}catch(e){}};
+  addEventListener("error",e=>plog("JSERROR",String(e.message)));
+  const showLog=txt=>{
+    const o=document.createElement("div");o.style.cssText="position:fixed;inset:0;z-index:9;background:#120c3c;display:flex;flex-direction:column;gap:10px;padding:14px";
+    o.innerHTML='<b>Game Night log</b><textarea readonly style="flex:1;font:11px monospace;background:#000;color:#9fd;border-radius:8px;padding:8px"></textarea><div style="display:flex;gap:8px"><button class="mini on" id="lgCopy">Copy</button><button class="mini" id="lgClose">Close</button></div>';
+    o.querySelector("textarea").value=txt;document.body.appendChild(o);
+    o.querySelector("#lgClose").onclick=()=>o.remove();
+    o.querySelector("#lgCopy").onclick=()=>{const t=o.querySelector("textarea");t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand("copy")}o.querySelector("#lgCopy").textContent="Copied ✓"};
+  };
+  let logBtn=null;
+  const wantLog=()=>{if(conn&&conn.open)conn.send({k:"getlog"});else showLog("not connected\n"+PL.join("\n"))};
   const SRc=window.SpeechRecognition||window.webkitSpeechRecognition;
   let peer=null,conn=null,mode="wait",uid=0,rec=null,micOK=false,joined=false,retry=null;
 
@@ -34,14 +48,14 @@
     if(!SRc||mode!=="mic"||!micOK||rec)return;
     const r=new SRc();rec=r;r.lang="en-AU";r.interimResults=true;r.continuous=true;r.maxAlternatives=3;
     let sess=0;
-    r.onstart=()=>{sess=++uid};
+    r.onstart=()=>{sess=++uid;plog("rec start",{sess})};
     r.onresult=e=>{
       const res=e.results[e.results.length-1],alts=[];for(let i=0;i<res.length;i++)alts.push(res[i].transcript);
-      $("heard").textContent=alts[0];
+      $("heard").textContent=alts[0];plog("result",{uid:sess*1000+(e.results.length-1),f:res.isFinal?1:0,t:alts[0]});
       if(conn&&conn.open)conn.send({k:"sp",uid:sess*1000+(e.results.length-1),alts,f:res.isFinal?1:0});
     };
-    r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){micOK=false;$("st").textContent="Voice blocked ("+e.error+"). On iPhone: open this page in Safari, allow the microphone, and turn on Settings > General > Keyboard > Enable Dictation. Then reload."}};
-    r.onend=()=>{rec=null;if(mode==="mic"&&micOK)setTimeout(runMic,120)};
+    r.onerror=e=>{plog("rec onerror",e.error);if(e.error==="not-allowed"||e.error==="service-not-allowed"){micOK=false;$("st").textContent="Voice blocked ("+e.error+"). On iPhone: open this page in Safari, allow the microphone, and turn on Settings > General > Keyboard > Enable Dictation. Then reload."}};
+    r.onend=()=>{plog("rec end");rec=null;if(mode==="mic"&&micOK)setTimeout(runMic,120)};
     try{r.start()}catch(e){rec=null;setTimeout(runMic,400)}
   };
   const setMode=(m,sub)=>{
@@ -79,7 +93,7 @@
     conn=peer.connect(target(),{reliable:true});
     const c=conn;
     c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player"});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
-    c.on("data",m=>{if(m&&m.k==="duel")return duel(m);if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
+    c.on("data",m=>{if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="duel")return duel(m);if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
     c.on("close",()=>{if(c!==conn)return;net("link lost");setMode("wait","Reconnecting…");retry=setTimeout(connect,1500)});
     c.on("error",()=>{});
     // a connection that never opens is retried
@@ -97,7 +111,7 @@
       net("error: "+(e&&e.type));retry=setTimeout(connect,2500);
     });
   };
-  const net=t=>{const n=$("net");if(n)n.textContent=t};
+  const net=t=>{const n=$("net");if(n)n.textContent=t;plog("net",t)};
   $("go").onclick=()=>{
     const code=$("code").value.trim().toUpperCase(),name=$("name").value.trim();
     if(code.length!==4){$("code").focus();return}

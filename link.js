@@ -13,6 +13,11 @@
   if(!/^[A-Z]{4}$/.test(code))code=rnd();
   let orderSeq=0;
   const LINK=window.LINK={code,phones:new Map(),ready:false};   // phones: pid -> {pid,name,conn,live,lastUid,muteUid,mode}
+  /* ---------- event log (ring buffer) so problems can be diagnosed afterwards ---------- */
+  const T0=Date.now(),LOGB=[];
+  const log=(ev,d)=>{let x="";try{x=d===undefined?"":(typeof d==="string"?d:JSON.stringify(d))}catch(e){}LOGB.push(((Date.now()-T0)/1000).toFixed(2)+"s TV "+ev+" "+x);if(LOGB.length>700)LOGB.shift()};
+  LINK.log=log;LINK.logText=()=>"build phone-link v14 | "+new Date().toISOString()+"\n"+LOGB.slice(-300).join("\n");
+  addEventListener("error",e=>log("JSERROR",String(e.message)+" @"+(e.filename||"").split("/").pop()+":"+e.lineno));
   const css=(el,s)=>{el.style.cssText=s;return el};
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"");
   const joinUrl=()=>base+"join.html?c="+LINK.code+(q.get("peerhost")?"&peerhost="+q.get("peerhost")+"&peerport="+(q.get("peerport")||9000):"");
@@ -76,7 +81,7 @@
       const mode=on?"mic":"wait";
       const sub=on?(act&&matched?"Your turn — say your answer":"Say your answer"):(voiceOn()?(act?act+" is answering":"Waiting…"):"Watch the TV");
       const key=mode+"|"+sub;
-      if(p.key!==key){p.key=key;send(p,{k:"ui",mode,sub})}
+      if(p.key!==key){p.key=key;send(p,{k:"ui",mode,sub});log('ui',{to:p.name,mode,sub})}
       p.live=on;
     });
   };
@@ -106,19 +111,22 @@
     const uid=m.uid||0;p.lastUid=Math.max(p.lastUid||0,uid);
     let texts=(m.alts||[]).slice(0,2).map(t=>String(t).trim()).filter(Boolean);if(!texts.length)return;
     p.lastText=texts[0];
-    if(!p.live||!voiceOn())return;
+    log('speech',{from:p.name,uid,f:m.f,t:texts[0],live:p.live,voice:voiceOn(),mute:p.muteUid||0});
+    if(!p.live||!voiceOn()){log('  ignored',p.live?'voice off':'not their turn');return}
     // same utterance as an answer we already took: iOS keeps adding to one running transcript, so only look at the new words
     if(uid<=(p.muteUid||0)){
       const st=p.stale||[];
       texts=texts.map(t=>{const w=wordsOf(t);for(let i=0;i<st.length;i++)if(w[i]!==st[i])return "";return w.slice(st.length).join(" ")}).filter(Boolean);
-      if(!texts.length)return;
+      if(!texts.length){log('  ignored','stale words');return}
     }
     // unfinished guesses must hold steady for a moment before they count (stops flickery mis-hears from scoring)
-    if(!m.f){const k=norm1(texts[0]),now=Date.now();if(!(p.prevK===k&&now-(p.prevT||0)<1500)){p.prevK=k;p.prevT=now;try{micUI("on",texts[0])}catch(e){}return}}
+    if(!m.f){const k=norm1(texts[0]),now=Date.now();if(!(p.prevK===k&&now-(p.prevT||0)<1500)){p.prevK=k;p.prevT=now;try{micUI("on",texts[0])}catch(e){}log('  held','unstable partial');return}}
+    log('  -> handler',texts);
     try{micUI("on",texts[0])}catch(e){}
     try{V.handler(texts,!!m.f)}catch(e){console.error(e)}
   };
   // an answer was accepted: ignore whatever the phones are still saying from that moment
+  ["answered","passed","startDuel","endDuel"].forEach(n=>{const f=window[n];if(typeof f==="function")window[n]=function(){try{const d=S.duel;log(n,{q:d&&d.q&&d.q.a,active:d&&d.active,tA:d&&Math.round(d.t.a),tB:d&&Math.round(d.t.b)})}catch(e){}return f.apply(this,arguments)}});
   const vm=window.voiceMark;
   if(typeof vm==="function")window.voiceMark=function(){LINK.phones.forEach(p=>{p.muteUid=p.lastUid||0;p.stale=wordsOf(p.lastText||"");p.prevK=""});return vm.apply(this,arguments)};
 
@@ -172,13 +180,15 @@
         p.av=m.av||p.av;p.closedAt=0;
         if(old&&old.conn&&old.conn!==conn)try{old.conn.close()}catch(e){}
         p.conn=conn;p.name=String(m.name||"Player").slice(0,16);p.key="";LINK.phones.set(m.pid,p);conn.__pid=m.pid;
-        send(p,{k:"hello",name:p.name});resend();paintChip();if(dlg.style.display==="flex")paintDlg();tick();return;
+        send(p,{k:"hello",name:p.name});resend();log("join",{name:p.name,pid:p.pid,order:p.order});paintChip();if(dlg.style.display==="flex")paintDlg();tick();return;
       }
       p=LINK.phones.get(conn.__pid);if(!p)return;
       if(m.k==="sp")onSpeech(p,m);
+      else if(m.k==="getlog")send(p,{k:"log",text:LINK.logText()});
+      else if(m.k==="plog")log("PHONE["+p.name+"]",m.t);
       else if(typeof LINK.onMessage==="function")LINK.onMessage(p,m);
     });
-    conn.on("close",()=>{const q=LINK.phones.get(conn.__pid);if(q&&q.conn===conn)q.closedAt=Date.now();paintChip();if(dlg.style.display==="flex")paintDlg()});
+    conn.on("close",()=>{const q=LINK.phones.get(conn.__pid);if(q&&q.conn===conn){q.closedAt=Date.now();log('phone closed',q.name)}paintChip();if(dlg.style.display==="flex")paintDlg()});
     conn.on("error",()=>{});
   };
   const start=()=>{
