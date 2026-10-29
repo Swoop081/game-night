@@ -38,6 +38,8 @@
   const mountHub=()=>{const h=hubEl();if(h&&!hubBtn.parentNode)h.appendChild(hubBtn)};
   mountHub();addEventListener("DOMContentLoaded",mountHub);setTimeout(mountHub,500);
   document.addEventListener("keydown",e=>{if([403,404,405,406,183,184,185,186,82,93].includes(e.keyCode)||e.key==="ContextMenu"||e.key==="p"&&e.altKey){e.preventDefault();toggle()}},true);
+  const ob=window.__gnBack;
+  window.__gnBack=function(){if(dlg.style.display==="flex"){dlg.style.display="none";return true}return ob?ob.apply(this,arguments):false};
   chip.onclick=toggle;chip.onkeydown=e=>{if(e.key==="Enter")toggle()};
   document.addEventListener("keydown",e=>{if(dlg.style.display==="flex"&&(e.key==="Escape"||e.key==="Backspace"||e.keyCode===4)){dlg.style.display="none";e.preventDefault();e.stopPropagation()}},true);
 
