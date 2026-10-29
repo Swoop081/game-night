@@ -11,13 +11,13 @@
   /* ----- microphone: runs only while the TV says it's this player's turn ----- */
   const runMic=()=>{
     if(!SRc||mode!=="mic"||!micOK||rec)return;
-    const r=new SRc();rec=r;r.lang="en-AU";r.interimResults=true;r.continuous=false;r.maxAlternatives=3;
-    let mine=0;
-    r.onstart=()=>{mine=++uid};
+    const r=new SRc();rec=r;r.lang="en-AU";r.interimResults=true;r.continuous=true;r.maxAlternatives=3;
+    let sess=0;
+    r.onstart=()=>{sess=++uid};
     r.onresult=e=>{
       const res=e.results[e.results.length-1],alts=[];for(let i=0;i<res.length;i++)alts.push(res[i].transcript);
       $("heard").textContent=alts[0];
-      if(conn&&conn.open)conn.send({k:"sp",uid:mine,alts,f:res.isFinal?1:0});
+      if(conn&&conn.open)conn.send({k:"sp",uid:sess*1000+(e.results.length-1),alts,f:res.isFinal?1:0});
     };
     r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){micOK=false;$("st").textContent="Voice blocked ("+e.error+"). On iPhone: open this page in Safari, allow the microphone, and turn on Settings > General > Keyboard > Enable Dictation. Then reload."}};
     r.onend=()=>{rec=null;if(mode==="mic"&&micOK)setTimeout(runMic,120)};
@@ -50,23 +50,33 @@
   if($("pass"))$("pass").onclick=()=>{if(conn&&conn.open)conn.send({k:"btn",id:"pass"})};
 
   /* ----- connection (keeps retrying if the TV or wifi blips) ----- */
-  const cfg=()=>{const o={debug:0};if(q.get("peerhost")){o.host=q.get("peerhost");o.port=+(q.get("peerport")||9000);o.secure=false;o.path="/"}return o};
+  const ICE=[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"},{urls:"stun:stun.cloudflare.com:3478"},{urls:["turn:openrelay.metered.ca:80","turn:openrelay.metered.ca:443"],username:"openrelayproject",credential:"openrelayproject"}];
+  const cfg=()=>{const o={debug:0,config:{iceServers:ICE}};if(q.get("peerhost")){o.host=q.get("peerhost");o.port=+(q.get("peerport")||9000);o.secure=false;o.path="/"}return o};
+  const target=()=>"gnight-"+$("code").value.trim().toUpperCase();
+  const dial=()=>{
+    try{conn&&conn.close()}catch(e){}
+    conn=peer.connect(target(),{reliable:true});
+    const c=conn;
+    c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player"});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
+    c.on("data",m=>{if(m&&m.k==="duel")return duel(m);if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
+    c.on("close",()=>{if(c!==conn)return;net("link lost");setMode("wait","Reconnecting…");retry=setTimeout(connect,1500)});
+    c.on("error",()=>{});
+    // a connection that never opens is retried
+    setTimeout(()=>{if(c===conn&&!c.open){net("retrying");connect()}},9000);
+  };
   const connect=()=>{
     clearTimeout(retry);
+    if(peer&&!peer.destroyed&&!peer.disconnected&&peer.open){dial();return}
     try{peer&&peer.destroy()}catch(e){}
     peer=new Peer(undefined,cfg());
-    peer.on("open",()=>{
-      conn=peer.connect("gnight-"+$("code").value.trim().toUpperCase(),{reliable:true});
-      conn.on("open",()=>{conn.send({k:"join",pid,name:$("name").value.trim()||"Player"});joined=true;$("who").textContent=$("name").value.trim()||"Player"});
-      conn.on("data",m=>{if(m&&m.k==="duel")return duel(m);if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
-      conn.on("close",()=>{setMode("wait","Reconnecting…");retry=setTimeout(connect,2000)});
-      conn.on("error",()=>{});
-    });
+    peer.on("open",dial);
+    peer.on("disconnected",()=>{try{peer.reconnect()}catch(e){}});
     peer.on("error",e=>{
       if(e&&e.type==="peer-unavailable"){$("st").textContent=joined?"Reconnecting…":"Can't find that TV code. Check the code on the TV screen.";if(!joined){$("join").classList.remove("hide");$("play").classList.add("hide")}}
-      retry=setTimeout(connect,3000);
+      net("error: "+(e&&e.type));retry=setTimeout(connect,2500);
     });
   };
+  const net=t=>{const n=$("net");if(n)n.textContent=t};
   $("go").onclick=()=>{
     const code=$("code").value.trim().toUpperCase(),name=$("name").value.trim();
     if(code.length!==4){$("code").focus();return}

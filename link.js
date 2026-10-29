@@ -5,7 +5,8 @@
   const q=new URLSearchParams(location.search);
   const TV=/GameNightTV/.test(navigator.userAgent);
   if(!TV&&!q.get("host"))return;
-  const cfg=()=>{const o={debug:0};if(q.get("peerhost")){o.host=q.get("peerhost");o.port=+(q.get("peerport")||9000);o.secure=false;o.path="/"}return o};
+  const ICE=[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"},{urls:"stun:stun.cloudflare.com:3478"},{urls:["turn:openrelay.metered.ca:80","turn:openrelay.metered.ca:443"],username:"openrelayproject",credential:"openrelayproject"}];
+  const cfg=()=>{const o={debug:0,config:{iceServers:ICE}};if(q.get("peerhost")){o.host=q.get("peerhost");o.port=+(q.get("peerport")||9000);o.secure=false;o.path="/"}return o};
   const ALPHA="ABCDEFGHJKMNPQRSTUVWXYZ";
   const rnd=()=>Array.from({length:4},()=>ALPHA[Math.floor(Math.random()*ALPHA.length)]).join("");
   let code="";try{code=localStorage.getItem("gn.joinCode")||""}catch(e){}
@@ -55,13 +56,15 @@
     return null;
   };
   const norm1=s=>String(s||"").trim().toLowerCase();
+  const initials=s=>norm1(s).split(/\s+/).map(w=>w[0]).join("");
+  const sameName=(a,b)=>{const x=norm1(a),y=norm1(b);if(!x||!y)return false;if(x===y)return true;if(initials(a)===y||initials(b)===x)return true;if(x.length>=2&&y.length>=2&&(x.startsWith(y)||y.startsWith(x)))return true;return x.split(/\s+/)[0]===y.split(/\s+/)[0]};
   const voiceOn=()=>{try{return !!(V&&V.on&&V.handler)}catch(e){return false}};
   const whoLive=()=>{
     const all=[...LINK.phones.values()].filter(p=>p.conn&&p.conn.open);
     if(!voiceOn())return {live:[],all};
     const act=activeNames();
     if(!act)return {live:all,all};
-    const m=all.filter(p=>act.some(a=>norm1(a)===norm1(p.name)));
+    const m=all.filter(p=>act.some(a=>sameName(a,p.name)));
     return {live:m.length?m:all,all,act:act[0],matched:m.length>0};
   };
   const tick=()=>{
@@ -133,9 +136,11 @@
     peer.on("connection",onConn);
     peer.on("error",e=>{
       if(e&&e.type==="unavailable-id"){LINK.code=rnd();try{peer.destroy()}catch(_){}setTimeout(start,300)}
-      else if(e&&(e.type==="network"||e.type==="server-error"||e.type==="socket-error"||e.type==="socket-closed")){LINK.ready=false;paintChip();setTimeout(()=>{try{peer.destroy()}catch(_){}start()},5000)}
+      else if(e&&(e.type==="network"||e.type==="server-error"||e.type==="socket-error"||e.type==="socket-closed")){LINK.ready=false;paintChip();setTimeout(()=>{try{if(peer.destroyed){start()}else if(peer.disconnected){peer.reconnect()}}catch(_){}},4000)}
     });
-    peer.on("disconnected",()=>{try{peer.reconnect()}catch(e){}});
+    peer.on("disconnected",()=>{LINK.ready=false;paintChip();setTimeout(()=>{try{peer.reconnect()}catch(e){}},1500)});
+    peer.on("close",()=>{setTimeout(start,1500)});
+    LINK.peer=peer;
   };
   const s=document.createElement("script");s.src="peerjs.min.js";s.onload=start;document.head.appendChild(s);
 })();
