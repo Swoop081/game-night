@@ -114,12 +114,13 @@
   /* ---------- lobby: phones are the players, in the order they joined ---------- */
   const lobby=()=>[...LINK.phones.values()].filter(p=>p.conn&&(p.conn.open||Date.now()-(p.closedAt||0)<60000)).sort((a,b)=>a.order-b.order);
   LINK.lobby=lobby;
-  let sig="";
+  let sig="",wasVisible=false;
   const syncLobby=()=>{
-    const el=document.getElementById("setup");if(!el||el.hidden)return;
+    const el=document.getElementById("setup");if(!el)return;
+    const vis=!el.hidden;if(vis&&!wasVisible)sig="";wasVisible=vis;if(!vis)return;
     const L=lobby();
     const k=JSON.stringify(L.map(p=>[p.pid,p.name,p.av?(p.av.src?p.av.src.length:p.av.style+p.av.seed):0]));
-    if(k===sig)return;sig=k;if(!L.length)return;
+    if(k===sig)return;sig=k;
     S.pids=S.pids||[];S.avatars=S.avatars||[];
     S.count=Math.min(20,Math.max(2,L.length));
     L.slice(0,20).forEach((p,i)=>{S.names[i]=p.name;S.pids[i]=p.pid;if(p.av)S.avatars[i]=p.av});
@@ -131,14 +132,28 @@
   if(typeof rs==="function")window.renderSetup=function(){
     const r=rs.apply(this,arguments);
     try{
-      const n=Math.min(20,lobby().length);
-      document.querySelectorAll("#players .prow").forEach((row,i)=>{
-        if(i<n){const inp=row.querySelector("input");if(inp){inp.readOnly=true;inp.title="Name comes from the player's phone"}
-          if(!row.querySelector(".phb")){const b=document.createElement("span");b.className="phb";b.textContent="📱";b.style.cssText="font-size:1.1rem;opacity:.85";row.appendChild(b)}}
-      });
-      const mi=document.getElementById("minus"),pl=document.getElementById("plus");
-      if(n>=2){mi&&(mi.disabled=true);pl&&(pl.disabled=true)}
-    }catch(e){}
+      const n=Math.min(20,lobby().length),wrap=document.getElementById("players");
+      if(wrap){
+        // the lobby is only the phones that have joined: no placeholder players
+        wrap.querySelectorAll(".prow").forEach((row,i)=>{
+          if(i>=n){row.remove();return}
+          const inp=row.querySelector("input");if(inp){inp.readOnly=true;inp.title="Name comes from the player's phone"}
+          if(!row.querySelector(".phb")){const b=document.createElement("span");b.className="phb";b.textContent="📱";b.style.cssText="font-size:1.1rem;opacity:.85";row.appendChild(b)}
+        });
+        wrap.querySelectorAll(".lobbyhint").forEach(x=>x.remove());
+        const hint=document.createElement("div");hint.className="lobbyhint";
+        if(n===0){
+          hint.style.cssText="display:flex;align-items:center;gap:22px;padding:6px 4px";
+          hint.innerHTML='<img alt="" width="150" height="150" style="background:#fff;padding:8px;border-radius:12px"><div><div style="font-size:1.5rem;font-weight:800">Scan to join</div><div style="opacity:.85;margin-top:4px">Open the camera on your phone, make your avatar, and tap Join.<br>Or go to <b>'+base.replace(/^https?:\/\//,"")+'join.html</b> and enter code <b style="letter-spacing:.2em;color:#ffd84a">'+LINK.code+'</b></div></div>';
+          hint.querySelector("img").src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+encodeURIComponent(joinUrl());
+          wrap.appendChild(hint);
+        }else if(n<2){
+          hint.style.cssText="align-self:center;opacity:.8;font-weight:700";hint.textContent="Waiting for at least one more player…";wrap.appendChild(hint);
+        }
+      }
+      const f=document.getElementById("pcount");const fld=f&&f.closest(".field");if(fld)fld.style.display="none";
+      const st=document.getElementById("startGame");if(st){st.disabled=n<2;st.style.opacity=n<2?".45":""}
+    }catch(e){log("setup decorate error",String(e))}
     return r;
   };
   // players know which phone is theirs
