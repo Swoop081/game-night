@@ -100,4 +100,4 @@ function podium(rows,o={}){
 }
 window.SK={bumper,vs,flash,shake,podium,sting};
 })();
-(function(){const h=document.getElementById("hub");if(!h)return;const v=document.createElement("div");v.textContent="build 29 Oct · phone link v12";v.style.cssText="position:absolute;right:14px;bottom:8px;font-size:.62rem;letter-spacing:.12em;color:rgba(162,157,208,.45);pointer-events:none";h.appendChild(v)})();
+(function(){const h=document.getElementById("hub");if(!h)return;const v=document.createElement("div");v.textContent="build 29 Oct · phone link v13";v.style.cssText="position:absolute;right:14px;bottom:8px;font-size:.62rem;letter-spacing:.12em;color:rgba(162,157,208,.45);pointer-events:none";h.appendChild(v)})();

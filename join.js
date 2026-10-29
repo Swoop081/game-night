@@ -62,7 +62,7 @@
       el.querySelector("b").textContent=o.n;el.querySelector("i").textContent=fmt(o.t);el.querySelector("u").style.transform="scaleX("+Math.min(1,o.t/o.T)+")";
     });
     $("cat").textContent=m.cat;$("hint").textContent=m.hint||"";
-    if(m.q){$("q").className=m.q.c;$("q").innerHTML=m.q.h}
+    if(m.q){$("q").className=m.q.c;$("q").innerHTML=m.q.h;$("heard").textContent=""}
     const rv=$("rv");rv.className=m.rv?(m.rv.c.indexOf("ok")>-1?"ok":"pass"):"";rv.textContent=m.rv?m.rv.t:"";
     $("pass").disabled=!(mode==="mic"&&m.state==="run");
     $("dst").textContent=mode==="mic"?"🎤 Your turn — say the answer":($("st").textContent||"");

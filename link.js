@@ -101,16 +101,26 @@
   const resend=()=>{lastQ=""};
 
   /* ---------- speech from phones feeds the same pipeline as the TV's own mic ---------- */
+  const wordsOf=t=>norm1(t).replace(/[^a-z0-9' ]+/g," ").split(/\s+/).filter(Boolean);
   const onSpeech=(p,m)=>{
-    p.lastUid=Math.max(p.lastUid||0,m.uid||0);
-    if(!p.live||(m.uid||0)<=(p.muteUid||0)||!voiceOn())return;
-    const texts=(m.alts||[]).map(t=>String(t).trim()).filter(Boolean);if(!texts.length)return;
+    const uid=m.uid||0;p.lastUid=Math.max(p.lastUid||0,uid);
+    let texts=(m.alts||[]).slice(0,2).map(t=>String(t).trim()).filter(Boolean);if(!texts.length)return;
+    p.lastText=texts[0];
+    if(!p.live||!voiceOn())return;
+    // same utterance as an answer we already took: iOS keeps adding to one running transcript, so only look at the new words
+    if(uid<=(p.muteUid||0)){
+      const st=p.stale||[];
+      texts=texts.map(t=>{const w=wordsOf(t);for(let i=0;i<st.length;i++)if(w[i]!==st[i])return "";return w.slice(st.length).join(" ")}).filter(Boolean);
+      if(!texts.length)return;
+    }
+    // unfinished guesses must hold steady for a moment before they count (stops flickery mis-hears from scoring)
+    if(!m.f){const k=norm1(texts[0]),now=Date.now();if(!(p.prevK===k&&now-(p.prevT||0)<1500)){p.prevK=k;p.prevT=now;try{micUI("on",texts[0])}catch(e){}return}}
     try{micUI("on",texts[0])}catch(e){}
     try{V.handler(texts,!!m.f)}catch(e){console.error(e)}
   };
   // an answer was accepted: ignore whatever the phones are still saying from that moment
   const vm=window.voiceMark;
-  if(typeof vm==="function")window.voiceMark=function(){LINK.phones.forEach(p=>{p.muteUid=p.lastUid||0});return vm.apply(this,arguments)};
+  if(typeof vm==="function")window.voiceMark=function(){LINK.phones.forEach(p=>{p.muteUid=p.lastUid||0;p.stale=wordsOf(p.lastText||"");p.prevK=""});return vm.apply(this,arguments)};
 
   /* ---------- lobby: phones are the players, in the order they joined ---------- */
   const lobby=()=>[...LINK.phones.values()].filter(p=>p.conn&&(p.conn.open||Date.now()-(p.closedAt||0)<60000)).sort((a,b)=>a.order-b.order);
