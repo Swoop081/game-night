@@ -30,6 +30,25 @@
     if(m==="mic")runMic();else if(rec){try{rec.abort()}catch(e){}}
   };
 
+  /* ----- the duel question mirrored from the TV ----- */
+  const fmt=t=>t<10000?(t/1000).toFixed(1):String(Math.ceil(t/1000));
+  const duel=m=>{
+    const D=$("duel");
+    if(m.off){D.classList.add("hide");$("play").classList.remove("hide");return}
+    D.classList.remove("hide");$("play").classList.add("hide");
+    [["a",$("pa")],["b",$("pb")]].forEach(([k,el])=>{
+      const o=m[k];el.style.setProperty("--c",o.c);el.classList.toggle("on",m.active===k);
+      el.querySelector("b").textContent=o.n;el.querySelector("i").textContent=fmt(o.t);el.querySelector("u").style.transform="scaleX("+Math.min(1,o.t/o.T)+")";
+    });
+    $("cat").textContent=m.cat;$("hint").textContent=m.hint||"";
+    if(m.q){$("q").className=m.q.c;$("q").innerHTML=m.q.h}
+    const rv=$("rv");rv.className=m.rv?(m.rv.c.indexOf("ok")>-1?"ok":"pass"):"";rv.textContent=m.rv?m.rv.t:"";
+    $("pass").disabled=!(mode==="mic"&&m.state==="run");
+    $("dst").textContent=mode==="mic"?"🎤 Your turn — say the answer":($("st").textContent||"");
+    $("dheard").textContent=mode==="mic"?$("heard").textContent:"";
+  };
+  $("pass").onclick=()=>{if(conn&&conn.open)conn.send({k:"btn",id:"pass"})};
+
   /* ----- connection (keeps retrying if the TV or wifi blips) ----- */
   const cfg=()=>{const o={debug:0};if(q.get("peerhost")){o.host=q.get("peerhost");o.port=+(q.get("peerport")||9000);o.secure=false;o.path="/"}return o};
   const connect=()=>{
@@ -39,7 +58,7 @@
     peer.on("open",()=>{
       conn=peer.connect("gnight-"+$("code").value.trim().toUpperCase(),{reliable:true});
       conn.on("open",()=>{conn.send({k:"join",pid,name:$("name").value.trim()||"Player"});joined=true;$("who").textContent=$("name").value.trim()||"Player"});
-      conn.on("data",m=>{if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
+      conn.on("data",m=>{if(m&&m.k==="duel")return duel(m);if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
       conn.on("close",()=>{setMode("wait","Reconnecting…");retry=setTimeout(connect,2000)});
       conn.on("error",()=>{});
     });

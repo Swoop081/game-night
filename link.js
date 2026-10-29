@@ -77,6 +77,24 @@
   };
   setInterval(tick,400);
 
+  /* ---------- mirror the duel question to every phone ---------- */
+  let lastQ="",duelOn=false;
+  const mirror=()=>{
+    let d=null;try{d=S.duel}catch(e){}
+    if(!d||!d.q){if(duelOn){duelOn=false;LINK.broadcast({k:"duel",off:1})}return}
+    duelOn=true;
+    const pa=S.players[d.a],pb=S.players[d.b],cat=CATS[d.cat],rv=document.getElementById("reveal"),qe=document.getElementById("q");
+    const qk=qe.className+"|"+qe.innerHTML;
+    const m={k:"duel",cat:cat.icon+" "+cat.name,hint:cat.hint,state:d.state,active:d.active,
+      a:{n:pa.name,t:Math.max(0,d.t.a),T:d.T.a,c:pa.color},b:{n:pb.name,t:Math.max(0,d.t.b),T:d.T.b,c:pb.color},
+      rv:rv&&rv.classList.contains("show")?{c:rv.className,t:rv.textContent}:null};
+    if(qk!==lastQ){lastQ=qk;m.q={c:qe.className,h:qe.innerHTML}}
+    LINK.broadcast(m);
+  };
+  setInterval(mirror,250);
+  LINK.onMessage=(p,m)=>{if(m.k==="btn"&&m.id==="pass"&&p.live){try{if(S.duel&&S.duel.state==="run")hostPass()}catch(e){}}};
+  const resend=()=>{lastQ=""};
+
   /* ---------- speech from phones feeds the same pipeline as the TV's own mic ---------- */
   const onSpeech=(p,m)=>{
     p.lastUid=Math.max(p.lastUid||0,m.uid||0);
@@ -99,7 +117,7 @@
         p=old||{pid:m.pid,lastUid:0,muteUid:0};
         if(old&&old.conn&&old.conn!==conn)try{old.conn.close()}catch(e){}
         p.conn=conn;p.name=String(m.name||"Player").slice(0,16);p.key="";LINK.phones.set(m.pid,p);conn.__pid=m.pid;
-        send(p,{k:"hello",name:p.name});paintChip();if(dlg.style.display==="flex")paintDlg();tick();return;
+        send(p,{k:"hello",name:p.name});resend();paintChip();if(dlg.style.display==="flex")paintDlg();tick();return;
       }
       p=LINK.phones.get(conn.__pid);if(!p)return;
       if(m.k==="sp")onSpeech(p,m);

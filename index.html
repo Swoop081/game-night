@@ -319,6 +319,9 @@ button{cursor:pointer}
 .catpick button{padding:14px;border-radius:14px;background:var(--stage-3);border:1px solid var(--line);font-weight:800;font-size:1.1rem}
 #confetti{position:absolute;inset:0;pointer-events:none;z-index:30}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.minimap{display:grid;gap:2px;width:min(100%,calc(var(--mc,4)*38px));aspect-ratio:var(--mc,4)/var(--mr,3);margin:2px auto 0;opacity:.95}
+.minimap i{border-radius:3px;opacity:.45}.minimap i.hot{opacity:1;box-shadow:0 0 0 2px #fff}.minimap i.e{background:transparent;opacity:0}
+.portrait .minimap{display:none}
 </style>
 </head>
 <body>
@@ -383,6 +386,7 @@ button{cursor:pointer}
       <div class="card" id="card"><div class="q" id="q"></div><div class="reveal" id="reveal"></div></div>
       <div class="mic" id="mic"></div>
       <div class="controls"><button class="btn passb" id="passBtn">Pass</button><button class="btn okb" id="okBtn">✓ Correct</button></div>
+      <div class="minimap" id="minimap" aria-hidden="true"></div>
     </div>
     <div class="side" id="sideB"><span id="avB"></span><span class="role" id="roleB">Defender</span><div class="who" id="nameB"></div><div class="clock" id="clockB"></div><div class="bar"><i id="barB"></i></div></div>
   </div>
@@ -880,11 +884,16 @@ function startDuel(cfg){
   $("sideA").style.setProperty("--pc",a.color);$("sideB").style.setProperty("--pc",b.color);
   const cat=CATS[cfg.cat];$("catName").textContent=`${cat.icon} ${cat.name}`;$("catHint").textContent=cat.hint;
   $("q").className="q";$("q").innerHTML="";$("reveal").className="reveal";
-  show("duel");paintClocks();setButtons(false);
+  show("duel");paintMini(a.id,b.id);paintClocks();setButtons(false);
   try{navigator.wakeLock&&navigator.wakeLock.request("screen").then(l=>wakeLock=l).catch(()=>{})}catch(e){}
   voiceStart();
   let n=3;openOverlay(`<div class="big321" id="c321">3</div>`);SFX.beep();
   const iv=setInterval(()=>{if(!S.duel){clearInterval(iv);return}n--;if(n>0){$("c321").textContent=n;SFX.beep()}else{clearInterval(iv);closeOverlay();SFX.go();S.duel.state="run";if(nextQ()){S.duel.last=performance.now();loop();setButtons(true);$("okBtn").focus({preventScroll:true})}}},800);
+}
+function paintMini(a,b){
+  const m=$("minimap");if(!m||!S.grid)return;const {rows,cols,owner}=S.grid;
+  m.style.gridTemplateColumns=`repeat(${cols},1fr)`;m.style.setProperty("--mc",cols);m.style.setProperty("--mr",rows);
+  m.innerHTML=owner.map(o=>o<0?'<i class="e"></i>':`<i class="${o===a||o===b?"hot":""}" style="background:${S.players[o].color}"></i>`).join("");
 }
 function setButtons(on){$("okBtn").disabled=!on;$("passBtn").disabled=!on}
 function renderQ(){
