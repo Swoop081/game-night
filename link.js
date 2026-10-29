@@ -12,7 +12,7 @@
   let code="";try{code=localStorage.getItem("gn.joinCode")||""}catch(e){}
   if(!/^[A-Z]{4}$/.test(code))code=rnd();
   let orderSeq=0;
-  const LINK=window.LINK={code,phones:new Map(),ready:false};   // phones: pid -> {pid,name,conn,live,lastUid,muteUid,mode}
+  const LINK=window.LINK={code,phones:new Map(),ready:false,round:0};   // phones: pid -> {pid,name,conn,live,lastUid,muteUid,mode}
   /* ---------- event log (ring buffer) so problems can be diagnosed afterwards ---------- */
   const T0=Date.now(),LOGB=[];
   const log=(ev,d)=>{let x="";try{x=d===undefined?"":(typeof d==="string"?d:JSON.stringify(d))}catch(e){}LOGB.push(((Date.now()-T0)/1000).toFixed(2)+"s TV "+ev+" "+x);if(LOGB.length>700)LOGB.shift()};
@@ -81,7 +81,7 @@
       const mode=on?"mic":"wait";
       const sub=on?(act&&matched?"Your turn — say your answer":"Say your answer"):(voiceOn()?(act?act+" is answering":"Waiting…"):"Watch the TV");
       const key=mode+"|"+sub;
-      if(p.key!==key){p.key=key;send(p,{k:"ui",mode,sub});log('ui',{to:p.name,mode,sub})}
+      if(p.key!==key){p.key=key;send(p,{k:"ui",mode,sub,n:LINK.round||0});log('ui',{to:p.name,mode,sub})}
       p.live=on;
     });
   };
@@ -105,30 +105,11 @@
   LINK.onMessage=(p,m)=>{if(m.k==="btn"&&m.id==="pass"&&p.live){try{if(S.duel&&S.duel.state==="run")hostPass()}catch(e){}}};
   const resend=()=>{lastQ=""};
 
-  /* ---------- speech from phones feeds the same pipeline as the TV's own mic ---------- */
-  const wordsOf=t=>norm1(t).replace(/[^a-z0-9' ]+/g," ").split(/\s+/).filter(Boolean);
-  const onSpeech=(p,m)=>{
-    const uid=m.uid||0;p.lastUid=Math.max(p.lastUid||0,uid);
-    let texts=(m.alts||[]).slice(0,2).map(t=>String(t).trim()).filter(Boolean);if(!texts.length)return;
-    p.lastText=texts[0];
-    log('speech',{from:p.name,uid,f:m.f,t:texts[0],live:p.live,voice:voiceOn(),mute:p.muteUid||0});
-    if(!p.live||!voiceOn()){log('  ignored',p.live?'voice off':'not their turn');return}
-    // same utterance as an answer we already took: iOS keeps adding to one running transcript, so only look at the new words
-    if(uid<=(p.muteUid||0)){
-      const st=p.stale||[];
-      texts=texts.map(t=>{const w=wordsOf(t);for(let i=0;i<st.length;i++)if(w[i]!==st[i])return "";return w.slice(st.length).join(" ")}).filter(Boolean);
-      if(!texts.length){log('  ignored','stale words');return}
-    }
-    // unfinished guesses must hold steady for a moment before they count (stops flickery mis-hears from scoring)
-    if(!m.f){const k=norm1(texts[0]),now=Date.now();if(!(p.prevK===k&&now-(p.prevT||0)<1500)){p.prevK=k;p.prevT=now;try{micUI("on",texts[0])}catch(e){}log('  held','unstable partial');return}}
-    log('  -> handler',texts);
-    try{micUI("on",texts[0])}catch(e){}
-    try{V.handler(texts,!!m.f)}catch(e){console.error(e)}
-  };
-  // an answer was accepted: ignore whatever the phones are still saying from that moment
+  /* ---------- speech from phones: handed to the voice bus (voice.js) ---------- */
+  LINK.wordsOf=t=>String(t||"").trim().toLowerCase().replace(/[^a-z0-9' ]+/g," ").split(/\s+/).filter(Boolean);
+  LINK.voiceOn=voiceOn;
+  const onSpeech=(p,m)=>{try{typeof LINK.speech==="function"&&LINK.speech(p,m)}catch(e){log("speech error",String(e))}};
   ["answered","passed","startDuel","endDuel"].forEach(n=>{const f=window[n];if(typeof f==="function")window[n]=function(){try{const d=S.duel;log(n,{q:d&&d.q&&d.q.a,active:d&&d.active,tA:d&&Math.round(d.t.a),tB:d&&Math.round(d.t.b)})}catch(e){}return f.apply(this,arguments)}});
-  const vm=window.voiceMark;
-  if(typeof vm==="function")window.voiceMark=function(){LINK.phones.forEach(p=>{p.muteUid=p.lastUid||0;p.stale=wordsOf(p.lastText||"");p.prevK=""});return vm.apply(this,arguments)};
 
   /* ---------- lobby: phones are the players, in the order they joined ---------- */
   const lobby=()=>[...LINK.phones.values()].filter(p=>p.conn&&(p.conn.open||Date.now()-(p.closedAt||0)<60000)).sort((a,b)=>a.order-b.order);
