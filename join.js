@@ -44,7 +44,7 @@
       conn.on("error",()=>{});
     });
     peer.on("error",e=>{
-      if(e&&e.type==="peer-unavailable"){$("st").textContent=joined?"Reconnecting…":"Can't find that TV code. Check the code on the TV screen.";if(!joined){$("join").classList.remove("hide");$("play").classList.add("hide");$("join").style.display="contents";$("play").style.display="none"}}
+      if(e&&e.type==="peer-unavailable"){$("st").textContent=joined?"Reconnecting…":"Can't find that TV code. Check the code on the TV screen.";if(!joined){$("join").classList.remove("hide");$("play").classList.add("hide")}}
       retry=setTimeout(connect,3000);
     });
   };
@@ -53,7 +53,7 @@
     if(code.length!==4){$("code").focus();return}
     if(!name){$("name").focus();return}
     ls("gn.pname",name);ls("gn.joinCode",code);
-    $("join").style.display="none";$("play").style.display="contents";
+    $("join").classList.add("hide");$("play").classList.remove("hide");
     $("st").textContent="Connecting…";
     // ask for the mic now, while we have a tap, so it never interrupts a turn
     if(SRc){micOK=true}

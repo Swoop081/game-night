@@ -4,7 +4,10 @@
 <style>
 :root{--g:#ffd84a}
 *{box-sizing:border-box}html,body{margin:0;height:100%}
-body{background:linear-gradient(160deg,#150e45,#3a1d8f);color:#fff;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;-webkit-user-select:none;user-select:none}
+body{background:linear-gradient(160deg,#150e45,#3a1d8f);color:#fff;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;}
+.col{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;width:100%}
+input{-webkit-user-select:text;user-select:text}
+button{-webkit-user-select:none;user-select:none}
 h1{margin:0;font-size:1.7rem;letter-spacing:.04em}
 small{opacity:.7;letter-spacing:.2em;font-size:.75rem}
 input{font:700 1.4rem system-ui;padding:14px 16px;border-radius:14px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;text-align:center;width:min(320px,90vw);text-transform:none}
@@ -18,13 +21,13 @@ button{font:800 1.3rem system-ui;padding:16px 34px;border:0;border-radius:999px;
 .hide{display:none!important}
 </style></head><body>
 <small>GAME NIGHT</small>
-<div id="join" style="display:contents">
+<div id="join" class="col">
   <h1>Join the game</h1>
   <input id="code" class="code" placeholder="TV code" maxlength="4" autocapitalize="characters" autocomplete="off">
   <input id="name" placeholder="Your name" maxlength="16" autocomplete="off">
   <button id="go">Join</button>
 </div>
-<div id="play" class="hide" style="display:contents">
+<div id="play" class="col hide">
   <div id="big">🎤</div>
   <h1 id="who"></h1>
   <div id="st"></div>
