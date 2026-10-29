@@ -1,7 +1,9 @@
 /* Android TV app only: the TV's WebView has no Web Speech API, so bridge to the native recogniser.
    Does nothing in a normal browser. */
 (function(){
-  if(!window.GNAndroid||window.SpeechRecognition||window.webkitSpeechRecognition)return;
+  const TV=/GameNightTV/.test(navigator.userAgent);
+  // the TV's WebView can expose a speech API that never delivers anything, so inside the TV app always use the native recogniser
+  if(!window.GNAndroid||(!TV&&(window.SpeechRecognition||window.webkitSpeechRecognition)))return;
   let ok=false;try{ok=GNAndroid.available()}catch(e){}
   if(!ok)return;
   let cur=null,fresh=true,accept=true,emptyIdle=0,rearmT=null;
@@ -29,5 +31,5 @@
   function SR(){this.lang="en-AU";this.active=false}
   SR.prototype.start=function(){if(this.active)return;cur=this;this.active=true;this.results=[];fresh=true;this.onstart&&this.onstart();rearm(350)};
   SR.prototype.stop=SR.prototype.abort=function(){clearTimeout(rearmT);if(!this.active)return;this.active=false;GNAndroid.stop();label('🎤 Speak')};
-  window.SpeechRecognition=SR;
+  ["SpeechRecognition","webkitSpeechRecognition"].forEach(k=>{try{Object.defineProperty(window,k,{value:SR,configurable:true,writable:true})}catch(e){try{window[k]=SR}catch(e2){}}});
 })();

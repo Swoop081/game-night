@@ -87,7 +87,7 @@ function vs(a,b,o={}){
   const el=document.createElement("div");el.className="skvs";if(o.font)el.style.setProperty("--skf",o.font);
   const half=(p,k,role)=>`<div class="half ${k}" style="--pc:${p.color}">${avatarHTML(p,"xl")}<div class="who"><small>${e(role||"")}</small><b>${e(p.name)}</b></div></div>`;
   el.innerHTML=`${half(a,"a",o.roleA)}<div class="mid"><div class="vsx">VS</div>${o.cat?`<div class="cat">${e(o.cat)}</div>`:""}</div>${half(b,"b",o.roleB)}`;
-  layer.appendChild(el);sting("vs");setTimeout(()=>flash("#fff"),620);
+  layer.appendChild(el);sting("vs");setTimeout(()=>flash("rgba(255,255,255,.55)"),620);
   return new Promise(res=>{let done=false;const fin=()=>{if(done)return;done=true;el.classList.add("out");setTimeout(()=>{el.remove();res()},340)};el.onclick=fin;setTimeout(fin,o.ms)});
 }
 function flash(color){const f=document.createElement("div");f.className="skflash";if(color)f.style.setProperty("--skfc",color);layer.appendChild(f);setTimeout(()=>f.remove(),500)}
@@ -100,4 +100,4 @@ function podium(rows,o={}){
 }
 window.SK={bumper,vs,flash,shake,podium,sting};
 })();
-(function(){const h=document.getElementById("hub");if(!h)return;const v=document.createElement("div");v.textContent="build 29 Oct · voice v4";v.style.cssText="position:absolute;right:14px;bottom:8px;font-size:.62rem;letter-spacing:.12em;color:rgba(162,157,208,.45);pointer-events:none";h.appendChild(v)})();
+(function(){const h=document.getElementById("hub");if(!h)return;const v=document.createElement("div");v.textContent="build 29 Oct · voice v5";v.style.cssText="position:absolute;right:14px;bottom:8px;font-size:.62rem;letter-spacing:.12em;color:rgba(162,157,208,.45);pointer-events:none";h.appendChild(v)})();
