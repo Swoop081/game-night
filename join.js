@@ -33,7 +33,7 @@
   /* ----- the duel question mirrored from the TV ----- */
   const fmt=t=>t<10000?(t/1000).toFixed(1):String(Math.ceil(t/1000));
   const duel=m=>{
-    const D=$("duel");
+    const D=$("duel");if(!D||!$("pass"))return;
     if(m.off){D.classList.add("hide");$("play").classList.remove("hide");return}
     D.classList.remove("hide");$("play").classList.add("hide");
     [["a",$("pa")],["b",$("pb")]].forEach(([k,el])=>{
@@ -47,7 +47,7 @@
     $("dst").textContent=mode==="mic"?"🎤 Your turn — say the answer":($("st").textContent||"");
     $("dheard").textContent=mode==="mic"?$("heard").textContent:"";
   };
-  $("pass").onclick=()=>{if(conn&&conn.open)conn.send({k:"btn",id:"pass"})};
+  if($("pass"))$("pass").onclick=()=>{if(conn&&conn.open)conn.send({k:"btn",id:"pass"})};
 
   /* ----- connection (keeps retrying if the TV or wifi blips) ----- */
   const cfg=()=>{const o={debug:0};if(q.get("peerhost")){o.host=q.get("peerhost");o.port=+(q.get("peerport")||9000);o.secure=false;o.path="/"}return o};
