@@ -380,62 +380,6 @@ Green plant that grows on shady rocks and logs|moss
 Feathery plant with fronds that never flowers|fern
 Big yellow flower and Kansas state flower|sunflower
 Plant famous for growing to the sky in a fairytale|beanstalk|bean|bean stalk`},
-{id:"characters",name:"Movie Characters",kind:"text",hint:"Name the movie",icon:"🎞️",d:`Simba and Nala|the lion king|lion king
-Darth Vader|star wars
-Buzz Lightyear and Woody|toy story
-Donkey and Princess Fiona|shrek
-Elsa and Anna|frozen
-Captain Jack Sparrow|pirates of the caribbean
-Lieutenant Dan and Bubba|forrest gump
-Hermione Granger|harry potter
-Frodo Baggins|lord of the rings|the lord of the rings|the hobbit
-Marty McFly and Doc Brown|back to the future
-Kevin McCallister|home alone
-Rocky Balboa|rocky|creed
-Dorothy and Toto|the wizard of oz|wizard of oz
-Nemo and Dory|finding nemo|finding dory
-Jack and Rose|titanic
-Neo and Trinity|the matrix|matrix
-Lightning McQueen|cars
-Mike and Sulley|monsters inc|monsters university
-Remy the rat|ratatouille
-Carl and Russell|up
-Olaf the snowman|frozen
-Maui|moana
-Hiccup and Toothless|how to train your dragon
-Baymax|big hero 6
-Po the panda|kung fu panda
-Gru and the Minions|despicable me|minions
-Sid the sloth|ice age
-Joy and Sadness|inside out
-Miguel and Hector|coco
-Judy Hopps and Nick Wilde|zootopia|zootropolis
-Mr Incredible|the incredibles|incredibles
-Ariel and Sebastian|the little mermaid|little mermaid
-Belle and the Beast|beauty and the beast
-Jasmine and the Genie|aladdin
-Mowgli and Baloo|the jungle book|jungle book
-Luke Skywalker|star wars
-Tony Stark|iron man|the avengers|avengers
-Katniss Everdeen|the hunger games|hunger games
-Bella and Edward|twilight
-Charlie Bucket|charlie and the chocolate factory|willy wonka|wonka
-John McClane|die hard
-Mick Dundee|crocodile dundee
-Max Rockatansky|mad max|fury road
-Farmer Hoggett|babe
-Peter Venkman|ghostbusters
-Ellen Ripley|alien|aliens
-Sarah Connor|the terminator|terminator
-Barbie and Ken|barbie
-Shrek's ogre swamp neighbour Lord Farquaad|shrek
-Woody and Jessie|toy story
-Wall-E and Eve|wall e|walle
-Tinker Bell|peter pan
-Aragorn and Gandalf|lord of the rings|the lord of the rings|the hobbit
-Ferris Bueller|ferris buellers day off|ferris bueller
-Elle Woods|legally blonde
-Mia Thermopolis|the princess diaries|princess diaries`},
 {id:"sports",name:"Sports",kind:"emoji",hint:"Name the sport",icon:"🏀",d:`⚽|soccer|football|footy
 🏀|basketball|netball
 🏈|american football|gridiron|nfl|football
@@ -511,7 +455,7 @@ Mia Thermopolis|the princess diaries|princess diaries`},
 🦽|wheelchair
 🛷|sled|sledge|toboggan|sleigh
 🚡|aerial tramway|cable car|gondola`},
-{id:"people",name:"Who Am I?",kind:"emoji",hint:"Name the job or character",icon:"🧑‍🚀",d:`🧑‍🚒|firefighter|fireman|firie|fire fighter
+{id:"people",name:"Jobs & Costumes",kind:"emoji",hint:"Name the job or character",icon:"🧑‍🚀",d:`🧑‍🚒|firefighter|fireman|firie|fire fighter
 👮|police officer|policeman|policewoman|cop|police
 🧑‍⚕️|doctor|nurse|gp|health worker
 🧑‍🍳|chef|cook|baker
@@ -596,24 +540,10 @@ Mia Thermopolis|the princess diaries|princess diaries`},
 🏔️|mountain|mountains|snowy mountain
 🏝️|island|desert island
 🏜️|desert
-🌵|cactus
-🌴|palm tree|palm|coconut tree
-🌲|pine tree|tree|christmas tree|fir tree
-🌳|tree|oak tree
-🍁|maple leaf|leaf|autumn leaf
-🌻|sunflower
-🌹|rose
-🌷|tulip
-🌸|cherry blossom|blossom|flower|sakura
-🌺|hibiscus|flower
-🌼|daisy|flower
-🍀|four leaf clover|clover|shamrock
 🌍|earth|world|globe|planet|planet earth
 ☄️|comet|meteor|asteroid|shooting star
 🪐|saturn|planet
 💧|water drop|droplet|raindrop|water|drop|tear
-🌱|seedling|sprout|plant|seed
-🍂|autumn leaves|leaves|fallen leaves
 🌫️|fog|mist|haze|smoke
 🌕|full moon|moon
 🌅|sunrise|sunset
@@ -783,7 +713,7 @@ Float|sink
 Hello|goodbye|bye
 Yes|no
 Top|bottom`},
-{id:"landmarks",name:"Landmark Cities",kind:"text",hint:"Which city is it in?",icon:"🗼",d:`Eiffel Tower|paris
+{id:"landmarks",name:"Landmarks",kind:"text",hint:"Where is it?",icon:"🗼",d:`Eiffel Tower|paris
 Colosseum|rome
 Big Ben|london
 Statue of Liberty|new york|new york city|nyc
@@ -834,7 +764,10 @@ Charles Bridge|prague
 Grand Palace|bangkok
 Shibuya Crossing|tokyo
 Merlion|singapore
-Burj Al Arab|dubai`},
+Burj Al Arab|dubai
+Uluru|northern territory|uluru|alice springs|nt
+The Twelve Apostles (Victoria)|victoria|great ocean road|vic
+Great Barrier Reef|queensland|qld|cairns|great barrier reef`},
 {id:"sayings",name:"Finish the Saying",kind:"text",hint:"Finish it",icon:"💬",d:`Actions speak louder than…|words
 The early bird catches the…|worm
 Don't count your chickens before they…|hatch|hatched|are hatched
@@ -970,87 +903,6 @@ NRL · Bulldogs|canterbury|canterbury bankstown|bankstown
 NRL · Wests Tigers|wests|western suburbs|balmain
 NRL · Warriors|new zealand|auckland|nz warriors
 NRL · Dolphins|redcliffe|the dolphins|dolphins`},
-{id:"babies",name:"Baby Animals",kind:"text",hint:"What's the baby called?",icon:"🐣",d:`Kangaroo|joey
-Cat|kitten|kitty
-Dog|puppy|pup
-Cow|calf
-Sheep|lamb
-Horse|foal|colt|filly
-Goat|kid
-Pig|piglet
-Duck|duckling
-Goose|gosling
-Frog|tadpole|froglet
-Swan|cygnet
-Bear|cub
-Lion|cub
-Deer|fawn
-Owl|owlet|chick
-Eagle|eaglet|chick
-Koala|joey
-Hen|chick
-Butterfly|caterpillar|larva
-Seal|pup|cub
-Whale|calf
-Elephant|calf
-Rabbit|kit|kitten|bunny
-Fox|kit|cub|pup
-Hare|leveret
-Turkey|poult|chick
-Pigeon|squab|chick
-Zebra|foal
-Donkey|foal
-Wombat|joey
-Shark|pup
-Tiger|cub
-Dolphin|calf
-Chicken|chick
-Platypus|puggle
-Echidna|puggle
-Giraffe|calf
-Penguin|chick
-Fish|fry
-Spider|spiderling
-Camel|calf
-Hippo|calf
-Beaver|kit`},
-{id:"faces",name:"Famous Faces",kind:"photo",hint:"Who is it?",icon:"🌟",d:`Taylor Swift|taylor swift|swift|taylor
-Barack Obama|barack obama|obama
-Albert Einstein|albert einstein|einstein
-Marilyn Monroe|marilyn monroe|monroe|marilyn
-Elvis Presley|elvis presley|elvis|presley
-Michael Jackson|michael jackson|jackson
-Beyoncé|beyonce|beyonce knowles
-Kylie Minogue|kylie minogue|kylie|minogue
-Steve Irwin|steve irwin|irwin|crocodile hunter
-Cathy Freeman|cathy freeman|freeman
-Shane Warne|shane warne|warne|warnie
-Don Bradman|don bradman|bradman|the don
-Ash Barty|ash barty|ashleigh barty|barty
-Usain Bolt|usain bolt|bolt
-Serena Williams|serena williams|serena
-LeBron James|lebron james|lebron
-Michael Jordan|michael jordan|jordan
-Cristiano Ronaldo|cristiano ronaldo|ronaldo
-Lionel Messi|lionel messi|messi
-Elizabeth II|queen elizabeth|elizabeth|the queen|queen elizabeth the second
-Charles III|king charles|charles|prince charles
-Diana, Princess of Wales|princess diana|diana|lady di
-Nelson Mandela|nelson mandela|mandela
-Abraham Lincoln|abraham lincoln|lincoln
-Ed Sheeran|ed sheeran|sheeran
-Adele|adele
-Lady Gaga|lady gaga|gaga
-Rihanna|rihanna
-Oprah Winfrey|oprah winfrey|oprah
-Bill Gates|bill gates|gates
-Steve Jobs|steve jobs|jobs
-Freddie Mercury|freddie mercury|mercury
-John Lennon|john lennon|lennon
-Muhammad Ali|muhammad ali|ali
-Roger Federer|roger federer|federer
-Dolly Parton|dolly parton|dolly
-Elton John|elton john|elton`},
 {id:"actors",name:"Famous Actors",kind:"photo",hint:"Name the actor",icon:"",d:`Tom Hanks|tom hanks|hanks
 Tom Cruise|tom cruise|cruise
 Brad Pitt|brad pitt|pitt
@@ -1128,6 +980,732 @@ Drew Barrymore|drew barrymore|barrymore
 Whoopi Goldberg|whoopi goldberg|whoopi|goldberg
 Charlie Chaplin|charlie chaplin|chaplin
 Rowan Atkinson|rowan atkinson|atkinson|mr bean`},
+{id:"musicians",name:"Famous Musicians",kind:"photo",hint:"Who is it?",icon:"",d:`Taylor Swift|taylor swift|swift|taylor
+Michael Jackson|michael jackson|mj|jackson
+Beyoncé|beyonce|beyonce knowles
+Kylie Minogue|kylie minogue|kylie|minogue
+Ed Sheeran|ed sheeran|sheeran
+Adele|adele
+Lady Gaga|lady gaga|gaga
+Rihanna|rihanna
+Freddie Mercury|freddie mercury|mercury
+John Lennon|john lennon|lennon
+Elton John|elton john|elton
+Dolly Parton|dolly parton|dolly
+Elvis Presley|elvis presley|elvis|presley
+Madonna (entertainer)|madonna
+Prince (musician)|prince
+Bob Dylan|bob dylan|dylan
+David Bowie|david bowie|bowie
+Bruce Springsteen|bruce springsteen|springsteen|the boss
+Mick Jagger|mick jagger|jagger
+Paul McCartney|paul mccartney|mccartney
+Ringo Starr|ringo starr|ringo
+Whitney Houston|whitney houston|whitney
+Celine Dion|celine dion|dion
+Shakira|shakira
+Katy Perry|katy perry
+Ariana Grande|ariana grande|ariana
+Billie Eilish|billie eilish|eilish
+Harry Styles|harry styles|styles
+Justin Bieber|justin bieber|bieber
+Bruno Mars|bruno mars
+The Weeknd|the weeknd|weeknd
+Eminem|eminem
+Jay-Z|jay z|jay-z|jayz
+Snoop Dogg|snoop dogg|snoop
+Dua Lipa|dua lipa|dua
+Olivia Rodrigo|olivia rodrigo|rodrigo
+Sia (musician)|sia
+Troye Sivan|troye sivan|troye
+Delta Goodrem|delta goodrem|delta
+Keith Urban|keith urban|urban
+Jimmy Barnes|jimmy barnes|barnesy
+John Farnham|john farnham|farnham
+Nick Cave|nick cave
+Johnny Cash|johnny cash|cash
+Bob Marley|bob marley|marley
+Stevie Wonder|stevie wonder
+Tina Turner|tina turner
+Cher|cher
+Lizzo|lizzo
+Post Malone|post malone
+Ozzy Osbourne|ozzy osbourne|ozzy
+Kanye West|kanye west|kanye|ye`},
+{id:"sportstars",name:"Sports Stars",kind:"photo",hint:"Who is it?",icon:"",d:`Michael Jordan|michael jordan|jordan
+LeBron James|lebron james|lebron
+Kobe Bryant|kobe bryant|kobe
+Stephen Curry|stephen curry|steph curry|curry
+Cristiano Ronaldo|cristiano ronaldo|ronaldo
+Lionel Messi|lionel messi|messi
+David Beckham|david beckham|beckham
+Neymar|neymar
+Kylian Mbappé|kylian mbappe|mbappe
+Sam Kerr|sam kerr|kerr
+Usain Bolt|usain bolt|bolt
+Cathy Freeman|cathy freeman|freeman
+Ian Thorpe|ian thorpe|thorpe|thorpedo
+Dawn Fraser|dawn fraser
+Michael Phelps|michael phelps|phelps
+Simone Biles|simone biles|biles
+Serena Williams|serena williams|serena
+Venus Williams|venus williams|venus
+Roger Federer|roger federer|federer
+Rafael Nadal|rafael nadal|nadal|rafa
+Novak Djokovic|novak djokovic|djokovic|novak
+Andy Murray|andy murray|murray
+Ash Barty|ash barty|barty|ashleigh barty
+Lleyton Hewitt|lleyton hewitt|hewitt
+Nick Kyrgios|nick kyrgios|kyrgios
+Shane Warne|shane warne|warne
+Don Bradman|don bradman|bradman|donald bradman
+Ricky Ponting|ricky ponting|ponting
+Steve Smith (cricketer)|steve smith|smith
+Pat Cummins|pat cummins|cummins
+Virat Kohli|virat kohli|kohli
+Sachin Tendulkar|sachin tendulkar|tendulkar|sachin
+Ben Stokes|ben stokes|stokes
+Tiger Woods|tiger woods|woods|tiger
+Rory McIlroy|rory mcilroy|mcilroy
+Greg Norman|greg norman|norman
+Lewis Hamilton|lewis hamilton|hamilton
+Max Verstappen|max verstappen|verstappen
+Daniel Ricciardo|daniel ricciardo|ricciardo
+Michael Schumacher|michael schumacher|schumacher
+Muhammad Ali|muhammad ali|ali
+Tom Brady|tom brady|brady
+Patrick Mahomes|patrick mahomes|mahomes
+Kelly Slater|kelly slater|slater
+Lance Franklin|lance franklin|buddy franklin|buddy
+Patty Mills|patty mills|mills`},
+{id:"icons",name:"Icons & Leaders",kind:"photo",hint:"Who is it?",icon:"",d:`Albert Einstein|albert einstein|einstein
+Marilyn Monroe|marilyn monroe|monroe|marilyn
+Barack Obama|barack obama|obama
+Donald Trump|donald trump|trump
+Joe Biden|joe biden|biden
+Elizabeth II|queen elizabeth|queen elizabeth ii|the queen|elizabeth
+Charles III|king charles|king charles iii|charles
+Diana, Princess of Wales|princess diana|diana|lady di
+Prince William, Duke of Cambridge|prince william|william
+Prince Harry, Duke of Sussex|prince harry|harry
+Nelson Mandela|nelson mandela|mandela
+Abraham Lincoln|abraham lincoln|lincoln|abe lincoln
+Winston Churchill|winston churchill|churchill
+Martin Luther King Jr.|martin luther king|martin luther king jr|mlk|king
+Mahatma Gandhi|mahatma gandhi|gandhi
+Napoleon|napoleon|napoleon bonaparte|bonaparte
+Oprah Winfrey|oprah winfrey|oprah
+Bill Gates|bill gates|gates
+Steve Jobs|steve jobs|jobs
+Elon Musk|elon musk|musk
+Mark Zuckerberg|mark zuckerberg|zuckerberg|zuck
+Jeff Bezos|jeff bezos|bezos
+Stephen Hawking|stephen hawking|hawking
+Charles Darwin|charles darwin|darwin
+Isaac Newton|isaac newton|newton
+Leonardo da Vinci|leonardo da vinci|da vinci|davinci|leonardo
+Walt Disney|walt disney|disney
+Mother Teresa|mother teresa|teresa
+Pope Francis|pope francis|francis|the pope|pope
+Neil Armstrong|neil armstrong|armstrong
+Greta Thunberg|greta thunberg|thunberg|greta
+David Attenborough|david attenborough|attenborough|sir david attenborough
+Steve Irwin|steve irwin|irwin|crocodile hunter
+Ned Kelly|ned kelly|kelly
+Bob Hawke|bob hawke|hawke
+John Howard|john howard|howard
+Julia Gillard|julia gillard|gillard
+Kevin Rudd|kevin rudd|rudd
+Scott Morrison|scott morrison|morrison|scomo
+Anthony Albanese|anthony albanese|albanese|albo
+Jacinda Ardern|jacinda ardern|ardern|jacinda
+Justin Trudeau|justin trudeau|trudeau
+Emmanuel Macron|emmanuel macron|macron
+Vladimir Putin|vladimir putin|putin`},
+{id:"dogs",name:"Dog Breeds",kind:"photo",hint:"What breed?",icon:"",d:`Labrador Retriever|labrador|labrador retriever|lab
+Golden Retriever|golden retriever|golden
+German Shepherd|german shepherd|alsatian
+Poodle|poodle
+Bulldog|bulldog|english bulldog
+French Bulldog|french bulldog|frenchie
+Beagle|beagle
+Rottweiler|rottweiler|rottie
+Dachshund|dachshund|sausage dog
+Pug|pug
+Boxer (dog)|boxer
+Border Collie|border collie|collie
+Siberian Husky|husky|siberian husky
+Chihuahua (dog)|chihuahua
+Great Dane|great dane
+Doberman Pinscher|doberman|dobermann|doberman pinscher
+Cavalier King Charles Spaniel|cavalier|cavalier king charles spaniel|king charles spaniel
+Shih Tzu|shih tzu
+Pomeranian dog|pomeranian|pom
+Australian Cattle Dog|cattle dog|blue heeler|australian cattle dog|heeler
+Kelpie (dog)|kelpie|australian kelpie
+Staffordshire Bull Terrier|staffy|staffordshire bull terrier|staffordshire terrier
+Jack Russell Terrier|jack russell|jack russell terrier
+Saint Bernard (dog)|saint bernard|st bernard
+Dalmatian (dog)|dalmatian
+Corgi|corgi|welsh corgi|pembroke welsh corgi
+Greyhound|greyhound
+Samoyed (dog)|samoyed
+Akita (dog)|akita|akita inu
+Shiba Inu|shiba inu|shiba
+Bernese Mountain Dog|bernese mountain dog|bernese
+Maltese dog|maltese
+Yorkshire Terrier|yorkshire terrier|yorkie
+Cocker Spaniel|cocker spaniel
+Basset Hound|basset hound|basset
+Bloodhound|bloodhound
+Afghan Hound|afghan hound|afghan
+Australian Shepherd|australian shepherd|aussie shepherd
+Weimaraner|weimaraner
+Border Terrier|border terrier`},
+{id:"bugs",name:"Bugs & Insects",kind:"photo",hint:"Name the bug",icon:"",d:`Ant|ant
+Honey bee|bee|honey bee|honeybee
+Wasp|wasp
+Housefly|fly|housefly|house fly
+Mosquito|mosquito|mozzie
+Ladybird|ladybird|ladybug|lady bug
+Butterfly|butterfly
+Moth|moth
+Dragonfly|dragonfly
+Grasshopper|grasshopper
+Cricket (insect)|cricket
+Cockroach|cockroach|roach
+Beetle|beetle
+Stag beetle|stag beetle
+Praying mantis|praying mantis|mantis
+Stick insect|stick insect
+Caterpillar|caterpillar
+Spider|spider
+Scorpion|scorpion
+Centipede|centipede
+Millipede|millipede
+Snail|snail
+Earwig|earwig
+Termite|termite
+Flea|flea
+Tick|tick
+Firefly|firefly|glow worm
+Cicada|cicada
+Locust|locust
+Dung beetle|dung beetle
+Hornet|hornet
+Bumblebee|bumblebee|bumble bee
+Silverfish|silverfish
+Louse|louse|head louse|lice
+Aphid|aphid
+Weevil|weevil
+Crab spider|crab spider`},
+{id:"fruitveg",name:"Fruit & Veg",kind:"photo",hint:"Name it",icon:"",d:`Apple|apple
+Banana|banana
+Orange (fruit)|orange
+Strawberry|strawberry
+Watermelon|watermelon
+Pineapple|pineapple
+Mango|mango
+Grape|grape|grapes
+Kiwifruit|kiwi|kiwifruit|kiwi fruit
+Lemon|lemon
+Lime (fruit)|lime
+Pear|pear
+Peach|peach
+Cherry|cherry
+Blueberry|blueberry
+Raspberry|raspberry
+Coconut|coconut
+Avocado|avocado
+Pomegranate|pomegranate
+Passionfruit|passionfruit|passion fruit
+Papaya|papaya|paw paw|pawpaw
+Dragon fruit|dragon fruit|pitaya
+Carrot|carrot
+Broccoli|broccoli
+Cauliflower|cauliflower
+Potato|potato
+Sweet potato|sweet potato
+Tomato|tomato
+Cucumber|cucumber
+Capsicum|capsicum|bell pepper|pepper
+Pumpkin|pumpkin
+Corn on the cob|corn|sweetcorn|sweet corn
+Onion|onion
+Garlic|garlic
+Mushroom|mushroom
+Lettuce|lettuce
+Cabbage|cabbage
+Spinach|spinach
+Celery|celery
+Eggplant|eggplant|aubergine
+Zucchini|zucchini|courgette
+Beetroot|beetroot|beet
+Radish|radish
+Asparagus|asparagus
+Brussels sprout|brussels sprout|brussels sprouts|sprout|sprouts
+Peas|peas|pea|green peas
+Chili pepper|chilli|chili|chilli pepper`},
+{id:"gear",name:"Sports Equipment",kind:"photo",hint:"Name the equipment",icon:"",d:`Cricket bat|cricket bat|bat
+Cricket ball|cricket ball
+Tennis racket|tennis racket|racket|racquet|tennis racquet
+Golf club|golf club|club|driver
+Boxing glove|boxing glove|boxing gloves|glove
+Baseball glove|baseball glove|mitt|catchers mitt
+Baseball bat|baseball bat
+Hockey stick|hockey stick|stick
+Surfboard|surfboard|surf board|board
+Skateboard|skateboard
+Dumbbell|dumbbell|weight|dumbell
+Bowling ball|bowling ball
+Badminton racket|badminton racket
+Shuttlecock|shuttlecock|birdie
+Rugby ball|rugby ball
+American football (ball)|american football|gridiron ball
+Basketball (ball)|basketball
+Volleyball (ball)|volleyball
+Football (ball)|soccer ball|football
+Table tennis|ping pong|table tennis|table tennis bat|ping pong paddle
+Snooker|snooker cue|cue|pool cue
+Archery|bow|bow and arrow|archery bow
+Fishing rod|fishing rod|rod
+Ice skates|ice skates|skates|ice skate
+Roller skates|roller skates|rollerskates
+Ski|skis|ski
+Snowboard|snowboard
+Kayak|kayak
+Diving mask|snorkel|mask|diving mask|goggles
+Javelin throw|javelin
+Discus throw|discus
+Rowing|oar|oars|paddle
+Dartboard|dartboard|dart board|darts
+Boomerang|boomerang
+Bicycle helmet|helmet|bike helmet`},
+{id:"cars",name:"Famous Cars",kind:"photo",hint:"Name the car",icon:"",d:`Ford Mustang|mustang|ford mustang
+Volkswagen Beetle|beetle|vw beetle|volkswagen beetle
+Mini (marque)|mini|mini cooper
+Toyota Hilux|hilux|toyota hilux
+Toyota Corolla|corolla|toyota corolla
+Ford Falcon (Australia)|falcon|ford falcon
+Holden Commodore|commodore|holden commodore
+Holden Monaro|monaro|holden monaro
+Jeep Wrangler|jeep wrangler|wrangler|jeep
+Land Rover Defender|defender|land rover defender|land rover
+Tesla Model S|tesla|tesla model s|model s
+Porsche 911|porsche 911|911|porsche
+Ferrari F40|ferrari f40|f40|ferrari
+Lamborghini Countach|countach|lamborghini countach|lamborghini
+Rolls-Royce Phantom|rolls royce|rolls-royce|rolls royce phantom
+Bentley Continental GT|bentley
+Aston Martin DB5|aston martin|db5|aston martin db5
+Chevrolet Corvette|corvette|chevrolet corvette|chevy corvette
+Chevrolet Camaro|camaro|chevrolet camaro|chevy camaro
+Dodge Challenger|challenger|dodge challenger
+Nissan Skyline GT-R|skyline|gtr|gt-r|nissan skyline
+Mazda MX-5|mx5|mx-5|miata|mazda mx-5
+Subaru Impreza WRX|wrx|subaru wrx|impreza|subaru
+Mercedes-Benz G-Class|g wagon|g-wagon|g class|mercedes g wagon
+Citroën 2CV|2cv|citroen 2cv
+Fiat 500|fiat 500|fiat
+DeLorean DMC-12|delorean|dmc-12
+Volkswagen Kombi|kombi|volkswagen kombi|vw kombi|combi van
+Ford Model T|model t|ford model t
+Rolls-Royce Silver Ghost|silver ghost
+Jaguar E-Type|e-type|jaguar e-type|e type|jaguar
+BMW M3|bmw m3|m3|bmw
+Audi R8|audi r8|r8|audi
+Toyota Prius|prius|toyota prius
+Isuzu D-Max|d-max|dmax|isuzu dmax
+Ford Ranger|ford ranger|ranger
+Toyota LandCruiser|landcruiser|land cruiser|toyota landcruiser`},
+{id:"paintings",name:"Famous Paintings",kind:"photo",hint:"Name the painting",icon:"",d:`Mona Lisa|mona lisa
+The Starry Night|starry night|the starry night
+The Scream|the scream|scream
+The Last Supper (Leonardo)|the last supper|last supper
+Girl with a Pearl Earring|girl with a pearl earring|pearl earring
+The Persistence of Memory|persistence of memory|the persistence of memory|melting clocks
+The Birth of Venus|birth of venus|the birth of venus
+Guernica (Picasso)|guernica
+American Gothic|american gothic
+The Kiss (Klimt)|the kiss|klimt the kiss
+The Night Watch|the night watch|night watch
+Las Meninas|las meninas
+Impression, Sunrise|impression sunrise|impression, sunrise
+Water Lilies|water lilies
+The Great Wave off Kanagawa|great wave|the great wave|great wave off kanagawa
+Sunflowers (Van Gogh series)|sunflowers
+The Creation of Adam|creation of adam|the creation of adam
+Whistler's Mother|whistlers mother|whistler's mother
+Nighthawks (Hopper)|nighthawks
+Café Terrace at Night|cafe terrace at night|cafe terrace
+Liberty Leading the People|liberty leading the people
+The Garden of Earthly Delights|garden of earthly delights|the garden of earthly delights
+A Sunday Afternoon on the Island of La Grande Jatte|la grande jatte|sunday afternoon on the island of la grande jatte
+The Son of Man|son of man|the son of man
+Campbell's Soup Cans|campbells soup cans|campbell's soup cans|soup cans
+Marilyn Diptych|marilyn diptych
+Wanderer above the Sea of Fog|wanderer above the sea of fog
+Lady with an Ermine|lady with an ermine
+Self-Portrait with Bandaged Ear|self portrait with bandaged ear|bandaged ear
+Vitruvian Man|vitruvian man
+Washington Crossing the Delaware (painting)|washington crossing the delaware
+School of Athens|school of athens|the school of athens
+The Hay Wain|the hay wain|hay wain
+The Blue Boy|the blue boy|blue boy
+Dogs Playing Poker|dogs playing poker`},
+{id:"instruments",name:"Musical Instruments",kind:"photo",hint:"Name the instrument",icon:"",d:`Acoustic guitar|guitar|acoustic guitar
+Electric guitar|electric guitar
+Bass guitar|bass guitar|bass
+Piano|piano
+Violin|violin|fiddle
+Cello|cello
+Double bass|double bass|upright bass
+Viola|viola
+Harp|harp
+Flute|flute
+Clarinet|clarinet
+Oboe|oboe
+Bassoon|bassoon
+Saxophone|saxophone|sax
+Trumpet|trumpet
+Trombone|trombone
+French horn|french horn|horn
+Tuba|tuba
+Drum kit|drum kit|drums|drum set
+Snare drum|snare drum|snare
+Xylophone|xylophone
+Triangle (musical instrument)|triangle
+Tambourine|tambourine
+Maracas|maracas
+Accordion|accordion
+Harmonica|harmonica|mouth organ
+Banjo|banjo
+Ukulele|ukulele|uke
+Mandolin|mandolin
+Bagpipes|bagpipes|bagpipe
+Didgeridoo|didgeridoo|didge
+Organ (music)|organ|pipe organ
+Recorder (musical instrument)|recorder
+Cymbal|cymbal|cymbals
+Bongo drum|bongo|bongos
+Synthesizer|synthesizer|synth|keyboard
+Sitar|sitar
+Kazoo|kazoo
+Castanets|castanets`},
+{id:"dinos",name:"Dinosaurs & Prehistoric",kind:"photo",hint:"Name the creature",icon:"",d:`Tyrannosaurus|t rex|tyrannosaurus|tyrannosaurus rex|trex
+Triceratops|triceratops
+Stegosaurus|stegosaurus
+Velociraptor|velociraptor|raptor
+Brachiosaurus|brachiosaurus
+Diplodocus|diplodocus
+Spinosaurus|spinosaurus
+Ankylosaurus|ankylosaurus
+Pteranodon|pteranodon
+Allosaurus|allosaurus
+Parasaurolophus|parasaurolophus
+Iguanodon|iguanodon
+Apatosaurus|apatosaurus|brontosaurus
+Pachycephalosaurus|pachycephalosaurus
+Compsognathus|compsognathus
+Dilophosaurus|dilophosaurus
+Gallimimus|gallimimus
+Carnotaurus|carnotaurus
+Giganotosaurus|giganotosaurus
+Plesiosaur|plesiosaur|plesiosaurus
+Mosasaurus|mosasaurus
+Archaeopteryx|archaeopteryx
+Woolly mammoth|woolly mammoth|mammoth
+Smilodon|sabre tooth tiger|saber tooth tiger|smilodon|sabre-toothed cat|saber-toothed cat|sabertooth
+Megalodon|megalodon`},
+{id:"wonders",name:"Natural Wonders",kind:"photo",hint:"Name the place",icon:"",d:`Uluru|uluru|ayers rock
+Great Barrier Reef|great barrier reef
+Grand Canyon|grand canyon
+Mount Everest|everest|mount everest
+Niagara Falls|niagara falls|niagara
+Victoria Falls|victoria falls
+Angel Falls|angel falls
+Mount Fuji|mount fuji|fuji
+Matterhorn|matterhorn
+Mount Kilimanjaro|kilimanjaro|mount kilimanjaro
+Aurora|aurora|northern lights|aurora borealis|southern lights
+Dead Sea|dead sea
+Giant's Causeway|giants causeway|giant's causeway
+Ha Long Bay|ha long bay|halong bay
+Amazon River|amazon|amazon river
+Sahara|sahara|sahara desert
+Yellowstone National Park|yellowstone
+Yosemite National Park|yosemite
+Zion National Park|zion
+Antelope Canyon|antelope canyon
+Great Blue Hole|great blue hole|blue hole
+Mount Rushmore|mount rushmore|rushmore
+Cliffs of Moher|cliffs of moher
+Pamukkale|pamukkale
+Plitvice Lakes National Park|plitvice lakes|plitvice
+Iguazu Falls|iguazu falls|iguazu|iguacu falls
+Mount Vesuvius|vesuvius|mount vesuvius
+The Twelve Apostles (Victoria)|twelve apostles|12 apostles
+Wave Rock|wave rock
+Kata Tjuta|kata tjuta|the olgas|olgas
+Bungle Bungle Range|bungle bungles|bungle bungle
+Whitehaven Beach|whitehaven beach
+Milford Sound|milford sound
+Mount Cook|mount cook|aoraki
+Lake Louise (Alberta)|lake louise
+Fingal's Cave|fingals cave|fingal's cave`},
+{id:"movietitle",name:"Finish the Movie Title",kind:"text",hint:"Fill in the blank",icon:"",d:`Finding ___|nemo
+___ Park|jurassic
+Toy ___|story
+The Lion ___|king
+Beauty and the ___|beast
+The Wizard of ___|oz
+Mary ___|poppins
+The Sound of ___|music
+Raiders of the Lost ___|ark
+Back to the ___|future
+Home ___|alone
+The Silence of the ___|lambs
+Saving Private ___|ryan
+The Princess ___|bride
+Mrs ___|doubtfire
+Forrest ___|gump
+Ferris Bueller's Day ___|off
+The Godfather ___ II|part|part two
+Edward ___hands|scissor
+Lord of the ___|rings
+Harry Potter and the ___ Stone|philosophers|philosopher's|sorcerers|sorcerer's
+Pirates of the ___|caribbean
+The Hunger ___|games
+Star ___|wars
+Monsters, ___|inc|incorporated
+Mad Max: ___ Road|fury
+Crocodile ___|dundee
+The Great ___|gatsby
+Pretty ___|woman
+Top ___|gun
+Breakfast at ___'s|tiffany|tiffanys
+Dirty ___|dancing
+Singin' in the ___|rain
+Gone with the ___|wind
+Planet of the ___|apes
+Indiana Jones and the Temple of ___|doom
+The Truman ___|show
+Night at the ___|museum
+Ice ___|age
+Kung Fu ___|panda
+How to Train Your ___|dragon
+Charlie and the Chocolate ___|factory
+Fast and ___|furious`},
+{id:"songtitle",name:"Finish the Song Title",kind:"text",hint:"Fill in the blank",icon:"",d:`Bohemian ___|rhapsody
+Hotel ___|california
+Stairway to ___|heaven
+Sweet Child O' ___|mine
+Smells Like Teen ___|spirit
+Billie ___|jean
+Don't Stop ___|believin|believing|believin'
+Livin' on a ___|prayer
+We Will Rock ___|you
+Another One Bites the ___|dust
+Hey ___|jude
+Let It ___|be
+Yellow ___|submarine
+Eye of the ___|tiger
+Shake It ___|off
+Girls Just Want to Have ___|fun
+Wake Me Up Before You ___|go-go|go go|gogo
+Take On ___|me
+Dancing ___|queen
+Rolling in the ___|deep
+Shape of ___|you
+Blinding ___|lights
+Great Balls of ___|fire
+Jailhouse ___|rock
+Take Me Home, Country ___|roads
+Sweet Home ___|alabama
+Highway to ___|hell
+Back in ___|black
+Crazy Little Thing Called ___|love
+Purple ___|rain
+Material ___|girl
+Single ___|ladies
+Uptown ___|funk
+Livin' la ___|loca`},
+{id:"artists",name:"Who Sang It?",kind:"text",hint:"Name the artist",icon:"",d:`Bohemian Rhapsody|queen
+Billie Jean|michael jackson|mj
+Thriller|michael jackson|mj
+Like a Prayer|madonna
+Purple Rain|prince
+Imagine|john lennon|lennon
+Hey Jude|the beatles|beatles
+Hotel California|eagles|the eagles
+Stairway to Heaven|led zeppelin|zeppelin
+Smells Like Teen Spirit|nirvana
+Sweet Child O' Mine|guns n roses|guns n' roses|guns and roses
+Livin' on a Prayer|bon jovi
+Dancing Queen|abba
+Rolling in the Deep|adele
+Hello|adele
+Shape of You|ed sheeran|sheeran
+Shake It Off|taylor swift|taylor
+Blank Space|taylor swift|taylor
+Umbrella|rihanna
+Single Ladies|beyonce|beyoncé
+Bad Guy|billie eilish|eilish
+Blinding Lights|the weeknd|weeknd
+Uptown Funk|bruno mars|mark ronson
+Poker Face|lady gaga|gaga
+Firework|katy perry
+Roar|katy perry
+Toxic|britney spears|britney
+Baby One More Time|britney spears|britney
+Wannabe|spice girls|the spice girls
+I Will Always Love You|whitney houston|dolly parton
+My Heart Will Go On|celine dion
+Waka Waka|shakira
+Hips Don't Lie|shakira
+Wonderwall|oasis
+Yellow|coldplay
+Viva la Vida|coldplay
+Mr Brightside|the killers|killers
+Seven Nation Army|the white stripes|white stripes
+Back in Black|ac/dc|acdc|ac dc
+Highway to Hell|ac/dc|acdc|ac dc
+Down Under|men at work
+You're the Voice|john farnham|farnham
+Khe Sanh|cold chisel
+Flame Trees|cold chisel
+Treaty|yothu yindi
+Dumb Things|paul kelly
+Sweet Caroline|neil diamond
+Jolene|dolly parton
+Ring of Fire|johnny cash
+Jailhouse Rock|elvis presley|elvis
+Hound Dog|elvis presley|elvis
+Superstition|stevie wonder
+Respect|aretha franklin|aretha
+Space Oddity|david bowie|bowie
+Born in the U.S.A.|bruce springsteen|springsteen
+Satisfaction|the rolling stones|rolling stones
+Dont Stop Believin'|journey`},
+{id:"pairs",name:"Famous Pairs",kind:"text",hint:"Fill in the blank",icon:"",d:`Batman and ___|robin
+Salt and ___|pepper
+Romeo and ___|juliet
+Bonnie and ___|clyde
+Tom and ___|jerry
+Laurel and ___|hardy
+Fish and ___|chips
+Bread and ___|butter
+Peanut butter and ___|jelly|jam
+Rock and ___|roll
+Pen and ___|paper
+Mickey and ___|minnie
+Fred and ___|ginger
+Antony and ___|cleopatra
+Adam and ___|eve
+Sonny and ___|cher
+Ant and ___|dec
+Hall and ___|oates
+Simon and ___|garfunkel
+Starsky and ___|hutch
+Thelma and ___|louise
+Lady and the ___|tramp
+Pinky and the ___|brain
+Wallace and ___|gromit
+Ben and ___|jerry
+Cheech and ___|chong
+Bert and ___|ernie
+Beavis and ___|butthead|butt-head
+Mario and ___|luigi
+Sherlock Holmes and Doctor ___|watson
+Hansel and ___|gretel
+Jack and ___|jill
+Punch and ___|judy
+Mork and ___|mindy
+Donny and ___|marie
+Dolce and ___|gabbana
+Marks and ___|spencer|spencers
+Procter and ___|gamble
+Lilo and ___|stitch
+Gilbert and ___|sullivan`},
+{id:"currencies",name:"Currencies",kind:"text",hint:"What currency?",icon:"",d:`Japan|yen
+United Kingdom|pound|pound sterling|british pound|pounds
+Europe|euro|euros
+United States|dollar|us dollar|usd|american dollar
+India|rupee|indian rupee
+China|yuan|renminbi|rmb
+Russia|rouble|ruble
+Mexico|peso|mexican peso
+Brazil|real|brazilian real
+South Africa|rand
+Switzerland|franc|swiss franc
+Sweden|krona|swedish krona
+Norway|krone|norwegian krone
+Denmark|krone|danish krone
+Poland|zloty|złoty
+Thailand|baht
+South Korea|won|korean won
+Turkey|lira|turkish lira
+Saudi Arabia|riyal|saudi riyal
+Israel|shekel|new shekel
+Nigeria|naira
+Kenya|shilling|kenyan shilling
+Vietnam|dong|đồng
+Indonesia|rupiah
+Malaysia|ringgit
+Hungary|forint
+Czech Republic|koruna|czech koruna
+Peru|sol|nuevo sol
+Bangladesh|taka
+Cambodia|riel
+Morocco|dirham
+United Arab Emirates|dirham|uae dirham
+Australia|australian dollar|dollar|aussie dollar
+New Zealand|new zealand dollar|nz dollar|kiwi dollar|dollar
+Canada|canadian dollar|dollar|loonie`},
+{id:"foreign",name:"Translate It",kind:"text",hint:"What does it mean?",icon:"",d:`Gracias (Spanish)|thank you|thanks
+Hola (Spanish)|hello|hi
+Adiós (Spanish)|goodbye|bye
+Por favor (Spanish)|please
+Agua (Spanish)|water
+Perro (Spanish)|dog
+Gato (Spanish)|cat
+Casa (Spanish)|house|home
+Amigo (Spanish)|friend
+Bonjour (French)|hello|good day|good morning
+Merci (French)|thank you|thanks
+Au revoir (French)|goodbye|bye
+Chat (French)|cat
+Chien (French)|dog
+Pain (French)|bread
+Fromage (French)|cheese
+Pomme (French)|apple
+Ciao (Italian)|hello|bye|goodbye
+Grazie (Italian)|thank you|thanks
+Buongiorno (Italian)|good morning|good day|hello
+Arrivederci (Italian)|goodbye|see you later
+Danke (German)|thank you|thanks
+Guten Tag (German)|good day|hello|good afternoon
+Auf Wiedersehen (German)|goodbye|bye
+Ja (German)|yes
+Nein (German)|no
+Wasser (German)|water
+Arigato (Japanese)|thank you|thanks
+Konnichiwa (Japanese)|hello|good afternoon|good day
+Sayonara (Japanese)|goodbye|farewell|bye
+Sakura (Japanese)|cherry blossom|cherry blossoms
+Ni hao (Mandarin)|hello|hi
+Xie xie (Mandarin)|thank you|thanks
+Namaste (Hindi)|hello|greetings|i bow to you
+Aloha (Hawaiian)|hello|goodbye|love
+Kia ora (Māori)|hello|hi|good health
+Hakuna matata (Swahili)|no worries|no problem|no troubles
+Sí (Spanish)|yes
+Uno (Spanish)|one
+Trois (French)|three
+Otto (Italian)|eight
+Cerveza (Spanish)|beer
+Café (French)|coffee
+Bambino (Italian)|baby|child`},
 {id:"ausanimals",name:"Australian Animals",kind:"photo",hint:"Name the animal",icon:"🦘",d:`Red kangaroo|kangaroo|red kangaroo|roo
 Koala|koala|koala bear
 Platypus|platypus|duck billed platypus
@@ -1171,91 +1749,6 @@ Great white shark|great white|shark|great white shark
 Wedge-tailed eagle|wedge tailed eagle|eagle|wedgie
 Tawny frogmouth|tawny frogmouth|frogmouth|owl
 Cane toad|cane toad|toad`},
-{id:"auslandmarks",name:"Australian Landmarks",kind:"photo",hint:"Name the landmark",icon:"🏞️",d:`Sydney Opera House|opera house|sydney opera house
-Sydney Harbour Bridge|harbour bridge|sydney harbour bridge|coathanger
-Uluru|uluru|ayers rock
-The Twelve Apostles (Victoria)|twelve apostles|12 apostles
-Bondi Beach|bondi|bondi beach
-Big Banana|big banana
-Big Pineapple|big pineapple
-Federation Square|federation square|fed square
-Flinders Street railway station|flinders street station|flinders street
-Melbourne Cricket Ground|mcg|melbourne cricket ground
-Parliament House, Canberra|parliament house|parliament
-Australian War Memorial|war memorial|australian war memorial
-Kata Tjuta|kata tjuta|the olgas|olgas
-Wave Rock|wave rock
-Pinnacles Desert|pinnacles|the pinnacles|pinnacles desert
-Port Arthur, Tasmania|port arthur
-Cradle Mountain|cradle mountain
-Wineglass Bay|wineglass bay
-Whitehaven Beach|whitehaven beach|whitehaven
-Shrine of Remembrance|shrine of remembrance|the shrine
-Story Bridge|story bridge
-Q1 (building)|q1|q1 tower
-Sydney Tower|sydney tower|centrepoint tower|centrepoint
-Luna Park Sydney|luna park
-Three Sisters (Australia)|three sisters
-Purnululu National Park|bungle bungles|bungle bungle|purnululu
-Daintree Rainforest|daintree|daintree rainforest
-Lake Hillier|lake hillier|pink lake
-Hosier Lane|hosier lane
-Royal Exhibition Building|royal exhibition building|exhibition building
-Big Merino|big merino|big sheep
-Great Barrier Reef|great barrier reef|barrier reef|reef
-Eureka Tower|eureka tower|eureka
-Fremantle Prison|fremantle prison
-Sovereign Hill|sovereign hill
-Puffing Billy Railway|puffing billy
-Great Ocean Road|great ocean road
-Mount Kosciuszko|kosciuszko|mount kosciuszko|kosi
-Kings Park, Western Australia|kings park
-Big Prawn|big prawn`},
-{id:"plots",name:"Famous Movies",kind:"text",hint:"Name the movie",icon:"🍿",d:`A shark terrorises a beach town|jaws
-A ship hits an iceberg on its first voyage|titanic
-Dinosaurs are brought back to life on an island|jurassic park|jurassic world
-A boy wizard goes to Hogwarts|harry potter
-Toys come to life when humans leave the room|toy story
-A clownfish dad crosses the ocean to find his son|finding nemo
-A lion cub runs away after his father dies|the lion king|lion king
-A teenager travels back to 1955 in a DeLorean|back to the future
-A boy left home alone at Christmas fights burglars|home alone
-Hobbits travel to destroy a powerful ring|lord of the rings|the lord of the rings
-A man runs across America and meets presidents|forrest gump
-Hackers discover reality is a computer simulation|the matrix|matrix
-A stranded alien wants to phone home|et|e t
-Two royal sisters, one with ice powers|frozen
-A green ogre rescues a princess for a lord|shrek
-Five emotions live inside a girl's head|inside out
-A rat dreams of being a chef in Paris|ratatouille
-An old man flies his house away with balloons|up
-A lonely robot cleans up a deserted Earth|wall e|walle
-A Philadelphia boxer gets a shot at the title|rocky
-Superheroes assemble to stop Thanos|avengers|the avengers|avengers endgame|infinity war
-A farm pig wants to be a sheepdog|babe
-A bushman from the outback visits New York|crocodile dundee
-Teens are forced to fight in a televised arena|the hunger games|hunger games
-A tornado sweeps a girl and her dog to a magical land|the wizard of oz|wizard of oz
-A doll leaves her perfect pink world for the real one|barbie
-Scientists start a ghost-catching business in New York|ghostbusters
-A pirate chases his stolen ship, the Black Pearl|pirates of the caribbean
-A cop fights terrorists at an office Christmas party|die hard
-A mermaid trades her voice for legs|the little mermaid|little mermaid
-A Polynesian girl sails to restore a stolen heart|moana
-A family of superheroes hides their powers|the incredibles|incredibles
-Astronauts travel through a wormhole to save humanity|interstellar
-A dad hunts for a Turbo-Man toy on Christmas Eve|jingle all the way
-A fake substitute teacher forms a kids' rock band|school of rock
-A British spy with the code number 007|james bond|bond|skyfall|casino royale
-A farm boy learns the Force to fight the Empire|star wars
-A weatherman relives the same day over and over|groundhog day
-An archaeologist races Nazis for the Ark of the Covenant|indiana jones|raiders of the lost ark
-A cyborg is sent back in time to kill Sarah Connor|the terminator|terminator
-A road warrior survives a desert wasteland|mad max|fury road
-A golden ticket wins a tour of a chocolate factory|charlie and the chocolate factory|willy wonka|wonka
-A Pixar car learns there's more to life than winning|cars
-A Mexican boy visits the Land of the Dead|coco
-A panda becomes a kung fu master|kung fu panda`},
 {id:"christmas",name:"Christmas Songs",kind:"text",hint:"Finish the song title",icon:"🎄",d:`Jingle…|bells
 Rudolph the Red-Nosed…|reindeer
 Frosty the…|snowman

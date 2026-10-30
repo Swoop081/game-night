@@ -2,7 +2,7 @@
    A photo starts blurred and comes into focus as the clock runs. Name it early for more points. */
 (function(){
 const IS_TV=/GameNightTV/.test(navigator.userAgent);
-const SETS=[["faces","🌟","Famous Faces"],["ausanimals","🦘","Aussie Animals"],["auslandmarks","🏞️","Aussie Landmarks"]].filter(s=>CATS[s[0]]);
+const SETS=[["actors","🎬","Famous Actors"],["musicians","🎤","Musicians"],["sportstars","🏅","Sports Stars"],["icons","🌟","Icons & Leaders"],["ausanimals","🦘","Aussie Animals"],["dogs","🐕","Dog Breeds"],["wonders","🏞️","Natural Wonders"]].filter(s=>CATS[s[0]]);
 const CFG={count:2,rounds:3,secs:20,sets:SETS.map(s=>s[0])};
 try{const j=JSON.parse(localStorage.getItem("gn.pb")||"null");if(j){Object.assign(CFG,j);CFG.sets=(CFG.sets||[]).filter(x=>CATS[x]);if(!CFG.sets.length)CFG.sets=SETS.map(s=>s[0])}}catch(e){}
 const saveCfg=()=>{try{localStorage.setItem("gn.pb",JSON.stringify(CFG))}catch(e){}};

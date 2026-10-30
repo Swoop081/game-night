@@ -34,7 +34,6 @@
     grocery:it=>base(it.a),
     bunnings:it=>base(it.a),
     plants:it=>base(it.a),
-    babies:it=>base(it.p),
     landmarks:it=>base(it.p),
     pokemon:it=>base(it.a),
     videogames:it=>base(it.a)

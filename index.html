@@ -444,7 +444,7 @@ button{cursor:pointer}
 <canvas id="confetti" hidden></canvas>
 </div>
 
-<script src="questions.js?v=25"></script>
+<script src="questions.js?v=26"></script>
 <script>
 /* =================== CATEGORIES =================== */
 const CATS={};
@@ -465,14 +465,15 @@ GN_RAW.forEach(c=>{
 });
 const CAT_IDS=Object.keys(CATS);
 const GROUPS=[
- ["Entertainment",["actors","faces","movies","plots","characters","videogames","pokemon"]],
- ["Animals & nature",["animals","babies","plants","weather"]],
- ["Geography",["flags","capitals","countries","landmarks"]],
- ["Aussie",["slang","footy","ausanimals","auslandmarks","bunnings"]],
- ["Food & shopping",["food","fastfood","grocery"]],
- ["Sport",["sports","nba"]],
- ["Everyday things",["people","objects","transport","colours"]],
- ["Words & numbers",["opposites","sayings","scramble","roman","times","elements"]],
+ ["Entertainment",["actors","musicians","movies","movietitle","songtitle","artists","videogames","pokemon"]],
+ ["People & history",["icons","paintings","dinos"]],
+ ["Animals & nature",["animals","dogs","bugs","plants","weather","wonders"]],
+ ["Places",["flags","capitals","countries","landmarks"]],
+ ["Aussie",["slang","footy","ausanimals","bunnings"]],
+ ["Food & shopping",["food","fruitveg","fastfood","grocery"]],
+ ["Sport",["sports","sportstars","gear","nba"]],
+ ["Everyday things",["people","objects","transport","cars","instruments","colours"]],
+ ["Words & numbers",["foreign","pairs","sayings","opposites","scramble","currencies","roman","times","elements"]],
  ["Seasonal",["christmas","halloween"]]];
 (function(){const listed=new Set(GROUPS.flatMap(g=>g[1]));const rest=CAT_IDS.filter(c=>!listed.has(c));if(rest.length)GROUPS.push(["More",rest]);GROUPS.forEach(g=>g[1]=g[1].filter(c=>CATS[c]))})();
 function catOptions(sel){return GROUPS.map(([g,ids])=>`<optgroup label="${g}">${ids.map(id=>`<option value="${id}"${sel===id?" selected":""}>${CATS[id].icon} ${CATS[id].name}</option>`).join("")}</optgroup>`).join("")}
@@ -1235,26 +1236,26 @@ window.__gnBack=()=>{
 if(/GameNightTV/.test(navigator.userAgent))addEventListener("load",()=>document.querySelectorAll('.seg[id*="Screen"]').forEach(e=>{const h=e.closest(".hubtop,.field")||e.parentElement;h.style.display="none"}));
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
-<script src="avatars.js?v=25"></script>
-<script src="prices.js?v=25"></script>
-<script src="comeondown.js?v=25"></script>
-<script src="nameten-data.js?v=25"></script>
-<script src="nameten.js?v=25"></script>
-<script src="feud-data.js?v=25"></script>
-<script src="feud.js?v=25"></script>
-<script src="trivial-data.js?v=25"></script>
-<script src="trivial.js?v=25"></script>
-<script src="picblitz.js?v=25"></script>
-<script src="wheel-data.js?v=25"></script>
-<script src="wheel.js?v=25"></script>
-<script src="showkit.js?v=25"></script>
-<script src="floor-theme.js?v=25"></script>
-<script src="leaderboard.js?v=25"></script>
-<script src="link.js?v=25"></script>
-<script src="voice.js?v=25"></script>
-<script src="tvlook.js?v=25"></script>
-<script src="photos.js?v=25"></script>
-<script src="autoupdate.js?v=25"></script>
-<script src="tvui.js?v=25"></script>
+<script src="avatars.js?v=26"></script>
+<script src="prices.js?v=26"></script>
+<script src="comeondown.js?v=26"></script>
+<script src="nameten-data.js?v=26"></script>
+<script src="nameten.js?v=26"></script>
+<script src="feud-data.js?v=26"></script>
+<script src="feud.js?v=26"></script>
+<script src="trivial-data.js?v=26"></script>
+<script src="trivial.js?v=26"></script>
+<script src="picblitz.js?v=26"></script>
+<script src="wheel-data.js?v=26"></script>
+<script src="wheel.js?v=26"></script>
+<script src="showkit.js?v=26"></script>
+<script src="floor-theme.js?v=26"></script>
+<script src="leaderboard.js?v=26"></script>
+<script src="link.js?v=26"></script>
+<script src="voice.js?v=26"></script>
+<script src="tvlook.js?v=26"></script>
+<script src="photos.js?v=26"></script>
+<script src="autoupdate.js?v=26"></script>
+<script src="tvui.js?v=26"></script>
 </body>
 </html>
