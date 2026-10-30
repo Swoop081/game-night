@@ -1063,6 +1063,81 @@ Roger Federer|roger federer|federer
 Rowan Atkinson|rowan atkinson|mr bean|atkinson
 Dolly Parton|dolly parton|dolly
 Elton John|elton john|elton`},
+{id:"actors",name:"Famous Actors",kind:"photo",hint:"Name the actor",icon:"",d:`Tom Hanks|tom hanks|hanks
+Tom Cruise|tom cruise|cruise
+Brad Pitt|brad pitt|pitt
+Leonardo DiCaprio|leonardo dicaprio|dicaprio|leo
+Johnny Depp|johnny depp|depp
+Robert Downey Jr.|robert downey jr|robert downey|downey|rdj
+Chris Hemsworth|chris hemsworth|hemsworth
+Hugh Jackman|hugh jackman|jackman
+Russell Crowe|russell crowe|crowe
+Heath Ledger|heath ledger|ledger
+Will Smith|will smith
+Denzel Washington|denzel washington|denzel|washington
+Morgan Freeman|morgan freeman|freeman
+Samuel L. Jackson|samuel l jackson|samuel jackson|samuel l. jackson
+Keanu Reeves|keanu reeves|keanu|reeves
+Arnold Schwarzenegger|arnold schwarzenegger|schwarzenegger|arnie
+Sylvester Stallone|sylvester stallone|stallone|sly
+Harrison Ford|harrison ford
+Jack Nicholson|jack nicholson|nicholson
+Al Pacino|al pacino|pacino
+Robert De Niro|robert de niro|de niro|deniro
+Clint Eastwood|clint eastwood|eastwood
+Anthony Hopkins|anthony hopkins|hopkins
+Ian McKellen|ian mckellen|mckellen
+Daniel Radcliffe|daniel radcliffe|radcliffe
+Daniel Craig|daniel craig
+Christian Bale|christian bale|bale
+Matt Damon|matt damon|damon
+Ben Affleck|ben affleck|affleck
+George Clooney|george clooney|clooney
+Ryan Reynolds|ryan reynolds|reynolds
+Ryan Gosling|ryan gosling|gosling
+Dwayne Johnson|dwayne johnson|the rock|rock
+Jim Carrey|jim carrey|carrey
+Robin Williams|robin williams
+Eddie Murphy|eddie murphy
+Adam Sandler|adam sandler|sandler
+Ben Stiller|ben stiller|stiller
+Mel Gibson|mel gibson
+Joaquin Phoenix|joaquin phoenix|phoenix
+Timothée Chalamet|timothee chalamet|chalamet
+Tom Holland|tom holland
+Robert Pattinson|robert pattinson|pattinson
+Zac Efron|zac efron|efron
+Liam Neeson|liam neeson|neeson
+Sean Connery|sean connery|connery
+Nicole Kidman|nicole kidman|kidman
+Margot Robbie|margot robbie|robbie
+Cate Blanchett|cate blanchett|blanchett
+Naomi Watts|naomi watts
+Rebel Wilson|rebel wilson
+Julia Roberts|julia roberts
+Meryl Streep|meryl streep|streep
+Angelina Jolie|angelina jolie|jolie
+Jennifer Lawrence|jennifer lawrence
+Jennifer Aniston|jennifer aniston|aniston
+Scarlett Johansson|scarlett johansson|johansson
+Emma Watson|emma watson
+Emma Stone|emma stone
+Anne Hathaway|anne hathaway|hathaway
+Sandra Bullock|sandra bullock|bullock
+Reese Witherspoon|reese witherspoon|witherspoon
+Natalie Portman|natalie portman|portman
+Kate Winslet|kate winslet|winslet
+Audrey Hepburn|audrey hepburn|hepburn
+Zendaya|zendaya
+Halle Berry|halle berry
+Charlize Theron|charlize theron|theron
+Sigourney Weaver|sigourney weaver
+Judi Dench|judi dench|dench
+Helen Mirren|helen mirren|mirren
+Lucy Liu|lucy liu
+Cameron Diaz|cameron diaz|diaz
+Drew Barrymore|drew barrymore|barrymore
+Whoopi Goldberg|whoopi goldberg|whoopi|goldberg`},
 {id:"ausanimals",name:"Australian Animals",kind:"photo",hint:"Name the animal",icon:"🦘",d:`Red kangaroo|kangaroo|red kangaroo|roo
 Koala|koala|koala bear
 Platypus|platypus|duck billed platypus
