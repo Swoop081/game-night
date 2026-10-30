@@ -1021,13 +1021,7 @@ Marilyn Monroe|marilyn monroe|monroe|marilyn
 Elvis Presley|elvis presley|elvis|presley
 Michael Jackson|michael jackson|jackson
 Beyoncé|beyonce|beyonce knowles
-Leonardo DiCaprio|leonardo dicaprio|dicaprio|leo
-Tom Hanks|tom hanks|hanks
-Hugh Jackman|hugh jackman|jackman
-Nicole Kidman|nicole kidman|kidman
 Kylie Minogue|kylie minogue|kylie|minogue
-Chris Hemsworth|chris hemsworth|hemsworth
-Margot Robbie|margot robbie|robbie
 Steve Irwin|steve irwin|irwin|crocodile hunter
 Cathy Freeman|cathy freeman|freeman
 Shane Warne|shane warne|warne|warnie
@@ -1044,23 +1038,17 @@ Charles III|king charles|charles|prince charles
 Diana, Princess of Wales|princess diana|diana|lady di
 Nelson Mandela|nelson mandela|mandela
 Abraham Lincoln|abraham lincoln|lincoln
-Dwayne Johnson|dwayne johnson|the rock|rock
 Ed Sheeran|ed sheeran|sheeran
 Adele|adele
 Lady Gaga|lady gaga|gaga
 Rihanna|rihanna
-Keanu Reeves|keanu reeves|keanu
-Will Smith|will smith
 Oprah Winfrey|oprah winfrey|oprah
 Bill Gates|bill gates|gates
 Steve Jobs|steve jobs|jobs
-Charlie Chaplin|charlie chaplin|chaplin
-Audrey Hepburn|audrey hepburn|hepburn
 Freddie Mercury|freddie mercury|mercury
 John Lennon|john lennon|lennon
 Muhammad Ali|muhammad ali|ali
 Roger Federer|roger federer|federer
-Rowan Atkinson|rowan atkinson|mr bean|atkinson
 Dolly Parton|dolly parton|dolly
 Elton John|elton john|elton`},
 {id:"actors",name:"Famous Actors",kind:"photo",hint:"Name the actor",icon:"",d:`Tom Hanks|tom hanks|hanks
@@ -1137,7 +1125,9 @@ Helen Mirren|helen mirren|mirren
 Lucy Liu|lucy liu
 Cameron Diaz|cameron diaz|diaz
 Drew Barrymore|drew barrymore|barrymore
-Whoopi Goldberg|whoopi goldberg|whoopi|goldberg`},
+Whoopi Goldberg|whoopi goldberg|whoopi|goldberg
+Charlie Chaplin|charlie chaplin|chaplin
+Rowan Atkinson|rowan atkinson|atkinson|mr bean`},
 {id:"ausanimals",name:"Australian Animals",kind:"photo",hint:"Name the animal",icon:"🦘",d:`Red kangaroo|kangaroo|red kangaroo|roo
 Koala|koala|koala bear
 Platypus|platypus|duck billed platypus
