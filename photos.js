@@ -34,9 +34,7 @@
     grocery:it=>base(it.a),
     bunnings:it=>base(it.a),
     plants:it=>base(it.a),
-    landmarks:it=>base(it.p),
-    pokemon:it=>base(it.a),
-    videogames:it=>base(it.a)
+    landmarks:it=>base(it.p)
   };
   const CONTAIN={flags:1,capitals:1};
   Object.keys(bySpec).forEach(id=>{

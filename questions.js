@@ -1342,8 +1342,6 @@ Liberty Leading the People|liberty leading the people
 The Garden of Earthly Delights|garden of earthly delights|the garden of earthly delights
 A Sunday Afternoon on the Island of La Grande Jatte|la grande jatte|sunday afternoon on the island of la grande jatte
 The Son of Man|son of man|the son of man
-Campbell's Soup Cans|campbells soup cans|campbell's soup cans|soup cans
-Marilyn Diptych|marilyn diptych
 Wanderer above the Sea of Fog|wanderer above the sea of fog
 Lady with an Ermine|lady with an ermine
 Self-Portrait with Bandaged Ear|self portrait with bandaged ear|bandaged ear
@@ -1351,8 +1349,7 @@ Vitruvian Man|vitruvian man
 Washington Crossing the Delaware (painting)|washington crossing the delaware
 School of Athens|school of athens|the school of athens
 The Hay Wain|the hay wain|hay wain
-The Blue Boy|the blue boy|blue boy
-Dogs Playing Poker|dogs playing poker`},
+The Blue Boy|the blue boy|blue boy`},
 {id:"instruments",name:"Musical Instruments",kind:"photo",hint:"Name the instrument",icon:"",d:`Acoustic guitar|guitar|acoustic guitar
 Electric guitar|electric guitar
 Bass guitar|bass guitar|bass
@@ -1834,87 +1831,6 @@ Pumpkin King of Halloween Town|jack skellington|jack
 The friendly ghost|casper
 Green ghost in Ghostbusters who eats everything|slimer
 What kids say at the door on Halloween|trick or treat`},
-{id:"pokemon",name:"Pokémon",kind:"text",hint:"Name the Pokémon",icon:"⚡",d:`Electric mouse and Ash's best friend|pikachu
-Fire lizard starter with a flame on its tail|charmander
-Grass starter with a bulb on its back|bulbasaur
-Water starter turtle|squirtle
-Huge orange fire-breathing dragon|charizard
-Pink balloon that sings you to sleep|jigglypuff
-Giant sleepy Pokémon that blocks roads|snorlax
-Psychic clone created in a lab|mewtwo
-Tiny pink psychic Pokémon, ancestor of all|mew
-Brown fox with many evolutions|eevee
-Fish that can only splash around|magikarp
-Fierce sea serpent that evolves from Magikarp|gyarados
-Purple ghost with a huge grin|gengar
-Team Rocket's talking cat|meowth
-Giant rock snake|onix
-Yellow duck with a constant headache|psyduck
-Spoon-bending psychic Pokémon|alakazam|kadabra|abra
-Four-armed fighting Pokémon|machamp|machoke|machop
-Orange Pokémon that Pikachu evolves into|raichu
-Baby Pokémon that evolves into Pikachu|pichu
-Legendary ice bird|articuno
-Legendary electric bird|zapdos
-Legendary fire bird|moltres
-Purple blob that can copy any Pokémon|ditto
-Pink nurse helper with an egg|chansey|blissey
-Ghost in a homemade Pikachu disguise|mimikyu
-Owl grass starter from Alola|rowlet
-Blue crocodile water starter|totodile
-Blue jackal that reads auras|lucario
-Green caterpillar that becomes Butterfree|caterpie
-Looks just like a Poké Ball|voltorb|electrode
-Floating rock with arms|geodude
-Friendly orange dragon that evolves from Dragonair|dragonite
-Big fire dog Pokémon|arcanine|growlithe
-Gentle sea creature that ferries people across water|lapras
-Electric sheep Pokémon|mareep|ampharos|flaaffy
-Pikachu's Gen 3 lookalike cheerleaders|plusle and minun|plusle|minun
-Pink fairy with a curly tail that loves the moon|clefairy|clefable
-Bat Pokémon found in every cave|zubat|golbat
-Mouse with a sandy shell that rolls into a ball|sandshrew|sandslash`},
-{id:"videogames",name:"Video Games",kind:"text",hint:"Name it",icon:"🎮",d:`Plumber who rescues Princess Peach|mario|super mario
-Mario's taller brother in green|luigi
-Blue hedgehog who runs really fast|sonic|sonic the hedgehog
-Hero in a green tunic in The Legend of Zelda|link
-Yellow circle that eats dots and ghosts|pac man|pacman
-Game where you build in a world of blocks|minecraft
-Minecraft's green creature that explodes|creeper
-Falling blocks puzzle game from Russia|tetris
-Battle royale where you build forts|fortnite
-Gorilla who throws barrels|donkey kong
-Mario's green dinosaur friend|yoshi
-Mario's spiky turtle enemy|bowser
-Game where you catch creatures in balls|pokemon
-Crime game series set in Los Santos|grand theft auto|gta
-Birds launched at pigs with a slingshot|angry birds
-Swipe to slice fruit with a blade|fruit ninja
-Run from a guard along train tracks|subway surfers
-Island life game with Tom Nook|animal crossing
-Space soldier called Master Chief|halo
-Life game where you control little people|the sims|sims
-Sony's games console|playstation|ps5|ps4
-Microsoft's games console|xbox
-Nintendo console you can take on the go|switch|nintendo switch
-Find the impostor among your crewmates|among us
-Kart racing with banana peels and shells|mario kart
-Shoot rows of aliens marching down the screen|space invaders
-Bouncing ball and paddles, one of the first video games|pong
-Pink puffball who inhales enemies|kirby
-Frog crossing busy roads and rivers|frogger
-Lara Croft's game series|tomb raider
-EA's football game series|fifa|ea fc|ea sports fc
-Online platform full of obbies|roblox
-Nintendo fighting game where Mario fights Pikachu|super smash bros|smash bros|smash
-Mario's greedy rival in yellow and purple|wario
-Luigi hunts ghosts with a vacuum|luigis mansion
-Fighting game famous for "Hadouken"|street fighter
-Fighting game famous for "Finish him!"|mortal kombat
-Orange bandicoot in jeans|crash|crash bandicoot
-Purple dragon hero on PlayStation|spyro
-Princess Mario keeps rescuing|peach|princess peach
-Plumber series where the ghost Boo appears|mario|super mario`},
 {id:"nba",name:"NBA",kind:"text",hint:"Name the team's city or the player",icon:"🏀",d:`Lakers|los angeles|la
 Clippers|los angeles|la
 Celtics|boston
