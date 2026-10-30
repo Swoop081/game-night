@@ -7,3 +7,4 @@ echo $N > version.txt
 
 sed -i "s/\"build [0-9]*\"/\"build $N\"/" showkit.js
 sed -i "s/const JB_BUILD=[0-9]*;/const JB_BUILD=$N;/" join.html
+sed -i "s/join\.js?v=[0-9]*/join.js?v=$N/" join.html

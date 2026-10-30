@@ -212,8 +212,9 @@ function onVoice(texts,final){
 
 /* ---------- game flow ---------- */
 function startGame(){
+  const LL=window.LINK&&LINK.pull&&LINK.pull(1,8);if(LL)CFG.count=LL.length;
   S.count=CFG.count;ensureSlots();save();saveCfg();
-  NT.players=[];for(let i=0;i<CFG.count;i++)NT.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],pts:0,slot:i,got:[]});
+  NT.players=[];for(let i=0;i<CFG.count;i++)NT.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],pts:0,slot:i,got:[],pid:(LL&&S.pids&&S.pids[i])||null});
   NT.turn=-1;NT.total=CFG.count*CFG.rounds;NT.used=new Set();
   show("nt");score();stage("");
   introContestants(NT.players,"Name Ten",()=>{voiceStart(onVoice,$("ntMic"));if(!S.prefs.voice)$("ntMic").innerHTML="";nextTurn()});

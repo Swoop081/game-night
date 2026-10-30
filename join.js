@@ -96,6 +96,74 @@
   };
   if($("pass"))$("pass").onclick=()=>{if(conn&&conn.open)conn.send({k:"btn",id:"pass"})};
 
+
+  /* ----- companion screen: mirrors the TV game and sends taps back ----- */
+  const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  let sn=-1,numv="",lastBtn="",picU="",lastScr=null;
+  const tapBtn=i=>{if(conn&&conn.open&&lastScr)conn.send({k:"tap",i,sn:lastScr.sn})};
+  const scr=m=>{
+    const C=$("cmp");if(!C)return;
+    if(m.off){lastScr=null;C.classList.add("hide");document.body.classList.remove("incmp");if(!$("duel")||$("duel").classList.contains("hide"))$("play").classList.remove("hide");document.body.style.overflow="";return}
+    lastScr=m;
+    C.className="th-"+m.th;document.body.classList.add("incmp");document.body.style.overflow="hidden";
+    $("play").classList.add("hide");$("duel")&&$("duel").classList.add("hide");
+    $("cmScores").innerHTML=(m.scores||[]).map(s=>'<div class="cs'+(s.on?" on":"")+'" style="--c:'+esc(s.c||"#555")+'">'+(s.av?'<img alt="" src="'+esc(s.av)+'">':"")+'<div><b>'+esc(s.n)+(s.pid&&s.pid===pid?" · you":"")+'</b><i>'+esc(s.s)+'</i></div></div>').join("");
+    $("cmE").textContent=m.head.e||"";$("cmT").textContent=m.head.t||"";$("cmS").textContent=m.head.s||"";
+    // main area per game
+    let main="";
+    if(m.cards&&m.cards.length)main='<div class="cmcards">'+m.cards.map(c=>c.b!==undefined?'<div class="pk back">'+esc(c.b)+'</div>':'<div class="pk '+(c.r||"")+'">'+esc(c.n)+'</div>').join("")+'</div>';
+    if(m.clock)main+='<div class="cmbig">'+esc(m.clock)+(m.count?' <small style="font-size:1rem;opacity:.7">'+esc(m.count)+'</small>':"")+'</div>';
+    if(m.found&&m.found.length)main+='<div class="cmchips">'+m.found.map(f=>'<span>'+esc(f)+'</span>').join("")+'</div>';
+    if(m.pts)main+='<div class="cmbig" style="font-size:1.6rem">'+esc(m.pts)+'</div>';
+    if(m.prizes&&m.prizes.length&&!(m.btns||[]).some(b=>b.nm))main+='<div class="cmprizes">'+m.prizes.map(p=>'<div class="cmprize">'+(p.im?'<img alt="" referrerpolicy="no-referrer" src="'+esc(p.im)+'">':'<span class="em">'+esc(p.em)+'</span>')+esc(p.nm)+(p.pr?'<em>'+esc(p.pr)+'</em>':"")+'</div>').join("")+'</div>';
+    const mm=$("cmMain");
+    if(m.pic){
+      let im=mm.querySelector("img.cpic");
+      if(!im||picU!==m.pic.u){mm.innerHTML="";im=document.createElement("img");im.className="cpic";im.alt="";im.src=m.pic.u;picU=m.pic.u;mm.style.cssText="flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;gap:6px";mm.appendChild(im);const ex=document.createElement("div");ex.id="cmEx";mm.appendChild(ex)}
+      const r=m.pic.t>=1?0:26*Math.pow(1-m.pic.t,1.5);im.style.filter=r<.5?"none":"blur("+r.toFixed(1)+"px)";$("cmEx").innerHTML=main;
+    }else{picU="";mm.style.cssText="";if(mm.dataset.h!==main)mm.dataset.h=main,mm.innerHTML=main}
+    $("cmFb").textContent=m.fb||"";
+    // buttons (only rebuilt when they change)
+    const bs=JSON.stringify([m.sn,m.me,(m.btns||[]).map(b=>[b.t,b.d,b.on,b.cls])]);
+    if(bs!==lastBtn){
+      lastBtn=bs;const B=$("cmBtns"),list=m.btns||[];
+      const prz=list.some(b=>b.nm);
+      B.className=list.length===2&&!prz&&list[0].cls&&/hi|lo/.test(list[0].cls)?"two big":(prz||list.length>3?"grid":"");
+      B.innerHTML="";
+      list.forEach((b,i)=>{const e=document.createElement("button");e.className="cb "+(b.cls||"")+(b.nm?" prz":"")+(b.on?" sel":"");
+        if(b.nm)e.innerHTML=(b.im?'<img alt="" referrerpolicy="no-referrer" src="'+esc(b.im)+'">':'<span class="em">'+esc(b.em)+'</span>')+esc(b.nm)+(b.pr?'<em>'+esc(b.pr)+'</em>':"");
+        else e.textContent=b.t;
+        e.disabled=!m.me||!!b.d;e.onclick=()=>tapBtn(i);B.appendChild(e)});
+    }
+    // type-in box
+    const F=$("cmForm");const showIn=!!m.inp&&!!m.me;F.classList.toggle("hide",!showIn);
+    if(showIn&&F.dataset.p!==(m.inp.ph||"")){F.dataset.p=m.inp.ph||"";$("cmIn").placeholder=m.inp.ph||""}
+    // number pad
+    const N=$("cmNum");const showNum=!!m.num;N.classList.toggle("hide",!showNum);
+    if(m.sn!==sn){sn=m.sn;numv="";}
+    if(showNum){
+      $("cmDisp").textContent="$"+(numv||"0");
+      const kp=$("cmKp");kp.classList.toggle("hide",!m.me);
+      if(!kp.firstChild){[1,2,3,"⌫",4,5,6,".",7,8,9,0].forEach(k=>{const b=document.createElement("button");b.textContent=k;b.dataset.k=k;kp.appendChild(b)});
+        [["Lock in","go"],["Clear","c"]].forEach(([t,k])=>{const b=document.createElement("button");b.textContent=t;b.dataset.k=k;if(k==="go")b.className="go";kp.appendChild(b)});
+        kp.onclick=e=>{const b=e.target.closest("button");if(!b)return;const k=b.dataset.k;
+          if(k==="go"){if(numv&&conn&&conn.open)conn.send({k:"num",v:numv});return}
+          if(k==="c")numv="";else if(k==="⌫")numv=numv.slice(0,-1);else if(k==="."){if(lastScr&&lastScr.num&&lastScr.num.dollars)return;if(!numv.includes("."))numv=(numv||"0")+"."}
+          else{if(numv.includes(".")&&numv.split(".")[1].length>=2)return;if(numv.replace(".","").length>=7)return;numv=(numv==="0"?"":numv)+k}
+          $("cmDisp").textContent="$"+(numv||"0")}}
+    }
+    paintMic();
+  };
+  const paintMic=()=>{
+    const C=$("cmp");if(!C||C.classList.contains("hide")||!lastScr)return;
+    const el=$("cmMic"),live=mode==="mic";
+    el.className=live?"live":"";
+    const h=$("heard").textContent;
+    el.textContent=live?(h?"🎤 "+h:"🎤 Your turn: say it out loud"):(lastScr.me?"Your turn":(lastScr.view?"Watch the TV":"Watch the TV · "+($("st").textContent||""))).replace(/ · $/,"");
+  };
+  setInterval(paintMic,300);
+  if($("cmForm"))$("cmForm").onsubmit=e=>{e.preventDefault();const v=$("cmIn").value.trim();$("cmIn").value="";if(v&&conn&&conn.open)conn.send({k:"txt",v});$("cmIn").focus({preventScroll:true})};
+
   /* ----- connection (keeps retrying if the TV or wifi blips) ----- */
   const ICE=[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"},{urls:"stun:stun.cloudflare.com:3478"},{urls:["turn:openrelay.metered.ca:80","turn:openrelay.metered.ca:443"],username:"openrelayproject",credential:"openrelayproject"}];
   const cfg=()=>{const o={debug:0,config:{iceServers:ICE}};if(q.get("peerhost")){o.host=q.get("peerhost");o.port=+(q.get("peerport")||9000);o.secure=false;o.path="/"}return o};
@@ -105,7 +173,7 @@
     conn=peer.connect(target(),{reliable:true});
     const c=conn;
     c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player",av});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
-    c.on("data",m=>{if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="duel")return duel(m);if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
+    c.on("data",m=>{if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="scr")return scr(m);if(m&&m.k==="duel"){const C=$("cmp");if(C&&!C.classList.contains("hide")){C.classList.add("hide");document.body.classList.remove("incmp")}return duel(m)}if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
     c.on("close",()=>{if(c!==conn)return;net("link lost");setMode("wait","Reconnecting…");retry=setTimeout(connect,1500)});
     c.on("error",()=>{});
     // a connection that never opens is retried

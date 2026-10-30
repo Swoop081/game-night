@@ -57,6 +57,7 @@
 
   /* ---------- whose turn is it? (names of the players whose phones should have a live mic, or null = everyone) ---------- */
   const activeNames=()=>{
+    try{const a=LINK.activeFor&&LINK.activeFor();if(a!==undefined)return a}catch(e){}
     try{const d=S.duel;if(d&&d.state==="run"){const p=S.players[d[d.active]];return p?(p.pid?{pid:p.pid,name:p.name}:[p.name]):null}}catch(e){}
     try{if(typeof HL!=="undefined"&&HL&&!HL.over&&HL.players&&HL.players[HL.turn])return [HL.players[HL.turn].name]}catch(e){}
     return null;

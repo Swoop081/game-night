@@ -145,9 +145,10 @@ function onVoice(texts,final){
 }
 
 async function startGame(){
+  const LL=window.LINK&&LINK.pull&&LINK.pull(1,8);if(LL)CFG.count=LL.length;
   S.count=CFG.count;ensureSlots();save();saveCfg();
   show("pb");PB.players=[];
-  for(let i=0;i<CFG.count;i++)PB.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],pts:0,slot:i});
+  for(let i=0;i<CFG.count;i++)PB.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],pts:0,slot:i,pid:(LL&&S.pids&&S.pids[i])||null});
   score();stage(`<div class="pbhead"><h2>Loading pictures…</h2></div>`);
   const ok=await Promise.all(CFG.sets.map(id=>loadPhotos(id)));
   PB.pool=[];CFG.sets.forEach(id=>{if(CATS[id].items&&CATS[id].kind==="photo")CATS[id].items.forEach(it=>{if(it.img)PB.pool.push(it)})});

@@ -260,8 +260,9 @@ const GAMES=["double","most","hilo","clock","squeeze","grocery","lucky"];
 const GAME_NAMES={double:"Double Prices",most:"Most Expensive",hilo:"Hi-Lo",clock:"Clock Game",squeeze:"Squeeze Play",grocery:"Grocery Game",lucky:"Lucky $even"};
 async function startGame(){
   await loadCatalogue();
+  const LL=window.LINK&&LINK.pull&&LINK.pull(2,4);if(LL)CD.count=Math.max(2,LL.length);
   S.count=CD.count;ensureSlots();save();
-  CD.players=[];for(let i=0;i<CD.count;i++)CD.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],win:0,prizes:[],slot:i});
+  CD.players=[];for(let i=0;i<CD.count;i++)CD.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],win:0,prizes:[],slot:i,pid:(LL&&S.pids&&S.pids[i])||null});
   CD.round=0;CD.used=new Set();CD.games=shuffle(GAMES).slice(0,3);
   if(!CD.games.includes("lucky")&&Math.random()<.5)CD.games[2]="lucky";
   show("cd");score();$("cdStage").innerHTML="";
@@ -590,5 +591,5 @@ function results(){
   $("cdMenu").onclick=()=>{closeOverlay();endGame();show("hub")};
   $("cdAgain").onclick=()=>{closeOverlay();endGame();startGame()};
 }
-window.__CD={CD,P,spokenAmount,fakePrice};
+window.__CD={CD,P,spokenAmount,fakePrice,key};
 })();
