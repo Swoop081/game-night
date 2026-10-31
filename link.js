@@ -102,7 +102,7 @@
     const m={k:"duel",cat:cat.name,hint:cat.hint,state:d.state,active:d.active,
       a:{n:pa.name,t:Math.max(0,d.t.a),T:d.T.a,c:pa.color,pid:pa.pid||"",av:avs(pa)},b:{n:pb.name,t:Math.max(0,d.t.b),T:d.T.b,c:pb.color,pid:pb.pid||"",av:avs(pb)},
       rv:rv&&rv.classList.contains("show")?{c:rv.className,t:rv.textContent}:null};
-    if(qk!==lastQ){lastQ=qk;m.q={c:qe.className,h:qe.innerHTML};
+    if(qk!==lastQ){lastQ=qk;m.q={c:"q text",h:"Look at the TV"};   /* the question itself is on the TV only (photos on phones lagged) */
       try{const g=S.grid;m.map={c:g.cols,r:g.rows,o:g.owner.map(o=>o<0?"":S.players[o].color),hot:[d.a,d.b].map(i=>g.owner.map((o,j)=>o===i?j:-1).filter(j=>j>=0))}}catch(e){}}
     LINK.broadcast(m);
   };
