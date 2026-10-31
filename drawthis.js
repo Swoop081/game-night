@@ -111,8 +111,10 @@ const css2=`
 .dtvs i{font-family:${FONT};font-style:normal;font-weight:900;color:#ff7a00;font-size:clamp(1.2rem,4vmin,2.6rem)}
 .dtword{animation:dtglow 3s ease-in-out infinite}
 @keyframes dtglow{0%,100%{box-shadow:0 0 0 0 rgba(255,122,0,0)}50%{box-shadow:0 0 5vmin 0 rgba(255,122,0,.55)}}
-.game.live .dtart{width:64px;height:58px;background:#ff7a00;border:0;border-radius:50% 50% 46% 46%;transform:none;box-shadow:inset -6px -4px 0 rgba(0,0,0,.18)}
-.game.live .dtart::before{content:"";position:absolute;left:28px;top:-9px;width:9px;height:12px;background:#2f8f3a;border-radius:2px}
+.game.live .dtart{width:64px;height:58px;background:none;border:0;transform:none;box-shadow:none;position:relative}
+.game.live .dtart .dtsvg{position:absolute;inset:-14% -10% -6%;width:120%;height:120%;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.game.live .dtart::before,.game.live .dtart::after{display:none!important}
+
 .game.live .dtart::after{content:"";position:absolute;inset:14px 8px 8px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 36'><path d='M6 2l8 12H-2zM42 2l8 12H34zM8 24q16 14 32 0q-16 4-32 0z' fill='%2314052b'/></svg>") center/contain no-repeat;transform:none;border:0}
 `;
 const st=document.createElement("style");st.textContent=css+css2;document.head.appendChild(st);
@@ -125,7 +127,7 @@ const fxHTML='<div class="dtfx"><div class="moon"></div><div class="fog f1"></di
 /* hub tile + screens */
 const hub=document.querySelector(".games");
 const tile=document.createElement("button");tile.className="game live";tile.id="playDT";
-tile.innerHTML=`<span class="art"><span class="dtart"></span><span class="pill">Play</span></span><h2>Draw This</h2><p>Same word, whiteboards, spooky fun. Vote for the best drawing.</p>`;
+tile.innerHTML=`<span class="art"><span class="dtart"><svg class="dtsvg" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg"><rect x="54" y="2" width="14" height="20" rx="3" fill="#2f8f3a"/><ellipse cx="36" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="84" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="60" cy="62" rx="34" ry="42" fill="#ff7a00"/><path d="M22 40l24 6-18 20z" fill="#14052b"/><path d="M98 40l-24 6 18 20z" fill="#14052b"/><path d="M60 58l-7 12h14z" fill="#14052b"/><path d="M26 78q34 30 68 0l-8-4-6 8-8-8-8 8-8-8-6 8-8-8z" fill="#14052b"/></svg></span><span class="pill">Play</span></span><h2>Draw This</h2><p>Same word, whiteboards, spooky fun. Vote for the best drawing.</p>`;
 hub.insertBefore(tile,hub.firstChild);
 const n=hub.children.length;hub.classList.remove("five","six","seven");if(n>=7)hub.classList.add("seven");
 const app=$("app");
