@@ -127,7 +127,7 @@ const fxHTML='<div class="dtfx"><div class="moon"></div><div class="fog f1"></di
 /* hub tile + screens */
 const hub=document.querySelector(".games");
 const tile=document.createElement("button");tile.className="game live";tile.id="playDT";
-tile.innerHTML=`<span class="art"><span class="dtart"><svg class="dtsvg" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg"><rect x="54" y="2" width="14" height="20" rx="3" fill="#2f8f3a"/><ellipse cx="36" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="84" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="60" cy="62" rx="34" ry="42" fill="#ff7a00"/><path d="M22 40l24 6-18 20z" fill="#14052b"/><path d="M98 40l-24 6 18 20z" fill="#14052b"/><path d="M60 58l-7 12h14z" fill="#14052b"/><path d="M26 78q34 30 68 0l-8-4-6 8-8-8-8 8-8-8-6 8-8-8z" fill="#14052b"/></svg></span><span class="pill">Play</span></span><h2>Draw This</h2><p>Same word, whiteboards, spooky fun. Vote for the best drawing.</p>`;
+tile.innerHTML=`<span class="art"><span class="dtart"><svg class="dtsvg" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg"><rect x="54" y="2" width="14" height="20" rx="3" fill="#2f8f3a"/><ellipse cx="36" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="84" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="60" cy="62" rx="34" ry="42" fill="#ff7a00"/><path d="M22 40l24 6-18 20z" fill="#14052b"/><path d="M98 40l-24 6 18 20z" fill="#14052b"/><path d="M60 58l-7 12h14z" fill="#14052b"/><path d="M26 78q34 30 68 0l-8-4-6 8-8-8-8 8-8-8-6 8-8-8z" fill="#14052b"/></svg></span><span class="pill">Play</span></span><h2>Draw This</h2><p>Same word, whiteboards, spooky fun. Vote for your favourite drawing.</p>`;
 hub.insertBefore(tile,hub.firstChild);
 const n=hub.children.length;hub.classList.remove("five","six","seven");if(n>=7)hub.classList.add("seven");
 /* ---------- spooky soundtrack: synthesised, no audio files ---------- */
@@ -252,7 +252,7 @@ function openSetup(){
   <div class="setup-grid"><div class="panel">
     <div class="field"><span class="eyebrow">How to play</span><ul class="rules">
       <li>Everyone draws the <b>same word</b> on their whiteboard before the timer ends.</li>
-      <li>Then <b>vote on your phone</b> for the best drawing. You can't vote for yourself.</li>
+      <li>Then <b>vote on your phone</b> for your favourite drawing. You can't vote for yourself.</li>
       <li>Every vote is a <b>point</b>. Most points after the last round wins.</li>
       <li>Every <b>4th round</b> is a <b>head to head</b>: with 4 players, two pairs each get a different secret word on their phones, then each pair judges the other. Every vote is a point.</li>
       <li>Players join with their phones, up to 4.</li></ul></div>
@@ -370,7 +370,7 @@ function startVote(){
 function paintVote(){
   stage(`<div class="dtk">${isDuel()?"Head to head · vote on your phone":"Time's up · hold up your boards"}</div>
     ${isDuel()?DT.duels.map(d=>`<div class="dtword s">${esc2(d.word)}</div>${vsHTML(d)}`).join(""):`<div class="dtword s">${esc2(DT.word)}</div>`}
-    <p class="dtp">${isDuel()?"Judge the other pair's drawings. Each vote is a point.":"Vote on your phone for the best drawing. Not your own! Each vote is a point."}</p>
+    <p class="dtp">${isDuel()?"Judge the other pair's drawings. Each vote is a point.":"Vote on your phone for your favourite drawing. Not your own! Each vote is a point."}</p>
     <div class="dtvotes">${voters().map(p=>`<span class="${DT.votes[p.pid]!=null?"ok":""}" style="${DT.votes[p.pid]!=null?"":"opacity:.8"}">${esc2(p.name)} ${DT.votes[p.pid]!=null?"✓":"…"}</span>`).join("")}</div>
     <div class="row"><button class="btn ghost" id="dtSkipVote">Skip voting</button></div>`);
   $("dtSkipVote").onclick=finishVote;
@@ -417,7 +417,7 @@ function renderResult(){
   }else{
     const top=Math.max(...DT.players.map(p=>DT.gain[p.pid])),tie=DT.players.filter(p=>DT.gain[p.pid]===top).length;
     body=`<div class="dtword s">${esc2(DT.word)}</div><div class="dtres">${DT.players.map(p=>card(p,top)).join("")}</div>`;
-    title=top===0?"No votes this round":tie>1?"A tie for best drawing":"Best drawing";
+    title=top===0?"No votes this round":tie>1?"A tie for favourite drawing":"Favourite drawing";
   }
   stage(`<div class="dtk">${title}</div>${body}<div class="row"><button class="btn gold" id="dtNext">${DT.round>=CFG.rounds?"See results":"Next round"}</button></div>`);
   $("dtNext").onclick=nextRound;
@@ -458,7 +458,7 @@ function sceneFor(p){
     const j=isDuel()?judgesIn(p.pid):-1;
     if(isDuel()&&j<0)return {...base,head:{e:rl,t:"Voting",s:"Watch the TV"},big:""};
     const word=isDuel()?DT.duels[j].word:DT.word;
-    return {...base,head:{e:rl,t:voted!=null?"Vote locked in":isDuel()?"Which drawing is best?":"Who drew it best?",s:voted!=null?"Waiting for the others":isDuel()?"Judge the other pair's "+word.toLowerCase():"Tap a player. Not yourself!"},big:word,
+    return {...base,head:{e:rl,t:voted!=null?"Vote locked in":isDuel()?"Which drawing is your favourite?":"Whose drawing is your favourite?",s:voted!=null?"Waiting for the others":isDuel()?"Judge the other pair's "+word.toLowerCase():"Tap a player. Not yourself!"},big:word,
       btns:targets(p.pid).map(x=>{const q=byPid(x);return {t:q.name,a:"vote",v:x,d:voted!=null?1:0,on:voted===x?1:0,c:q.color}})};
   }
   if(DT.phase==="perfect"){
