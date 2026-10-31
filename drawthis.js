@@ -132,7 +132,7 @@ hub.insertBefore(tile,hub.firstChild);
 const n=hub.children.length;hub.classList.remove("five","six","seven");if(n>=7)hub.classList.add("seven");
 /* ---------- spooky soundtrack: synthesised, no audio files ---------- */
 const SPK=(()=>{
-  let m=null,timer=null,sfxT=0,step=0,lastPh="",drone=[],started=0;
+  let m=null,cdg=null,cdT=null,lastS=-1,tt=0,timer=null,sfxT=0,step=0,lastPh="",drone=[],started=0;
   const SC=[220,246.9,261.6,293.7,329.6,349.2,415.3,440,493.9,523.3,587.3,659.3,698.5,830.6,880];
   const BASS=[110,110,87.3,82.4,110,98,87.3,82.4];
   const on=()=>S.prefs.sound&&ac();
@@ -167,6 +167,29 @@ const SPK=(()=>{
     fanfare(){[[440,523.3,659.3],[466.2,587.3,698.5],[523.3,659.3,784]].forEach((c,i)=>c.forEach(f=>env(f,"sawtooth",.55,.05,i*.32)));FX.sparkle()},
     organ(){[110,165,220,277.2].forEach(f=>env(f,"sawtooth",2.2,.05,0))}
   };
+
+  /* countdown layer: separate loud bus so it cuts through the music */
+  function cdEnv(f,type,dur,vol,when,f2){return env(f,type,dur,vol,when,cdg,f2)}
+  function cdTick(){
+    const c=ac();if(!c||!m||!cdg)return;
+    const ph=(window.__DT&&__DT.DT&&__DT.DT.phase)||"";
+    if(ph!=="draw"){lastS=-1;return}
+    const left=__DT.DT.left,s=Math.ceil(left);if(s===lastS)return;lastS=s;
+    if(s>10){tt^=1;cdEnv(tt?1300:950,"square",.05,.22,0);cdEnv(tt?180:140,"sine",.09,.3,0,90);return}
+    if(s<=0)return;
+    /* last 10 seconds: heartbeat + sharp beep every second, getting higher and more frantic */
+    const hi=1000+(10-s)*90;
+    cdEnv(hi,"square",.12,.28,0);cdEnv(hi*2,"sine",.12,.12,0);
+    cdEnv(65,"sine",.2,.6,0,38);cdEnv(65,"sine",.2,.45,.17,38);
+    if(s<=5){cdEnv(hi*1.25,"square",.08,.22,.5)}
+    if(s<=3){cdEnv(hi*1.25,"square",.08,.22,.25);cdEnv(hi*1.5,"square",.08,.22,.75);noise(.35,.25,3000,600)}
+    if(s===10){const t=c.currentTime,o=c.createOscillator(),g=c.createGain(),f=c.createBiquadFilter();
+      o.type="sawtooth";f.type="lowpass";f.frequency.setValueAtTime(300,t);f.frequency.exponentialRampToValueAtTime(5000,t+10);
+      o.frequency.setValueAtTime(90,t);o.frequency.exponentialRampToValueAtTime(900,t+10);
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.16,t+9.5);g.gain.linearRampToValueAtTime(0,t+10.1);
+      o.connect(f);f.connect(g);g.connect(cdg);o.start(t);o.stop(t+10.2)}
+  }
+  function buzzer(){const c=ac();if(!c||!cdg)return;cdEnv(110,"sawtooth",1.1,.5,0);cdEnv(116,"square",1.1,.35,0);cdEnv(220,"sawtooth",1.1,.25,0);noise(.5,.3,2500,200)}
   const RANDOM=["wail","creak","owl","bats","cackle","knock","thunder"];
   function cue(ph){
     if(ph==="draw"){FX.boom();FX.creak()}
@@ -180,9 +203,9 @@ const SPK=(()=>{
     if(!visible()||!S.prefs.sound){stop();return}
     const c=ac();if(!c)return;
     const ph=(window.__DT&&__DT.DT&&__DT.DT.phase)||"setup";
-    if(ph!==lastPh){const was=lastPh;lastPh=ph;if(was&&ph!=="setup"&&ph!=="idle")cue(ph)}
+    if(ph!==lastPh){const was=lastPh;lastPh=ph;if(was&&ph!=="setup"&&ph!=="idle"){if(was==="draw"&&ph==="vote")buzzer();cue(ph)}}
     const draw=ph==="draw",left=draw?__DT.DT.left:99,calm=ph==="perfect"||ph==="final";
-    m.gain.setTargetAtTime(calm?.6:1,c.currentTime,.4);
+    m.gain.setTargetAtTime(calm?.6:(draw&&left<=10?.35:1),c.currentTime,.3);
     /* music-box melody */
     const p=draw?(left<=10?.9:.7):ph==="vote"?.35:.5;
     if(Math.random()<p){
@@ -191,8 +214,6 @@ const SPK=(()=>{
     }
     /* bass pulse every 4th step, heartbeat when time is low */
     if(step%4===0)env(BASS[(step>>2)%BASS.length],"triangle",1.2,.09,0);
-    if(draw&&left<=10){env(62,"sine",.18,.2,0,null,40);env(62,"sine",.18,.14,.16,null,40)}
-    else if(draw&&step%2===0)env(900,"square",.03,.025,0);
     /* random spooky one-shots */
     sfxT--;if(sfxT<=0&&ph!=="perfect"){sfxT=draw?18+Math.random()*14:12+Math.random()*10;FX[RANDOM[Math.floor(Math.random()*RANDOM.length)]]()}
     step++;
@@ -200,7 +221,7 @@ const SPK=(()=>{
   }
   function start(){
     if(timer||!S.prefs.sound)return;const c=ac();if(!c)return;
-    m=c.createGain();m.gain.value=0;m.connect(c.destination);m.gain.linearRampToValueAtTime(1,c.currentTime+2);
+    m=c.createGain();m.gain.value=0;m.connect(c.destination);cdg=c.createGain();cdg.gain.value=1;cdg.connect(c.destination);lastS=-1;clearInterval(cdT);cdT=setInterval(cdTick,100);m.gain.linearRampToValueAtTime(1,c.currentTime+2);
     /* dark pad: detuned low saws through a slow wobbling filter */
     const f=c.createBiquadFilter();f.type="lowpass";f.frequency.value=260;f.Q.value=3;
     const lfo=c.createOscillator(),lg=c.createGain();lfo.frequency.value=.12;lg.gain.value=140;lfo.connect(lg);lg.connect(f.frequency);lfo.start();
@@ -209,7 +230,7 @@ const SPK=(()=>{
     step=0;sfxT=3;lastPh="";tick.i=null;tick();
   }
   function stop(){
-    clearTimeout(timer);timer=null;if(!m)return;
+    clearTimeout(timer);timer=null;clearInterval(cdT);if(!m)return;
     const mm=m,d=drone;m=null;drone=[];try{mm.gain.setTargetAtTime(0,ac().currentTime,.25)}catch(e){}
     setTimeout(()=>{d.forEach(o=>{try{o.stop()}catch(e){}});try{mm.disconnect()}catch(e){}},1200);
   }
