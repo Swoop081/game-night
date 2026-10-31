@@ -211,7 +211,7 @@
       p=LINK.phones.get(conn.__pid);if(!p)return;
       p.rx=Date.now();if(m.k==="hb")return;
       if(m.k==="sp")onSpeech(p,m);
-      else if(m.k==="cats"){p.cats=(Array.isArray(m.v)?m.v:[]).filter(x=>typeof x==="string"&&CATS[x]).slice(0,4);log("cats",p.name,p.cats)}
+      else if(m.k==="cats"){if(LINK.draft&&LINK.draft.on)return;p.cats=(Array.isArray(m.v)?m.v:[]).filter(x=>typeof x==="string"&&CATS[x]).slice(0,4);log("cats",p.name,p.cats)}
       else if(m.k==="getlog")send(p,{k:"log",text:LINK.logText()});
       else if(m.k==="plog")log("PHONE["+p.name+"]",m.t);
       else if(typeof LINK.onMessage==="function")LINK.onMessage(p,m);

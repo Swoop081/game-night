@@ -445,7 +445,7 @@ button{cursor:pointer}
 <canvas id="confetti" hidden></canvas>
 </div>
 
-<script src="questions.js?v=47"></script>
+<script src="questions.js?v=48"></script>
 <script>
 /* =================== CATEGORIES =================== */
 const CATS={};
@@ -740,7 +740,7 @@ function renderSetup(){
   for(let i=0;i<S.count;i++){
     const row=document.createElement("div");row.className="prow";
     const opts=catOptions(S.cats[i]);
-    row.innerHTML=`<button class="swatchbtn" id="pk${i}" aria-label="Player ${i+1} look">${avatarHTML({name:S.names[i]||"P",color:S.colors[i],slot:i})}</button><input id="pn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name">${isMulti()?`<div class="mcats" style="flex:1;font-size:.8rem;opacity:.9;line-height:1.3">${S.mcats[i].map(c=>esc(CATS[c].name)).join(" · ")}</div>`:`<select id="pc${i}" aria-label="Player ${i+1} category">${opts}</select>`}`;
+    row.innerHTML=`<button class="swatchbtn" id="pk${i}" aria-label="Player ${i+1} look">${avatarHTML({name:S.names[i]||"P",color:S.colors[i],slot:i})}</button><input id="pn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name">${isMulti()?`<div class="mcats" style="flex:1;font-size:.8rem;opacity:.9;line-height:1.3">${S.mcats[i].map(c=>((S.mpicks&&S.mpicks[i])||[]).includes(c)?`<b>${esc(CATS[c].name)}</b>`:`<span style="opacity:.5">${esc(CATS[c].name)}</span>`).join(" · ")}</div>`:`<select id="pc${i}" aria-label="Player ${i+1} category">${opts}</select>`}`;
     row.querySelector("input").oninput=e=>{S.names[i]=e.target.value;save()};
     if(row.querySelector("select"))row.querySelector("select").onchange=e=>{const v=e.target.value,j=S.cats.slice(0,S.count).indexOf(v);if(j>=0&&j!==i)S.cats[j]=S.cats[i];S.cats[i]=v;save();renderSetup()};
     row.querySelector(".swatchbtn").onclick=()=>pickColour(i);
@@ -773,7 +773,7 @@ function startGame(){
   try{if(window.LINK&&LINK.pull){ph=LINK.pull(2,20,{cpu:false});if(ph&&ph.length>=2){S.count=ph.length;ph.forEach((p,i)=>{S.names[i]=p.name;if(p.cats&&p.cats[0])S.cats[i]=p.cats[0]})}else ph=null}}catch(e){ph=null}
   ensureSlots();save();
   S.multi=!!S.prefs.multi&&S.count===4;
-  const mc=S.multi?buildMulti(ph?ph.map((p,i)=>(p.cats&&p.cats.length?p.cats:[S.cats[i]])):(S.mcats||[])):null;
+  const mc=S.multi?((ph&&S.mcats&&S.mcats.length===4&&S.mcatsSig===JSON.stringify(ph.map(p=>p.cats||[])))?S.mcats.map(l=>l.slice()):buildMulti(ph?ph.map((p,i)=>(p.cats&&p.cats.length?p.cats:[S.cats[i]])):(S.mcats||[]))):null;
   if(S.multi)mc.forEach((l,i)=>{S.cats[i]=l[0]});
   S.players=[];for(let i=0;i<S.count;i++)S.players.push({id:i,name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],cat:S.cats[i],alive:true,duels:0,streak:0,boost:false});
   const {rows,cols}=gridDims(S.count);
@@ -1288,31 +1288,32 @@ window.__gnBack=()=>{
 if(/GameNightTV/.test(navigator.userAgent))addEventListener("load",()=>document.querySelectorAll('.seg[id*="Screen"]').forEach(e=>{const h=e.closest(".hubtop,.field")||e.parentElement;h.style.display="none"}));
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
-<script src="avatars.js?v=47"></script>
-<script src="prices.js?v=47"></script>
-<script src="comeondown.js?v=47"></script>
-<script src="nameten-data.js?v=47"></script>
-<script src="nameten.js?v=47"></script>
-<script src="feud-data.js?v=47"></script>
-<script src="feud.js?v=47"></script>
-<script src="trivial-data.js?v=47"></script>
-<script src="trivial.js?v=47"></script>
-<script src="picblitz.js?v=47"></script>
-<script src="drawthis.js?v=47"></script>
-<script src="gamemusic.js?v=47"></script>
-<script src="setupfit.js?v=47"></script>
-<script src="wheel-data.js?v=47"></script>
-<script src="wheel.js?v=47"></script>
-<script src="showkit.js?v=47"></script>
-<script src="floor-theme.js?v=47"></script>
-<script src="leaderboard.js?v=47"></script>
-<script src="link.js?v=47"></script>
-<script src="companion.js?v=47"></script>
-<script src="voice.js?v=47"></script>
-<script src="tvlook.js?v=47"></script>
-<script src="photos.js?v=47"></script>
-<script src="gamelook.js?v=47"></script>
-<script src="autoupdate.js?v=47"></script>
-<script src="tvui.js?v=47"></script>
+<script src="avatars.js?v=48"></script>
+<script src="prices.js?v=48"></script>
+<script src="comeondown.js?v=48"></script>
+<script src="nameten-data.js?v=48"></script>
+<script src="nameten.js?v=48"></script>
+<script src="feud-data.js?v=48"></script>
+<script src="feud.js?v=48"></script>
+<script src="trivial-data.js?v=48"></script>
+<script src="trivial.js?v=48"></script>
+<script src="picblitz.js?v=48"></script>
+<script src="drawthis.js?v=48"></script>
+<script src="gamemusic.js?v=48"></script>
+<script src="setupfit.js?v=48"></script>
+<script src="wheel-data.js?v=48"></script>
+<script src="wheel.js?v=48"></script>
+<script src="showkit.js?v=48"></script>
+<script src="floor-theme.js?v=48"></script>
+<script src="leaderboard.js?v=48"></script>
+<script src="link.js?v=48"></script>
+<script src="companion.js?v=48"></script>
+<script src="floordraft.js?v=48"></script>
+<script src="voice.js?v=48"></script>
+<script src="tvlook.js?v=48"></script>
+<script src="photos.js?v=48"></script>
+<script src="gamelook.js?v=48"></script>
+<script src="autoupdate.js?v=48"></script>
+<script src="tvui.js?v=48"></script>
 </body>
 </html>
