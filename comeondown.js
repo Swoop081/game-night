@@ -591,5 +591,25 @@ function results(){
   $("cdMenu").onclick=()=>{closeOverlay();endGame();show("hub")};
   $("cdAgain").onclick=()=>{closeOverlay();endGame();startGame()};
 }
-window.__CD={CD,P,spokenAmount,fakePrice,key};
+/* every Price Is Right screen must fit the TV without scrolling: shrink the stage content until it does */
+(function(){
+  const st=document.getElementById("cdStage");if(!st)return;
+  let busy=false;
+  const fit=()=>{
+    if(busy)return;busy=true;
+    try{
+      const kids=[...st.children];kids.forEach(k=>k.style.zoom="");
+      let z=1;
+      for(let i=0;i<8&&st.scrollHeight>st.clientHeight+1&&st.clientHeight>0;i++){
+        z=Math.max(.35,z*(st.clientHeight/st.scrollHeight)*.97);kids.forEach(k=>k.style.zoom=z.toFixed(3));
+      }
+      st.scrollTop=0;
+    }catch(e){}
+    busy=false;
+  };
+  new MutationObserver(()=>{if(!busy)setTimeout(fit,30)}).observe(st,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["class","disabled"]});
+  addEventListener("resize",()=>setTimeout(fit,100));
+  window.__cdFit=fit;
+})();
+window.__CD={CD,P,spokenAmount,fakePrice,key,playGame,showcase,bidRound};
 })();
