@@ -104,8 +104,9 @@
     if(g==="pb"){
       const st=$("pbStage"),bl=btnList(st);btnEls=bl.map(b=>b.el);
       const inp=$("pbIn");let pic=null;
-      try{const B=__PB.PB;if(B.item&&B.item.img&&$("pbCv"))pic={u:B.item.img,t:B.live?Math.min(1,(1-B.left/__PB.CFG.secs)/.8):1}}catch(e){}
-      return {th:g,head:headOf(st),scores:chips("pbScore",P),btns:bl.map(({el,...r})=>r),pic,pts:txt($("pbPts")),fb:txt($("pbFb")),inp:inp&&vis(inp)?{ph:"What is it?"}:null};
+      /* the picture is on the TV only: phones just get the answer box and Pass (loading photos on phones lagged) */
+      const showInp=inp&&vis(inp);
+      return {th:g,head:headOf(st),scores:chips("pbScore",P),btns:bl.map(({el,...r})=>r),pic,pts:txt($("pbPts")),fb:txt($("pbFb")),big:showInp?"Look at the TV":"",inp:showInp?{ph:"What is it?"}:null};
     }
     if(g==="cd"){
       const st=$("cdStage"),bl=btnList(st);btnEls=bl.map(b=>b.el);
