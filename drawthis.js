@@ -45,6 +45,7 @@ const css=`
 .dtvotes span.ok{background:#16c784;color:#022}
 .dtres{display:flex;gap:.8vmin;justify-content:center;width:100%}
 .dtres div{flex:1;max-width:25%;background:#2a1050;padding:2vmin 1vmin;font-family:${FONT};text-transform:uppercase;letter-spacing:.1em;font-weight:800;font-size:clamp(.8rem,2.2vmin,1.3rem)}
+.dtres.sm div{padding:1vmin}.dtres.sm div em{font-size:clamp(1.8rem,8vmin,4.5rem)}
 .dtres div.win{background:#ff7a00;color:#14052b}
 .dtres div em{display:block;font-style:normal;font-size:clamp(2.4rem,12vmin,7rem);line-height:1}
 .dtrank{display:flex;flex-direction:column;gap:.8vmin;width:min(700px,92%)}
@@ -121,7 +122,7 @@ function openSetup(){
       <li>Everyone draws the <b>same word</b> on their whiteboard before the timer ends.</li>
       <li>Then <b>vote on your phone</b> for the best drawing. You can't vote for yourself.</li>
       <li>Every vote is a <b>point</b>. Most points after the last round wins.</li>
-      <li>Every <b>4th round</b> is a <b>head to head</b>: two players get a secret word on their phones, and everyone else votes.</li>
+      <li>Every <b>4th round</b> is a <b>head to head</b>: with 4 players, two pairs each get a different secret word on their phones, then each pair judges the other. Every vote is a point.</li>
       <li>Players join with their phones, up to 4.</li></ul></div>
     <div class="field"><span class="eyebrow">Rounds</span><div class="seg" id="dtRoundsSeg"></div></div>
     <div class="field"><span class="eyebrow">Seconds to draw</span><div class="seg" id="dtSecsSeg"></div></div>
@@ -141,16 +142,20 @@ function openSetup(){
 }
 
 /* state */
-const DT={players:[],round:0,word:"",phase:"idle",mode:"all",duo:[],pairs:[],pairN:0,left:0,timer:null,votes:{},used:new Set(),gain:{},voteT:null,cpuT:[]};
+const DT={players:[],round:0,word:"",phase:"idle",mode:"all",duels:[],pairings:[],duelN:0,left:0,timer:null,votes:{},used:new Set(),gain:{},voteT:null,cpuT:[]};
 const stage=html=>{$("dtStage").innerHTML=html};
 const esc2=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 const byPid=pid=>DT.players.find(p=>p.pid===pid);
 const isDuel=()=>DT.mode==="duel";
-const voters=()=>isDuel()?DT.players.filter(p=>!DT.duo.includes(p.pid)):DT.players;
-const targets=pid=>isDuel()?DT.duo.filter(x=>x!==pid):DT.players.map(p=>p.pid).filter(x=>x!==pid);
+const drawsIn=pid=>DT.duels.findIndex(d=>d.duo.includes(pid));      // which duel this player draws in (-1 = none)
+const judgesIn=pid=>DT.duels.findIndex(d=>!d.duo.includes(pid));    // which duel this player judges
+const voters=()=>isDuel()?DT.players.filter(p=>judgesIn(p.pid)>=0):DT.players;
+const targets=pid=>isDuel()?(judgesIn(pid)>=0?DT.duels[judgesIn(pid)].duo:[]):DT.players.map(p=>p.pid).filter(x=>x!==pid);
+const duoPlayers=d=>d.duo.map(byPid).filter(Boolean);
+const vsHTML=d=>`<div class="dtvs">${duoPlayers(d).map(p=>`<span style="--pc:${p.color}">${avatarHTML(p,"sm")}${esc2(p.name)}</span>`).join("<i>VS</i>")}</div>`;
 function score(){
   $("dtScore").innerHTML=DT.players.map(p=>{
-    const on=(DT.phase==="vote"&&DT.votes[p.pid]!=null)||(isDuel()&&DT.duo.includes(p.pid)&&(DT.phase==="ready"||DT.phase==="draw"));
+    const on=(DT.phase==="vote"&&DT.votes[p.pid]!=null)||(isDuel()&&drawsIn(p.pid)>=0&&(DT.phase==="ready"||DT.phase==="draw"));
     return `<div class="dtchip${on?" on":""}" style="--pc:${p.color}">${avatarHTML(p,"sm")}<b>${esc(p.name)}</b><span>${p.pts}</span></div>`}).join("");
 }
 function endGame(){clearInterval(DT.timer);clearTimeout(DT.voteT);DT.cpuT.forEach(clearTimeout);DT.cpuT=[];DT.phase="idle"}
@@ -159,12 +164,17 @@ function pickWord(){
   let fresh=pool.filter(w=>!DT.used.has(w));if(!fresh.length){DT.used=new Set();fresh=pool}
   const w=fresh[Math.floor(Math.random()*fresh.length)];DT.used.add(w);return w;
 }
-function pickDuo(){
-  if(!DT.pairs.length||DT.pairN>=DT.pairs.length){
-    const ps=[];for(let i=0;i<DT.players.length;i++)for(let j=i+1;j<DT.players.length;j++)ps.push([DT.players[i].pid,DT.players[j].pid]);
-    DT.pairs=shuffle(ps);DT.pairN=0;
+/* 4 players: two duos with a different word each (they judge each other). 3 players: one duo, the third judges. */
+function makeDuels(){
+  const P=DT.players.map(p=>p.pid);
+  if(P.length>=4){
+    if(!DT.pairings.length)DT.pairings=shuffle([[[0,3],[1,2]],[[0,1],[2,3]],[[0,2],[1,3]]]);
+    const pr=DT.pairings[DT.duelN++%DT.pairings.length];
+    return pr.map(d=>({duo:d.map(i=>P[i]),word:pickWord()}));
   }
-  return DT.pairs[DT.pairN++];
+  const ps=[[0,1],[0,2],[1,2]];
+  const d=ps[DT.duelN++%3];
+  return [{duo:d.map(i=>P[i]),word:pickWord()}];
 }
 function startGame(){
   const L=window.LINK&&LINK.pull?LINK.pull(2,4,{cpu:true}):null;
@@ -174,7 +184,7 @@ function startGame(){
   }
   ensureSlots();save();saveCfg();
   DT.players=L.map((p,i)=>({name:p.name,color:S.colors[i],pts:0,slot:i,pid:p.pid,cpu:!!p.cpu}));
-  DT.round=0;DT.used=new Set();DT.phase="idle";DT.pairs=[];DT.pairN=0;DT.mode="all";DT.duo=[];
+  DT.round=0;DT.used=new Set();DT.phase="idle";DT.pairings=[];DT.duelN=0;DT.mode="all";DT.duels=[];
   show("dt");score();stage("");
   introContestants(DT.players,"Draw This",()=>nextRound());
 }
@@ -182,30 +192,28 @@ function nextRound(){
   DT.round++;
   if(DT.round>CFG.rounds)return results();
   DT.mode=(DT.players.length>=3&&DT.round%4===0)?"duel":"all";
-  DT.duo=isDuel()?pickDuo():[];
-  DT.word=pickWord();DT.votes={};DT.gain={};DT.phase="ready";
+  DT.duels=isDuel()?makeDuels():[];
+  DT.word=isDuel()?"":pickWord();DT.votes={};DT.gain={};DT.phase="ready";
   $("dtRound").textContent=`Round ${DT.round} of ${CFG.rounds}`;
   renderReady();
 }
 function renderReady(){
   score();
-  const w=DT.word,duo=DT.duo.map(byPid).filter(Boolean);
   stage(isDuel()
-   ?`<div class="dtk">Head to head</div><div class="dtvs">${duo.map(p=>`<span style="--pc:${p.color}">${avatarHTML(p,"sm")}${esc2(p.name)}</span>`).join('<i>VS</i>')}</div><div class="dtword s">Check your phone</div><p class="dtp">${esc2(duo[0].name)} and ${esc2(duo[1].name)} get a secret word on their phones. Everyone else watches, then votes.</p>
-      <div class="row"><button class="btn" id="dtNew">New word</button><button class="btn gold" id="dtGo">Start</button></div>`
-   :`<div class="dtk">Everyone draw</div><div class="dtword${w.length>16?" s":""}">${esc2(w)}</div><p class="dtp">${CFG.secs} seconds · grab your marker</p>
+   ?`<div class="dtk">Head to head</div>${DT.duels.map(vsHTML).join("")}<div class="dtword s">Check your phone</div><p class="dtp">${DT.duels.length>1?"Each pair gets a different secret word on their phones. Then the other pair votes.":"The two players get a secret word on their phones. The other player watches, then votes."}</p>
+      <div class="row"><button class="btn" id="dtNew">New words</button><button class="btn gold" id="dtGo">Start</button></div>`
+   :`<div class="dtk">Everyone draw</div><div class="dtword${DT.word.length>16?" s":""}">${esc2(DT.word)}</div><p class="dtp">${CFG.secs} seconds · grab your marker</p>
       <div class="row"><button class="btn" id="dtNew">New word</button><button class="btn gold" id="dtGo">Start</button></div>`);
-  $("dtNew").onclick=()=>{DT.word=pickWord();renderReady()};
+  $("dtNew").onclick=()=>{if(isDuel())DT.duels.forEach(d=>d.word=pickWord());else DT.word=pickWord();renderReady()};
   $("dtGo").onclick=startDraw;
   setTimeout(()=>{const b=$("dtGo");b&&b.focus({preventScroll:true})},40);
 }
 function startDraw(){
   if(DT.phase!=="ready")return;
   DT.phase="draw";DT.left=CFG.secs;SFX.go&&SFX.go();score();
-  const w=DT.word,duo=DT.duo.map(byPid).filter(Boolean);
   stage(isDuel()
-   ?`<div class="dtk">Head to head · draw!</div><div class="dtvs">${duo.map(p=>`<span style="--pc:${p.color}">${avatarHTML(p,"sm")}${esc2(p.name)}</span>`).join('<i>VS</i>')}</div><div class="dtword s">Check your phone</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div><div class="row"><button class="btn ghost" id="dtDone">Everyone's done</button></div>`
-   :`<div class="dtk">Draw!</div><div class="dtword s">${esc2(w)}</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div>
+   ?`<div class="dtk">Head to head · draw!</div>${DT.duels.map(vsHTML).join("")}<div class="dtword s">Check your phone</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div><div class="row"><button class="btn ghost" id="dtDone">Everyone's done</button></div>`
+   :`<div class="dtk">Draw!</div><div class="dtword s">${esc2(DT.word)}</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div>
     <div class="row"><button class="btn ghost" id="dtDone">Everyone's done</button></div>`);
   $("dtDone").onclick=startVote;
   clearInterval(DT.timer);let last=CFG.secs;
@@ -228,10 +236,9 @@ function startVote(){
   setTimeout(()=>{const b=$("dtSkipVote");b&&b.focus({preventScroll:true})},40);
 }
 function paintVote(){
-  const duo=DT.duo.map(byPid).filter(Boolean);
-  stage(`<div class="dtk">${isDuel()?"Head to head · the word was":"Time's up · hold up your boards"}</div><div class="dtword s">${esc2(DT.word)}</div>
-    ${isDuel()?`<div class="dtvs">${duo.map(p=>`<span style="--pc:${p.color}">${avatarHTML(p,"sm")}${esc2(p.name)}</span>`).join('<i>VS</i>')}</div>`:""}
-    <p class="dtp">${isDuel()?"Voters: choose the best drawing on your phone.":"Vote on your phone for the best drawing. Not your own!"}</p>
+  stage(`<div class="dtk">${isDuel()?"Head to head · vote on your phone":"Time's up · hold up your boards"}</div>
+    ${isDuel()?DT.duels.map(d=>`<div class="dtword s">${esc2(d.word)}</div>${vsHTML(d)}`).join(""):`<div class="dtword s">${esc2(DT.word)}</div>`}
+    <p class="dtp">${isDuel()?"Judge the other pair's drawings. Each vote is a point.":"Vote on your phone for the best drawing. Not your own! Each vote is a point."}</p>
     <div class="dtvotes">${voters().map(p=>`<span class="${DT.votes[p.pid]!=null?"ok":""}" style="${DT.votes[p.pid]!=null?"":"opacity:.8"}">${esc2(p.name)} ${DT.votes[p.pid]!=null?"✓":"…"}</span>`).join("")}</div>
     <div class="row"><button class="btn ghost" id="dtSkipVote">Skip voting</button></div>`);
   $("dtSkipVote").onclick=finishVote;
@@ -248,20 +255,25 @@ function finishVote(){
   if(DT.phase!=="vote")return;
   clearTimeout(DT.voteT);DT.cpuT.forEach(clearTimeout);DT.cpuT=[];DT.phase="result";
   DT.gain={};DT.players.forEach(p=>DT.gain[p.pid]=0);
-  Object.values(DT.votes).forEach(f=>{if(DT.gain[f]!=null)DT.gain[f]++});
+  Object.values(DT.votes).forEach(f=>{if(DT.gain[f]!=null)DT.gain[f]++});      // every vote is a point
   DT.players.forEach(p=>p.pts+=DT.gain[p.pid]);score();
-  const shown=isDuel()?DT.duo.map(byPid).filter(Boolean):DT.players;
-  const top=Math.max(...shown.map(p=>DT.gain[p.pid]));
-  const tie=shown.filter(p=>DT.gain[p.pid]===top).length;
   SFX.win&&SFX.win();
-  stage(`<div class="dtk">${isDuel()?"Head to head · ":""}${top===0?"No votes this round":tie>1?"A tie for best drawing":"Best drawing"}</div><div class="dtword s">${esc2(DT.word)}</div>
-    <div class="dtres">${shown.map(p=>`<div class="${top>0&&DT.gain[p.pid]===top?"win":""}">${esc2(p.name)}<em>+${DT.gain[p.pid]}</em></div>`).join("")}</div>
-    <div class="row"><button class="btn gold" id="dtNext">${DT.round>=CFG.rounds?"See results":"Next round"}</button></div>`);
+  const card=(p,top)=>`<div class="${top>0&&DT.gain[p.pid]===top?"win":""}">${esc2(p.name)}<em>+${DT.gain[p.pid]}</em></div>`;
+  let body,title;
+  if(isDuel()){
+    body=DT.duels.map(d=>{const ps=duoPlayers(d),top=Math.max(...ps.map(p=>DT.gain[p.pid]));return `<div class="dtword s">${esc2(d.word)}</div><div class="dtres sm">${ps.map(p=>card(p,top)).join("")}</div>`}).join("");
+    title="Head to head · results";
+  }else{
+    const top=Math.max(...DT.players.map(p=>DT.gain[p.pid])),tie=DT.players.filter(p=>DT.gain[p.pid]===top).length;
+    body=`<div class="dtword s">${esc2(DT.word)}</div><div class="dtres">${DT.players.map(p=>card(p,top)).join("")}</div>`;
+    title=top===0?"No votes this round":tie>1?"A tie for best drawing":"Best drawing";
+  }
+  stage(`<div class="dtk">${title}</div>${body}<div class="row"><button class="btn gold" id="dtNext">${DT.round>=CFG.rounds?"See results":"Next round"}</button></div>`);
   $("dtNext").onclick=nextRound;
   setTimeout(()=>{const b=$("dtNext");b&&b.focus({preventScroll:true})},60);
 }
 function results(){
-  DT.phase="final";DT.mode="all";DT.duo=[];$("dtRound").textContent="";
+  DT.phase="final";DT.mode="all";DT.duels=[];$("dtRound").textContent="";
   const order=DT.players.slice().sort((a,b)=>b.pts-a.pts),top=order[0].pts,winners=order.filter(p=>p.pts===top);
   window.LB&&LB.record("dt",DT.players.map(p=>({name:p.name,color:p.color,score:p.pts,win:p.pts===top})));
   SFX.win&&SFX.win();
@@ -270,7 +282,7 @@ function results(){
     <div class="row"><button class="btn" id="dtMenu">Game Night menu</button><button class="btn gold" id="dtAgain">Play again</button></div>`);
   confetti(winners.map(w=>w.color).concat(["#ff7a00","#fffdf6"]));
   $("dtMenu").onclick=()=>{stopConfetti();endGame();show("hub")};
-  $("dtAgain").onclick=()=>{stopConfetti();DT.players.forEach(p=>p.pts=0);DT.round=0;DT.used=new Set();DT.pairs=[];DT.pairN=0;score();nextRound()};
+  $("dtAgain").onclick=()=>{stopConfetti();DT.players.forEach(p=>p.pts=0);DT.round=0;DT.used=new Set();DT.pairings=[];DT.duelN=0;score();nextRound()};
   setTimeout(()=>{const b=$("dtAgain");b&&b.focus({preventScroll:true})},60);
 }
 
@@ -279,25 +291,29 @@ function sceneFor(p){
   const sc=DT.players.map(q=>({n:q.name,s:q.pts,c:q.color,on:0,pid:q.pid,av:(()=>{try{return avatarSrc(q.slot)}catch(e){return ""}})()}));
   const base={th:"dt",scores:sc,btns:[],sn:DT.round*10+({ready:1,draw:2,vote:3,result:4,final:5}[DT.phase]||0),me:1};
   const rl=(isDuel()?"Head to head · ":"")+(DT.round?`Round ${Math.min(DT.round,CFG.rounds)} of ${CFG.rounds}`:"");
-  const meIn=DT.players.some(q=>q.pid===p.pid);
-  const inDuo=isDuel()&&DT.duo.includes(p.pid);
-  const duoNames=DT.duo.map(x=>(byPid(x)||{}).name).join(" vs ");
+  const mine=drawsIn(p.pid),myDuel=mine>=0?DT.duels[mine]:null;
+  const partner=myDuel?(byPid(myDuel.duo.find(x=>x!==p.pid))||{}).name:"";
+  const names=DT.duels.map(d=>duoPlayers(d).map(q=>q.name).join(" vs ")).join("  ·  ");
   if(DT.phase==="ready"){
-    if(isDuel())return {...base,head:{e:rl,t:inDuo?"You're up!":"Head to head",s:inDuo?"Secret word. Don't show anyone":duoNames},big:inDuo?DT.word:"",btns:[{t:"Start",cls:"gold",a:"start"}]};
+    if(isDuel())return {...base,head:{e:rl,t:myDuel?"You're up!":"Head to head",s:myDuel?"Secret word. You and "+partner+" draw the same thing":names},big:myDuel?myDuel.word:"",btns:[{t:"Start",cls:"gold",a:"start"}]};
     return {...base,head:{e:rl,t:"Get your marker ready",s:"Everyone draws the same thing"},big:DT.word,btns:[{t:"Start",cls:"gold",a:"start"}]};
   }
   if(DT.phase==="draw"){
-    if(isDuel())return {...base,head:{e:rl,t:inDuo?"Draw it!":"Watch the duel",s:inDuo?"Keep it secret":duoNames},big:inDuo?DT.word:"",clock:String(Math.ceil(DT.left))};
+    if(isDuel())return {...base,head:{e:rl,t:myDuel?"Draw it!":"Watch the duel",s:myDuel?"Keep it secret":names},big:myDuel?myDuel.word:"",clock:String(Math.ceil(DT.left))};
     return {...base,head:{e:rl,t:"Draw it!",s:"On your whiteboard"},big:DT.word,clock:String(Math.ceil(DT.left))};
   }
   if(DT.phase==="vote"){
-    const mine=DT.votes[p.pid];
-    const can=voters().some(q=>q.pid===p.pid);
-    if(!can)return {...base,head:{e:rl,t:"Voting",s:isDuel()?"Others are voting on your drawings":"Watch the TV"},big:DT.word};
-    return {...base,head:{e:rl,t:mine!=null?"Vote locked in":"Who drew it best?",s:mine!=null?"Waiting for the others":isDuel()?"Tap the best drawing":"Tap a player. Not yourself!"},big:DT.word,
-      btns:targets(p.pid).map(x=>{const q=byPid(x);return {t:q.name,a:"vote",v:x,d:mine!=null?1:0,on:mine===x?1:0,c:q.color}})};
+    const voted=DT.votes[p.pid];
+    const j=isDuel()?judgesIn(p.pid):-1;
+    if(isDuel()&&j<0)return {...base,head:{e:rl,t:"Voting",s:"Watch the TV"},big:""};
+    const word=isDuel()?DT.duels[j].word:DT.word;
+    return {...base,head:{e:rl,t:voted!=null?"Vote locked in":isDuel()?"Which drawing is best?":"Who drew it best?",s:voted!=null?"Waiting for the others":isDuel()?"Judge the other pair's "+word.toLowerCase():"Tap a player. Not yourself!"},big:word,
+      btns:targets(p.pid).map(x=>{const q=byPid(x);return {t:q.name,a:"vote",v:x,d:voted!=null?1:0,on:voted===x?1:0,c:q.color}})};
   }
-  if(DT.phase==="result")return {...base,head:{e:rl,t:"Round result",s:(isDuel()?DT.duo.map(byPid):DT.players).filter(Boolean).map(q=>q.name+" +"+(DT.gain[q.pid]||0)).join("  ·  ")},big:DT.word,btns:[{t:DT.round>=CFG.rounds?"See results":"Next round",cls:"gold",a:"next"}]};
+  if(DT.phase==="result"){
+    const list=isDuel()?DT.duels.flatMap(duoPlayers):DT.players;
+    return {...base,head:{e:rl,t:"Round result",s:list.map(q=>q.name+" +"+(DT.gain[q.pid]||0)).join("  ·  ")},big:isDuel()?"":DT.word,btns:[{t:DT.round>=CFG.rounds?"See results":"Next round",cls:"gold",a:"next"}]};
+  }
   if(DT.phase==="final"){const o=DT.players.slice().sort((a,b)=>b.pts-a.pts);return {...base,head:{e:"Final",t:o[0].name+" wins!",s:o.map(q=>q.name+" "+q.pts).join("  ·  ")}}}
   return {...base,head:{e:"Draw This",t:"Get ready",s:""}};
 }
