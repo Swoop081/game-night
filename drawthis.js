@@ -57,19 +57,59 @@ const css=`
 .game.live .dtart{width:64px;height:64px;background:#fff;border:3px solid #ff7a00;position:relative;transform:rotate(-6deg)}
 .game.live .dtart::after{content:"";position:absolute;left:10px;top:30px;width:40px;height:4px;background:#ff7a00;box-shadow:0 12px 0 #ff7a00,8px -12px 0 #ff7a00;transform:rotate(-12deg)}
 `;
-const st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
+const css2=`
+#dt,#dtSetup{background:radial-gradient(120% 80% at 50% 110%,#3b0a52 0%,#14052b 55%,#07010f 100%);position:absolute;overflow:hidden}
+#dt>*,#dtSetup>*{position:relative;z-index:2}
+#dt>.dtfx,#dtSetup>.dtfx{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.dtfx .web{position:absolute;width:30vmin;height:30vmin;opacity:.55}
+.dtfx .web.tl{top:0;left:0}.dtfx .web.tr{top:0;right:0;transform:scaleX(-1)}.dtfx .web.bl{bottom:0;left:0;transform:scaleY(-1)}.dtfx .web.br{bottom:0;right:0;transform:scale(-1,-1)}
+.dtfx .fog{position:absolute;left:-20%;width:140%;height:34%;background:radial-gradient(50% 50% at 50% 50%,rgba(200,170,255,.16),transparent 70%);animation:dtfog 26s linear infinite}
+.dtfx .fog.f2{bottom:6%;animation-duration:38s;animation-direction:reverse;opacity:.8}.dtfx .fog.f1{bottom:-6%}
+@keyframes dtfog{from{transform:translateX(-12%)}50%{transform:translateX(12%)}to{transform:translateX(-12%)}}
+.dtfx .ghost{position:absolute;width:11vmin;opacity:0;filter:drop-shadow(0 0 2vmin rgba(255,255,255,.5));animation:dtghost 22s linear infinite}
+.dtfx .ghost.g2{width:8vmin;animation-duration:30s;animation-delay:7s;top:62%}
+.dtfx .ghost.g3{width:14vmin;animation-duration:40s;animation-delay:15s;top:22%}
+.dtfx .ghost.g1{top:42%}
+@keyframes dtghost{0%{transform:translate(-20vmin,0);opacity:0}8%{opacity:.5}50%{transform:translate(50vw,-6vmin)}92%{opacity:.5}100%{transform:translate(110vw,3vmin);opacity:0}}
+.dtfx .bat{position:absolute;width:7vmin;left:-10vmin;fill:#05010a;animation:dtbat 14s linear infinite}
+.dtfx .bat.b2{animation-delay:5s;top:30%;width:5vmin;animation-duration:11s}.dtfx .bat.b3{animation-delay:9s;top:70%;width:6vmin;animation-duration:17s}.dtfx .bat.b1{top:12%}
+@keyframes dtbat{0%{transform:translate(0,0) scaleY(1)}10%{transform:translate(15vw,-4vmin) scaleY(.5)}20%{transform:translate(30vw,3vmin) scaleY(1)}30%{transform:translate(45vw,-5vmin) scaleY(.5)}40%{transform:translate(60vw,4vmin) scaleY(1)}50%{transform:translate(75vw,-3vmin) scaleY(.5)}60%{transform:translate(90vw,3vmin) scaleY(1)}100%{transform:translate(125vw,0) scaleY(1)}}
+.dtfx .spider{position:absolute;top:0;left:12%;width:5vmin;animation:dtspider 9s ease-in-out infinite}
+.dtfx .spider.s2{left:80%;animation-duration:13s;animation-delay:4s;width:4vmin}
+.dtfx .spider i{position:absolute;left:50%;bottom:100%;width:2px;height:60vh;background:rgba(255,255,255,.35);transform:translateX(-50%)}
+@keyframes dtspider{0%,100%{transform:translateY(-4vh)}50%{transform:translateY(18vh)}}
+.dtfx .flash{position:absolute;inset:0;background:#c9b6ff;opacity:0;animation:dtflash 19s linear infinite}
+@keyframes dtflash{0%,93%,100%{opacity:0}94%{opacity:.22}95%{opacity:0}96%{opacity:.14}97.5%{opacity:0}}
+.dtfx .moon{position:absolute;top:9%;right:11%;width:12vmin;height:12vmin;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6d1,#e9c76a 70%);box-shadow:0 0 6vmin 1vmin rgba(255,220,120,.35);opacity:.75}
+.dtvs{display:flex;align-items:center;gap:2vmin;justify-content:center;flex-wrap:wrap}
+.dtvs span{display:flex;align-items:center;gap:1.4vmin;background:var(--pc);padding:1vmin 2.4vmin 1vmin 1vmin;font-family:${FONT};font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:clamp(1rem,3.4vmin,2.2rem);color:#fff}
+.dtvs span .av{--s:clamp(34px,7vmin,60px);border-radius:0;padding:0;background:#fff;box-shadow:none}
+.dtvs i{font-family:${FONT};font-style:normal;font-weight:900;color:#ff7a00;font-size:clamp(1.2rem,4vmin,2.6rem)}
+.dtword{animation:dtglow 3s ease-in-out infinite}
+@keyframes dtglow{0%,100%{box-shadow:0 0 0 0 rgba(255,122,0,0)}50%{box-shadow:0 0 5vmin 0 rgba(255,122,0,.55)}}
+.game.live .dtart{width:64px;height:58px;background:#ff7a00;border:0;border-radius:50% 50% 46% 46%;transform:none;box-shadow:inset -6px -4px 0 rgba(0,0,0,.18)}
+.game.live .dtart::before{content:"";position:absolute;left:28px;top:-9px;width:9px;height:12px;background:#2f8f3a;border-radius:2px}
+.game.live .dtart::after{content:"";position:absolute;inset:14px 8px 8px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 36'><path d='M6 2l8 12H-2zM42 2l8 12H34zM8 24q16 14 32 0q-16 4-32 0z' fill='%2314052b'/></svg>") center/contain no-repeat;transform:none;border:0}
+`;
+const st=document.createElement("style");st.textContent=css+css2;document.head.appendChild(st);
+const WEB='<svg class="web" viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width=".7" stroke-linecap="round"><path d="M0 0L100 0M0 0L88 40M0 0L66 66M0 0L40 88M0 0L0 100"/><path d="M18 0Q14 14 0 18M38 0Q30 30 0 38M58 0Q46 46 0 58M80 0Q60 60 0 80"/></svg>';
+const GHOST='<svg class="ghost" viewBox="0 0 64 80"><path d="M32 4C15 4 6 17 6 34v38l9-8 8 8 9-8 9 8 8-8 9 8V34C58 17 49 4 32 4z" fill="#fff" fill-opacity=".85"/><ellipse cx="23" cy="32" rx="5" ry="7" fill="#14052b"/><ellipse cx="41" cy="32" rx="5" ry="7" fill="#14052b"/><ellipse cx="32" cy="48" rx="5" ry="6" fill="#14052b"/></svg>';
+const BAT='<svg class="bat" viewBox="0 0 64 32"><path d="M32 8c-3 0-4 4-6 4-4-5-12-8-24-6 6 3 7 8 6 14 5-5 10-4 14 2 3-4 5-5 10-5s7 1 10 5c4-6 9-7 14-2-1-6 0-11 6-14-12-2-20 1-24 6-2 0-3-4-6-4z"/></svg>';
+const SPIDER='<div class="spider"><i></i><svg viewBox="0 0 40 40" width="100%"><g stroke="#e9e1ff" stroke-width="2" fill="none" stroke-linecap="round"><path d="M14 20l-10-8M14 22l-12 2M14 24l-10 10M26 20l10-8M26 22l12 2M26 24l10 10"/></g><circle cx="20" cy="26" r="8" fill="#e9e1ff"/><circle cx="20" cy="16" r="5" fill="#e9e1ff"/><circle cx="18" cy="15" r="1.4" fill="#ff2d2d"/><circle cx="22" cy="15" r="1.4" fill="#ff2d2d"/></svg></div>';
+const fxHTML='<div class="dtfx"><div class="moon"></div><div class="fog f1"></div><div class="fog f2"></div>'+["tl","tr","bl","br"].map(c=>WEB.replace('class="web"','class="web '+c+'"')).join("")+GHOST.replace('class="ghost"','class="ghost g1"')+GHOST.replace('class="ghost"','class="ghost g2"')+GHOST.replace('class="ghost"','class="ghost g3"')+BAT.replace('class="bat"','class="bat b1"')+BAT.replace('class="bat"','class="bat b2"')+BAT.replace('class="bat"','class="bat b3"')+SPIDER+SPIDER.replace('class="spider"','class="spider s2"')+'<div class="flash"></div></div>';
 
 /* hub tile + screens */
 const hub=document.querySelector(".games");
 const tile=document.createElement("button");tile.className="game live";tile.id="playDT";
-tile.innerHTML=`<span class="art"><span class="dtart"></span><span class="pill">Play</span></span><h2>Draw This</h2><p>Same word, four whiteboards, vote for the best.</p>`;
-hub.insertBefore(tile,hub.children[2]||null);
+tile.innerHTML=`<span class="art"><span class="dtart"></span><span class="pill">Play</span></span><h2>Draw This</h2><p>Same word, whiteboards, spooky fun. Vote for the best drawing.</p>`;
+hub.insertBefore(tile,hub.firstChild);
 const n=hub.children.length;hub.classList.remove("five","six","seven");if(n>=7)hub.classList.add("seven");
 const app=$("app");
 const secS=document.createElement("section");secS.className="screen";secS.id="dtSetup";secS.hidden=true;
 const sec=document.createElement("section");sec.className="screen";sec.id="dt";sec.hidden=true;
 app.insertBefore(secS,$("overlay"));app.insertBefore(sec,$("overlay"));
 sec.innerHTML=`<div class="floorbar"><span class="brand">GAME NIGHT<small>DRAW THIS</small></span><span class="spacer"></span><span class="count" id="dtRound"></span><button class="btn ghost" id="dtQuit">Quit</button></div><div id="dtScore"></div><div id="dtStage"></div>`;
+sec.insertAdjacentHTML("afterbegin",fxHTML);
 tile.onclick=()=>{ac();openSetup()};
 $("dtQuit").onclick=()=>confirmSheet("Quit this game?","The scores will be lost.","Quit",()=>{closeOverlay();endGame();show("hub")});
 
@@ -81,6 +121,7 @@ function openSetup(){
       <li>Everyone draws the <b>same word</b> on their whiteboard before the timer ends.</li>
       <li>Then <b>vote on your phone</b> for the best drawing. You can't vote for yourself.</li>
       <li>Every vote is a <b>point</b>. Most points after the last round wins.</li>
+      <li>Every <b>4th round</b> is a <b>head to head</b>: two players get a secret word on their phones, and everyone else votes.</li>
       <li>Players join with their phones, up to 4.</li></ul></div>
     <div class="field"><span class="eyebrow">Rounds</span><div class="seg" id="dtRoundsSeg"></div></div>
     <div class="field"><span class="eyebrow">Seconds to draw</span><div class="seg" id="dtSecsSeg"></div></div>
@@ -93,24 +134,37 @@ function openSetup(){
   Object.keys(PACKS).forEach(k=>{const b=document.createElement("button");b.textContent=PACK_NAMES[k]+" · "+PACKS[k].length;b.setAttribute("aria-pressed",CFG.packs.includes(k));
     b.onclick=()=>{const on=CFG.packs.includes(k);if(on&&CFG.packs.length===1)return;CFG.packs=on?CFG.packs.filter(x=>x!==k):CFG.packs.concat(k);saveCfg();b.setAttribute("aria-pressed",!on);$("dtAvail").textContent=total()+" words"};
     $("dtPacks").appendChild(b)});
+  secS.insertAdjacentHTML("afterbegin",fxHTML);
   $("dtBack").onclick=()=>show("hub");
   $("dtStart").onclick=()=>{ac();startGame()};
   show("dtSetup");
 }
 
 /* state */
-const DT={players:[],round:0,word:"",phase:"idle",left:0,timer:null,votes:{},used:new Set(),gain:{},voteT:null,cpuT:[]};
+const DT={players:[],round:0,word:"",phase:"idle",mode:"all",duo:[],pairs:[],pairN:0,left:0,timer:null,votes:{},used:new Set(),gain:{},voteT:null,cpuT:[]};
 const stage=html=>{$("dtStage").innerHTML=html};
-const cur=()=>DT.players;
 const esc2=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const byPid=pid=>DT.players.find(p=>p.pid===pid);
+const isDuel=()=>DT.mode==="duel";
+const voters=()=>isDuel()?DT.players.filter(p=>!DT.duo.includes(p.pid)):DT.players;
+const targets=pid=>isDuel()?DT.duo.filter(x=>x!==pid):DT.players.map(p=>p.pid).filter(x=>x!==pid);
 function score(){
-  $("dtScore").innerHTML=DT.players.map(p=>`<div class="dtchip${DT.phase==="vote"&&DT.votes[p.pid]!=null?" on":""}" style="--pc:${p.color}">${avatarHTML(p,"sm")}<b>${esc(p.name)}</b><span>${p.pts}</span></div>`).join("");
+  $("dtScore").innerHTML=DT.players.map(p=>{
+    const on=(DT.phase==="vote"&&DT.votes[p.pid]!=null)||(isDuel()&&DT.duo.includes(p.pid)&&(DT.phase==="ready"||DT.phase==="draw"));
+    return `<div class="dtchip${on?" on":""}" style="--pc:${p.color}">${avatarHTML(p,"sm")}<b>${esc(p.name)}</b><span>${p.pts}</span></div>`}).join("");
 }
 function endGame(){clearInterval(DT.timer);clearTimeout(DT.voteT);DT.cpuT.forEach(clearTimeout);DT.cpuT=[];DT.phase="idle"}
 function pickWord(){
   const pool=CFG.packs.flatMap(k=>PACKS[k]);
   let fresh=pool.filter(w=>!DT.used.has(w));if(!fresh.length){DT.used=new Set();fresh=pool}
   const w=fresh[Math.floor(Math.random()*fresh.length)];DT.used.add(w);return w;
+}
+function pickDuo(){
+  if(!DT.pairs.length||DT.pairN>=DT.pairs.length){
+    const ps=[];for(let i=0;i<DT.players.length;i++)for(let j=i+1;j<DT.players.length;j++)ps.push([DT.players[i].pid,DT.players[j].pid]);
+    DT.pairs=shuffle(ps);DT.pairN=0;
+  }
+  return DT.pairs[DT.pairN++];
 }
 function startGame(){
   const L=window.LINK&&LINK.pull?LINK.pull(2,4,{cpu:true}):null;
@@ -120,28 +174,38 @@ function startGame(){
   }
   ensureSlots();save();saveCfg();
   DT.players=L.map((p,i)=>({name:p.name,color:S.colors[i],pts:0,slot:i,pid:p.pid,cpu:!!p.cpu}));
-  DT.round=0;DT.used=new Set();DT.phase="idle";
+  DT.round=0;DT.used=new Set();DT.phase="idle";DT.pairs=[];DT.pairN=0;DT.mode="all";DT.duo=[];
   show("dt");score();stage("");
   introContestants(DT.players,"Draw This",()=>nextRound());
 }
 function nextRound(){
   DT.round++;
   if(DT.round>CFG.rounds)return results();
+  DT.mode=(DT.players.length>=3&&DT.round%4===0)?"duel":"all";
+  DT.duo=isDuel()?pickDuo():[];
   DT.word=pickWord();DT.votes={};DT.gain={};DT.phase="ready";
-  $("dtRound").textContent=`Round ${DT.round} of ${CFG.rounds}`;score();
-  const w=DT.word;
-  stage(`<div class="dtk">Everyone draw</div><div class="dtword${w.length>16?" s":""}">${esc2(w)}</div><p class="dtp">${CFG.secs} seconds · grab your marker</p>
-    <div class="row"><button class="btn" id="dtNew">New word</button><button class="btn gold" id="dtGo">Start</button></div>`);
-  $("dtNew").onclick=()=>{DT.word=pickWord();nextRoundWord()};
+  $("dtRound").textContent=`Round ${DT.round} of ${CFG.rounds}`;
+  renderReady();
+}
+function renderReady(){
+  score();
+  const w=DT.word,duo=DT.duo.map(byPid).filter(Boolean);
+  stage(isDuel()
+   ?`<div class="dtk">Head to head</div><div class="dtvs">${duo.map(p=>`<span style="--pc:${p.color}">${avatarHTML(p,"sm")}${esc2(p.name)}</span>`).join('<i>VS</i>')}</div><div class="dtword s">Check your phone</div><p class="dtp">${esc2(duo[0].name)} and ${esc2(duo[1].name)} get a secret word on their phones. Everyone else watches, then votes.</p>
+      <div class="row"><button class="btn" id="dtNew">New word</button><button class="btn gold" id="dtGo">Start</button></div>`
+   :`<div class="dtk">Everyone draw</div><div class="dtword${w.length>16?" s":""}">${esc2(w)}</div><p class="dtp">${CFG.secs} seconds · grab your marker</p>
+      <div class="row"><button class="btn" id="dtNew">New word</button><button class="btn gold" id="dtGo">Start</button></div>`);
+  $("dtNew").onclick=()=>{DT.word=pickWord();renderReady()};
   $("dtGo").onclick=startDraw;
   setTimeout(()=>{const b=$("dtGo");b&&b.focus({preventScroll:true})},40);
 }
-function nextRoundWord(){DT.round--;nextRound()}
 function startDraw(){
   if(DT.phase!=="ready")return;
   DT.phase="draw";DT.left=CFG.secs;SFX.go&&SFX.go();score();
-  const w=DT.word;
-  stage(`<div class="dtk">Draw!</div><div class="dtword s">${esc2(w)}</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div>
+  const w=DT.word,duo=DT.duo.map(byPid).filter(Boolean);
+  stage(isDuel()
+   ?`<div class="dtk">Head to head · draw!</div><div class="dtvs">${duo.map(p=>`<span style="--pc:${p.color}">${avatarHTML(p,"sm")}${esc2(p.name)}</span>`).join('<i>VS</i>')}</div><div class="dtword s">Check your phone</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div><div class="row"><button class="btn ghost" id="dtDone">Everyone's done</button></div>`
+   :`<div class="dtk">Draw!</div><div class="dtword s">${esc2(w)}</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div>
     <div class="row"><button class="btn ghost" id="dtDone">Everyone's done</button></div>`);
   $("dtDone").onclick=startVote;
   clearInterval(DT.timer);let last=CFG.secs;
@@ -159,25 +223,25 @@ function startVote(){
   clearInterval(DT.timer);DT.phase="vote";DT.votes={};score();
   paintVote();
   DT.cpuT.forEach(clearTimeout);DT.cpuT=[];
-  DT.players.filter(p=>p.cpu).forEach(p=>{DT.cpuT.push(setTimeout(()=>castVote(p.pid,pickOther(p.pid)),2000+Math.random()*4000))});
+  voters().filter(p=>p.cpu).forEach(p=>{DT.cpuT.push(setTimeout(()=>{const t=targets(p.pid);if(t.length)castVote(p.pid,t[Math.floor(Math.random()*t.length)])},2000+Math.random()*4000))});
   clearTimeout(DT.voteT);DT.voteT=setTimeout(finishVote,35000);
   setTimeout(()=>{const b=$("dtSkipVote");b&&b.focus({preventScroll:true})},40);
 }
-function pickOther(pid){const o=DT.players.filter(p=>p.pid!==pid);return o[Math.floor(Math.random()*o.length)].pid}
 function paintVote(){
-  const need=DT.players.filter(connected);
-  stage(`<div class="dtk">Time's up · hold up your boards</div><div class="dtword s">${esc2(DT.word)}</div><p class="dtp">Vote on your phone for the best drawing. Not your own!</p>
-    <div class="dtvotes">${DT.players.map(p=>`<span class="${DT.votes[p.pid]!=null?"ok":""}" style="${DT.votes[p.pid]!=null?"":"opacity:.8"}">${esc2(p.name)} ${DT.votes[p.pid]!=null?"✓":"…"}</span>`).join("")}</div>
+  const duo=DT.duo.map(byPid).filter(Boolean);
+  stage(`<div class="dtk">${isDuel()?"Head to head · the word was":"Time's up · hold up your boards"}</div><div class="dtword s">${esc2(DT.word)}</div>
+    ${isDuel()?`<div class="dtvs">${duo.map(p=>`<span style="--pc:${p.color}">${avatarHTML(p,"sm")}${esc2(p.name)}</span>`).join('<i>VS</i>')}</div>`:""}
+    <p class="dtp">${isDuel()?"Voters: choose the best drawing on your phone.":"Vote on your phone for the best drawing. Not your own!"}</p>
+    <div class="dtvotes">${voters().map(p=>`<span class="${DT.votes[p.pid]!=null?"ok":""}" style="${DT.votes[p.pid]!=null?"":"opacity:.8"}">${esc2(p.name)} ${DT.votes[p.pid]!=null?"✓":"…"}</span>`).join("")}</div>
     <div class="row"><button class="btn ghost" id="dtSkipVote">Skip voting</button></div>`);
   $("dtSkipVote").onclick=finishVote;
   score();
 }
 function castVote(pid,forPid){
   if(DT.phase!=="vote"||pid===forPid||DT.votes[pid]!=null)return false;
-  if(!DT.players.some(p=>p.pid===pid)||!DT.players.some(p=>p.pid===forPid))return false;
+  if(!voters().some(p=>p.pid===pid)||!targets(pid).includes(forPid))return false;
   DT.votes[pid]=forPid;SFX.beep&&SFX.beep();paintVote();
-  const need=DT.players.filter(connected);
-  if(need.every(p=>DT.votes[p.pid]!=null))setTimeout(finishVote,700);
+  if(voters().filter(connected).every(p=>DT.votes[p.pid]!=null))setTimeout(finishVote,700);
   return true;
 }
 function finishVote(){
@@ -186,17 +250,18 @@ function finishVote(){
   DT.gain={};DT.players.forEach(p=>DT.gain[p.pid]=0);
   Object.values(DT.votes).forEach(f=>{if(DT.gain[f]!=null)DT.gain[f]++});
   DT.players.forEach(p=>p.pts+=DT.gain[p.pid]);score();
-  const top=Math.max(...DT.players.map(p=>DT.gain[p.pid]));
-  const tie=DT.players.filter(p=>DT.gain[p.pid]===top).length;
+  const shown=isDuel()?DT.duo.map(byPid).filter(Boolean):DT.players;
+  const top=Math.max(...shown.map(p=>DT.gain[p.pid]));
+  const tie=shown.filter(p=>DT.gain[p.pid]===top).length;
   SFX.win&&SFX.win();
-  stage(`<div class="dtk">${top===0?"No votes this round":tie>1?"A tie for best drawing":"Best drawing"}</div><div class="dtword s">${esc2(DT.word)}</div>
-    <div class="dtres">${DT.players.map(p=>`<div class="${top>0&&DT.gain[p.pid]===top?"win":""}">${esc2(p.name)}<em>+${DT.gain[p.pid]}</em></div>`).join("")}</div>
+  stage(`<div class="dtk">${isDuel()?"Head to head · ":""}${top===0?"No votes this round":tie>1?"A tie for best drawing":"Best drawing"}</div><div class="dtword s">${esc2(DT.word)}</div>
+    <div class="dtres">${shown.map(p=>`<div class="${top>0&&DT.gain[p.pid]===top?"win":""}">${esc2(p.name)}<em>+${DT.gain[p.pid]}</em></div>`).join("")}</div>
     <div class="row"><button class="btn gold" id="dtNext">${DT.round>=CFG.rounds?"See results":"Next round"}</button></div>`);
   $("dtNext").onclick=nextRound;
   setTimeout(()=>{const b=$("dtNext");b&&b.focus({preventScroll:true})},60);
 }
 function results(){
-  DT.phase="final";$("dtRound").textContent="";
+  DT.phase="final";DT.mode="all";DT.duo=[];$("dtRound").textContent="";
   const order=DT.players.slice().sort((a,b)=>b.pts-a.pts),top=order[0].pts,winners=order.filter(p=>p.pts===top);
   window.LB&&LB.record("dt",DT.players.map(p=>({name:p.name,color:p.color,score:p.pts,win:p.pts===top})));
   SFX.win&&SFX.win();
@@ -205,7 +270,7 @@ function results(){
     <div class="row"><button class="btn" id="dtMenu">Game Night menu</button><button class="btn gold" id="dtAgain">Play again</button></div>`);
   confetti(winners.map(w=>w.color).concat(["#ff7a00","#fffdf6"]));
   $("dtMenu").onclick=()=>{stopConfetti();endGame();show("hub")};
-  $("dtAgain").onclick=()=>{stopConfetti();DT.players.forEach(p=>p.pts=0);DT.round=0;DT.used=new Set();score();nextRound()};
+  $("dtAgain").onclick=()=>{stopConfetti();DT.players.forEach(p=>p.pts=0);DT.round=0;DT.used=new Set();DT.pairs=[];DT.pairN=0;score();nextRound()};
   setTimeout(()=>{const b=$("dtAgain");b&&b.focus({preventScroll:true})},60);
 }
 
@@ -213,18 +278,26 @@ function results(){
 function sceneFor(p){
   const sc=DT.players.map(q=>({n:q.name,s:q.pts,c:q.color,on:0,pid:q.pid,av:(()=>{try{return avatarSrc(q.slot)}catch(e){return ""}})()}));
   const base={th:"dt",scores:sc,btns:[],sn:DT.round*10+({ready:1,draw:2,vote:3,result:4,final:5}[DT.phase]||0),me:1};
-  const rl=DT.round?`Round ${Math.min(DT.round,CFG.rounds)} of ${CFG.rounds}`:"";
+  const rl=(isDuel()?"Head to head · ":"")+(DT.round?`Round ${Math.min(DT.round,CFG.rounds)} of ${CFG.rounds}`:"");
   const meIn=DT.players.some(q=>q.pid===p.pid);
-  if(DT.phase==="ready")return {...base,head:{e:rl,t:"Get your marker ready",s:"Everyone draws the same thing"},big:DT.word,btns:[{t:"Start",cls:"gold",a:"start"}]};
-  if(DT.phase==="draw")return {...base,head:{e:rl,t:"Draw it!",s:"On your whiteboard"},big:DT.word,clock:String(Math.ceil(DT.left))};
+  const inDuo=isDuel()&&DT.duo.includes(p.pid);
+  const duoNames=DT.duo.map(x=>(byPid(x)||{}).name).join(" vs ");
+  if(DT.phase==="ready"){
+    if(isDuel())return {...base,head:{e:rl,t:inDuo?"You're up!":"Head to head",s:inDuo?"Secret word. Don't show anyone":duoNames},big:inDuo?DT.word:"",btns:[{t:"Start",cls:"gold",a:"start"}]};
+    return {...base,head:{e:rl,t:"Get your marker ready",s:"Everyone draws the same thing"},big:DT.word,btns:[{t:"Start",cls:"gold",a:"start"}]};
+  }
+  if(DT.phase==="draw"){
+    if(isDuel())return {...base,head:{e:rl,t:inDuo?"Draw it!":"Watch the duel",s:inDuo?"Keep it secret":duoNames},big:inDuo?DT.word:"",clock:String(Math.ceil(DT.left))};
+    return {...base,head:{e:rl,t:"Draw it!",s:"On your whiteboard"},big:DT.word,clock:String(Math.ceil(DT.left))};
+  }
   if(DT.phase==="vote"){
     const mine=DT.votes[p.pid];
-    if(!meIn)return {...base,head:{e:rl,t:"Voting",s:"Watch the TV"},big:DT.word};
-    const others=DT.players.filter(q=>q.pid!==p.pid);
-    return {...base,head:{e:rl,t:mine!=null?"Vote locked in":"Who drew it best?",s:mine!=null?"Waiting for the others":"Tap a player. Not yourself!"},big:DT.word,
-      btns:others.map(q=>({t:q.name,a:"vote",v:q.pid,d:mine!=null?1:0,on:mine===q.pid?1:0,c:q.color}))};
+    const can=voters().some(q=>q.pid===p.pid);
+    if(!can)return {...base,head:{e:rl,t:"Voting",s:isDuel()?"Others are voting on your drawings":"Watch the TV"},big:DT.word};
+    return {...base,head:{e:rl,t:mine!=null?"Vote locked in":"Who drew it best?",s:mine!=null?"Waiting for the others":isDuel()?"Tap the best drawing":"Tap a player. Not yourself!"},big:DT.word,
+      btns:targets(p.pid).map(x=>{const q=byPid(x);return {t:q.name,a:"vote",v:x,d:mine!=null?1:0,on:mine===x?1:0,c:q.color}})};
   }
-  if(DT.phase==="result")return {...base,head:{e:rl,t:"Round result",s:DT.players.map(q=>q.name+" +"+(DT.gain[q.pid]||0)).join("  ·  ")},big:DT.word,btns:[{t:DT.round>=CFG.rounds?"See results":"Next round",cls:"gold",a:"next"}]};
+  if(DT.phase==="result")return {...base,head:{e:rl,t:"Round result",s:(isDuel()?DT.duo.map(byPid):DT.players).filter(Boolean).map(q=>q.name+" +"+(DT.gain[q.pid]||0)).join("  ·  ")},big:DT.word,btns:[{t:DT.round>=CFG.rounds?"See results":"Next round",cls:"gold",a:"next"}]};
   if(DT.phase==="final"){const o=DT.players.slice().sort((a,b)=>b.pts-a.pts);return {...base,head:{e:"Final",t:o[0].name+" wins!",s:o.map(q=>q.name+" "+q.pts).join("  ·  ")}}}
   return {...base,head:{e:"Draw This",t:"Get ready",s:""}};
 }
@@ -234,5 +307,5 @@ function act(p,m){
   else if(m.a==="vote")castVote(p.pid,m.i);
 }
 function active(){return !$("dt").hidden}
-window.__DT={DT,CFG,sceneFor,act,castVote,PACKS,active};
+window.__DT={DT,CFG,sceneFor,act,castVote,PACKS,active,nextRound};
 })();
