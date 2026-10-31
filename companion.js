@@ -9,7 +9,7 @@
   const log=L.log||(()=>{});
   const txt=el=>el?String(el.textContent||"").replace(/\s+/g," ").trim():"";
   const vis=el=>!!el&&el.isConnected&&!el.closest("[hidden]");
-  const GAME_IDS=["hl","nt","pb","cd","ff","tp","wf"];
+  const GAME_IDS=["hl","nt","pb","cd","dt","ff","tp","wf"];
   const WIRED={hl:1,nt:1,pb:1,cd:1};
   const gameNow=()=>{for(const id of GAME_IDS){const e=$(id);if(e&&!e.hidden)return id}return null};
   const players=g=>{try{if(g==="hl")return HL.players;if(g==="nt")return __NT.NT.players;if(g==="pb")return __PB.PB.players;if(g==="cd")return __CD.CD.players}catch(e){}return null};
@@ -124,6 +124,7 @@
     const g=gameNow();
     if(!g){if(wasOn){wasOn=false;open().forEach(p=>{p.scr="";L.send(p,{k:"scr",off:1})})}return}
     wasOn=true;
+    if(g==="dt"&&window.__DT){open().forEach(p=>{const m={k:"scr",...__DT.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     let sc;try{sc=scene(g)}catch(e){log("scene error",String(e));return}
     const bs=g+"|"+sc.btns.map(b=>b.t).join("~")+"|"+JSON.stringify(sc.head);
     if(bs!==lastBtnSig){lastBtnSig=bs;serial++;try{if(typeof voiceMark==="function"&&L.voiceOn())voiceMark()}catch(e){}}
@@ -141,6 +142,7 @@
   const om=L.onMessage;
   L.onMessage=(p,m)=>{
     const g=gameNow();
+    if(m.k==="act"&&window.__DT&&__DT.active()){try{__DT.act(p,m)}catch(e){log("act error",String(e))}return}
     if(m.k==="tap"||m.k==="txt"||m.k==="num"){
       if(!g||!mayAct(g,p)){log("input ignored",{k:m.k,from:p.name});return}
       try{
@@ -154,7 +156,7 @@
   };
 
   /* ---------- phone panel on each game's setup screen ---------- */
-  const SETUPS={hlSetup:"hlPlayers",ntSetup:"ntPlayers",pbSetup:"pbPlayers",cdSetup:"cdPlayers"};
+  const SETUPS={hlSetup:"hlPlayers",ntSetup:"ntPlayers",pbSetup:"pbPlayers",cdSetup:"cdPlayers",dtSetup:"dtPlayers"};
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"");
   const joinUrl=()=>base+"join.html?c="+L.code+(new URLSearchParams(location.search).get("peerhost")?"&peerhost="+new URLSearchParams(location.search).get("peerhost")+"&peerport="+(new URLSearchParams(location.search).get("peerport")||9000):"");
   const paintPanel=(id,pl)=>{
@@ -176,7 +178,7 @@
         <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">${img}<div style="flex:1;min-width:200px">
         ${lob.length?lob.map(p=>`<div style="padding:4px 0;font-weight:800">${p.cpu?"🤖":"📱"} ${String(p.name).replace(/</g,"&lt;")}</div>`).join(""):`<div>Scan the code, or open <b>${base.replace(/^https?:\/\//,"")}join.html</b> and enter <b style="letter-spacing:.2em;color:var(--gold)">${L.code}</b></div>`}
         </div></div>
-        <div class="row" style="margin-top:8px"><button class="btn" data-a="join">📱 Show join code</button>${id==="hlSetup"?'<button class="btn" data-a="cpu">🤖 Add CPU player</button><button class="btn ghost" data-a="nocpu">Remove CPU</button>':""}</div>
+        <div class="row" style="margin-top:8px"><button class="btn" data-a="join">📱 Show join code</button>${id==="hlSetup"||id==="dtSetup"?'<button class="btn" data-a="cpu">🤖 Add CPU player</button><button class="btn ghost" data-a="nocpu">Remove CPU</button>':""}</div>
         <div class="note" style="margin-top:6px">${lob.length?"These players are used when you press Start.":"No phones yet. You can still play on this screen."}</div>`;
       el.querySelectorAll("button").forEach(b=>b.onclick=()=>{const a=b.dataset.a;if(a==="join")L.toggle();else if(a==="cpu")L.addCpu();else L.removeCpu()});
     }

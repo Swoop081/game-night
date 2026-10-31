@@ -6,7 +6,7 @@ const MODES=[
   ["floor-tv","🟦","The Floor · TV Game","wins"],["floor-custom","🟦","The Floor · Custom","wins"],
   ["hl","🃏","Higher or Lower","pts"],["cd","💵","The Price Is Right","$"],
   ["nt","🔟","Name Ten","pts"],["ff","👨‍👩‍👧","Family Feud","pts"],
-  ["tp","🥧","Trivial Pursuit","wedges"],["pb","🖼️","Picture Blitz","pts"],["wf","🎡","Wheel of Fortune","$"]];
+  ["tp","🥧","Trivial Pursuit","wedges"],["pb","🖼️","Picture Blitz","pts"],["wf","🎡","Wheel of Fortune","$"],["dt","✏️","Draw This","pts"]];
 const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return {}}};
 const store=d=>{try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
 const keyOf=n=>String(n||"").trim().toLowerCase();

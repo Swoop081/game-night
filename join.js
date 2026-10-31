@@ -111,6 +111,7 @@
     $("cmE").textContent=m.head.e||"";$("cmT").textContent=m.head.t||"";$("cmS").textContent=m.head.s||"";
     // main area per game
     let main="";
+    if(m.big)main+='<div class="cmword">'+esc(m.big)+'</div>';
     if(m.cards&&m.cards.length)main='<div class="cmcards">'+m.cards.map(c=>c.b!==undefined?'<div class="pk back">'+esc(c.b)+'</div>':'<div class="pk '+(c.r||"")+'">'+esc(c.n)+'</div>').join("")+'</div>';
     if(m.clock)main+='<div class="cmbig">'+esc(m.clock)+(m.count?' <small style="font-size:1rem;opacity:.7">'+esc(m.count)+'</small>':"")+'</div>';
     if(m.found&&m.found.length)main+='<div class="cmchips">'+m.found.map(f=>'<span>'+esc(f)+'</span>').join("")+'</div>';
@@ -128,12 +129,12 @@
     if(bs!==lastBtn){
       lastBtn=bs;const B=$("cmBtns"),list=m.btns||[];
       const prz=list.some(b=>b.nm);
-      B.className=list.length===2&&!prz&&list[0].cls&&/hi|lo/.test(list[0].cls)?"two big":(prz||list.length>3?"grid":"");
+      B.className=list.some(b=>b.a==="vote")?"grid big":list.length===2&&!prz&&list[0].cls&&/hi|lo/.test(list[0].cls)?"two big":(prz||list.length>3?"grid":"");
       B.innerHTML="";
       list.forEach((b,i)=>{const e=document.createElement("button");e.className="cb "+(b.cls||"")+(b.nm?" prz":"")+(b.on?" sel":"");
         if(b.nm)e.innerHTML=(b.im?'<img alt="" referrerpolicy="no-referrer" src="'+esc(b.im)+'">':'<span class="em">'+esc(b.em)+'</span>')+esc(b.nm)+(b.pr?'<em>'+esc(b.pr)+'</em>':"");
         else e.textContent=b.t;
-        e.disabled=!m.me||!!b.d;e.onclick=()=>tapBtn(i);B.appendChild(e)});
+        if(b.c)e.style.cssText="background:"+b.c+";color:#fff";e.disabled=!m.me||!!b.d;e.onclick=()=>{if(b.a){if(conn&&conn.open)conn.send({k:"act",a:b.a,i:b.v})}else tapBtn(i)};B.appendChild(e)});
     }
     // type-in box
     const F=$("cmForm");const showIn=!!m.inp&&!!m.me;F.classList.toggle("hide",!showIn);
@@ -159,7 +160,7 @@
     const el=$("cmMic"),live=mode==="mic";
     el.className=live?"live":"";
     const h=$("heard").textContent;
-    el.textContent=live?(h?"🎤 "+h:"🎤 Your turn: say it out loud"):(lastScr.me?"Your turn":(lastScr.view?"Watch the TV":"Watch the TV · "+($("st").textContent||""))).replace(/ · $/,"");
+    el.textContent=lastScr.th==="dt"?"":live?(h?"🎤 "+h:"🎤 Your turn: say it out loud"):(lastScr.me?"Your turn":(lastScr.view?"Watch the TV":"Watch the TV · "+($("st").textContent||""))).replace(/ · $/,"");
   };
   setInterval(paintMic,300);
   if($("cmForm"))$("cmForm").onsubmit=e=>{e.preventDefault();const v=$("cmIn").value.trim();$("cmIn").value="";if(v&&conn&&conn.open)conn.send({k:"txt",v});$("cmIn").focus({preventScroll:true})};
