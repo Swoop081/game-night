@@ -89,6 +89,22 @@ const css2=`
 .dtfx .flash{position:absolute;inset:0;background:#c9b6ff;opacity:0;animation:dtflash 19s linear infinite}
 @keyframes dtflash{0%,93%,100%{opacity:0}94%{opacity:.22}95%{opacity:0}96%{opacity:.14}97.5%{opacity:0}}
 .dtfx .moon{position:absolute;top:9%;right:11%;width:12vmin;height:12vmin;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6d1,#e9c76a 70%);box-shadow:0 0 6vmin 1vmin rgba(255,220,120,.35);opacity:.75}
+
+#dt,#dtSetup{--stage-2:#1b0a33;--stage-3:#2e1157;--line:#4b1f86;--gold:#ff7a00;--gold-deep:#d95f00;--muted:#c9a8ff}
+#dt.photo>.floorbar,#dt.photo>#dtScore{display:none}
+#dt.photo #dtStage{gap:4vmin}
+.dtghostbtn{position:absolute;bottom:2vmin;left:50%;transform:translateX(-50%);opacity:.02;font-size:.6rem!important;padding:.3em 1em!important}
+.dtghostbtn:focus{opacity:.02}
+.dtchip{background:#2e1157;border-left:1.1vmin solid var(--pc)}
+.dtchip.on{background:#ff7a00;color:#14052b}
+.dtchip.on b,.dtchip.on span{color:#14052b}
+.dtvs span{background:#2e1157;border-left:1.1vmin solid var(--pc);color:#fff}
+.dtvotes span{background:#2e1157}.dtvotes span.ok{background:#ff7a00;color:#14052b}
+.dtres div{background:#2e1157}.dtres div.win{background:#ff7a00}
+.dtrank .r{background:#2e1157}.dtrank .r.win{background:#ff7a00}
+.dtstar{background:#2e1157;border:.8vmin solid #ff7a00;box-shadow:0 0 6vmin #ff7a00}
+#dtSetup .topbar h2{color:#ff7a00}
+#playDT{background:linear-gradient(160deg,#4b1f86,#14052b)!important;border-color:#ff7a00!important}
 .dtvs{display:flex;align-items:center;gap:2vmin;justify-content:center;flex-wrap:wrap}
 .dtvs span{display:flex;align-items:center;gap:1.4vmin;background:var(--pc);padding:1vmin 2.4vmin 1vmin 1vmin;font-family:${FONT};font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:clamp(1rem,3.4vmin,2.2rem);color:#fff}
 .dtvs span .av{--s:clamp(34px,7vmin,60px);border-radius:0;padding:0;background:#fff;box-shadow:none}
@@ -150,7 +166,7 @@ function openSetup(){
 
 /* state */
 const DT={players:[],round:0,word:"",phase:"idle",mode:"all",duels:[],pairings:[],duelN:0,left:0,timer:null,votes:{},used:new Set(),gain:{},voteT:null,cpuT:[]};
-const stage=html=>{$("dtStage").innerHTML=html};
+const stage=html=>{$("dt").classList.toggle("photo",DT.phase==="perfect");$("dtStage").innerHTML=html};
 const esc2=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 const byPid=pid=>DT.players.find(p=>p.pid===pid);
 const isDuel=()=>DT.mode==="duel";
@@ -274,10 +290,9 @@ function renderPerfect(){
   DT.phase="perfect";score();
   SFX.win&&SFX.win();setTimeout(()=>SFX.win&&SFX.win(),700);
   const P=DT.perfect;
-  stage(`<div class="dtk">Every single vote!</div><div class="dtperfect">Perfect score!</div>
+  stage(`<div class="dtperfect">Perfect score!</div>
     <div class="dtstars">${P.map(p=>`<div class="dtstar" style="--pc:${p.color}">${avatarHTML(p,"lg")}<b>${esc2(p.name)}</b><small>${esc2(wordOf(p))}</small></div>`).join("")}</div>
-    <p class="dtp dtphoto">${P.map(p=>esc2(p.name)).join(" and ")}, come and get a photo with your masterpiece! Hold your whiteboard next to the TV.</p>
-    <div class="row"><button class="btn gold" id="dtPhoto">Got the photo</button></div>`);
+    <button class="btn gold dtghostbtn" id="dtPhoto" aria-label="Continue">Continue</button>`);
   confetti(P.map(p=>p.color).concat(["#ff7a00","#ffd400","#fffdf6"]));
   $("dtPhoto").onclick=()=>{stopConfetti();renderResult()};
   setTimeout(()=>{const b=$("dtPhoto");b&&b.focus({preventScroll:true})},60);
@@ -339,7 +354,7 @@ function sceneFor(p){
   }
   if(DT.phase==="perfect"){
     const P=DT.perfect||[],won=P.some(q=>q.pid===p.pid);
-    return {...base,head:{e:rl,t:won?"PERFECT SCORE!":"Perfect score!",s:won?"Every vote! Take your whiteboard to the TV for a photo":P.map(q=>q.name).join(" and ")+" got every vote"},big:won?wordOf(byPid(p.pid)):"",btns:[{t:won?"Got the photo":"Continue",cls:"gold",a:"photo"}]};
+    return {...base,head:{e:rl,t:won?"PERFECT SCORE!":"Perfect score!",s:won?"You got every vote! Take your whiteboard to the TV and stand next to it for a photo with your masterpiece":P.map(q=>q.name).join(" and ")+(P.length>1?" got":" got")+" every vote. Get your phone camera ready!"},big:won?wordOf(byPid(p.pid)):"",btns:[{t:won?"Got the photo":"Continue",cls:"gold",a:"photo"}]};
   }
   if(DT.phase==="result"){
     const list=isDuel()?DT.duels.flatMap(duoPlayers):DT.players;

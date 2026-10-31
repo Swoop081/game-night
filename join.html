@@ -74,6 +74,7 @@ body{min-height:100dvh;padding:calc(env(safe-area-inset-top) + 8px) 14px calc(en
 #cmp.th-nt{--bg:#033b40;--hd:#c6ff3d;--hdf:#033b40;--ac:#c6ff3d;--acf:#033b40}
 #cmp.th-dt{--bg:#14052b;--hd:#ff7a00;--hdf:#14052b;--ac:#ff7a00;--acf:#14052b}
 .cmword{font:900 2.6rem/1.05 system-ui;text-transform:uppercase;text-align:center;background:var(--ac);color:var(--acf);padding:18px 14px;max-width:100%;word-break:break-word}
+#cmp.th-dt .cs{background:#2e1157;border-left:6px solid var(--c)}#cmp.th-dt .cs.on{background:#ff7a00;color:#14052b}
 #cmp.th-dt #cmBody{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='white' stroke-opacity='.25' stroke-width='.7'><path d='M0 0L100 0M0 0L88 40M0 0L66 66M0 0L40 88M0 0L0 100M18 0Q14 14 0 18M38 0Q30 30 0 38M58 0Q46 46 0 58M80 0Q60 60 0 80'/></svg>") 0 0/32vw no-repeat,radial-gradient(120% 80% at 50% 110%,#3b0a52,#14052b)}
 #cmp.th-pb{--bg:#0b0b12;--hd:#ff2d95;--hdf:#fff;--ac:#19e3ff;--acf:#0b0b12}
 #cmScores{display:flex;flex:none}
@@ -170,7 +171,7 @@ document.getElementById("inx").onclick=function(){b.classList.add("hide")};
 document.getElementById("cpy").onclick=function(){var t=location.href,d=document.getElementById("cpy");
 (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var i=document.createElement("input");i.value=t;document.body.appendChild(i);i.select();try{document.execCommand("copy")}catch(e){}i.remove()}).then(function(){d.textContent="Copied. Paste into Safari"})}})();</script>
 <script>/* reload if a newer build exists (phone browsers cache this page) */
-const JB_BUILD=32;fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.text()).then(t=>{if(parseInt(t,10)>JB_BUILD&&!sessionStorage.getItem("gn.rl"+t)){try{sessionStorage.setItem("gn.rl"+t,"1")}catch(e){}location.replace(location.pathname+location.search.replace(/[&?]r=\d+/,"")+(location.search?"&":"?")+"r="+Date.now())}}).catch(()=>{});</script>
+const JB_BUILD=33;fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.text()).then(t=>{if(parseInt(t,10)>JB_BUILD&&!sessionStorage.getItem("gn.rl"+t)){try{sessionStorage.setItem("gn.rl"+t,"1")}catch(e){}location.replace(location.pathname+location.search.replace(/[&?]r=\d+/,"")+(location.search?"&":"?")+"r="+Date.now())}}).catch(()=>{});</script>
 <script src="peerjs.min.js?v=1"></script>
-<script src="join.js?v=32"></script>
+<script src="join.js?v=33"></script>
 </body></html>
