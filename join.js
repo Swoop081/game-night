@@ -92,7 +92,7 @@
       if(m.map){const mp=$("map");mp.style.gridTemplateColumns="repeat("+m.map.c+",16px)";mp.innerHTML=m.map.o.map((c,i)=>'<i style="background:'+(c||"transparent")+'" class="'+((m.map.hot[0].includes(i)||m.map.hot[1].includes(i))?"hot":"")+'"></i>').join("")}}
     const rv=$("rv");rv.className=m.rv?(m.rv.c.indexOf("ok")>-1?"ok":"pass"):"";rv.textContent=m.rv?m.rv.t:"";
     $("pass").disabled=!(mode==="mic"&&m.state==="run");
-    $("dst").textContent=mode==="mic"?"Your turn · say the answer out loud":($("st").textContent||"");
+    $("dst").textContent=mode==="mic"?(micOK?"Your turn · say the answer out loud":($("st").textContent||"Microphone not working")):($("st").textContent||"");
     $("dheard").textContent=mode==="mic"?$("heard").textContent:"";
   };
   if($("pass"))$("pass").onclick=()=>{if(conn&&conn.open)conn.send({k:"btn",id:"pass"})};
@@ -203,7 +203,7 @@
     conn=peer.connect(target(),{reliable:true});
     const c=conn;
     c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player",av});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
-    c.on("data",m=>{lastRx=Date.now();if(m&&m.k==="hb")return;if(m&&m.k==="avs"){avMap[m.id]=m.src;return}if(m&&m.k==="draft"){onDraft(m);return}if(m&&m.k==="catlist"){catGroups=m.g||[];paintCatBtn();try{conn&&conn.open&&conn.send({k:"cats",v:mycats})}catch(e){}return}if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive&&!warmed){warmed=true;try{navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{s.getTracks().forEach(t=>t.stop())}).catch(()=>{})}catch(e){}}if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="scr")return scr(m);if(m&&m.k==="duel"){const C=$("cmp");if(C&&!C.classList.contains("hide")){C.classList.add("hide");document.body.classList.remove("incmp")}return duel(m)}if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
+    c.on("data",m=>{lastRx=Date.now();if(m&&m.k==="hb")return;if(m&&m.k==="avs"){avMap[m.id]=m.src;return}if(m&&m.k==="draft"){onDraft(m);return}if(m&&m.k==="catlist"){catGroups=m.g||[];paintCatBtn();try{conn&&conn.open&&conn.send({k:"cats",v:mycats})}catch(e){}return}if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive&&!warmed){warmed=true;try{navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{s.getTracks().forEach(t=>t.stop())}).catch(e=>{if(e&&(e.name==="NotAllowedError"||e.name==="SecurityError")){micOK=false;$("st").textContent="Microphone is blocked for this page. Tap the aA button in the address bar > Website Settings > Microphone > Allow, then reload this page."}})}catch(e){}}if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="scr")return scr(m);if(m&&m.k==="duel"){const C=$("cmp");if(C&&!C.classList.contains("hide")){C.classList.add("hide");document.body.classList.remove("incmp")}return duel(m)}if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
     c.on("close",()=>{if(c!==conn)return;net("link lost");setMode("wait","Reconnecting…");retry=setTimeout(connect,1500)});
     c.on("error",()=>{});
     // a connection that never opens is retried

@@ -74,7 +74,7 @@
     if(act.pid&&String(act.pid).startsWith("cpu-"))return {live:[],all,act:act.name,matched:true,cpu:true};
     const byPid=act.pid?all.filter(p=>p.pid===act.pid):[];
     const m=byPid.length?byPid:all.filter(p=>[].concat(act.pid?[act.name]:act).some(a=>sameName(a,p.name)));
-    return {live:m.length?m:all,all,act:act.pid?act.name:act[0],matched:m.length>0};
+    return {live:m.length?m:(act.pid?[]:all),all,act:act.pid?act.name:act[0],matched:m.length>0};
   };
   const tick=()=>{
     const {live,all,act,matched}=whoLive();
@@ -107,7 +107,7 @@
     LINK.broadcast(m);
   };
   setInterval(mirror,250);
-  LINK.onMessage=(p,m)=>{if(m.k==="btn"&&m.id==="pass"&&p.live){try{if(S.duel&&S.duel.state==="run")hostPass()}catch(e){}}};
+  LINK.onMessage=(p,m)=>{if(m.k==="btn"&&m.id==="pass"&&p.live){try{const d=S.duel;if(d&&d.state==="run"){const ap=S.players[d[d.active]];if(ap&&ap.pid&&ap.pid!==p.pid)return;hostPass()}}catch(e){}}};
   const resend=()=>{lastQ=""};
 
   /* ---------- speech from phones: handed to the voice bus (voice.js) ---------- */
