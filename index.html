@@ -445,7 +445,7 @@ button{cursor:pointer}
 <canvas id="confetti" hidden></canvas>
 </div>
 
-<script src="questions.js?v=50"></script>
+<script src="questions.js?v=51"></script>
 <script>
 /* =================== CATEGORIES =================== */
 const CATS={};
@@ -799,14 +799,12 @@ function neighbours(pid){
   return [...set];
 }
 function targetCells(pid){
-  if(S.multi){const set=new Set();S.grid.owner.forEach((o,i)=>{if(o>=0&&o!==pid)set.add(i)});return set}
   const {rows,cols,owner}=S.grid,set=new Set();
   cellsOf(pid).forEach(i=>{const r=Math.floor(i/cols),c=i%cols;
     [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr<0||cc<0||rr>=rows||cc>=cols)return;const j=rr*cols+cc;if(owner[j]>=0&&owner[j]!==pid)set.add(j)})});
   return set;
 }
 function fromCell(pid,target){
-  if(S.multi){const cols=S.grid.cols,tr=Math.floor(target/cols),tc=target%cols;let best=null,bd=1e9;cellsOf(pid).forEach(i=>{const d=Math.abs(Math.floor(i/cols)-tr)+Math.abs(i%cols-tc);if(d<bd){bd=d;best=i}});return best}
   const {rows,cols,owner}=S.grid,r=Math.floor(target/cols),c=target%cols;
   for(const [rr,cc] of [[r-1,c],[r+1,c],[r,c-1],[r,c+1]]){if(rr<0||cc<0||rr>=rows||cc>=cols)continue;if(owner[rr*cols+cc]===pid)return rr*cols+cc}
   return cellsOf(pid)[0];
@@ -858,7 +856,7 @@ function renderStatus(){
     st.innerHTML=`<p>The Randomizer is choosing…</p>`;
   }else if(S.phase==="choose"){
     const c=S.players[S.challenger];
-    st.innerHTML=`<p><b>${esc(c.name)}</b>, ${S.multi?"pick any square to challenge. You'll play that square's category.":"choose a neighbour to challenge. You'll play their category."}</p>${R().tapPick?'<button class="btn ghost" id="cancelPick">Cancel</button>':""}`;
+    st.innerHTML=`<p><b>${esc(c.name)}</b>, ${S.multi?"pick a square touching one of yours to challenge. You'll play that square's category.":"choose a neighbour to challenge. You'll play their category."}</p>${R().tapPick?'<button class="btn ghost" id="cancelPick">Cancel</button>':""}`;
     if($("cancelPick"))$("cancelPick").onclick=()=>{S.phase="idle";S.challenger=null;renderFloor()};
     setTimeout(()=>{const f=document.querySelector(".cell.sel");f&&f.focus({preventScroll:true})},30);
   }else st.innerHTML="";
@@ -1290,32 +1288,32 @@ window.__gnBack=()=>{
 if(/GameNightTV/.test(navigator.userAgent))addEventListener("load",()=>document.querySelectorAll('.seg[id*="Screen"]').forEach(e=>{const h=e.closest(".hubtop,.field")||e.parentElement;h.style.display="none"}));
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
-<script src="avatars.js?v=50"></script>
-<script src="prices.js?v=50"></script>
-<script src="comeondown.js?v=50"></script>
-<script src="nameten-data.js?v=50"></script>
-<script src="nameten.js?v=50"></script>
-<script src="feud-data.js?v=50"></script>
-<script src="feud.js?v=50"></script>
-<script src="trivial-data.js?v=50"></script>
-<script src="trivial.js?v=50"></script>
-<script src="picblitz.js?v=50"></script>
-<script src="drawthis.js?v=50"></script>
-<script src="gamemusic.js?v=50"></script>
-<script src="setupfit.js?v=50"></script>
-<script src="wheel-data.js?v=50"></script>
-<script src="wheel.js?v=50"></script>
-<script src="showkit.js?v=50"></script>
-<script src="floor-theme.js?v=50"></script>
-<script src="leaderboard.js?v=50"></script>
-<script src="link.js?v=50"></script>
-<script src="companion.js?v=50"></script>
-<script src="floordraft.js?v=50"></script>
-<script src="voice.js?v=50"></script>
-<script src="tvlook.js?v=50"></script>
-<script src="photos.js?v=50"></script>
-<script src="gamelook.js?v=50"></script>
-<script src="autoupdate.js?v=50"></script>
-<script src="tvui.js?v=50"></script>
+<script src="avatars.js?v=51"></script>
+<script src="prices.js?v=51"></script>
+<script src="comeondown.js?v=51"></script>
+<script src="nameten-data.js?v=51"></script>
+<script src="nameten.js?v=51"></script>
+<script src="feud-data.js?v=51"></script>
+<script src="feud.js?v=51"></script>
+<script src="trivial-data.js?v=51"></script>
+<script src="trivial.js?v=51"></script>
+<script src="picblitz.js?v=51"></script>
+<script src="drawthis.js?v=51"></script>
+<script src="gamemusic.js?v=51"></script>
+<script src="setupfit.js?v=51"></script>
+<script src="wheel-data.js?v=51"></script>
+<script src="wheel.js?v=51"></script>
+<script src="showkit.js?v=51"></script>
+<script src="floor-theme.js?v=51"></script>
+<script src="leaderboard.js?v=51"></script>
+<script src="link.js?v=51"></script>
+<script src="companion.js?v=51"></script>
+<script src="floordraft.js?v=51"></script>
+<script src="voice.js?v=51"></script>
+<script src="tvlook.js?v=51"></script>
+<script src="photos.js?v=51"></script>
+<script src="gamelook.js?v=51"></script>
+<script src="autoupdate.js?v=51"></script>
+<script src="tvui.js?v=51"></script>
 </body>
 </html>

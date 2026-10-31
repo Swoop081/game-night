@@ -31,3 +31,18 @@ ${L(".rules")}{font-size:clamp(.62rem,1.6vh,.8rem)!important;line-height:1.3!imp
     });
   },400);
 })();
+/* result sheets with a scoreboard must fit one screen too */
+(function(){
+  const st=document.createElement("style");
+  st.textContent=`
+#sheet:has(.skpod){padding:clamp(8px,2vh,22px) clamp(14px,3vw,30px)!important;gap:clamp(4px,1vh,10px)!important;max-height:96vh;overflow:hidden}
+#sheet:has(.skpod)>.av,#sheet:has(.skpod)>.avatar{--s:clamp(48px,11vh,90px)!important;width:var(--s);height:var(--s)}
+#sheet:has(.skpod) h2{font-size:clamp(1.3rem,4.6vh,2.6rem)!important}
+#sheet:has(.skpod) .eyebrow{font-size:clamp(.55rem,1.6vh,.8rem)}
+#sheet:has(.skpod) .skpod{gap:clamp(2px,.7vh,6px)}
+#sheet:has(.skpod) .skrow{padding-top:0;padding-bottom:0;min-height:0}
+#sheet:has(.skpod) .skrow .av{--s:clamp(22px,5vh,40px)!important}
+#sheet:has(.skpod) .note{font-size:clamp(.7rem,2vh,1rem);margin:0}
+#sheet:has(.skpod) .btn{padding:.5em 1.1em;font-size:clamp(.8rem,2.4vh,1.1rem)}
+`;document.head.appendChild(st);
+})();
