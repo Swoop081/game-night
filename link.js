@@ -36,7 +36,7 @@
     dlg.querySelector("img").src="https://api.qrserver.com/v1/create-qr-code/?size=210x210&data="+encodeURIComponent(joinUrl());
   };
   const toggle=()=>{if(dlg.style.display==="flex")dlg.style.display="none";else{paintDlg();dlg.style.display="flex"}};
-  const mount=()=>{document.body.appendChild(chip);document.body.appendChild(dlg);paintChip()};
+  const mount=()=>{document.body.appendChild(chip);document.body.appendChild(dlg);paintChip();setInterval(paintChip,2000)};
   if(document.body)mount();else addEventListener("DOMContentLoaded",mount);
   LINK.toggle=toggle;
   // remote-friendly: a focusable button on the hub, plus colour / menu keys anywhere
