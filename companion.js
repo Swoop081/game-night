@@ -156,7 +156,7 @@
   };
 
   /* ---------- phone panel on each game's setup screen ---------- */
-  const SETUPS={hlSetup:"hlPlayers",ntSetup:"ntPlayers",pbSetup:"pbPlayers",cdSetup:"cdPlayers",dtSetup:"dtPlayers"};
+  const SETUPS={setup:"players",hlSetup:"hlPlayers",ntSetup:"ntPlayers",pbSetup:"pbPlayers",cdSetup:"cdPlayers",dtSetup:"dtPlayers"};
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"");
   const joinUrl=()=>base+"join.html?c="+L.code+(new URLSearchParams(location.search).get("peerhost")?"&peerhost="+new URLSearchParams(location.search).get("peerhost")+"&peerport="+(new URLSearchParams(location.search).get("peerport")||9000):"");
   const paintPanel=(id,pl)=>{

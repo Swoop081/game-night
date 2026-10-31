@@ -206,11 +206,12 @@
         p.av=m.av||p.av;p.closedAt=0;
         if(old&&old.conn&&old.conn!==conn)try{old.conn.close()}catch(e){}
         p.conn=conn;p.rx=Date.now();p.scr="";p.name=String(m.name||"Player").slice(0,16);p.key="";LINK.phones.set(m.pid,p);conn.__pid=m.pid;
-        send(p,{k:"hello",name:p.name});resend();log("join",{name:p.name,pid:p.pid,order:p.order});paintChip();if(dlg.style.display==="flex")paintDlg();tick();return;
+        send(p,{k:"hello",name:p.name});try{send(p,{k:"catlist",g:GROUPS.map(([g,ids])=>[g,ids.filter(id=>CATS[id]).map(id=>[id,CATS[id].name])])})}catch(e){}resend();log("join",{name:p.name,pid:p.pid,order:p.order});paintChip();if(dlg.style.display==="flex")paintDlg();tick();return;
       }
       p=LINK.phones.get(conn.__pid);if(!p)return;
       p.rx=Date.now();if(m.k==="hb")return;
       if(m.k==="sp")onSpeech(p,m);
+      else if(m.k==="cats"){p.cats=(Array.isArray(m.v)?m.v:[]).filter(x=>typeof x==="string"&&CATS[x]).slice(0,4);log("cats",p.name,p.cats)}
       else if(m.k==="getlog")send(p,{k:"log",text:LINK.logText()});
       else if(m.k==="plog")log("PHONE["+p.name+"]",m.t);
       else if(typeof LINK.onMessage==="function")LINK.onMessage(p,m);

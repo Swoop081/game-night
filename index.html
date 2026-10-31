@@ -353,6 +353,7 @@ button{cursor:pointer}
       <div class="field"><span class="eyebrow">Players</span>
         <div class="stepper"><button id="minus" aria-label="Fewer players">−</button><output id="pcount">2</output><button id="plus" aria-label="More players">+</button></div>
       </div>
+      <div class="field" id="multiField"><span class="eyebrow">Categories each (only with 4 players)</span><div class="seg" id="segMulti"></div></div>
       <div id="rulesBox"></div>
       <div class="field"><span class="eyebrow">Voice answers</span><div class="seg" id="segVoice"></div></div>
       <div class="field"><span class="eyebrow">Sound</span><div class="seg" id="segSound"></div></div>
@@ -444,7 +445,7 @@ button{cursor:pointer}
 <canvas id="confetti" hidden></canvas>
 </div>
 
-<script src="questions.js?v=44"></script>
+<script src="questions.js?v=45"></script>
 <script>
 /* =================== CATEGORIES =================== */
 const CATS={};
@@ -576,7 +577,7 @@ const COLORS=[
  ["#a18072","Mocha"],["#5bb98b","Mint"],["#64748b","Slate"],["#475569","Steel"],["#b45309","Bronze"],["#9f1239","Crimson"]];
 const TV_RULES={time:45,penalty:3,boost:true,bo3:true,fair:true,tapPick:false};
 const S={
-  prefs:{voice:true,sound:true,screen:null,hlTie:"push"},
+  prefs:{voice:true,sound:true,screen:null,hlTie:"push",multi:false},
   custom:{time:45,penalty:3,boost:true,bo3:true,fair:true,tapPick:true},
   mode:"tv",count:2,names:[],cats:[],colors:[],
   players:[],grid:null,played:new Set(),
@@ -703,6 +704,7 @@ function openSetup(){
     seg($("segBo3"),[true,false],()=>C.bo3,v=>C.bo3=v,onOff);
     seg($("segFair"),[true,false],()=>C.fair,v=>C.fair=v,onOff);
   }
+  seg($("segMulti"),[false,true],()=>!!S.prefs.multi,v=>{S.prefs.multi=v;renderSetup()},v=>v?"4 each":"1 each");
   seg($("segVoice"),[true,false],()=>S.prefs.voice,v=>S.prefs.voice=v,onOff);
   seg($("segSound"),[true,false],()=>S.prefs.sound,v=>S.prefs.sound=v,onOff);
   screenSeg($("segScreenSetup"));
@@ -722,8 +724,15 @@ function ensureSlots(){
     usedK.add(S.colors[i]);
   }
 }
+function buildMulti(src){
+  const used=new Set(),out=[];
+  for(let i=0;i<4;i++){const l=[];((src&&src[i])||[]).forEach(c=>{if(CATS[c]&&!used.has(c)&&l.length<4){l.push(c);used.add(c)}});out.push(l)}
+  const free=shuffle(CAT_IDS.filter(c=>!used.has(c)));out.forEach(l=>{while(l.length<4)l.push(free.pop())});return out;
+}
+const isMulti=()=>!!S.prefs.multi&&S.count===4;
 function renderSetup(){
   $("pcount").textContent=S.count;
+  if(isMulti()&&(!S.mcats||S.mcats.length!==4))S.mcats=buildMulti([]);
   $("minus").disabled=S.count<=2;$("plus").disabled=S.count>=20;
   ensureSlots();
   const wrap=$("players");
@@ -731,9 +740,9 @@ function renderSetup(){
   for(let i=0;i<S.count;i++){
     const row=document.createElement("div");row.className="prow";
     const opts=catOptions(S.cats[i]);
-    row.innerHTML=`<button class="swatchbtn" id="pk${i}" aria-label="Player ${i+1} look">${avatarHTML({name:S.names[i]||"P",color:S.colors[i],slot:i})}</button><input id="pn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name"><select id="pc${i}" aria-label="Player ${i+1} category">${opts}</select>`;
+    row.innerHTML=`<button class="swatchbtn" id="pk${i}" aria-label="Player ${i+1} look">${avatarHTML({name:S.names[i]||"P",color:S.colors[i],slot:i})}</button><input id="pn${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i]||"")}" aria-label="Player ${i+1} name">${isMulti()?`<div class="mcats" style="flex:1;font-size:.8rem;opacity:.9;line-height:1.3">${S.mcats[i].map(c=>esc(CATS[c].name)).join(" · ")}</div>`:`<select id="pc${i}" aria-label="Player ${i+1} category">${opts}</select>`}`;
     row.querySelector("input").oninput=e=>{S.names[i]=e.target.value;save()};
-    row.querySelector("select").onchange=e=>{const v=e.target.value,j=S.cats.slice(0,S.count).indexOf(v);if(j>=0&&j!==i)S.cats[j]=S.cats[i];S.cats[i]=v;save();renderSetup()};
+    if(row.querySelector("select"))row.querySelector("select").onchange=e=>{const v=e.target.value,j=S.cats.slice(0,S.count).indexOf(v);if(j>=0&&j!==i)S.cats[j]=S.cats[i];S.cats[i]=v;save();renderSetup()};
     row.querySelector(".swatchbtn").onclick=()=>pickColour(i);
     wrap.appendChild(row);
   }
@@ -751,7 +760,7 @@ function pickColour(i,after){
 }
 $("minus").onclick=()=>{S.count=Math.max(2,S.count-1);renderSetup()};
 $("plus").onclick=()=>{S.count=Math.min(20,S.count+1);renderSetup()};
-$("shuffleCats").onclick=()=>{const p=shuffle(CAT_IDS);for(let i=0;i<S.count;i++)S.cats[i]=p[i%p.length];save();renderSetup()};
+$("shuffleCats").onclick=()=>{if(isMulti()){S.mcats=buildMulti([]);renderSetup();return}const p=shuffle(CAT_IDS);for(let i=0;i<S.count;i++)S.cats[i]=p[i%p.length];save();renderSetup()};
 $("startGame").onclick=()=>{ac();startGame()};
 
 /* =================== GAME =================== */
@@ -760,15 +769,25 @@ function gridDims(n){
   let cols=Math.ceil(Math.sqrt(n*1.5));let rows=Math.ceil(n/cols);while((cols-1)*rows>=n)cols--;return{rows,cols};
 }
 function startGame(){
+  let ph=null;
+  try{if(window.LINK&&LINK.pull){ph=LINK.pull(2,20,{cpu:false});if(ph&&ph.length>=2){S.count=ph.length;ph.forEach((p,i)=>{S.names[i]=p.name;if(p.cats&&p.cats[0])S.cats[i]=p.cats[0]})}else ph=null}}catch(e){ph=null}
   ensureSlots();save();
+  S.multi=!!S.prefs.multi&&S.count===4;
+  const mc=S.multi?buildMulti(ph?ph.map((p,i)=>(p.cats&&p.cats.length?p.cats:[S.cats[i]])):(S.mcats||[])):null;
+  if(S.multi)mc.forEach((l,i)=>{S.cats[i]=l[0]});
   S.players=[];for(let i=0;i<S.count;i++)S.players.push({id:i,name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],cat:S.cats[i],alive:true,duels:0,streak:0,boost:false});
   const {rows,cols}=gridDims(S.count);
   const order=shuffle(S.players.map(p=>p.id));
   S.grid={rows,cols,owner:Array.from({length:rows*cols},(_,i)=>i<order.length?order[i]:-1)};
+  if(S.multi){
+    const cells=shuffle(Array.from({length:16},(_,i)=>i)),owner=Array(16).fill(-1),cat=Array(16).fill(null);
+    mc.forEach((l,i)=>l.forEach((c,k)=>{const cell=cells[i*4+k];owner[cell]=i;cat[cell]=c}));
+    S.grid={rows:4,cols:4,owner,cat};
+  }
   S.played=new Set();S.phase="idle";S.challenger=null;S.defender=null;S.final=null;
   $("floorMode").textContent=S.mode==="tv"?"THE FLOOR · TV GAME":"THE FLOOR · CUSTOM";
   show("floor");renderFloor();
-  S.players.forEach(p=>loadPhotos(p.cat));
+  if(S.multi)S.grid.cat.forEach(c=>loadPhotos(c));else S.players.forEach(p=>loadPhotos(p.cat));
   introContestants(S.players,"The Floor",()=>{renderFloor();if(S.count===2&&R().bo3)setTimeout(startFinal,300)});
 }
 const alive=()=>S.players.filter(p=>p.alive);
@@ -778,6 +797,17 @@ function neighbours(pid){
   cellsOf(pid).forEach(i=>{const r=Math.floor(i/cols),c=i%cols;
     [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr<0||cc<0||rr>=rows||cc>=cols)return;const o=owner[rr*cols+cc];if(o>=0&&o!==pid)set.add(o)})});
   return [...set];
+}
+function targetCells(pid){
+  const {rows,cols,owner}=S.grid,set=new Set();
+  cellsOf(pid).forEach(i=>{const r=Math.floor(i/cols),c=i%cols;
+    [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr<0||cc<0||rr>=rows||cc>=cols)return;const j=rr*cols+cc;if(owner[j]>=0&&owner[j]!==pid)set.add(j)})});
+  return set;
+}
+function fromCell(pid,target){
+  const {rows,cols,owner}=S.grid,r=Math.floor(target/cols),c=target%cols;
+  for(const [rr,cc] of [[r-1,c],[r+1,c],[r,c-1],[r,c+1]]){if(rr<0||cc<0||rr>=rows||cc>=cols)continue;if(owner[rr*cols+cc]===pid)return rr*cols+cc}
+  return cellsOf(pid)[0];
 }
 function anchorCell(pid){
   const cs=cellsOf(pid),cols=S.grid.cols;const mr=cs.reduce((s,i)=>s+Math.floor(i/cols),0)/cs.length,mc=cs.reduce((s,i)=>s+i%cols,0)/cs.length;
@@ -792,7 +822,7 @@ function renderFloor(hlSet){
   b.style.gridTemplateColumns=`repeat(${vc},${size}px)`;b.style.gridAutoRows=size+"px";
   b.style.setProperty("--fs",Math.max(10,Math.min(26,size*.15))+"px");b.style.setProperty("--cs",Math.round(Math.min(110,size*.42))+"px");
   const anchors=new Set(alive().map(p=>anchorCell(p.id)));
-  const nbrs=S.phase==="choose"?new Set(neighbours(S.challenger)):new Set();
+  const nbrs=S.phase==="choose"?new Set(neighbours(S.challenger)):new Set(),tcells=(S.multi&&S.phase==="choose")?targetCells(S.challenger):new Set();
   b.classList.toggle("dimmed",S.phase==="choose"||!!hlSet);
   b.innerHTML="";
   for(let v=0;v<vr*vc;v++){
@@ -804,14 +834,14 @@ function renderFloor(hlSet){
     const sides=pt?{t:seam(r,c-1),b:seam(r,c+1),l:seam(r-1,c),r:seam(r+1,c)}:{t:seam(r-1,c),b:seam(r+1,c),l:seam(r,c-1),r:seam(r,c+1)};
     const sh=[];if(sides.t)sh.push("inset 0 2px 0 #06050f");if(sides.b)sh.push("inset 0 -2px 0 #06050f");if(sides.l)sh.push("inset 2px 0 0 #06050f");if(sides.r)sh.push("inset -2px 0 0 #06050f");
     el.style.setProperty("--edges",sh.join(",")||"none");
-    const cat=CATS[p.cat];
-    el.innerHTML=anchors.has(i)?`${p.boost?'<span class="bst" title="Time Boost">⚡</span>':""}<span class="lbl">${size>=58?avatarHTML(p,"cell"):""}<span class="nm">${esc(p.name)}</span><span class="ct">${cat.icon} ${esc(cat.name)}</span></span>`:`<span class="lbl"><span class="ic">${cat.icon}</span></span>`;
+    const cat=S.multi?CATS[S.grid.cat[i]]:CATS[p.cat];
+    el.innerHTML=S.multi?`<span class="lbl"><span class="nm" style="font-size:calc(var(--fs)*.85);letter-spacing:.02em;white-space:normal;line-height:1.1;overflow:visible;text-overflow:clip;word-break:normal;text-align:center">${esc(cat.name)}</span><span class="ct">${esc(p.name)}</span></span>`:anchors.has(i)?`${p.boost?'<span class="bst" title="Time Boost">⚡</span>':""}<span class="lbl">${size>=58?avatarHTML(p,"cell"):""}<span class="nm">${esc(p.name)}</span><span class="ct">${cat.icon} ${esc(cat.name)}</span></span>`:`<span class="lbl"><span class="ic">${cat.icon}</span></span>`;
     if(anchors.has(i)&&R().fair&&p.duels>0&&alive().some(x=>x.duels===0))el.classList.add("done");
     el.setAttribute("aria-label",`${p.name}, ${cat.name}`);
     if(hlSet&&hlSet.has(o))el.classList.add("hl");
-    if(S.phase==="choose"){if(o===S.challenger)el.classList.add("me");else if(nbrs.has(o))el.classList.add("sel");else el.disabled=true}
+    if(S.phase==="choose"){if(S.multi){if(o===S.challenger)el.classList.add("me");else if(tcells.has(i))el.classList.add("sel");else el.disabled=true}else if(o===S.challenger)el.classList.add("me");else if(nbrs.has(o))el.classList.add("sel");else el.disabled=true}
     else if(S.phase!=="idle"||!R().tapPick)el.tabIndex=-1;
-    el.onclick=()=>cellClick(o);
+    el.onclick=()=>cellClick(o,i);
     b.appendChild(el);
   }
   $("left").textContent=`${alive().length} left`;
@@ -826,13 +856,14 @@ function renderStatus(){
     st.innerHTML=`<p>The Randomizer is choosing…</p>`;
   }else if(S.phase==="choose"){
     const c=S.players[S.challenger];
-    st.innerHTML=`<p><b>${esc(c.name)}</b>, choose a neighbour to challenge. You'll play their category.</p>${R().tapPick?'<button class="btn ghost" id="cancelPick">Cancel</button>':""}`;
+    st.innerHTML=`<p><b>${esc(c.name)}</b>, ${S.multi?"pick a square next to yours to challenge. You'll play that square's category.":"choose a neighbour to challenge. You'll play their category."}</p>${R().tapPick?'<button class="btn ghost" id="cancelPick">Cancel</button>':""}`;
     if($("cancelPick"))$("cancelPick").onclick=()=>{S.phase="idle";S.challenger=null;renderFloor()};
     setTimeout(()=>{const f=document.querySelector(".cell.sel");f&&f.focus({preventScroll:true})},30);
   }else st.innerHTML="";
 }
-function cellClick(o){
+function cellClick(o,i){
   if(S.phase==="idle"&&R().tapPick){S.challenger=o;S.phase="choose";SFX.beep();renderFloor()}
+  else if(S.multi&&S.phase==="choose"&&o!==S.challenger&&targetCells(S.challenger).has(i)){S.defender=o;S.target=i;S.from=fromCell(S.challenger,i);openDuelIntro()}
   else if(S.phase==="choose"&&o!==S.challenger&&neighbours(S.challenger).includes(o)){S.defender=o;openDuelIntro()}
 }
 function randomPick(){
@@ -854,14 +885,15 @@ function endAll(){if(S.duel){S.duel.state="over";cancelAnimationFrame(raf)}voice
 /* =================== DUEL =================== */
 async function openDuelIntro(){
   const a=S.players[S.challenger],b=S.players[S.defender];
+  let dc=S.multi?S.grid.cat[S.target]:b.cat;
   S.phase="ready";renderFloor();
   let swapNote="";
-  if(CATS[b.cat].kind==="photo"){
-    openOverlay(`<span class="eyebrow">Duel</span><h2>Loading pictures…</h2><p class="note">${CATS[b.cat].icon} ${esc(CATS[b.cat].name)}</p>`);
-    const r=await ensureCat(b.cat,[a.cat,b.cat]);
-    if(r.swapped){swapNote=`<p class="note" style="color:var(--hot)">${esc(CATS[r.swapped].name)} pictures couldn't load (check the internet connection), so this duel uses ${esc(CATS[r.id].name)} instead.</p>`;b.cat=r.id}
+  if(CATS[dc].kind==="photo"){
+    openOverlay(`<span class="eyebrow">Duel</span><h2>Loading pictures…</h2><p class="note">${CATS[dc].icon} ${esc(CATS[dc].name)}</p>`);
+    const r=await ensureCat(dc,S.multi?[dc]:[a.cat,b.cat]);
+    if(r.swapped){swapNote=`<p class="note" style="color:var(--hot)">${esc(CATS[r.swapped].name)} pictures couldn't load (check the internet connection), so this duel uses ${esc(CATS[r.id].name)} instead.</p>`;dc=r.id;if(S.multi)S.grid.cat[S.target]=r.id;else b.cat=r.id}
   }
-  const cat=CATS[b.cat];
+  const cat=CATS[dc];
   const use={a:false,b:false};
   const bb=(p,k)=>R().boost&&p.boost?`<button class="boostbtn" id="boost${k}" aria-pressed="false">⚡ Use Time Boost (+5s)</button>`:"";
   openOverlay(`<span class="eyebrow">Duel</span>
@@ -873,7 +905,7 @@ async function openDuelIntro(){
   if($("duelBack"))$("duelBack").onclick=()=>{closeOverlay();S.phase="idle";S.challenger=null;S.defender=null;renderFloor()};
   $("duelGo").onclick=()=>{ac();
     if(use.a){a.boost=false}if(use.b){b.boost=false}
-    startDuel({a:a.id,b:b.id,cat:b.cat,bonus:{a:use.a?5000:0,b:use.b?5000:0},roles:["Challenger","Defender"]});
+    startDuel({a:a.id,b:b.id,cat:dc,bonus:{a:use.a?5000:0,b:use.b?5000:0},roles:["Challenger","Defender"]});
   };
 }
 let raf=0,wakeLock=null;
@@ -969,7 +1001,25 @@ function endDuel(wk,why){
   setTimeout(()=>{S.duel=null;if(S.final)finalRoundOver(W,L);else duelOver(wk,W,L,d)},1800);
 }
 function transfer(W,L){S.grid.owner=S.grid.owner.map(o=>o===L.id?W.id:o);L.alive=false}
+function duelOverMulti(wk,W,L,d){
+  W.duels++;L.duels++;
+  const cell=wk==="a"?S.target:S.from,cname=CATS[S.grid.cat[cell]].name;
+  S.grid.owner[cell]=W.id;L.alive=cellsOf(L.id).length>0;
+  W.streak++;let boosted=false;
+  if(R().boost&&W.streak>=3){if(!W.boost){W.boost=true;boosted=true}W.streak=0}
+  const remaining=alive().length;
+  if(remaining===1)return champion(W);
+  SFX.win();if(boosted)setTimeout(SFX.boost,500);
+  const left=cellsOf(L.id).length;
+  openOverlay(`${avatarHTML(W,"xl")}<span class="eyebrow">${esc(L.name)} ${L.alive?"loses a square":"is out"}</span><h2 style="color:${W.color}">${esc(W.name)} wins ${esc(cname)}</h2>
+    ${boosted?`<p class="note" style="color:var(--gold);font-weight:800">⚡ Three wins in a row. ${esc(W.name)} earns a 5-second Time Boost.</p>`:""}
+    <p class="note">${esc(W.name)} now has ${cellsOf(W.id).length} squares.${L.alive?` ${esc(L.name)} has ${left} left.`:""} ${remaining} players left.</p>
+    <div class="row"><button class="btn" id="toFloor">Back to the floor</button><button class="btn gold" id="again">${esc(W.name)} plays on</button></div>`);
+  $("toFloor").onclick=()=>{closeOverlay();W.streak=0;S.phase="idle";S.challenger=null;S.defender=null;show("floor");renderFloor()};
+  $("again").onclick=()=>{closeOverlay();S.phase="choose";S.challenger=W.id;S.defender=null;show("floor");renderFloor()};
+}
 function duelOver(wk,W,L,d){
+  if(S.multi)return duelOverMulti(wk,W,L,d);
   W.duels++;L.duels++;
   if(wk==="b")W.cat=S.players[d.a].cat; // defender won: takes the challenger's unplayed category
   transfer(W,L);
@@ -1238,30 +1288,30 @@ window.__gnBack=()=>{
 if(/GameNightTV/.test(navigator.userAgent))addEventListener("load",()=>document.querySelectorAll('.seg[id*="Screen"]').forEach(e=>{const h=e.closest(".hubtop,.field")||e.parentElement;h.style.display="none"}));
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
-<script src="avatars.js?v=44"></script>
-<script src="prices.js?v=44"></script>
-<script src="comeondown.js?v=44"></script>
-<script src="nameten-data.js?v=44"></script>
-<script src="nameten.js?v=44"></script>
-<script src="feud-data.js?v=44"></script>
-<script src="feud.js?v=44"></script>
-<script src="trivial-data.js?v=44"></script>
-<script src="trivial.js?v=44"></script>
-<script src="picblitz.js?v=44"></script>
-<script src="drawthis.js?v=44"></script>
-<script src="setupfit.js?v=44"></script>
-<script src="wheel-data.js?v=44"></script>
-<script src="wheel.js?v=44"></script>
-<script src="showkit.js?v=44"></script>
-<script src="floor-theme.js?v=44"></script>
-<script src="leaderboard.js?v=44"></script>
-<script src="link.js?v=44"></script>
-<script src="companion.js?v=44"></script>
-<script src="voice.js?v=44"></script>
-<script src="tvlook.js?v=44"></script>
-<script src="photos.js?v=44"></script>
-<script src="gamelook.js?v=44"></script>
-<script src="autoupdate.js?v=44"></script>
-<script src="tvui.js?v=44"></script>
+<script src="avatars.js?v=45"></script>
+<script src="prices.js?v=45"></script>
+<script src="comeondown.js?v=45"></script>
+<script src="nameten-data.js?v=45"></script>
+<script src="nameten.js?v=45"></script>
+<script src="feud-data.js?v=45"></script>
+<script src="feud.js?v=45"></script>
+<script src="trivial-data.js?v=45"></script>
+<script src="trivial.js?v=45"></script>
+<script src="picblitz.js?v=45"></script>
+<script src="drawthis.js?v=45"></script>
+<script src="setupfit.js?v=45"></script>
+<script src="wheel-data.js?v=45"></script>
+<script src="wheel.js?v=45"></script>
+<script src="showkit.js?v=45"></script>
+<script src="floor-theme.js?v=45"></script>
+<script src="leaderboard.js?v=45"></script>
+<script src="link.js?v=45"></script>
+<script src="companion.js?v=45"></script>
+<script src="voice.js?v=45"></script>
+<script src="tvlook.js?v=45"></script>
+<script src="photos.js?v=45"></script>
+<script src="gamelook.js?v=45"></script>
+<script src="autoupdate.js?v=45"></script>
+<script src="tvui.js?v=45"></script>
 </body>
 </html>

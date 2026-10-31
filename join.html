@@ -159,6 +159,14 @@ body.incmp #net{display:none}body.incmp #logb{bottom:auto!important;top:2px!impo
   <h1 id="who"></h1>
   <div id="st"></div>
   <div id="heard"></div>
+  <button class="mini" id="catBtn" style="display:none;margin-top:14px;font-size:1rem;padding:12px 18px">Choose my categories</button>
+  <div id="catNote" style="opacity:.75;font-size:.85rem;margin-top:6px;max-width:300px"></div>
+</div>
+<div id="catSheet" style="display:none;position:fixed;inset:0;z-index:40;background:#10062b;overflow:auto;padding:14px 14px 90px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><b id="catHead" style="flex:1;font-size:1.1rem">Pick your categories</b><button class="mini" id="catDone" style="padding:10px 16px">Done</button></div>
+  <div id="catHelp" style="opacity:.8;font-size:.85rem;margin-bottom:10px">Your first pick is your category in a normal game. In a 4-player Floor you can pick up to 4 (one per square).</div>
+  <div id="catSel" style="font-weight:800;margin-bottom:10px;min-height:1.4em"></div>
+  <div id="catList"></div>
 </div>
 <button class="mini" id="logb" style="position:fixed;bottom:26px;right:10px;opacity:.6">📋 Log</button>
 <div id="net" style="position:fixed;bottom:8px;left:0;right:0;text-align:center;font-size:.7rem;opacity:.45"></div>
@@ -171,7 +179,7 @@ document.getElementById("inx").onclick=function(){b.classList.add("hide")};
 document.getElementById("cpy").onclick=function(){var t=location.href,d=document.getElementById("cpy");
 (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var i=document.createElement("input");i.value=t;document.body.appendChild(i);i.select();try{document.execCommand("copy")}catch(e){}i.remove()}).then(function(){d.textContent="Copied. Paste into Safari"})}})();</script>
 <script>/* reload if a newer build exists (phone browsers cache this page) */
-const JB_BUILD=44;fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.text()).then(t=>{if(parseInt(t,10)>JB_BUILD&&!sessionStorage.getItem("gn.rl"+t)){try{sessionStorage.setItem("gn.rl"+t,"1")}catch(e){}location.replace(location.pathname+location.search.replace(/[&?]r=\d+/,"")+(location.search?"&":"?")+"r="+Date.now())}}).catch(()=>{});</script>
+const JB_BUILD=45;fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.text()).then(t=>{if(parseInt(t,10)>JB_BUILD&&!sessionStorage.getItem("gn.rl"+t)){try{sessionStorage.setItem("gn.rl"+t,"1")}catch(e){}location.replace(location.pathname+location.search.replace(/[&?]r=\d+/,"")+(location.search?"&":"?")+"r="+Date.now())}}).catch(()=>{});</script>
 <script src="peerjs.min.js?v=1"></script>
-<script src="join.js?v=44"></script>
+<script src="join.js?v=45"></script>
 </body></html>

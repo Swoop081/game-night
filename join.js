@@ -169,12 +169,28 @@
   const ICE=[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"},{urls:"stun:stun.cloudflare.com:3478"},{urls:["turn:openrelay.metered.ca:80","turn:openrelay.metered.ca:443"],username:"openrelayproject",credential:"openrelayproject"}];
   const cfg=()=>{const o={debug:0,config:{iceServers:ICE}};if(q.get("peerhost")){o.host=q.get("peerhost");o.port=+(q.get("peerport")||9000);o.secure=false;o.path="/"}return o};
   const target=()=>"gnight-"+$("code").value.trim().toUpperCase();
+  /* ----- category picker: your speciality category (up to 4 for a 4-player Floor) ----- */
+  let catGroups=[],mycats=[];try{mycats=JSON.parse(localStorage.getItem("gn.cats")||"[]")}catch(e){}
+  const catName=id=>{for(const g of catGroups)for(const c of g[1])if(c[0]===id)return c[1];return id};
+  const paintCatBtn=()=>{
+    $("catBtn").style.display=catGroups.length?"":"none";
+    $("catNote").textContent=mycats.length?"Your picks: "+mycats.map(catName).join(", "):"";
+    $("catSel").textContent=mycats.length?mycats.map((id,i)=>(i+1)+". "+catName(id)).join("   "):"Nothing picked yet (the TV will choose for you)";
+    document.querySelectorAll("#catList button").forEach(b=>{const i=mycats.indexOf(b.dataset.id);b.style.background=i>=0?"#ff7a00":"#2a1459";b.style.color=i>=0?"#1b0a33":"#fff";b.firstChild.textContent=(i>=0?(i+1)+". ":"")+b.dataset.n});
+  };
+  const sendCats=()=>{try{localStorage.setItem("gn.cats",JSON.stringify(mycats))}catch(e){}try{conn&&conn.open&&conn.send({k:"cats",v:mycats})}catch(e){}paintCatBtn()};
+  $("catBtn").onclick=()=>{
+    if(!$("catList").children.length)$("catList").innerHTML=catGroups.map(g=>`<div style="margin:12px 0 6px;opacity:.7;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase">${g[0]}</div><div style="display:flex;flex-wrap:wrap;gap:6px">${g[1].map(c=>`<button class="mini" data-id="${c[0]}" data-n="${c[1]}" style="padding:10px 12px"><span>${c[1]}</span></button>`).join("")}</div>`).join("");
+    document.querySelectorAll("#catList button").forEach(b=>b.onclick=()=>{const id=b.dataset.id,i=mycats.indexOf(id);if(i>=0)mycats.splice(i,1);else{if(mycats.length>=4)mycats.shift();mycats.push(id)}sendCats()});
+    paintCatBtn();$("catSheet").style.display="block";
+  };
+  $("catDone").onclick=()=>{$("catSheet").style.display="none"};
   const dial=()=>{
     try{conn&&conn.close()}catch(e){}
     conn=peer.connect(target(),{reliable:true});
     const c=conn;
     c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player",av});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
-    c.on("data",m=>{lastRx=Date.now();if(m&&m.k==="hb")return;if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive&&!warmed){warmed=true;try{navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{s.getTracks().forEach(t=>t.stop())}).catch(()=>{})}catch(e){}}if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="scr")return scr(m);if(m&&m.k==="duel"){const C=$("cmp");if(C&&!C.classList.contains("hide")){C.classList.add("hide");document.body.classList.remove("incmp")}return duel(m)}if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
+    c.on("data",m=>{lastRx=Date.now();if(m&&m.k==="hb")return;if(m&&m.k==="catlist"){catGroups=m.g||[];paintCatBtn();try{conn&&conn.open&&conn.send({k:"cats",v:mycats})}catch(e){}return}if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive&&!warmed){warmed=true;try{navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{s.getTracks().forEach(t=>t.stop())}).catch(()=>{})}catch(e){}}if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="scr")return scr(m);if(m&&m.k==="duel"){const C=$("cmp");if(C&&!C.classList.contains("hide")){C.classList.add("hide");document.body.classList.remove("incmp")}return duel(m)}if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
     c.on("close",()=>{if(c!==conn)return;net("link lost");setMode("wait","Reconnecting…");retry=setTimeout(connect,1500)});
     c.on("error",()=>{});
     // a connection that never opens is retried
