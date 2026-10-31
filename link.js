@@ -23,12 +23,13 @@
   const joinUrl=()=>base+"join.html?c="+LINK.code+(q.get("peerhost")?"&peerhost="+q.get("peerhost")+"&peerport="+(q.get("peerport")||9000):"");
 
   /* ---------- pairing chip + dialog ---------- */
-  const chip=css(document.createElement("div"),"position:fixed;left:4px;bottom:3px;z-index:9000;opacity:.7;background:rgba(20,12,60,.85);border:1px solid rgba(255,255,255,.25);color:#fff;font:600 10px system-ui,sans-serif;padding:2px 8px;border-radius:999px;cursor:pointer;max-width:30vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis");
+  const chip=css(document.createElement("div"),"position:fixed;left:4px;bottom:3px;z-index:9000;opacity:.9;background:rgba(20,12,60,.85);border:1px solid rgba(255,255,255,.25);color:#fff;font:600 10px system-ui,sans-serif;padding:2px 8px;border-radius:999px;cursor:pointer;max-width:60vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis");
   chip.tabIndex=0;
   const dlg=css(document.createElement("div"),"position:fixed;inset:0;z-index:99998;background:rgba(10,6,40,.95);color:#fff;font-family:system-ui,sans-serif;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px");
   const paintChip=()=>{const n=[...LINK.phones.values()].filter(p=>p.conn&&p.conn.open);
-    chip.textContent=n.length?"📱 "+n.length:(LINK.ready?"📱 Join with phones · code "+LINK.code+" · press a colour button":"📱 Phones: connecting…");
-    chip.style.borderColor=n.length?"#5dffa0":"rgba(255,255,255,.25)"};
+    const off=[...LINK.phones.values()].filter(p=>!(p.conn&&p.conn.open));
+    chip.textContent=off.length&&n.length?"📱 "+n.length+" · Offline: "+off.map(p=>p.name).join(", "):off.length?"📱 Offline: "+off.map(p=>p.name).join(", "):n.length?"📱 "+n.length+" connected":(LINK.ready?"📱 Join with phones · code "+LINK.code+" · press a colour button":"📱 Phones: connecting…");
+    chip.style.borderColor=off.length?"#ff5d5d":n.length?"#5dffa0":"rgba(255,255,255,.25)"};
   const paintDlg=()=>{
     const n=[...LINK.phones.values()].filter(p=>p.conn&&p.conn.open);
     dlg.innerHTML='<div style="font-size:2rem;font-weight:800">Join with your phone</div><img alt="" width="210" height="210" style="background:#fff;padding:10px;border-radius:12px"><div>Scan the code, or open <b style="color:#ffd84a">'+base.replace(/^https?:\/\//,"")+'join.html</b> and enter <b style="color:#ffd84a;font-size:1.4rem;letter-spacing:.2em">'+LINK.code+'</b></div><div style="opacity:.9;font-size:1.1rem">'+(n.length?"Joined: "+n.map(p=>p.name).join(" · "):"Nobody has joined yet")+'</div><div style="opacity:.6">Press Back to close</div>';
