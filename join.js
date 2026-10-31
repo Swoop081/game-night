@@ -22,7 +22,7 @@
   $("avcam").onclick=()=>$("avfile").click();
   $("avfile").onchange=e=>{
     const f=e.target.files&&e.target.files[0];if(!f)return;
-    const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=128;const x=c.getContext("2d");const s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,128,128);av={type:"photo",src:c.toDataURL("image/jpeg",.72)};paintAv();URL.revokeObjectURL(im.src)};
+    const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=384;const x=c.getContext("2d");const s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,384,384);av={type:"photo",src:c.toDataURL("image/jpeg",.86)};paintAv();URL.revokeObjectURL(im.src)};
     im.src=URL.createObjectURL(f);
   };
   paintAv();
