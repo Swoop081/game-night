@@ -445,7 +445,7 @@ button{cursor:pointer}
 <canvas id="confetti" hidden></canvas>
 </div>
 
-<script src="questions.js?v=48"></script>
+<script src="questions.js?v=49"></script>
 <script>
 /* =================== CATEGORIES =================== */
 const CATS={};
@@ -710,6 +710,9 @@ function openSetup(){
   screenSeg($("segScreenSetup"));
   renderSetup();show("setup");
 }
+/* player colours are assigned automatically, picked to be easy to tell apart */
+const DISTINCT=["#e5484d","#0090ff","#30a46c","#f2a900","#a855f7","#ff7a1a","#18d6e0","#ff5fa2","#b6f23d","#8b5e3c","#94a3b8","#14b8a6","#6366f1","#dc2626","#16a34a","#facc15","#d946ef","#0ea5e9","#84cc16","#f97316"];
+function fixColours(){for(let i=0;i<20;i++)S.colors[i]=DISTINCT[i%DISTINCT.length]}
 function ensureSlots(){
   const usedC=new Set(),usedK=new Set();
   for(let i=0;i<S.count;i++){
@@ -718,10 +721,7 @@ function ensureSlots(){
       S.cats[i]=free[0]||CAT_IDS[Math.floor(Math.random()*CAT_IDS.length)];
     }
     usedC.add(S.cats[i]);
-    if(!S.colors[i]||usedK.has(S.colors[i])||!COLORS.some(c=>c[0]===S.colors[i])){
-      S.colors[i]=(COLORS.find(c=>!usedK.has(c[0])&&!S.colors.slice(i+1,S.count).includes(c[0]))||COLORS[i%24])[0];
-    }
-    usedK.add(S.colors[i]);
+    S.colors[i]=DISTINCT[i%DISTINCT.length];
   }
 }
 function buildMulti(src){
@@ -747,7 +747,7 @@ function renderSetup(){
     wrap.appendChild(row);
   }
 }
-function pickColour(i,after){
+function pickColour(i,after){return;
   const name=(S.names[i]||"").trim()||`Player ${i+1}`;
   const owner=c=>{const j=S.colors.slice(0,S.count).indexOf(c);return j>=0&&j!==i?((S.names[j]||"").trim()||`P${j+1}`):""};
   openOverlay(`<span class="eyebrow">Colour for</span><h2>${esc(name)}</h2>
@@ -799,12 +799,14 @@ function neighbours(pid){
   return [...set];
 }
 function targetCells(pid){
+  if(S.multi){const set=new Set();S.grid.owner.forEach((o,i)=>{if(o>=0&&o!==pid)set.add(i)});return set}
   const {rows,cols,owner}=S.grid,set=new Set();
   cellsOf(pid).forEach(i=>{const r=Math.floor(i/cols),c=i%cols;
     [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr<0||cc<0||rr>=rows||cc>=cols)return;const j=rr*cols+cc;if(owner[j]>=0&&owner[j]!==pid)set.add(j)})});
   return set;
 }
 function fromCell(pid,target){
+  if(S.multi){const cols=S.grid.cols,tr=Math.floor(target/cols),tc=target%cols;let best=null,bd=1e9;cellsOf(pid).forEach(i=>{const d=Math.abs(Math.floor(i/cols)-tr)+Math.abs(i%cols-tc);if(d<bd){bd=d;best=i}});return best}
   const {rows,cols,owner}=S.grid,r=Math.floor(target/cols),c=target%cols;
   for(const [rr,cc] of [[r-1,c],[r+1,c],[r,c-1],[r,c+1]]){if(rr<0||cc<0||rr>=rows||cc>=cols)continue;if(owner[rr*cols+cc]===pid)return rr*cols+cc}
   return cellsOf(pid)[0];
@@ -856,7 +858,7 @@ function renderStatus(){
     st.innerHTML=`<p>The Randomizer is choosing…</p>`;
   }else if(S.phase==="choose"){
     const c=S.players[S.challenger];
-    st.innerHTML=`<p><b>${esc(c.name)}</b>, ${S.multi?"pick a square next to yours to challenge. You'll play that square's category.":"choose a neighbour to challenge. You'll play their category."}</p>${R().tapPick?'<button class="btn ghost" id="cancelPick">Cancel</button>':""}`;
+    st.innerHTML=`<p><b>${esc(c.name)}</b>, ${S.multi?"pick any square to challenge. You'll play that square's category.":"choose a neighbour to challenge. You'll play their category."}</p>${R().tapPick?'<button class="btn ghost" id="cancelPick">Cancel</button>':""}`;
     if($("cancelPick"))$("cancelPick").onclick=()=>{S.phase="idle";S.challenger=null;renderFloor()};
     setTimeout(()=>{const f=document.querySelector(".cell.sel");f&&f.focus({preventScroll:true})},30);
   }else st.innerHTML="";
@@ -1275,7 +1277,7 @@ function confetti(cols){
 function stopConfetti(){cancelAnimationFrame(confRaf);$("confetti").hidden=true}
 
 /* =================== BOOT =================== */
-load();applyScreen();screenSeg($("segScreenHub"));show("hub");
+load();fixColours();applyScreen();screenSeg($("segScreenHub"));show("hub");
 // Back button on the TV remote: close a sheet, or step out to the menu; false means "on the menu already" so the app can exit
 window.__gnBack=()=>{
   if(!$("overlay").hidden){closeOverlay();return true}
@@ -1288,32 +1290,32 @@ window.__gnBack=()=>{
 if(/GameNightTV/.test(navigator.userAgent))addEventListener("load",()=>document.querySelectorAll('.seg[id*="Screen"]').forEach(e=>{const h=e.closest(".hubtop,.field")||e.parentElement;h.style.display="none"}));
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
-<script src="avatars.js?v=48"></script>
-<script src="prices.js?v=48"></script>
-<script src="comeondown.js?v=48"></script>
-<script src="nameten-data.js?v=48"></script>
-<script src="nameten.js?v=48"></script>
-<script src="feud-data.js?v=48"></script>
-<script src="feud.js?v=48"></script>
-<script src="trivial-data.js?v=48"></script>
-<script src="trivial.js?v=48"></script>
-<script src="picblitz.js?v=48"></script>
-<script src="drawthis.js?v=48"></script>
-<script src="gamemusic.js?v=48"></script>
-<script src="setupfit.js?v=48"></script>
-<script src="wheel-data.js?v=48"></script>
-<script src="wheel.js?v=48"></script>
-<script src="showkit.js?v=48"></script>
-<script src="floor-theme.js?v=48"></script>
-<script src="leaderboard.js?v=48"></script>
-<script src="link.js?v=48"></script>
-<script src="companion.js?v=48"></script>
-<script src="floordraft.js?v=48"></script>
-<script src="voice.js?v=48"></script>
-<script src="tvlook.js?v=48"></script>
-<script src="photos.js?v=48"></script>
-<script src="gamelook.js?v=48"></script>
-<script src="autoupdate.js?v=48"></script>
-<script src="tvui.js?v=48"></script>
+<script src="avatars.js?v=49"></script>
+<script src="prices.js?v=49"></script>
+<script src="comeondown.js?v=49"></script>
+<script src="nameten-data.js?v=49"></script>
+<script src="nameten.js?v=49"></script>
+<script src="feud-data.js?v=49"></script>
+<script src="feud.js?v=49"></script>
+<script src="trivial-data.js?v=49"></script>
+<script src="trivial.js?v=49"></script>
+<script src="picblitz.js?v=49"></script>
+<script src="drawthis.js?v=49"></script>
+<script src="gamemusic.js?v=49"></script>
+<script src="setupfit.js?v=49"></script>
+<script src="wheel-data.js?v=49"></script>
+<script src="wheel.js?v=49"></script>
+<script src="showkit.js?v=49"></script>
+<script src="floor-theme.js?v=49"></script>
+<script src="leaderboard.js?v=49"></script>
+<script src="link.js?v=49"></script>
+<script src="companion.js?v=49"></script>
+<script src="floordraft.js?v=49"></script>
+<script src="voice.js?v=49"></script>
+<script src="tvlook.js?v=49"></script>
+<script src="photos.js?v=49"></script>
+<script src="gamelook.js?v=49"></script>
+<script src="autoupdate.js?v=49"></script>
+<script src="tvui.js?v=49"></script>
 </body>
 </html>
