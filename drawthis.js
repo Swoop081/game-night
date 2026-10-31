@@ -333,11 +333,10 @@ function nextRound(){
 function renderReady(){
   score();
   stage(isDuel()
-   ?`<div class="dtk">Head to head</div>${DT.duels.map(vsHTML).join("")}<div class="dtword s">Check your phone</div><p class="dtp">${DT.duels.length>1?"Each pair gets a different secret word on their phones. Then the other pair votes.":"The two players get a secret word on their phones. The other player watches, then votes."}</p>
-      <div class="row"><button class="btn" id="dtNew">New words</button><button class="btn gold" id="dtGo">Start</button></div>`
-   :`<div class="dtk">Everyone draw</div><div class="dtword${DT.word.length>16?" s":""}">${esc2(DT.word)}</div><p class="dtp">${CFG.secs} seconds · grab your marker</p>
-      <div class="row"><button class="btn" id="dtNew">New word</button><button class="btn gold" id="dtGo">Start</button></div>`);
-  $("dtNew").onclick=()=>{if(isDuel())DT.duels.forEach(d=>d.word=pickWord());else DT.word=pickWord();renderReady()};
+   ?`<div class="dtk">Head to head</div>${DT.duels.map(vsHTML).join("")}<div class="dtword s">Word hidden until you start</div><p class="dtp">${DT.duels.length>1?"Press Start and each pair's secret word appears on their phones only. Then the other pair votes.":"Press Start and the two players' secret word appears on their phones. The other player watches, then votes."}</p>
+      <div class="row"><button class="btn gold" id="dtGo">Start</button></div>`
+   :`<div class="dtk">Everyone draw</div><div class="dtword s">Word hidden until you start</div><p class="dtp">${CFG.secs} seconds · grab your marker</p>
+      <div class="row"><button class="btn gold" id="dtGo">Start</button></div>`);
   $("dtGo").onclick=startDraw;
   setTimeout(()=>{const b=$("dtGo");b&&b.focus({preventScroll:true})},40);
 }
@@ -447,8 +446,8 @@ function sceneFor(p){
   const partner=myDuel?(byPid(myDuel.duo.find(x=>x!==p.pid))||{}).name:"";
   const names=DT.duels.map(d=>duoPlayers(d).map(q=>q.name).join(" vs ")).join("  ·  ");
   if(DT.phase==="ready"){
-    if(isDuel())return {...base,head:{e:rl,t:myDuel?"You're up!":"Head to head",s:myDuel?"Secret word. You and "+partner+" draw the same thing":names},big:myDuel?myDuel.word:"",btns:[{t:"Start",cls:"gold",a:"start"}]};
-    return {...base,head:{e:rl,t:"Get your marker ready",s:"Everyone draws the same thing"},big:DT.word,btns:[{t:"Start",cls:"gold",a:"start"}]};
+    if(isDuel())return {...base,head:{e:rl,t:myDuel?"You're up!":"Head to head",s:myDuel?"You and "+partner+" draw the same secret word. Tap Start to see it":names},big:"",btns:[{t:"Start",cls:"gold",a:"start"}]};
+    return {...base,head:{e:rl,t:"Get your marker ready",s:"The word appears when you press Start"},big:"",btns:[{t:"Start",cls:"gold",a:"start"}]};
   }
   if(DT.phase==="draw"){
     if(isDuel())return {...base,head:{e:rl,t:myDuel?"Draw it!":"Watch the duel",s:myDuel?"Keep it secret":names},big:myDuel?myDuel.word:"",clock:String(Math.ceil(DT.left))};
