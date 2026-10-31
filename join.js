@@ -174,7 +174,7 @@
     conn=peer.connect(target(),{reliable:true});
     const c=conn;
     c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player",av});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
-    c.on("data",m=>{if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="scr")return scr(m);if(m&&m.k==="duel"){const C=$("cmp");if(C&&!C.classList.contains("hide")){C.classList.add("hide");document.body.classList.remove("incmp")}return duel(m)}if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
+    c.on("data",m=>{lastRx=Date.now();if(m&&m.k==="hb")return;if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="scr")return scr(m);if(m&&m.k==="duel"){const C=$("cmp");if(C&&!C.classList.contains("hide")){C.classList.add("hide");document.body.classList.remove("incmp")}return duel(m)}if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
     c.on("close",()=>{if(c!==conn)return;net("link lost");setMode("wait","Reconnecting…");retry=setTimeout(connect,1500)});
     c.on("error",()=>{});
     // a connection that never opens is retried
@@ -192,6 +192,13 @@
       net("error: "+(e&&e.type));retry=setTimeout(connect,2500);
     });
   };
+  /* staying connected: heartbeat both ways, and rejoin straight away after the phone was in the camera or another app */
+  let lastRx=Date.now();
+  setInterval(()=>{if(conn&&conn.open&&joined)try{conn.send({k:"hb"})}catch(e){}},3000);
+  setInterval(()=>{if(joined&&!document.hidden&&Date.now()-lastRx>10000){plog("stale link, reconnecting");lastRx=Date.now();net("reconnecting");connect()}},2500);
+  const wake=()=>{try{navigator.wakeLock&&navigator.wakeLock.request("screen").catch(()=>{})}catch(e){}};
+  const back=()=>{if(document.hidden||!joined)return;wake();lastRx=Date.now()-6000;if(!conn||!conn.open){net("reconnecting");connect()}else try{conn.send({k:"hb"})}catch(e){connect()}};
+  document.addEventListener("visibilitychange",back);addEventListener("pageshow",back);addEventListener("online",()=>{if(joined){net("reconnecting");connect()}});
   const net=t=>{const n=$("net");if(n)n.textContent=t;plog("net",t)};
   $("go").onclick=()=>{
     const code=$("code").value.trim().toUpperCase(),name=$("name").value.trim();

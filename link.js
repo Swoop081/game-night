@@ -88,6 +88,7 @@
     });
   };
   setInterval(tick,400);
+  setInterval(()=>LINK.broadcast({k:"hb"}),3000);
 
   /* ---------- mirror the duel question to every phone ---------- */
   let lastQ="",duelOn=false;
@@ -204,10 +205,11 @@
         p=old||{pid:m.pid,lastUid:0,muteUid:0,order:++orderSeq};
         p.av=m.av||p.av;p.closedAt=0;
         if(old&&old.conn&&old.conn!==conn)try{old.conn.close()}catch(e){}
-        p.conn=conn;p.name=String(m.name||"Player").slice(0,16);p.key="";LINK.phones.set(m.pid,p);conn.__pid=m.pid;
+        p.conn=conn;p.rx=Date.now();p.scr="";p.name=String(m.name||"Player").slice(0,16);p.key="";LINK.phones.set(m.pid,p);conn.__pid=m.pid;
         send(p,{k:"hello",name:p.name});resend();log("join",{name:p.name,pid:p.pid,order:p.order});paintChip();if(dlg.style.display==="flex")paintDlg();tick();return;
       }
       p=LINK.phones.get(conn.__pid);if(!p)return;
+      p.rx=Date.now();if(m.k==="hb")return;
       if(m.k==="sp")onSpeech(p,m);
       else if(m.k==="getlog")send(p,{k:"log",text:LINK.logText()});
       else if(m.k==="plog")log("PHONE["+p.name+"]",m.t);

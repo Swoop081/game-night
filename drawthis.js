@@ -45,6 +45,13 @@ const css=`
 .dtvotes span.ok{background:#16c784;color:#022}
 .dtres{display:flex;gap:.8vmin;justify-content:center;width:100%}
 .dtres div{flex:1;max-width:25%;background:#2a1050;padding:2vmin 1vmin;font-family:${FONT};text-transform:uppercase;letter-spacing:.1em;font-weight:800;font-size:clamp(.8rem,2.2vmin,1.3rem)}
+.dtperfect{font-family:${FONT};font-weight:900;text-transform:uppercase;font-size:clamp(3rem,15vmin,10rem);line-height:1;color:#ffd400;text-shadow:0 0 3vmin #ff7a00;animation:dtpop 1.2s ease-in-out infinite alternate}
+@keyframes dtpop{from{transform:scale(1) rotate(-1.5deg)}to{transform:scale(1.07) rotate(1.5deg)}}
+.dtstars{display:flex;gap:3vmin;justify-content:center}
+.dtstar{display:flex;flex-direction:column;align-items:center;gap:1vmin;background:var(--pc);padding:2vmin 4vmin;font-family:${FONT};text-transform:uppercase;letter-spacing:.12em;box-shadow:0 0 6vmin var(--pc);animation:dtglow 1.6s ease-in-out infinite}
+.dtstar b{font-size:clamp(1.4rem,5vmin,3rem);color:#fff}.dtstar small{font-size:clamp(.8rem,2.2vmin,1.3rem);color:rgba(255,255,255,.85);letter-spacing:.2em}
+.dtstar .av{--s:clamp(70px,16vmin,140px);border-radius:0;padding:0;background:#fff;box-shadow:none}.dtstar .av img,.dtstar .av .ini{border-radius:0}
+.dtphoto{font-size:clamp(1rem,3vmin,1.8rem);max-width:90%;color:#fff}
 .dtres.sm div{padding:1vmin}.dtres.sm div em{font-size:clamp(1.8rem,8vmin,4.5rem)}
 .dtres div.win{background:#ff7a00;color:#14052b}
 .dtres div em{display:block;font-style:normal;font-size:clamp(2.4rem,12vmin,7rem);line-height:1}
@@ -225,7 +232,7 @@ function startDraw(){
     if(DT.left<=0){SFX.buzz&&SFX.buzz();startVote()}
   },100);
 }
-const connected=p=>{if(p.cpu)return true;try{const x=LINK.phones.get(p.pid);return !!(x&&x.conn&&x.conn.open)}catch(e){return false}};
+const connected=p=>{if(p.cpu)return true;try{const x=LINK.phones.get(p.pid);return !!(x&&x.conn&&x.conn.open&&Date.now()-(x.rx||0)<15000)}catch(e){return false}};
 function startVote(){
   if(DT.phase!=="draw")return;
   clearInterval(DT.timer);DT.phase="vote";DT.votes={};score();
@@ -257,6 +264,26 @@ function finishVote(){
   DT.gain={};DT.players.forEach(p=>DT.gain[p.pid]=0);
   Object.values(DT.votes).forEach(f=>{if(DT.gain[f]!=null)DT.gain[f]++});      // every vote is a point
   DT.players.forEach(p=>p.pts+=DT.gain[p.pid]);score();
+  const pool=p=>isDuel()?DT.players.filter(q=>!DT.duels[Math.max(0,drawsIn(p.pid))].duo.includes(q.pid)).length:DT.players.length-1;
+  DT.perfect=DT.players.filter(p=>{const n=pool(p);return (!isDuel()||drawsIn(p.pid)>=0)&&n>=2&&DT.gain[p.pid]===n});
+  if(DT.perfect.length)return renderPerfect();
+  renderResult();
+}
+function wordOf(p){return isDuel()?DT.duels[Math.max(0,drawsIn(p.pid))].word:DT.word}
+function renderPerfect(){
+  DT.phase="perfect";score();
+  SFX.win&&SFX.win();setTimeout(()=>SFX.win&&SFX.win(),700);
+  const P=DT.perfect;
+  stage(`<div class="dtk">Every single vote!</div><div class="dtperfect">Perfect score!</div>
+    <div class="dtstars">${P.map(p=>`<div class="dtstar" style="--pc:${p.color}">${avatarHTML(p,"lg")}<b>${esc2(p.name)}</b><small>${esc2(wordOf(p))}</small></div>`).join("")}</div>
+    <p class="dtp dtphoto">${P.map(p=>esc2(p.name)).join(" and ")}, come and get a photo with your masterpiece! Hold your whiteboard next to the TV.</p>
+    <div class="row"><button class="btn gold" id="dtPhoto">Got the photo</button></div>`);
+  confetti(P.map(p=>p.color).concat(["#ff7a00","#ffd400","#fffdf6"]));
+  $("dtPhoto").onclick=()=>{stopConfetti();renderResult()};
+  setTimeout(()=>{const b=$("dtPhoto");b&&b.focus({preventScroll:true})},60);
+}
+function renderResult(){
+  DT.phase="result";score();
   SFX.win&&SFX.win();
   const card=(p,top)=>`<div class="${top>0&&DT.gain[p.pid]===top?"win":""}">${esc2(p.name)}<em>+${DT.gain[p.pid]}</em></div>`;
   let body,title;
@@ -289,7 +316,7 @@ function results(){
 /* what the phones see */
 function sceneFor(p){
   const sc=DT.players.map(q=>({n:q.name,s:q.pts,c:q.color,on:0,pid:q.pid,av:(()=>{try{return avatarSrc(q.slot)}catch(e){return ""}})()}));
-  const base={th:"dt",scores:sc,btns:[],sn:DT.round*10+({ready:1,draw:2,vote:3,result:4,final:5}[DT.phase]||0),me:1};
+  const base={th:"dt",scores:sc,btns:[],sn:DT.round*10+({ready:1,draw:2,vote:3,perfect:6,result:4,final:5}[DT.phase]||0),me:1};
   const rl=(isDuel()?"Head to head · ":"")+(DT.round?`Round ${Math.min(DT.round,CFG.rounds)} of ${CFG.rounds}`:"");
   const mine=drawsIn(p.pid),myDuel=mine>=0?DT.duels[mine]:null;
   const partner=myDuel?(byPid(myDuel.duo.find(x=>x!==p.pid))||{}).name:"";
@@ -310,6 +337,10 @@ function sceneFor(p){
     return {...base,head:{e:rl,t:voted!=null?"Vote locked in":isDuel()?"Which drawing is best?":"Who drew it best?",s:voted!=null?"Waiting for the others":isDuel()?"Judge the other pair's "+word.toLowerCase():"Tap a player. Not yourself!"},big:word,
       btns:targets(p.pid).map(x=>{const q=byPid(x);return {t:q.name,a:"vote",v:x,d:voted!=null?1:0,on:voted===x?1:0,c:q.color}})};
   }
+  if(DT.phase==="perfect"){
+    const P=DT.perfect||[],won=P.some(q=>q.pid===p.pid);
+    return {...base,head:{e:rl,t:won?"PERFECT SCORE!":"Perfect score!",s:won?"Every vote! Take your whiteboard to the TV for a photo":P.map(q=>q.name).join(" and ")+" got every vote"},big:won?wordOf(byPid(p.pid)):"",btns:[{t:won?"Got the photo":"Continue",cls:"gold",a:"photo"}]};
+  }
   if(DT.phase==="result"){
     const list=isDuel()?DT.duels.flatMap(duoPlayers):DT.players;
     return {...base,head:{e:rl,t:"Round result",s:list.map(q=>q.name+" +"+(DT.gain[q.pid]||0)).join("  ·  ")},big:isDuel()?"":DT.word,btns:[{t:DT.round>=CFG.rounds?"See results":"Next round",cls:"gold",a:"next"}]};
@@ -320,6 +351,7 @@ function sceneFor(p){
 function act(p,m){
   if(m.a==="start"&&DT.phase==="ready")startDraw();
   else if(m.a==="next"&&DT.phase==="result")nextRound();
+  else if(m.a==="photo"&&DT.phase==="perfect"){stopConfetti();renderResult()}
   else if(m.a==="vote")castVote(p.pid,m.i);
 }
 function active(){return !$("dt").hidden}
