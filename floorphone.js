@@ -24,7 +24,7 @@
       return {...base,head:head(h?h.textContent.trim():"",ey?ey.textContent.trim():""),
         btns:ok?bs.map((b,i)=>({t:b.textContent.replace(/\s+/g," ").trim(),cls:/gold/.test(b.className)?"gold":"",a:"ov",v:i})):[]};
     }
-    if(S.phase==="idle")return {...base,head:head("Spin the Randomizer","Anyone can tap it"),btns:[{t:"Randomizer",cls:"gold",a:"spin"}].concat(R().tapPick?S.players.filter(q=>q.alive).map(q=>({t:q.name+" challenges",a:"chal",v:q.id,c:q.color})):[])};
+    if(S.phase==="idle")return {...base,head:head("Spin the Randomizer","Anyone can tap it"),btns:[{t:"Randomizer",cls:"gold",a:"spin"}].concat(R().tapPick&&!S.multi?S.players.filter(q=>q.alive).map(q=>({t:q.name+" challenges",a:"chal",v:q.id,c:q.color})):[])};
     if(S.phase==="picking")return {...base,head:head("Randomizer…","Who's up?")};
     if(S.phase==="choose"){
       const ch=S.players[S.challenger];
@@ -33,7 +33,7 @@
       let btns;
       if(S.multi)btns=[...targetCells(S.challenger)].map(i=>{const o=S.players[S.grid.owner[i]];return {t:CATS[S.grid.cat[i]].name+" · "+o.name,a:"sq",v:i,c:o.color}});
       else btns=neighbours(S.challenger).map(id=>{const o=S.players[id];return {t:o.name+" · "+CATS[o.cat].name,a:"sq",v:id,c:o.color}});
-      return {...base,head:head("Your turn, "+ch.name,"Pick a square touching yours to challenge"),btns};
+      return {...base,head:head("Your turn, "+ch.name,S.multi&&S.origin!=null?"You landed on "+CATS[S.grid.cat[S.origin]].name+". Pick a square touching it":"Pick a square touching yours to challenge"),btns};
     }
     return {...base,head:head("The Floor","Watch the TV")};
   }

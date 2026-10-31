@@ -445,7 +445,7 @@ button{cursor:pointer}
 <canvas id="confetti" hidden></canvas>
 </div>
 
-<script src="questions.js?v=54"></script>
+<script src="questions.js?v=55"></script>
 <script>
 /* =================== CATEGORIES =================== */
 const CATS={};
@@ -784,7 +784,7 @@ function startGame(){
     mc.forEach((l,i)=>l.forEach((c,k)=>{const cell=cells[i*4+k];owner[cell]=i;cat[cell]=c}));
     S.grid={rows:4,cols:4,owner,cat};
   }
-  S.played=new Set();S.phase="idle";S.challenger=null;S.defender=null;S.final=null;
+  S.played=new Set();S.phase="idle";S.challenger=null;S.defender=null;S.final=null;S.origin=null;
   $("floorMode").textContent=S.mode==="tv"?"THE FLOOR · TV GAME":"THE FLOOR · CUSTOM";
   show("floor");renderFloor();
   if(S.multi)S.grid.cat.forEach(c=>loadPhotos(c));else S.players.forEach(p=>loadPhotos(p.cat));
@@ -799,12 +799,18 @@ function neighbours(pid){
   return [...set];
 }
 function targetCells(pid){
-  const {rows,cols,owner}=S.grid,set=new Set();
-  cellsOf(pid).forEach(i=>{const r=Math.floor(i/cols),c=i%cols;
-    [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr<0||cc<0||rr>=rows||cc>=cols)return;const j=rr*cols+cc;if(owner[j]>=0&&owner[j]!==pid)set.add(j)})});
-  return set;
+  const {rows,cols,owner}=S.grid;
+  const adj=(cells)=>{const set=new Set();cells.forEach(i=>{const r=Math.floor(i/cols),c=i%cols;
+    [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr<0||cc<0||rr>=rows||cc>=cols)return;const j=rr*cols+cc;if(owner[j]>=0&&owner[j]!==pid)set.add(j)})});return set};
+  if(S.multi&&S.origin!=null&&owner[S.origin]===pid){
+    const a=adj([S.origin]);if(a.size)return a;          // only squares touching the square the Randomizer landed on
+  }
+  const a=adj(cellsOf(pid));if(a.size)return a;
+  if(S.multi){const all=new Set();owner.forEach((o,i)=>{if(o>=0&&o!==pid)all.add(i)});return all}
+  return a;
 }
 function fromCell(pid,target){
+  if(S.multi&&S.origin!=null&&S.grid.owner[S.origin]===pid)return S.origin;
   const {rows,cols,owner}=S.grid,r=Math.floor(target/cols),c=target%cols;
   for(const [rr,cc] of [[r-1,c],[r+1,c],[r,c-1],[r,c+1]]){if(rr<0||cc<0||rr>=rows||cc>=cols)continue;if(owner[rr*cols+cc]===pid)return rr*cols+cc}
   return cellsOf(pid)[0];
@@ -838,8 +844,8 @@ function renderFloor(hlSet){
     el.innerHTML=S.multi?`<span class="lbl"><span class="nm" style="font-size:calc(var(--fs)*.85);letter-spacing:.02em;white-space:normal;line-height:1.1;overflow:visible;text-overflow:clip;word-break:normal;text-align:center">${esc(cat.name)}</span><span class="ct">${esc(p.name)}</span></span>`:anchors.has(i)?`${p.boost?'<span class="bst" title="Time Boost">⚡</span>':""}<span class="lbl">${size>=58?avatarHTML(p,"cell"):""}<span class="nm">${esc(p.name)}</span><span class="ct">${cat.icon} ${esc(cat.name)}</span></span>`:`<span class="lbl"><span class="ic">${cat.icon}</span></span>`;
     if(anchors.has(i)&&R().fair&&p.duels>0&&alive().some(x=>x.duels===0))el.classList.add("done");
     el.setAttribute("aria-label",`${p.name}, ${cat.name}`);
-    if(hlSet&&hlSet.has(o))el.classList.add("hl");
-    if(S.phase==="choose"){if(S.multi){if(o===S.challenger)el.classList.add("me");else if(tcells.has(i))el.classList.add("sel");else el.disabled=true}else if(o===S.challenger)el.classList.add("me");else if(nbrs.has(o))el.classList.add("sel");else el.disabled=true}
+    if(hlSet&&hlSet.has(S.multi?i:o))el.classList.add("hl");
+    if(S.phase==="choose"){if(S.multi){if(i===S.origin||(S.origin==null&&o===S.challenger))el.classList.add("me");else if(tcells.has(i))el.classList.add("sel");else el.disabled=true}else if(o===S.challenger)el.classList.add("me");else if(nbrs.has(o))el.classList.add("sel");else el.disabled=true}
     else if(S.phase!=="idle"||!R().tapPick)el.tabIndex=-1;
     el.onclick=()=>cellClick(o,i);
     b.appendChild(el);
@@ -856,20 +862,31 @@ function renderStatus(){
     st.innerHTML=`<p>The Randomizer is choosing…</p>`;
   }else if(S.phase==="choose"){
     const c=S.players[S.challenger];
-    st.innerHTML=`<p><b>${esc(c.name)}</b>, ${S.multi?"pick a square touching one of yours to challenge. You'll play that square's category.":"choose a neighbour to challenge. You'll play their category."}</p>${R().tapPick?'<button class="btn ghost" id="cancelPick">Cancel</button>':""}`;
+    st.innerHTML=`<p><b>${esc(c.name)}</b>, ${S.multi?(S.origin!=null?"you landed on <b>"+esc(CATS[S.grid.cat[S.origin]].name)+"</b>. Pick a square touching it to challenge, and you'll play that square's category.":"pick a square touching one of yours to challenge."):"choose a neighbour to challenge. You'll play their category."}</p>${R().tapPick?'<button class="btn ghost" id="cancelPick">Cancel</button>':""}`;
     if($("cancelPick"))$("cancelPick").onclick=()=>{S.phase="idle";S.challenger=null;renderFloor()};
     setTimeout(()=>{const f=document.querySelector(".cell.sel");f&&f.focus({preventScroll:true})},30);
   }else st.innerHTML="";
 }
 function cellClick(o,i){
-  if(S.phase==="idle"&&R().tapPick){S.challenger=o;S.phase="choose";SFX.beep();renderFloor()}
+  if(S.phase==="idle"&&R().tapPick){S.challenger=o;S.origin=S.multi?i:null;S.phase="choose";SFX.beep();renderFloor()}
   else if(S.multi&&S.phase==="choose"&&o!==S.challenger&&targetCells(S.challenger).has(i)){S.defender=o;S.target=i;S.from=fromCell(S.challenger,i);openDuelIntro()}
   else if(S.phase==="choose"&&o!==S.challenger&&neighbours(S.challenger).includes(o)){S.defender=o;openDuelIntro()}
 }
 function randomPick(){
-  S.phase="picking";renderFloor();
+  S.phase="picking";S.origin=null;renderFloor();
   const all=alive().map(p=>p.id);
   let pool=all;if(R().fair){const fresh=alive().filter(p=>p.duels===0).map(p=>p.id);if(fresh.length)pool=fresh}
+  if(S.multi){
+    const cells=S.grid.owner.map((o,i)=>pool.includes(o)?i:-1).filter(i=>i>=0);
+    const final=cells[Math.floor(Math.random()*cells.length)];
+    let step=0,steps=16+Math.floor(Math.random()*5),cur=-1;
+    const go=()=>{
+      if(step>=steps)cur=final;else{let n;do{n=cells[Math.floor(Math.random()*cells.length)]}while(cells.length>1&&n===cur);cur=n}
+      renderFloor(new Set([cur]));SFX.tick();
+      if(step>=steps){setTimeout(()=>{S.origin=final;S.challenger=S.grid.owner[final];S.phase="choose";SFX.beep();renderFloor()},650);return}
+      step++;setTimeout(go,40+step*step*.55);
+    };go();return;
+  }
   const final=pool[Math.floor(Math.random()*pool.length)];
   let step=0,steps=16+Math.floor(Math.random()*5),cur=-1;
   const go=()=>{
@@ -1016,7 +1033,7 @@ function duelOverMulti(wk,W,L,d){
     <p class="note">${esc(W.name)} now has ${cellsOf(W.id).length} squares.${L.alive?` ${esc(L.name)} has ${left} left.`:""} ${remaining} players left.</p>
     <div class="row"><button class="btn" id="toFloor">Back to the floor</button><button class="btn gold" id="again">${esc(W.name)} plays on</button></div>`);
   $("toFloor").onclick=()=>{closeOverlay();W.streak=0;S.phase="idle";S.challenger=null;S.defender=null;show("floor");renderFloor()};
-  $("again").onclick=()=>{closeOverlay();S.phase="choose";S.challenger=W.id;S.defender=null;show("floor");renderFloor()};
+  $("again").onclick=()=>{closeOverlay();S.phase="choose";S.challenger=W.id;S.defender=null;S.origin=null;show("floor");renderFloor()};
 }
 function duelOver(wk,W,L,d){
   if(S.multi)return duelOverMulti(wk,W,L,d);
@@ -1039,7 +1056,7 @@ function duelOver(wk,W,L,d){
     <p class="note">${esc(W.name)} now plays as <b>${CATS[W.cat].icon} ${esc(CATS[W.cat].name)}</b> and owns ${sq} square${sq>1?"s":""}. ${remaining} players left.${R().boost&&!boosted&&W.streak>0?` Win streak: ${W.streak}.`:""}</p>
     <div class="row"><button class="btn" id="toFloor">Back to the floor</button><button class="btn gold" id="again">${esc(W.name)} plays on</button></div>`);
   $("toFloor").onclick=()=>{closeOverlay();W.streak=0;S.phase="idle";S.challenger=null;S.defender=null;show("floor");renderFloor()};
-  $("again").onclick=()=>{closeOverlay();S.phase="choose";S.challenger=W.id;S.defender=null;show("floor");renderFloor()};
+  $("again").onclick=()=>{closeOverlay();S.phase="choose";S.challenger=W.id;S.defender=null;S.origin=null;show("floor");renderFloor()};
 }
 
 /* =================== FINAL (best of three) =================== */
@@ -1288,33 +1305,33 @@ window.__gnBack=()=>{
 if(/GameNightTV/.test(navigator.userAgent))addEventListener("load",()=>document.querySelectorAll('.seg[id*="Screen"]').forEach(e=>{const h=e.closest(".hubtop,.field")||e.parentElement;h.style.display="none"}));
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
-<script src="avatars.js?v=54"></script>
-<script src="prices.js?v=54"></script>
-<script src="comeondown.js?v=54"></script>
-<script src="nameten-data.js?v=54"></script>
-<script src="nameten.js?v=54"></script>
-<script src="feud-data.js?v=54"></script>
-<script src="feud.js?v=54"></script>
-<script src="trivial-data.js?v=54"></script>
-<script src="trivial.js?v=54"></script>
-<script src="picblitz.js?v=54"></script>
-<script src="drawthis.js?v=54"></script>
-<script src="gamemusic.js?v=54"></script>
-<script src="setupfit.js?v=54"></script>
-<script src="wheel-data.js?v=54"></script>
-<script src="wheel.js?v=54"></script>
-<script src="showkit.js?v=54"></script>
-<script src="floor-theme.js?v=54"></script>
-<script src="leaderboard.js?v=54"></script>
-<script src="link.js?v=54"></script>
-<script src="companion.js?v=54"></script>
-<script src="floorphone.js?v=54"></script>
-<script src="floordraft.js?v=54"></script>
-<script src="voice.js?v=54"></script>
-<script src="tvlook.js?v=54"></script>
-<script src="photos.js?v=54"></script>
-<script src="gamelook.js?v=54"></script>
-<script src="autoupdate.js?v=54"></script>
-<script src="tvui.js?v=54"></script>
+<script src="avatars.js?v=55"></script>
+<script src="prices.js?v=55"></script>
+<script src="comeondown.js?v=55"></script>
+<script src="nameten-data.js?v=55"></script>
+<script src="nameten.js?v=55"></script>
+<script src="feud-data.js?v=55"></script>
+<script src="feud.js?v=55"></script>
+<script src="trivial-data.js?v=55"></script>
+<script src="trivial.js?v=55"></script>
+<script src="picblitz.js?v=55"></script>
+<script src="drawthis.js?v=55"></script>
+<script src="gamemusic.js?v=55"></script>
+<script src="setupfit.js?v=55"></script>
+<script src="wheel-data.js?v=55"></script>
+<script src="wheel.js?v=55"></script>
+<script src="showkit.js?v=55"></script>
+<script src="floor-theme.js?v=55"></script>
+<script src="leaderboard.js?v=55"></script>
+<script src="link.js?v=55"></script>
+<script src="companion.js?v=55"></script>
+<script src="floorphone.js?v=55"></script>
+<script src="floordraft.js?v=55"></script>
+<script src="voice.js?v=55"></script>
+<script src="tvlook.js?v=55"></script>
+<script src="photos.js?v=55"></script>
+<script src="gamelook.js?v=55"></script>
+<script src="autoupdate.js?v=55"></script>
+<script src="tvui.js?v=55"></script>
 </body>
 </html>
