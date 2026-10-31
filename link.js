@@ -205,7 +205,7 @@
         p=old||{pid:m.pid,lastUid:0,muteUid:0,order:++orderSeq};
         p.av=m.av||p.av;p.closedAt=0;
         if(old&&old.conn&&old.conn!==conn)try{old.conn.close()}catch(e){}
-        p.conn=conn;p.rx=Date.now();p.scr="";p.name=String(m.name||"Player").slice(0,16);p.key="";LINK.phones.set(m.pid,p);conn.__pid=m.pid;
+        p.conn=conn;p.rx=Date.now();p.scr="";p.avSent={};p.name=String(m.name||"Player").slice(0,16);p.key="";LINK.phones.set(m.pid,p);conn.__pid=m.pid;
         send(p,{k:"hello",name:p.name});try{send(p,{k:"catlist",g:GROUPS.map(([g,ids])=>[g,ids.filter(id=>CATS[id]).map(id=>[id,CATS[id].name])])})}catch(e){}resend();log("join",{name:p.name,pid:p.pid,order:p.order});paintChip();if(dlg.style.display==="flex")paintDlg();tick();return;
       }
       p=LINK.phones.get(conn.__pid);if(!p)return;

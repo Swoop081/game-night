@@ -41,6 +41,7 @@
   let logBtn=null;
   const wantLog=()=>{if(conn&&conn.open)conn.send({k:"getlog"});else showLog("not connected\n"+PL.join("\n"))};
   const SRc=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const avMap={};const avr=v=>(v&&avMap[v])||v;
   let peer=null,conn=null,mode="wait",uid=0,rec=null,micOK=false,warmed=false,joined=false,retry=null;
 
   /* ----- microphone: runs only while the TV says it's this player's turn ----- */
@@ -84,7 +85,7 @@
     [["a",$("pa")],["b",$("pb")]].forEach(([k,el])=>{
       const o=m[k];el.style.setProperty("--c",o.c);el.classList.toggle("on",m.active===k);
       el.querySelector("b").textContent=o.n+(o.pid&&o.pid===pid?" · you":"");el.querySelector("i").textContent=fmt(o.t);
-      const im=el.querySelector("img");if(o.av&&im.getAttribute("src")!==o.av)im.src=o.av;
+      const im=el.querySelector("img");if(o.av&&im.getAttribute("src")!==avr(o.av))im.src=avr(o.av);
     });
     $("cat").textContent=m.cat;$("hint").textContent=m.hint||"";
     if(m.q){$("q").className=m.q.c;$("q").innerHTML=m.q.h;$("heard").textContent="";
@@ -107,7 +108,7 @@
     lastScr=m;
     C.className="th-"+m.th;document.body.classList.add("incmp");document.body.style.overflow="hidden";
     $("play").classList.add("hide");$("duel")&&$("duel").classList.add("hide");
-    $("cmScores").innerHTML=(m.scores||[]).map(s=>'<div class="cs'+(s.on?" on":"")+'" style="--c:'+esc(s.c||"#555")+'">'+(s.av?'<img alt="" src="'+esc(s.av)+'">':"")+'<div><b>'+esc(s.n)+(s.pid&&s.pid===pid?" · you":"")+'</b><i>'+esc(s.s)+'</i></div></div>').join("");
+    $("cmScores").innerHTML=(m.scores||[]).map(s=>'<div class="cs'+(s.on?" on":"")+'" style="--c:'+esc(s.c||"#555")+'">'+(s.av?'<img alt="" src="'+esc(avr(s.av))+'">':"")+'<div><b>'+esc(s.n)+(s.pid&&s.pid===pid?" · you":"")+'</b><i>'+esc(s.s)+'</i></div></div>').join("");
     $("cmE").textContent=m.head.e||"";$("cmT").textContent=m.head.t||"";$("cmS").textContent=m.head.s||"";
     // main area per game
     let main="";
@@ -202,7 +203,7 @@
     conn=peer.connect(target(),{reliable:true});
     const c=conn;
     c.on("open",()=>{c.send({k:"join",pid,name:$("name").value.trim()||"Player",av});joined=true;$("who").textContent=$("name").value.trim()||"Player";net("linked")});
-    c.on("data",m=>{lastRx=Date.now();if(m&&m.k==="hb")return;if(m&&m.k==="draft"){onDraft(m);return}if(m&&m.k==="catlist"){catGroups=m.g||[];paintCatBtn();try{conn&&conn.open&&conn.send({k:"cats",v:mycats})}catch(e){}return}if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive&&!warmed){warmed=true;try{navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{s.getTracks().forEach(t=>t.stop())}).catch(()=>{})}catch(e){}}if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="scr")return scr(m);if(m&&m.k==="duel"){const C=$("cmp");if(C&&!C.classList.contains("hide")){C.classList.add("hide");document.body.classList.remove("incmp")}return duel(m)}if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
+    c.on("data",m=>{lastRx=Date.now();if(m&&m.k==="hb")return;if(m&&m.k==="avs"){avMap[m.id]=m.src;return}if(m&&m.k==="draft"){onDraft(m);return}if(m&&m.k==="catlist"){catGroups=m.g||[];paintCatBtn();try{conn&&conn.open&&conn.send({k:"cats",v:mycats})}catch(e){}return}if(m&&m.k==="round")return setRound(m.n);if(m&&m.n!==undefined&&m.k==="ui")setRound(m.n);if(m&&m.k==="ui"){voiceActive=!!m.v;if(voiceActive&&!warmed){warmed=true;try{navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{s.getTracks().forEach(t=>t.stop())}).catch(()=>{})}catch(e){}}if(voiceActive)runMic();else if(rec){try{rec.abort()}catch(e){}}}if(m&&m.k==="log")return showLog(m.text+"\n\n--- phone side ---\n"+PL.join("\n"));if(m&&m.k==="scr")return scr(m);if(m&&m.k==="duel"){const C=$("cmp");if(C&&!C.classList.contains("hide")){C.classList.add("hide");document.body.classList.remove("incmp")}return duel(m)}if(m&&m.k==="ui")setMode(m.mode,m.sub);else if(m&&m.k==="hello"){$("st").textContent="You're in! Watch the TV."}});
     c.on("close",()=>{if(c!==conn)return;net("link lost");setMode("wait","Reconnecting…");retry=setTimeout(connect,1500)});
     c.on("error",()=>{});
     // a connection that never opens is retried

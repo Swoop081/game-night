@@ -135,6 +135,16 @@
       const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m);
     });
   };
+  /* avatars are big: send each photo to a phone once, and refer to it by a short id in every scene */
+  const osend=L.send;
+  const hsh=s=>{let h=5381;for(let i=0;i<s.length;i+=7)h=((h<<5)+h+s.charCodeAt(i))|0;return "av"+(h>>>0).toString(36)+s.length};
+  L.send=(p,m)=>{
+    try{if(m&&m.k==="scr"&&m.scores&&m.scores.some(s=>s.av&&s.av.length>300)){
+      p.avSent=p.avSent||{};
+      m={...m,scores:m.scores.map(s=>{if(!s.av||s.av.length<=300)return s;const id=hsh(s.av);if(!p.avSent[id]){p.avSent[id]=1;osend(p,{k:"avs",id,src:s.av})}return {...s,av:id}})};
+    }}catch(e){}
+    osend(p,m);
+  };
   setInterval(tickScene,300);
   setInterval(()=>{document.body.classList.toggle("hasph",open().length>0)},500);
 
