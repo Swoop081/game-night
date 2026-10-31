@@ -130,13 +130,99 @@ const tile=document.createElement("button");tile.className="game live";tile.id="
 tile.innerHTML=`<span class="art"><span class="dtart"><svg class="dtsvg" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg"><rect x="54" y="2" width="14" height="20" rx="3" fill="#2f8f3a"/><ellipse cx="36" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="84" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="60" cy="62" rx="34" ry="42" fill="#ff7a00"/><path d="M22 40l24 6-18 20z" fill="#14052b"/><path d="M98 40l-24 6 18 20z" fill="#14052b"/><path d="M60 58l-7 12h14z" fill="#14052b"/><path d="M26 78q34 30 68 0l-8-4-6 8-8-8-8 8-8-8-6 8-8-8z" fill="#14052b"/></svg></span><span class="pill">Play</span></span><h2>Draw This</h2><p>Same word, whiteboards, spooky fun. Vote for the best drawing.</p>`;
 hub.insertBefore(tile,hub.firstChild);
 const n=hub.children.length;hub.classList.remove("five","six","seven");if(n>=7)hub.classList.add("seven");
+/* ---------- spooky soundtrack: synthesised, no audio files ---------- */
+const SPK=(()=>{
+  let m=null,timer=null,sfxT=0,step=0,lastPh="",drone=[],started=0;
+  const SC=[220,246.9,261.6,293.7,329.6,349.2,415.3,440,493.9,523.3,587.3,659.3,698.5,830.6,880];
+  const BASS=[110,110,87.3,82.4,110,98,87.3,82.4];
+  const on=()=>S.prefs.sound&&ac();
+  function env(f,type,dur,vol,when,dest,f2){
+    const c=ac(),t=c.currentTime+(when||0),o=c.createOscillator(),g=c.createGain();
+    o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+Math.min(.02,dur/4));g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g);g.connect(dest||m);o.start(t);o.stop(t+dur+.05);return o;
+  }
+  function noise(dur,vol,fHi,fLo,when){
+    const c=ac(),t=c.currentTime+(when||0),n=c.sampleRate*dur,b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);
+    for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+    const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type="lowpass";f.frequency.setValueAtTime(fHi,t);f.frequency.exponentialRampToValueAtTime(fLo,t+dur);
+    const g=c.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.05);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    s.connect(f);f.connect(g);g.connect(m);s.start(t);s.stop(t+dur);
+  }
+  const FX={
+    wail(){const c=ac(),t=c.currentTime,o=c.createOscillator(),l=c.createOscillator(),lg=c.createGain(),g=c.createGain();
+      o.type="sine";o.frequency.setValueAtTime(380,t);o.frequency.linearRampToValueAtTime(620,t+1.1);o.frequency.linearRampToValueAtTime(300,t+2.6);
+      l.frequency.value=5.5;lg.gain.value=22;l.connect(lg);lg.connect(o.frequency);
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.07,t+.8);g.gain.linearRampToValueAtTime(0,t+2.7);
+      o.connect(g);g.connect(m);o.start(t);l.start(t);o.stop(t+2.8);l.stop(t+2.8)},
+    creak(){env(140,"sawtooth",.9,.05,0,null,60);env(95,"square",.7,.03,.1,null,170)},
+    owl(){[0,.5].forEach(w=>{env(420,"sine",.35,.07,w,null,360)})},
+    thunder(){noise(2.6,.22,500,40);env(48,"sine",1.8,.14,0,null,30)},
+    bats(){for(let i=0;i<7;i++)env(2400+Math.random()*1800,"sine",.07,.025,i*.07+Math.random()*.03)},
+    cackle(){for(let i=0;i<7;i++)env(520-i*30,"sawtooth",.11,.04,i*.13,null,430-i*30)},
+    knock(){[0,.28,.5].forEach(w=>env(140,"triangle",.12,.16,w,null,70))},
+    bell(){[196,293.7,392].forEach((f,i)=>env(f,"sine",2.2,.09-i*.02,0))},
+    boom(){env(70,"sine",1,.2,0,null,35);noise(.7,.12,900,80)},
+    sparkle(){[880,1175,1480,1760,2349].forEach((f,i)=>env(f,"triangle",.5,.07,i*.09))},
+    fanfare(){[[440,523.3,659.3],[466.2,587.3,698.5],[523.3,659.3,784]].forEach((c,i)=>c.forEach(f=>env(f,"sawtooth",.55,.05,i*.32)));FX.sparkle()},
+    organ(){[110,165,220,277.2].forEach(f=>env(f,"sawtooth",2.2,.05,0))}
+  };
+  const RANDOM=["wail","creak","owl","bats","cackle","knock","thunder"];
+  function cue(ph){
+    if(ph==="draw"){FX.boom();FX.creak()}
+    else if(ph==="vote"){FX.bell()}
+    else if(ph==="perfect"){FX.fanfare();setTimeout(()=>on()&&FX.wail(),900)}
+    else if(ph==="result"){FX.sparkle()}
+    else if(ph==="final"){FX.thunder();FX.organ()}
+  }
+  function visible(){const a=$("dt"),b=$("dtSetup");return (a&&!a.hidden)||(b&&!b.hidden)}
+  function tick(){
+    if(!visible()||!S.prefs.sound){stop();return}
+    const c=ac();if(!c)return;
+    const ph=(window.__DT&&__DT.DT&&__DT.DT.phase)||"setup";
+    if(ph!==lastPh){const was=lastPh;lastPh=ph;if(was&&ph!=="setup"&&ph!=="idle")cue(ph)}
+    const draw=ph==="draw",left=draw?__DT.DT.left:99,calm=ph==="perfect"||ph==="final";
+    m.gain.setTargetAtTime(calm?.6:1,c.currentTime,.4);
+    /* music-box melody */
+    const p=draw?(left<=10?.9:.7):ph==="vote"?.35:.5;
+    if(Math.random()<p){
+      const i=Math.min(SC.length-1,Math.max(0,(tick.i=(tick.i==null?4:tick.i+Math.round(Math.random()*4-2)))));tick.i=Math.min(SC.length-1,Math.max(0,tick.i));
+      const f=SC[tick.i];env(f,"sine",1.1,.06,0);env(f*2,"triangle",.6,.02,0)
+    }
+    /* bass pulse every 4th step, heartbeat when time is low */
+    if(step%4===0)env(BASS[(step>>2)%BASS.length],"triangle",1.2,.09,0);
+    if(draw&&left<=10){env(62,"sine",.18,.2,0,null,40);env(62,"sine",.18,.14,.16,null,40)}
+    else if(draw&&step%2===0)env(900,"square",.03,.025,0);
+    /* random spooky one-shots */
+    sfxT--;if(sfxT<=0&&ph!=="perfect"){sfxT=draw?18+Math.random()*14:12+Math.random()*10;FX[RANDOM[Math.floor(Math.random()*RANDOM.length)]]()}
+    step++;
+    clearTimeout(timer);timer=setTimeout(tick,draw?(left<=10?330:380):480);
+  }
+  function start(){
+    if(timer||!S.prefs.sound)return;const c=ac();if(!c)return;
+    m=c.createGain();m.gain.value=0;m.connect(c.destination);m.gain.linearRampToValueAtTime(1,c.currentTime+2);
+    /* dark pad: detuned low saws through a slow wobbling filter */
+    const f=c.createBiquadFilter();f.type="lowpass";f.frequency.value=260;f.Q.value=3;
+    const lfo=c.createOscillator(),lg=c.createGain();lfo.frequency.value=.12;lg.gain.value=140;lfo.connect(lg);lg.connect(f.frequency);lfo.start();
+    const pg=c.createGain();pg.gain.value=.06;f.connect(pg);pg.connect(m);
+    drone=[55,55.4,82.4,110.3].map(hz=>{const o=c.createOscillator();o.type="sawtooth";o.frequency.value=hz;o.connect(f);o.start();return o});drone.push(lfo);
+    step=0;sfxT=3;lastPh="";tick.i=null;tick();
+  }
+  function stop(){
+    clearTimeout(timer);timer=null;if(!m)return;
+    const mm=m,d=drone;m=null;drone=[];try{mm.gain.setTargetAtTime(0,ac().currentTime,.25)}catch(e){}
+    setTimeout(()=>{d.forEach(o=>{try{o.stop()}catch(e){}});try{mm.disconnect()}catch(e){}},1200);
+  }
+  return {start,stop};
+})();
+
 const app=$("app");
 const secS=document.createElement("section");secS.className="screen";secS.id="dtSetup";secS.hidden=true;
 const sec=document.createElement("section");sec.className="screen";sec.id="dt";sec.hidden=true;
 app.insertBefore(secS,$("overlay"));app.insertBefore(sec,$("overlay"));
 sec.innerHTML=`<div class="floorbar"><span class="brand">GAME NIGHT<small>DRAW THIS</small></span><span class="spacer"></span><span class="count" id="dtRound"></span><button class="btn ghost" id="dtQuit">Quit</button></div><div id="dtScore"></div><div id="dtStage"></div>`;
 sec.insertAdjacentHTML("afterbegin",fxHTML);
-tile.onclick=()=>{ac();openSetup()};
+tile.onclick=()=>{ac();openSetup();setTimeout(()=>SPK.start(),400)};
 $("dtQuit").onclick=()=>confirmSheet("Quit this game?","The scores will be lost.","Quit",()=>{closeOverlay();endGame();show("hub")});
 
 function total(){return CFG.packs.reduce((a,k)=>a+PACKS[k].length,0)}
@@ -163,7 +249,7 @@ function openSetup(){
   function paintPk(){[...$("dtPacks").children].forEach((b,i)=>b.setAttribute("aria-pressed",CFG.packs.includes(Object.keys(PACKS)[i])));$("dtAvail").textContent=total()+" words"}
   secS.insertAdjacentHTML("afterbegin",fxHTML);
   $("dtBack").onclick=()=>show("hub");
-  $("dtStart").onclick=()=>{ac();startGame()};
+  $("dtStart").onclick=()=>{ac();SPK.start();startGame()};
   show("dtSetup");
 }
 
@@ -184,7 +270,7 @@ function score(){
     const on=(DT.phase==="vote"&&DT.votes[p.pid]!=null)||(isDuel()&&drawsIn(p.pid)>=0&&(DT.phase==="ready"||DT.phase==="draw"));
     return `<div class="dtchip${on?" on":""}" style="--pc:${p.color}">${avatarHTML(p,"sm")}<b>${esc(p.name)}</b><span>${p.pts}</span></div>`}).join("");
 }
-function endGame(){clearInterval(DT.timer);clearTimeout(DT.voteT);DT.cpuT.forEach(clearTimeout);DT.cpuT=[];DT.phase="idle"}
+function endGame(){SPK.stop();clearInterval(DT.timer);clearTimeout(DT.voteT);DT.cpuT.forEach(clearTimeout);DT.cpuT=[];DT.phase="idle"}
 function pickWord(){
   const pool=CFG.packs.flatMap(k=>PACKS[k]);
   let fresh=pool.filter(w=>!DT.used.has(w));if(!fresh.length){DT.used=new Set();fresh=pool}
