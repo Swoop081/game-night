@@ -240,6 +240,7 @@ function keys(kind){
   setTimeout(()=>{const f=$("wfCtl").querySelector("[data-l]:not([disabled])");f&&f.focus({preventScroll:true})},40);
 }
 function callLetter(l){
+  if(W.phase==="bcons"||W.phase==="bvowel")return bonusLetter(l);
   if(W.phase!=="cons"&&W.phase!=="vowel")return;stopClock();
   if(W.called.has(l)||(W.phase==="vowel")!==VOWELS.includes(l))return;
   const p=cur(),vow=W.phase==="vowel";
@@ -289,13 +290,73 @@ function solved(p,why){
   $("wfNext").onclick=()=>{stopConfetti();nextPuzzle()};
   setTimeout(()=>{const b=$("wfNext");b&&b.focus({preventScroll:true})},60);
 }
-function results(){
+/* ---------- bonus round: the winner plays alone ---------- */
+const BONUS_SECS=60,GIVEN="RSTLNE",PRIZES=[10000,15000,25000,25000,50000,100000];
+const B={p:null,picks:[],vow:null,left:0,tm:null,prize:0};
+function stopB(){clearInterval(B.tm);B.tm=null}
+function bonusStart(p){
+  stopB();clearInterval(W.tm);W.busy=false;
+  B.p=p;B.picks=[];B.vow=null;B.prize=PRIZES[Math.floor(Math.random()*PRIZES.length)];W.bonusMsg="";
+  W.turn=W.players.indexOf(p);W.puz=pickPuzzle();W.rev=new Set(GIVEN.split(""));W.called=new Set(GIVEN.split(""));
+  $("wfRound").textContent="Bonus round";
+  $("wfMain").innerHTML=mainHTML("");sizeBoard();score();
+  [...$("wfBoard").querySelectorAll(".wftile.hid")].forEach(t=>{if(W.rev.has(t.dataset.l)){t.classList.remove("hid")}});
+  SFX.win();bonusKeys();return true;
+}
+function bonusKeys(){
+  const vow=B.picks.length>=3;W.phase=vow?"bvowel":"bcons";W.sn=(W.sn||0)+1;
+  const letters=ALL.split("").filter(l=>!W.called.has(l)&&(vow?VOWELS.includes(l):!VOWELS.includes(l)));
+  $("wfCtl").innerHTML=`<div class="wfkeys">${letters.map(l=>`<button data-l="${l}" class="${vow?"v":""}">${l}</button>`).join("")}</div>`;
+  msg(vow?`${B.p.name}: pick 1 vowel`:`${B.p.name}: pick ${3-B.picks.length} more consonant${3-B.picks.length===1?"":"s"} · R S T L N E are given · prize $${B.prize.toLocaleString("en-AU")}`);
+  $("wfCtl").querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>bonusLetter(b.dataset.l));
+}
+function bonusLetter(l){
+  if(W.phase!=="bcons"&&W.phase!=="bvowel")return;
+  const vow=W.phase==="bvowel";
+  if(W.called.has(l)||vow!==VOWELS.includes(l))return;
+  W.called.add(l);W.rev.add(l);if(vow)B.vow=l;else B.picks.push(l);SFX.tick();
+  $("wfBoard").querySelectorAll(`.wftile[data-l="${l}"]`).forEach(t=>{t.classList.remove("hid");t.classList.add("flip")});
+  if(B.picks.length>=3&&!vow)return bonusKeys();
+  if(vow){W.phase="breveal";$("wfCtl").innerHTML="";msg("Here are your letters. 60 seconds to solve it!");setTimeout(bonusSolve,2200);return}
+  bonusKeys();
+}
+function bonusSolve(){
+  if(W.phase!=="breveal")return;W.phase="bsolve";B.left=BONUS_SECS;
+  $("wfCtl").innerHTML=`<div class="wfclock" id="wfClock">${B.left}</div><form class="wfsolve" id="wfForm" autocomplete="off"><input id="wfIn" type="text" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="Type the puzzle" aria-label="Solve the puzzle"><button class="btn gold" type="submit">Solve</button></form>`;
+  msg(`${B.p.name}: solve it for $${B.prize.toLocaleString("en-AU")}`);
+  $("wfForm").onsubmit=e=>{e.preventDefault();bonusTry($("wfIn").value)};
+  setTimeout(()=>{const i=$("wfIn");i&&i.focus({preventScroll:true})},40);
+  B.tm=setInterval(()=>{
+    if(!$("overlay").hidden)return;
+    B.left--;const c=$("wfClock");if(c){c.textContent=B.left;c.classList.toggle("low",B.left<=10)}
+    if(B.left<=5&&B.left>0)SFX.low&&SFX.low();
+    if(B.left<=0)bonusEnd(false);
+  },1000);
+}
+function bonusTry(text){
+  if(W.phase!=="bsolve")return;if(!norm(text))return;
+  if(same(text))return bonusEnd(true);
+  SFX.buzz();msg("Not quite, keep trying!","bad");const i=$("wfIn");if(i){i.value="";i.focus({preventScroll:true})}
+}
+function bonusEnd(win){
+  if(W.phase!=="bsolve")return;stopB();W.phase="bend";W.sn=(W.sn||0)+1;
+  $("wfBoard").querySelectorAll(".wftile.hid").forEach(t=>{t.classList.remove("hid");t.classList.add("flip")});
+  $("wfCtl").innerHTML="";
+  if(win){B.p.total+=B.prize;SFX.win();confetti([B.p.color,"#ffc94a","#fffdf6"]);W.bonusMsg=`${B.p.name} won the bonus round: +$${B.prize.toLocaleString("en-AU")}!`;msg(W.bonusMsg,"ok")}
+  else{SFX.buzz();W.bonusMsg=`${B.p.name} missed the bonus round puzzle: ${W.puz.text}`;msg("Time's up! The answer: "+W.puz.text,"bad")}
+  score();
+  $("wfCtl").innerHTML=`<button class="btn gold" id="wfBNext">See final results</button>`;
+  $("wfBNext").onclick=()=>{stopConfetti();results(true)};
+  setTimeout(()=>{const b=$("wfBNext");b&&b.focus({preventScroll:true})},60);
+}
+function results(bonusDone){
+  if(!bonusDone){const o=W.players.slice().sort((a,b)=>b.total-a.total);if(o.length===1||o[0].total!==o[1].total)return bonusStart(o[0])}
   W.phase="";score();$("wfRound").textContent="";SFX.win();
   const order=W.players.slice().sort((a,b)=>b.total-a.total),top=order[0].total,winners=order.filter(p=>p.total===top),solo=W.players.length===1;
   window.LB&&LB.record("wf",W.players.map(p=>({name:p.name,color:p.color,score:p.total,win:p.total===top&&!solo})));
   $("wfMain").innerHTML=`<div class="wfleft" style="grid-column:1/-1"><span class="wfcat">Wheel of Fortune · final</span>
     <div class="wfbig">${solo?`${esc(order[0].name)} won $${top.toLocaleString("en-AU")}`:winners.length>1?"It's a draw!":`${esc(winners[0].name)} wins $${top.toLocaleString("en-AU")}!`}</div>
-    <div class="ntrank">${order.map(p=>`<div class="r${p.total===top&&!solo?" win":""}">${avatarHTML(p,"")}<b style="color:${p.color}">${esc(p.name)}</b><em>$${p.total.toLocaleString("en-AU")}</em></div>`).join("")}</div>
+    ${W.bonusMsg?`<div class="wfmsg">${esc(W.bonusMsg)}</div>`:""}<div class="ntrank">${order.map(p=>`<div class="r${p.total===top&&!solo?" win":""}">${avatarHTML(p,"")}<b style="color:${p.color}">${esc(p.name)}</b><em>$${p.total.toLocaleString("en-AU")}</em></div>`).join("")}</div>
     <div class="wfbtns"><button class="btn" id="wfMenu">Game Night menu</button><button class="btn gold" id="wfAgain">Play again</button></div></div>`;
   confetti(winners.map(w=>w.color).concat(["#ffc94a","#fffdf6"]));
   $("wfMenu").onclick=()=>{stopConfetti();endGame();show("hub")};
@@ -312,9 +373,11 @@ function letterOf(text){
   return null;
 }
 function onVoice(texts,final){
-  if(!W.puz||W.busy&&W.phase!=="done")return;
+  if(!W.puz||W.busy&&W.phase!=="done"&&!/^b/.test(W.phase))return;
   for(const t of (final?texts:[texts[0]])){
     if(["act","cons","vowel","solve"].includes(W.phase)&&same(t)){solved(cur(),"Solved!");return}
+    if(W.phase==="bsolve"&&same(t)){bonusEnd(true);return}
+    if((W.phase==="bcons"||W.phase==="bvowel")){const l=letterOf(t);if(l){bonusLetter(l);return}}
     if(W.phase==="act"&&/\bspin\b/.test(norm(t))){spin();return}
     if(W.phase==="cons"||W.phase==="vowel"){const l=letterOf(t);if(l){callLetter(l);return}}
   }
@@ -331,6 +394,13 @@ function sceneFor(p){
   if(!me)return {...base,head:{e:"Wheel of Fortune",t:"Watch the TV",s:"You'll be in the next game"}};
   if(W.phase==="final")return {...base,head:{e:"Final",t:"Watch the TV",s:""}};
   const my=c&&c.pid===p.pid;
+  if(/^b/.test(W.phase)){
+    if(!my)return {...base,head:{e:"Bonus round",t:B.p.name+" is playing",s:"Prize $"+B.prize.toLocaleString("en-AU")+". Watch the TV"},clock:W.phase==="bsolve"?String(B.left):undefined};
+    if(W.phase==="bcons"||W.phase==="bvowel"){const vow=W.phase==="bvowel";return {...base,head:{e:"Bonus round",t:vow?"Pick 1 vowel":"Pick "+(3-B.picks.length)+" more consonant"+(3-B.picks.length===1?"":"s"),s:"R S T L N E are given. Prize $"+B.prize.toLocaleString("en-AU")},btns:ALL.split("").filter(l=>!W.called.has(l)&&(vow?VOWELS.includes(l):!VOWELS.includes(l))).map(l=>({t:l,a:"letter",v:l}))}}
+    if(W.phase==="bsolve")return {...base,head:{e:"Bonus round",t:"Solve it! "+B.left+"s",s:"Prize $"+B.prize.toLocaleString("en-AU")},inp:{ph:"Type the puzzle"},clock:String(B.left)};
+    if(W.phase==="bend")return {...base,head:{e:"Bonus round",t:W.bonusMsg||"Finished",s:"Watch the TV"}};
+    return {...base,head:{e:"Bonus round",t:"Get ready",s:"Watch the TV"}};
+  }
   if(W.phase==="done"){
     return {...base,head:{e,t:"Puzzle solved!",s:note},btns:my||true?[{t:W.round>=CFG.rounds?"See results":"Next puzzle",cls:"gold",a:"next"}]:[]};
   }
@@ -360,7 +430,7 @@ function act(p,m){
   else if(m.a==="letter")callLetter(String(m.i||"").toUpperCase());
   else if(m.a==="back"){if(W.phase==="vowel"||W.phase==="solve"||W.phase==="cons")turnStart(false)}
 }
-function text(p,v){if(mine(p.pid)&&W.phase==="solve")trySolve(String(v||""))}
+function text(p,v){if(!mine(p.pid))return;if(W.phase==="solve")trySolve(String(v||""));else if(W.phase==="bsolve")bonusTry(String(v||""))}
 const active=()=>!!$("wf")&&!$("wf").hidden&&W.players.some(q=>q.pid);
 window.__WF={PUZ,W,CFG,callLetter,trySolve,spin,sceneFor,act,text,active};
 })();

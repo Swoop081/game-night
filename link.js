@@ -28,23 +28,40 @@
   const dlg=css(document.createElement("div"),"position:fixed;inset:0;z-index:99998;background:rgba(10,6,40,.95);color:#fff;font-family:system-ui,sans-serif;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px");
   const paintChip=()=>{const n=[...LINK.phones.values()].filter(p=>p.conn&&p.conn.open);
     const off=[...LINK.phones.values()].filter(p=>!(p.conn&&p.conn.open));
-    chip.textContent=off.length&&n.length?"📱 "+n.length+" · Offline: "+off.map(p=>p.name).join(", "):off.length?"📱 Offline: "+off.map(p=>p.name).join(", "):n.length?"📱 "+n.length+" connected":(LINK.ready?"📱 Join with phones · code "+LINK.code+" · press a colour button":"📱 Phones: connecting…");
+    chip.textContent=off.length&&n.length?"📱 "+n.length+" · Offline: "+off.map(p=>p.name).join(", "):off.length?"📱 Offline: "+off.map(p=>p.name).join(", "):n.length?"📱 "+n.length+" connected":(LINK.ready?"📱 No phones yet":"📱 Phones: connecting…");
     chip.style.borderColor=off.length?"#ff5d5d":n.length?"#5dffa0":"rgba(255,255,255,.25)"};
   const paintDlg=()=>{
     const n=[...LINK.phones.values()].filter(p=>p.conn&&p.conn.open);
     dlg.innerHTML='<div style="font-size:2rem;font-weight:800">Join with your phone</div><img alt="" width="210" height="210" style="background:#fff;padding:10px;border-radius:12px"><div>Scan the code, or open <b style="color:#ffd84a">'+base.replace(/^https?:\/\//,"")+'join.html</b> and enter <b style="color:#ffd84a;font-size:1.4rem;letter-spacing:.2em">'+LINK.code+'</b></div><div style="opacity:.9;font-size:1.1rem">'+(n.length?"Joined: "+n.map(p=>p.name).join(" · "):"Nobody has joined yet")+'</div><div style="opacity:.6">Press Back to close</div>';
     dlg.querySelector("img").src="https://api.qrserver.com/v1/create-qr-code/?size=210x210&data="+encodeURIComponent(joinUrl());
   };
-  const toggle=()=>{if(dlg.style.display==="flex")dlg.style.display="none";else{paintDlg();dlg.style.display="flex"}};
+  const toggle=()=>{/* joining happens only from the join card on the main menu */};
   const mount=()=>{document.body.appendChild(chip);document.body.appendChild(dlg);paintChip();setInterval(paintChip,2000)};
   if(document.body)mount();else addEventListener("DOMContentLoaded",mount);
   LINK.toggle=toggle;
   // remote-friendly: a focusable button on the hub, plus colour / menu keys anywhere
   const hubBtn=document.createElement("button");hubBtn.className="btn";hubBtn.id="phonesBtn";hubBtn.textContent="📱 Phones";
-  hubBtn.style.cssText="position:absolute;top:12px;left:16px;z-index:5;font-size:.85rem;padding:8px 16px";hubBtn.onclick=toggle;
+  hubBtn.style.cssText="position:absolute;top:12px;left:16px;z-index:5;font-size:.85rem;padding:8px 16px";hubBtn.onclick=toggle;hubBtn.style.display="none";
   const hubEl=()=>document.getElementById("hub");
   const mountHub=()=>{const h=hubEl();if(h&&!hubBtn.parentNode)h.appendChild(hubBtn)};
   mountHub();addEventListener("DOMContentLoaded",mountHub);setTimeout(mountHub,500);
+
+  /* ---------- join card: the only QR code, top left of the main menu ---------- */
+  const jc=document.createElement("div");jc.id="joinCard";
+  jc.style.cssText="position:absolute;top:10px;left:12px;z-index:6;width:min(210px,30vw);background:rgba(10,6,40,.78);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:10px;color:#fff;font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center";
+  jc.innerHTML='<div style="font:800 .8rem system-ui;letter-spacing:.12em;text-transform:uppercase;color:#ffd84a">Scan to join</div><img alt="" style="width:100%;max-width:128px;aspect-ratio:1;background:#fff;padding:5px;border-radius:8px"><div style="font:700 .72rem system-ui;opacity:.85">code <b id="jcCode" style="letter-spacing:.2em;color:#ffd84a;font-size:1rem"></b></div><div id="jcList" style="width:100%;font:700 .72rem system-ui;text-align:left;column-count:2;column-gap:8px"></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center"><button class="btn" id="jcCpu" style="font-size:.7rem;padding:5px 10px">+ CPU</button><button class="btn ghost" id="jcCpuX" style="font-size:.7rem;padding:5px 10px;display:none">- CPU</button></div>';
+  let jcKey="";
+  const paintJc=()=>{
+    const lob=[...LINK.lobby?LINK.lobby():[]];const k=LINK.code+"|"+JSON.stringify(lob.map(p=>[p.pid,p.name,!!p.cpu]));
+    if(k===jcKey)return;jcKey=k;
+    const im=jc.querySelector("img");if(LINK.code&&im.dataset.c!==LINK.code){im.dataset.c=LINK.code;im.src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="+encodeURIComponent(joinUrl())}
+    jc.querySelector("#jcCode").textContent=LINK.code||"…";
+    jc.querySelector("#jcList").innerHTML=lob.length?lob.map(p=>'<div style="padding:2px 0">'+(p.cpu?"🤖":"📱")+" "+String(p.name).replace(/</g,"&lt;")+"</div>").join(""):'<div style="opacity:.7;text-align:center">Nobody yet</div>';
+    jc.querySelector("#jcCpuX").style.display=lob.some(p=>p.cpu)?"":"none";
+  };
+  jc.querySelector("#jcCpu").onclick=()=>LINK.addCpu&&LINK.addCpu();jc.querySelector("#jcCpuX").onclick=()=>LINK.removeCpu&&LINK.removeCpu();
+  const mountJc=()=>{const h=hubEl();if(h&&!jc.parentNode)h.appendChild(jc)};
+  mountJc();setTimeout(mountJc,500);addEventListener("DOMContentLoaded",mountJc);setInterval(()=>{mountJc();paintJc()},800);
   document.addEventListener("keydown",e=>{if([403,404,405,406,183,184,185,186,82,93].includes(e.keyCode)||e.key==="ContextMenu"||e.key==="p"&&e.altKey){e.preventDefault();toggle()}},true);
   const ob=window.__gnBack;
   window.__gnBack=function(){if(dlg.style.display==="flex"){dlg.style.display="none";return true}return ob?ob.apply(this,arguments):false};
@@ -155,8 +172,7 @@
         const hint=document.createElement("div");hint.className="lobbyhint";
         if(n===0){
           hint.style.cssText="display:flex;align-items:center;gap:22px;padding:6px 4px";
-          hint.innerHTML='<img alt="" width="150" height="150" style="background:#fff;padding:8px;border-radius:12px"><div><div style="font-size:1.5rem;font-weight:800">Scan to join</div><div style="opacity:.85;margin-top:4px">Open the camera on your phone, make your avatar, and tap Join.<br>Or go to <b>'+base.replace(/^https?:\/\//,"")+'join.html</b> and enter code <b style="letter-spacing:.2em;color:#ffd84a">'+LINK.code+'</b></div></div>';
-          hint.querySelector("img").src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+encodeURIComponent(joinUrl());
+          hint.innerHTML='<div><div style="font-size:1.3rem;font-weight:800">No phones yet</div><div style="opacity:.85;margin-top:4px">Players scan the code on the main menu (top left) to join.</div></div>';
           wrap.appendChild(hint);
         }else if(n<2){
           hint.style.cssText="align-self:center;opacity:.8;font-weight:700";hint.textContent="Waiting for at least one more player…";wrap.appendChild(hint);
@@ -171,7 +187,7 @@
   const sg=window.startGame;
   if(typeof sg==="function")window.startGame=function(){const r=sg.apply(this,arguments);try{(S.players||[]).forEach((p,i)=>{p.pid=(S.pids&&S.pids[i])||null})}catch(e){}return r};
   // a join button on the setup screen
-  const setupBtn=document.createElement("button");setupBtn.className="btn";setupBtn.textContent="📱 Join with phones";setupBtn.onclick=()=>toggle();
+  const setupBtn=document.createElement("button");setupBtn.className="btn";setupBtn.textContent="📱 Join with phones";setupBtn.onclick=()=>toggle();setupBtn.style.display="none";
   setupBtn.style.cssText="margin-left:auto;margin-right:12px";
   const mountSetup=()=>{const tb=document.querySelector("#setup .topbar");if(tb&&!setupBtn.parentNode){const start=document.getElementById("startGame");tb.insertBefore(setupBtn,start||null)}};
   const cpuBtn=document.createElement("button");cpuBtn.className="btn";cpuBtn.textContent="🤖 Add CPU player";cpuBtn.style.cssText="margin-right:12px";cpuBtn.onclick=()=>LINK.addCpu();

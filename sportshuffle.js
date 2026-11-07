@@ -5,7 +5,7 @@
    for every correct answer you give, and it stays for the whole game. */
 (function(){
 const Q=window.SS_Q||{},SPORTS=window.SS_SPORTS||[],NAMES=window.SS_NAMES||{};
-const CFG={rounds:5,per:2,secs:20};
+const CFG={rand:3,per:2,secs:20};
 try{const j=JSON.parse(localStorage.getItem("gn.ss")||"null");if(j)Object.assign(CFG,j)}catch(e){}
 const saveCfg=()=>{try{localStorage.setItem("gn.ss",JSON.stringify(CFG))}catch(e){}};
 const FONT='"Oxanium","Big Shoulders Display",Impact,sans-serif';
@@ -87,23 +87,24 @@ function openSetup(){
   <div class="setup-grid"><div class="panel">
     <div class="field"><span class="eyebrow">How to play</span><ul class="rules">
       <li>Everyone <b>picks a sport</b> on their phone: AFL, NRL, NBA, NFL, NHL, MLB, EPL, WWE or UFC.</li>
-      <li>Each round the questions come from <b>one of the picked sports</b>. Everyone gets the same question with 3 answers.</li>
+      <li>Every picked sport gets its own round. Everyone gets the same question with 3 answers, with a <b>leaderboard break</b> between questions.</li>
+      <li>When every sport has had a go there is a <b>random round</b>: each question comes from a random player's sport and your multiplier still counts.</li>
       <li>A right answer is worth <b>100 points</b>. If the question <b>isn't from your sport it's worth double</b>.</li>
       <li>Every right answer also adds <b>x0.25 to your multiplier</b> for the rest of the game, so late answers are worth a lot more.</li>
       <li>Most points after the last round wins. 2 to 10 players.</li></ul></div>
-    <div class="field"><span class="eyebrow">Rounds</span><div class="seg" id="ssRoundsSeg"></div></div>
+    <div class="field"><span class="eyebrow">Random round questions</span><div class="seg" id="ssRoundsSeg"></div></div>
     <div class="field"><span class="eyebrow">Questions per round</span><div class="seg" id="ssPerSeg"></div></div>
     <div class="field"><span class="eyebrow">Seconds per question</span><div class="seg" id="ssSecsSeg"></div></div>
     <div class="field"><span class="eyebrow">Sound</span><div class="seg" id="ssSoundSeg"></div></div>
   </div><div class="panel"><span class="eyebrow">Players</span><div id="ssPlayers" class="hlsetup"><div class="note">Join with your phones. You need at least 2 players (CPU players count).</div></div></div></div>`;
-  seg($("ssRoundsSeg"),[3,5,7],()=>CFG.rounds,v=>{CFG.rounds=v;saveCfg()},v=>String(v));
+  seg($("ssRoundsSeg"),[0,3,5,8],()=>CFG.rand,v=>{CFG.rand=v;saveCfg()},v=>v?String(v):"Off");
   seg($("ssPerSeg"),[1,2,3],()=>CFG.per,v=>{CFG.per=v;saveCfg()},v=>String(v));
   seg($("ssSecsSeg"),[15,20,30],()=>CFG.secs,v=>{CFG.secs=v;saveCfg()},v=>v+"s");
   seg($("ssSoundSeg"),[true,false],()=>S.prefs.sound,v=>S.prefs.sound=v,onOff);
   $("ssBack").onclick=()=>show("hub");$("ssStart").onclick=()=>{ac();startGame()};
   show("ssSetup");
 }
-const SS={players:[],phase:"idle",rn:0,qn:0,cats:[],cat:null,q:null,opts:[],correct:0,left:0,timer:null,T:[],winners:[],lastGain:{}};
+const SS={total:1,per:2,rand:false,players:[],phase:"idle",rn:0,qn:0,cats:[],cat:null,q:null,opts:[],correct:0,left:0,timer:null,T:[],winners:[],lastGain:{}};
 const byPid=pid=>SS.players.find(p=>p.pid===pid);
 const clearT=()=>{clearInterval(SS.timer);SS.T.forEach(clearTimeout);SS.T=[]};
 const later=(fn,ms)=>{SS.T.push(setTimeout(fn,ms))};
@@ -148,16 +149,24 @@ function finishPick(){
   if(SS.phase!=="pick")return;clearT();
   SS.players.forEach(p=>{if(!p.pick)p.pick=SPORTS[Math.floor(Math.random()*SPORTS.length)][0]});
   const picked=[...new Set(SS.players.map(p=>p.pick))].sort(()=>Math.random()-.5);
-  SS.cats=[];for(let r=0;r<CFG.rounds;r++){let c=picked[r%picked.length];if(r>0&&picked.length>1&&c===SS.cats[r-1]){c=picked[(r+1)%picked.length]}SS.cats.push(c)}
+  SS.cats=picked.slice();SS.total=picked.length+(CFG.rand>0?1:0);SS.rand=false;SS.per=CFG.per;
   SS.phase="intro";nextRound();
 }
 function nextRound(){
   clearT();SS.rn++;SS.qn=0;
-  if(SS.rn>CFG.rounds)return finish();
-  const cat=SS.cats[SS.rn-1];SS.cat=cat;SS.phase="intro";
-  $("ssCount").textContent=`Round ${SS.rn} of ${CFG.rounds}`;
+  if(SS.rn>SS.total)return finish();
+  if(SS.rn>SS.cats.length){ // random round: every question from a random picked sport, multipliers carry on
+    SS.rand=true;SS.per=CFG.rand;SS.phase="intro";SS.cat=SS.cats[Math.floor(Math.random()*SS.cats.length)];
+    $("ssCount").textContent=`Round ${SS.rn} of ${SS.total}`;
+    $("ssStage").innerHTML=`<div class="ssboard">${boardHTML()}</div><div class="ssmid"><div class="sssub">Round ${SS.rn} of ${SS.total}</div><div class="ssbig">Random round</div>
+    <div class="sssub">${SS.per} questions. Each one comes from a random player's sport</div>
+    <div class="sssub" style="color:#7dff9b">Your multipliers still count. Not your sport? Double points</div></div>`;
+    SFX.go&&SFX.go();later(nextQ,4800);return;
+  }
+  const cat=SS.cats[SS.rn-1];SS.cat=cat;SS.phase="intro";SS.rand=false;SS.per=CFG.per;
+  $("ssCount").textContent=`Round ${SS.rn} of ${SS.total}`;
   const owners=SS.players.filter(p=>p.pick===cat),others=SS.players.length-owners.length;
-  $("ssStage").innerHTML=`<div class="ssboard">${boardHTML()}</div><div class="ssmid"><div class="sssub">Round ${SS.rn} of ${CFG.rounds}</div><div class="ssbig" style="color:#fff"><span class="sstag" style="--sc:${SP[cat].col}">${SP[cat].lab}</span></div><div class="ssbig">${E(NAMES[cat]||SP[cat].lab)}</div>
+  $("ssStage").innerHTML=`<div class="ssboard">${boardHTML()}</div><div class="ssmid"><div class="sssub">Round ${SS.rn} of ${SS.total}</div><div class="ssbig" style="color:#fff"><span class="sstag" style="--sc:${SP[cat].col}">${SP[cat].lab}</span></div><div class="ssbig">${E(NAMES[cat]||SP[cat].lab)}</div>
   <div class="sssub">${owners.map(p=>E(p.name)).join(", ")} ${owners.length===1?"picked this sport and scores":"picked this sport and score"} normal points</div>
   <div class="sssub" style="color:#7dff9b">${others?"Everyone else scores DOUBLE":"Everyone picked this sport"}</div></div>`;
   SFX.go&&SFX.go();later(nextQ,4200);
@@ -174,12 +183,13 @@ function takeQ(cat){
 }
 function nextQ(){
   clearT();SS.qn++;
-  if(SS.qn>CFG.per)return nextRound();
+  if(SS.qn>SS.per)return nextRound();
+  if(SS.rand){const prev=SS.cat;let o=SS.cats.filter(c=>c!==prev);if(!o.length)o=SS.cats;SS.cat=o[Math.floor(Math.random()*o.length)]}
   const q=takeQ(SS.cat);SS.q=q;
   SS.opts=[0,1,2].sort(()=>Math.random()-.5).map(i=>q[1+i]);SS.correct=SS.opts.indexOf(q[1]);
   SS.players.forEach(p=>{p.ans=null;p.gain=0;p.ok=false});SS.phase="ask";SS.left=CFG.secs;
   $("ssStage").innerHTML=`<div class="ssboard" id="ssBoard">${boardHTML()}</div>
-  <div class="sshud"><span><span class="sstag" style="--sc:${SP[SS.cat].col}">${SP[SS.cat].lab}</span>  Q${SS.qn} of ${CFG.per}</span><span class="ssclock" id="ssClock">${SS.left}</span><span>Answer on your phone</span></div>
+  <div class="sshud"><span><span class="sstag" style="--sc:${SP[SS.cat].col}">${SP[SS.cat].lab}</span>  ${SS.rand?"Random ":""}Q${SS.qn} of ${SS.per}</span><span class="ssclock" id="ssClock">${SS.left}</span><span>Answer on your phone</span></div>
   <div class="ssq">${E(q[0])}</div>
   <div class="ssopts">${SS.opts.map((o,i)=>`<div class="sso"><i>${"ABC"[i]}</i><span>${E(o)}</span></div>`).join("")}</div>
   <div class="ssmsg" id="ssMsg">Locked in: 0 of ${SS.players.length}</div>`;
@@ -210,8 +220,18 @@ function showResults(){
   const ord=SS.players.slice().sort((a,b)=>b.gain-a.gain||b.pts-a.pts);
   $("ssStage").innerHTML=`<div class="ssboard">${boardHTML()}</div><div class="ssres"><h3>${E(SS.q[1])}</h3>
   <div class="sslist${two?" two":""}" style="--rs:${rs};--av:${avs}">${ord.map((p,i)=>`<div class="ssrow${p.ok?"":" bad"}" style="--pc:${p.color};animation-delay:${i*.1}s">${avEl(p)}<b>${E(p.name)}</b><span class="fx">${p.ok?`100 ${p.dbl?"x2 ":""}${fx(p.mx)}`:p.ans==null?"no answer":"wrong"}</span><span class="gn">${p.ok?"+"+p.gain:"0"}</span><span class="tot">${p.pts}</span></div>`).join("")}</div>
-  <div class="ssmsg">${SS.rn>=CFG.rounds&&SS.qn>=CFG.per?"That was the last question!":"Next question coming up"}</div></div>`;
-  later(nextQ,7000+(n>6?2000:0));
+  <div class="ssmsg">${SS.rn>=SS.total&&SS.qn>=SS.per?"That was the last question!":"Leaderboard next"}</div></div>`;
+  if(SS.rn>=SS.total&&SS.qn>=SS.per)later(nextQ,6500+(n>6?2000:0));else later(leaderboard,6000+(n>6?2000:0));
+}
+function leaderboard(){
+  if(SS.phase!=="result")return;SS.phase="break";SS.sn2=(SS.sn2||0)+1;
+  const o=SS.players.slice().sort((a,b)=>b.pts-a.pts),n=o.length,two=n>5,rs=n<=3?"4vmin":n<=5?"3.4vmin":n<=8?"2.9vmin":"2.6vmin",avs=n<=3?"10vmin":n<=5?"8vmin":n<=8?"6.4vmin":"5.6vmin";
+  const endR=SS.qn>=SS.per,nxt=endR?(SS.rn+1>SS.total?"Final scores next":SS.rn+1>SS.cats.length?"Next: the random round":"Next round: "+E(SP[SS.cats[SS.rn]].lab)):"Next question: "+(SS.rand?"another random sport":E(SP[SS.cat].lab));
+  SS.rankOf={};o.forEach((p,i)=>SS.rankOf[p.pid||p.name]=i+1);
+  $("ssStage").innerHTML=`<div class="ssres"><h3>Leaderboard</h3>
+  <div class="sslist${two?" two":""}" style="--rs:${rs};--av:${avs}">${o.map((p,i)=>`<div class="ssrow" style="--pc:${p.color};animation-delay:${i*.08}s"><span class="gn" style="color:#ffd23f;min-width:1.4em;text-align:center">${i+1}</span>${avEl(p)}<b>${E(p.name)}</b><span class="fx">${p.right} right · ${fx(mult(p))}</span><span class="tot">${p.pts}</span></div>`).join("")}</div>
+  <div class="ssmsg">${nxt}</div></div>`;
+  later(nextQ,6500+(n>6?1500:0));
 }
 function finish(){
   clearT();SS.phase="final";
@@ -228,11 +248,12 @@ function finish(){
 function sceneFor(p){
   const me=byPid(p.pid);
   const sc=SS.players.map(q=>({n:q.name,s:q.pts,c:q.color,on:0,pid:q.pid,av:av(q)}));
-  const base={th:"ss",scores:sc,btns:[],sn:SS.rn*100+SS.qn*10+({pick:1,intro:2,ask:3,reveal:4,result:5,final:6}[SS.phase]||0),me:1};
-  const e=SS.rn?`Round ${SS.rn} of ${CFG.rounds}`:"Sport Shuffle";
+  const base={th:"ss",scores:sc,btns:[],sn:SS.rn*100+SS.qn*10+({pick:1,intro:2,ask:3,reveal:4,result:5,final:6,break:7}[SS.phase]||0),me:1};
+  const e=SS.rn?`Round ${SS.rn} of ${SS.total}`:"Sport Shuffle";
   if(!me)return {...base,head:{e:"Sport Shuffle",t:"Watch the TV",s:"You'll be in the next game"}};
   if(SS.phase==="final")return {...base,head:{e:"Game over",t:SS.winners.includes(me)?"YOU WIN!":SS.winners.map(x=>x.name).join(" & ")+" wins!",s:"You scored "+me.pts}};
   if(SS.phase==="pick")return {...base,head:{e:"Sport Shuffle",t:"Pick your sport",s:"Questions from your sport score normal points. Everyone else's score double"},clock:String(SS.left),btns:SPORTS.map(s=>({t:s[1],a:"pick",v:s[0],on:me.pick===s[0]?1:0,c:s[2]}))};
+  if(SS.phase==="break"){const rk=SS.rankOf&&SS.rankOf[me.pid||me.name];return {...base,head:{e,t:rk?"You are in "+rk+(rk===1?"st":rk===2?"nd":rk===3?"rd":"th")+" place":"Leaderboard",s:me.pts+" points · multiplier "+fx(mult(me))+". Watch the TV"}}}
   if(SS.phase==="intro")return {...base,head:{e,t:SP[SS.cat].lab+" round",s:me.pick===SS.cat?"Your sport: normal points":"Not your sport: DOUBLE points"}};
   const dbl=me.pick!==SS.cat,m=fx(mult(me));
   if(SS.phase==="ask"){

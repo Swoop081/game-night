@@ -9,7 +9,7 @@
   const log=L.log||(()=>{});
   const txt=el=>el?String(el.textContent||"").replace(/\s+/g," ").trim():"";
   const vis=el=>!!el&&el.isConnected&&!el.closest("[hidden]");
-  const GAME_IDS=["ss","wr","ch","ct","ot","hl","nt","pb","cd","dt","bm","cr","floor","ff","tp","wf"];
+  const GAME_IDS=["wl","ss","wr","ch","ct","ot","hl","nt","pb","cd","dt","bm","cr","floor","ff","tp","wf"];
   const WIRED={hl:1,nt:1,pb:1,cd:1,tp:1};
   const gameNow=()=>{for(const id of GAME_IDS){const e=$(id);if(e&&!e.hidden)return id}return null};
   const players=g=>{try{if(g==="hl")return HL.players;if(g==="nt")return __NT.NT.players;if(g==="pb")return __PB.PB.players;if(g==="cd")return __CD.CD.players;if(g==="tp")return __TP.TP.players}catch(e){}return null};
@@ -142,6 +142,7 @@
     if(g==="wr"&&window.__WR&&__WR.active()){open().forEach(p=>{const m={k:"scr",...__WR.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     if(g==="tp"&&window.__TP&&__TP.active()){open().forEach(p=>{const m={k:"scr",...__TP.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     if(g==="ss"&&window.__SS&&__SS.active()){open().forEach(p=>{const m={k:"scr",...__SS.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
+    if(g==="wl"&&window.__WL&&__WL.active()){open().forEach(p=>{const m={k:"scr",...__WL.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     if(g==="dt"&&window.__DT){open().forEach(p=>{const m={k:"scr",...__DT.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     let sc;try{sc=scene(g)}catch(e){log("scene error",String(e));return}
     const bs=g+"|"+sc.btns.map(b=>b.t).join("~")+"|"+JSON.stringify(sc.head);
@@ -178,6 +179,7 @@
     if(window.__WR&&__WR.active()){if(m.k==="act"){try{__WR.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"&&__WR.text){try{__WR.text(p,m.v)}catch(e){log("txt error",String(e))}return}return}
     if(window.__TP&&__TP.active()){if(m.k==="act"){try{__TP.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"){try{__TP.text(p,m.v)}catch(e){log("txt error",String(e))}return}return}
     if(window.__SS&&__SS.active()){if(m.k==="act"){try{__SS.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"&&__SS.text){try{__SS.text(p,m.v)}catch(e){log("txt error",String(e))}return}return}
+    if(window.__WL&&__WL.active()){if(m.k==="act"){try{__WL.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"&&__WL.text){try{__WL.text(p,m.v)}catch(e){log("txt error",String(e))}return}return}
     if(window.__BM&&__BM.active()){if(m.k==="act"){try{__BM.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"){try{__BM.text(p,m.v)}catch(e){log("txt error",String(e))}return}}
     if(window.__PB&&__PB.active()){if(m.k==="act"){try{__PB.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"){try{__PB.text(p,m.v)}catch(e){log("txt error",String(e))}return}}
     if(window.__WF&&__WF.active()){if(m.k==="act"){try{__WF.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"){try{__WF.text(p,m.v)}catch(e){log("txt error",String(e))}return}}
@@ -195,11 +197,18 @@
   };
 
   /* ---------- phone panel on each game's setup screen ---------- */
-  const SETUPS={hlSetup:"hlPlayers",ntSetup:"ntPlayers",pbSetup:"pbPlayers",cdSetup:"cdPlayers",tpSetup:"tpPlayers",wfSetup:"wfPlayers",dtSetup:"dtPlayers",bmSetup:"bmPlayers",crSetup:"crPlayers",otSetup:"otPlayers"};
+  const SETUPS={hlSetup:"hlPlayers",ntSetup:"ntPlayers",pbSetup:"pbPlayers",cdSetup:"cdPlayers",tpSetup:"tpPlayers",wfSetup:"wfPlayers",dtSetup:"dtPlayers",bmSetup:"bmPlayers",crSetup:"crPlayers",otSetup:"otPlayers",wlSetup:"wlPlayers"};
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"");
   const joinUrl=()=>base+"join.html?c="+L.code+(new URLSearchParams(location.search).get("peerhost")?"&peerhost="+new URLSearchParams(location.search).get("peerhost")+"&peerport="+(new URLSearchParams(location.search).get("peerport")||9000):"");
   const paintPanel=(id,pl)=>{
     const sec=$(id);if(!sec||sec.hidden)return;
+    { // players join on the main menu only: no QR or join panel on game screens
+      const old=sec.querySelector(".phpanel");if(old)old.remove();
+      const has=L.lobby().length>0;
+      const f=sec.querySelector(".stepper");const fld=f&&f.closest(".field");if(fld)fld.style.display=has?"none":"";
+      const pw=$(pl);const pp=pw&&pw.closest(".panel");if(pp)pp.style.display=has?"none":"";
+      return;
+    }
     let el=sec.querySelector(".phpanel");
     if(!el){
       const grid=sec.querySelector(".setup-grid")||sec;
@@ -217,7 +226,7 @@
         <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">${img}<div style="flex:1;min-width:200px">
         ${lob.length?lob.map(p=>`<div style="padding:4px 0;font-weight:800">${p.cpu?"🤖":"📱"} ${String(p.name).replace(/</g,"&lt;")}</div>`).join(""):`<div>Scan the code, or open <b>${base.replace(/^https?:\/\//,"")}join.html</b> and enter <b style="letter-spacing:.2em;color:var(--gold)">${L.code}</b></div>`}
         </div></div>
-        <div class="row" style="margin-top:8px"><button class="btn" data-a="join">📱 Show join code</button>${id==="hlSetup"||id==="dtSetup"||id==="bmSetup"||id==="crSetup"||id==="otSetup"?'<button class="btn" data-a="cpu">🤖 Add CPU player</button><button class="btn ghost" data-a="nocpu">Remove CPU</button>':""}</div>
+        <div class="row" style="margin-top:8px"><button class="btn" data-a="join">📱 Show join code</button>${id==="hlSetup"||id==="dtSetup"||id==="bmSetup"||id==="crSetup"||id==="otSetup"||id==="wlSetup"?'<button class="btn" data-a="cpu">🤖 Add CPU player</button><button class="btn ghost" data-a="nocpu">Remove CPU</button>':""}</div>
         <div class="note" style="margin-top:6px">${lob.length?"These players are used when you press Start.":"No phones yet. You can still play on this screen."}</div>`;
       el.querySelectorAll("button").forEach(b=>b.onclick=()=>{const a=b.dataset.a;if(a==="join")L.toggle();else if(a==="cpu")L.addCpu();else L.removeCpu()});
     }

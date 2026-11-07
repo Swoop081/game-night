@@ -20,7 +20,7 @@
     m.className="mic"+(state==="on"?" on":"");
     if(state==="off"){m.innerHTML=S.prefs.voice?"":"";return}
     const n=LINK.lobby?LINK.lobby().filter(p=>p.conn&&p.conn.open).length:0;
-    const msg=text?"<q>"+esc2(text)+"</q>":(n?"📱 Answer out loud into your phone":"📱 No phones joined — press the Phones button to answer by voice");
+    const msg=text?"<q>"+esc2(text)+"</q>":(n?"📱 Answer out loud into your phone":"📱 No phones joined — players join from the main menu");
     m.innerHTML='<span class="d"></span>'+msg;
   };
 
