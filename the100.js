@@ -128,7 +128,7 @@ function begin(list){
   show("cr");
   $("crStage").innerHTML=`<div class="crend"><div class="big">The 100</div><div class="crmsg">${CR.players.length} player${CR.players.length===1?"":"s"}. Get ready!</div></div>`;
   SFX.go&&SFX.go();
-  later(nextQ,2800);
+  later(nextQ,2000);
 }
 function nextQ(){
   clearT();CR.n++;
@@ -161,14 +161,14 @@ function lock(pid,idx){
   const p=byPid(pid);if(!p||!p.alive||CR.phase!=="ask"||p.pick!=null)return;
   p.pick=idx;const t=T[pid];if(t)t.classList.remove("dim");
   SFX.tick&&SFX.tick();
-  if(alive().every(x=>x.pick!=null)){clearInterval(CR.timer);later(sortPhase,900)}
+  if(alive().every(x=>x.pick!=null)){clearInterval(CR.timer);later(sortPhase,500)}
 }
 /* move a token to a new parent with a smooth slide (FLIP) */
 function flip(moves){
   const first=new Map();moves.forEach(([el])=>first.set(el,el.getBoundingClientRect()));
   moves.forEach(([el,parent])=>parent.appendChild(el));
   moves.forEach(([el],i)=>{const a=first.get(el),b=el.getBoundingClientRect();const dx=a.left-b.left,dy=a.top-b.top;
-    if(!dx&&!dy)return;el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],{duration:900,delay:Math.min(700,i*12),easing:"cubic-bezier(.3,.9,.3,1)",fill:"backwards"})});
+    if(!dx&&!dy)return;el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],{duration:750,delay:Math.min(500,i*8),easing:"cubic-bezier(.3,.9,.3,1)",fill:"backwards"})});
 }
 function sortPhase(){
   if(CR.phase!=="ask")return;
@@ -180,8 +180,8 @@ function sortPhase(){
   const msg=$("crMsg");if(msg)msg.textContent="Locked in!";
   flip(mv);
   SFX.boost&&SFX.boost();
-  later(()=>{if(msg)msg.textContent="Moment of truth..."},1400);
-  later(reveal,3600);
+  later(()=>{if(msg)msg.textContent="Moment of truth..."},900);
+  later(reveal,2300);
 }
 function reveal(){
   CR.phase="reveal";
@@ -195,16 +195,16 @@ function reveal(){
   if(everyoneWrong){if(msg)msg.textContent="Everyone got it wrong! Nobody is out";SFX.buzz&&SFX.buzz()}
   else{
     later(()=>{
-      wrong.forEach(p=>{p.alive=false;p.out=CR.n-1;const t=T[p.pid];if(t){t.animate([{transform:"none",opacity:1},{transform:"translateY(5vmin) rotate(35deg) scale(.2)",opacity:0}],{duration:1000,fill:"forwards"})}});
+      wrong.forEach(p=>{p.alive=false;p.out=CR.n-1;const t=T[p.pid];if(t){t.animate([{transform:"none",opacity:1},{transform:"translateY(5vmin) rotate(35deg) scale(.2)",opacity:0}],{duration:700,fill:"forwards"})}});
       if(msg)msg.textContent=wrong.length?`${wrong.length} ${wrong.length===1?"player is":"players are"} out`:"Everyone got it right!";
       SFX.pass&&wrong.length&&SFX.pass();
       $("crCount").textContent=`${right.length} player${right.length===1?"":"s"} left`;
-    },1300);
+    },600);
   }
   later(()=>{CR.phase="result";const l=alive();
     if(msg)msg.textContent=l.length===1?"We have a winner!":`${l.length} players left`;
     wrong.forEach(p=>{const t=T[p.pid];if(t&&t.parentNode)t.remove()});
-    later(nextQ,2600)},4200);
+    later(nextQ,1200)},2500);
 }
 function finish(){
   clearT();CR.phase="final";

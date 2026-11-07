@@ -8,6 +8,8 @@
         ch:[[48,[60,64,67]],[43,[59,62,67]],[45,[57,60,64]],[41,[57,60,65]]]},
     nt:{bpm:126,swing:0,bass:"square",chord:"sawtooth",kick:[0,8],hat:1,mel:[69,72,74,76,79,81],melP:.45,vol:.7,
         ch:[[45,[57,60,64]],[41,[57,60,65]],[48,[60,64,67]],[43,[59,62,67]]]},
+    cr:{bpm:116,swing:0,bass:"sawtooth",chord:"triangle",kick:[0,8],hat:2,mel:[69,72,74,76,79,81],melP:.3,vol:.85,
+        ch:[[45,[57,60,64]],[41,[57,60,65]],[48,[60,64,67]],[43,[59,62,67]]]},
     pb:{bpm:132,swing:0,bass:"sawtooth",chord:"sawtooth",kick:[0,4,8,12],hat:2,mel:[64,67,71,74,76,79],melP:.3,vol:.7,
         ch:[[40,[59,64,67]],[48,[60,64,67]],[43,[59,62,67]],[50,[62,66,69]]]}
   };
@@ -48,7 +50,7 @@
   }
   /* follow whichever of the four games is on screen */
   setInterval(()=>{
-    let g=null;for(const k of ["hl","cd","nt","pb"]){const e=document.getElementById(k);if(e&&!e.hidden){g=k;break}}
+    let g=null;for(const k of ["hl","cd","nt","pb","cr"]){const e=document.getElementById(k);if(e&&!e.hidden){g=k;break}}
     if(g&&S.prefs.sound){if(id&&id!==g)stop();if(!id)start(g)}else if(id)stop();
   },600);
   /* Higher or Lower reveal: drum roll then a big ding or buzzer (runs on its own bus so it stays clear of the music) */
