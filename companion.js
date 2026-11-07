@@ -134,6 +134,7 @@
     if(g==="floor"&&window.__FLP){open().forEach(p=>{const m={k:"scr",...__FLP.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     if(g==="cr"&&window.__CR){open().forEach(p=>{const m={k:"scr",...__CR.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     if(g==="bm"&&window.__BM){open().forEach(p=>{const m={k:"scr",...__BM.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
+    if(g==="pb"&&window.__PB&&__PB.active()){open().forEach(p=>{const m={k:"scr",...__PB.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     if(g==="dt"&&window.__DT){open().forEach(p=>{const m={k:"scr",...__DT.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     let sc;try{sc=scene(g)}catch(e){log("scene error",String(e));return}
     const bs=g+"|"+sc.btns.map(b=>b.t).join("~")+"|"+JSON.stringify(sc.head);
@@ -165,6 +166,7 @@
     if(m.k==="act"&&window.__FLP&&__FLP.active()){__FLP.act(p,m);return}
     if(window.__CR&&__CR.active()){if(m.k==="act"){try{__CR.act(p,m)}catch(e){log("act error",String(e))}}return}
     if(window.__BM&&__BM.active()){if(m.k==="act"){try{__BM.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"){try{__BM.text(p,m.v)}catch(e){log("txt error",String(e))}return}}
+    if(window.__PB&&__PB.active()){if(m.k==="act"){try{__PB.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"){try{__PB.text(p,m.v)}catch(e){log("txt error",String(e))}return}}
     if(m.k==="act"&&window.__DT&&__DT.active()){try{__DT.act(p,m)}catch(e){log("act error",String(e))}return}
     if(m.k==="tap"||m.k==="txt"||m.k==="num"){
       if(!g||!mayAct(g,p)){log("input ignored",{k:m.k,from:p.name});return}
