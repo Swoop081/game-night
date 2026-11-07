@@ -163,8 +163,9 @@ function mainHTML(ctl){
 
 /* ---------- flow ---------- */
 function startGame(){
+  const LL=window.LINK&&LINK.pull&&LINK.pull(1,6);if(LL)CFG.count=LL.length;
   S.count=CFG.count;ensureSlots();save();saveCfg();
-  W.players=[];for(let i=0;i<CFG.count;i++)W.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],slot:i,rc:0,total:0});
+  W.players=[];for(let i=0;i<CFG.count;i++)W.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],slot:i,rc:0,total:0,pid:(LL&&S.pids&&S.pids[i])||null});
   W.round=0;W.used=new Set();W.turn=-1;
   show("wf");score();$("wfMain").innerHTML="";
   introContestants(W.players,"Wheel of Fortune",()=>{voiceStart(onVoice,$("wfMic"));if(!S.prefs.voice)$("wfMic").innerHTML="";nextPuzzle()});
@@ -302,5 +303,48 @@ function onVoice(texts,final){
     if(W.phase==="cons"||W.phase==="vowel"){const l=letterOf(t);if(l){callLetter(l);return}}
   }
 }
-window.__WF={PUZ,W,CFG,callLetter,trySolve,spin};
+
+/* ---------- phones: the player whose turn it is spins, buys, picks letters and solves on their own phone ---------- */
+const mine=pid=>{const p=cur();return !!p&&!!pid&&p.pid===pid};
+function sceneFor(p){
+  const sc=W.players.map(q=>({n:q.name,s:"$"+q.rc.toLocaleString("en-AU"),c:q.color,on:q===cur()?1:0,pid:q.pid,av:(()=>{try{return avatarSrc(q.slot)}catch(e){return ""}})()}));
+  const me=W.players.find(q=>q.pid===p.pid),c=cur();
+  const note=(()=>{const m=$("wfMsg");return m?String(m.textContent||"").trim():""})();
+  const e=W.puz?(CFG.rounds>1?`Puzzle ${W.round} of ${CFG.rounds} · `:"")+W.puz.cat:"Wheel of Fortune";
+  const base={th:"wf",scores:sc,btns:[],sn:W.round*100+W.turn*10+({act:1,spin:2,cons:3,vowel:4,solve:5,reveal:6,done:7}[W.phase]||0),me:1};
+  if(!me)return {...base,head:{e:"Wheel of Fortune",t:"Watch the TV",s:"You'll be in the next game"}};
+  if(W.phase==="final")return {...base,head:{e:"Final",t:"Watch the TV",s:""}};
+  const my=c&&c.pid===p.pid;
+  if(W.phase==="done"){
+    return {...base,head:{e,t:"Puzzle solved!",s:note},btns:my||true?[{t:W.round>=CFG.rounds?"See results":"Next puzzle",cls:"gold",a:"next"}]:[]};
+  }
+  if(!my)return {...base,head:{e,t:c?c.name+"'s turn":"Watch the TV",s:note}};
+  const cash=me.rc;
+  if(W.phase==="act"){
+    const noCons=![...puzLetters()].some(l=>!VOWELS.includes(l)&&!W.called.has(l));
+    const noVow=![...puzLetters()].some(l=>VOWELS.includes(l)&&!W.called.has(l));
+    return {...base,head:{e,t:"Your turn!",s:"You have $"+cash.toLocaleString("en-AU")+". Spin, buy a vowel, or solve."},
+      btns:[{t:"Spin the wheel",cls:"gold",a:"spin",d:noCons?1:0},{t:"Buy a vowel · $"+VCOST,a:"vowel",d:(cash>=VCOST&&!noVow)?0:1},{t:"Solve the puzzle",a:"solve"}]};
+  }
+  if(W.phase==="cons"||W.phase==="vowel"){
+    const vow=W.phase==="vowel";
+    const letters=ALL.split("").filter(l=>vow?VOWELS.includes(l):!VOWELS.includes(l));
+    return {...base,head:{e,t:vow?"Pick a vowel":"$"+W.val.toLocaleString("en-AU")+": pick a consonant",s:"Look at the board on the TV"},
+      btns:letters.map(l=>({t:l,a:"letter",v:l,d:W.called.has(l)?1:0})).concat([{t:"Back",cls:"ghost",a:"back"}])};
+  }
+  if(W.phase==="solve")return {...base,head:{e,t:"Solve it!",s:"Type the whole puzzle"},inp:{ph:"Type the puzzle"},btns:[{t:"Back",cls:"ghost",a:"back"}]};
+  return {...base,head:{e,t:W.phase==="spin"?"Spinning...":"Watch the TV",s:note}};
+}
+function act(p,m){
+  if(W.phase==="done"&&m.a==="next"){const b=$("wfNext");b&&b.click();return}
+  if(!mine(p.pid))return;
+  if(m.a==="spin")spin();
+  else if(m.a==="vowel"){if(W.phase==="act")keys("vowel")}
+  else if(m.a==="solve")solveOpen();
+  else if(m.a==="letter")callLetter(String(m.i||"").toUpperCase());
+  else if(m.a==="back"){if(W.phase==="vowel"||W.phase==="solve"||W.phase==="cons")turnStart(false)}
+}
+function text(p,v){if(mine(p.pid)&&W.phase==="solve")trySolve(String(v||""))}
+const active=()=>!!$("wf")&&!$("wf").hidden&&W.players.some(q=>q.pid);
+window.__WF={PUZ,W,CFG,callLetter,trySolve,spin,sceneFor,act,text,active};
 })();
