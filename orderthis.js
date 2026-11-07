@@ -45,6 +45,25 @@ const css=`
 .otrank .r{display:flex;align-items:center;gap:1.4vmin;background:rgba(0,0,0,.35);padding:.8vmin 1.6vmin;border-left:.8vmin solid var(--pc);font-family:${FONT};font-weight:800;color:#fff;font-size:clamp(.9rem,3vmin,1.8rem);text-transform:uppercase}
 .otrank .r b{flex:1;text-align:left}.otrank .r em{font-style:normal;color:#ffd23f}
 .otrank .r.win{background:#ffd23f;color:#2a0a4d}.otrank .r.win em{color:#2a0a4d}
+.otboard{flex:none;display:flex;gap:.8vmin;justify-content:center;flex-wrap:wrap}
+.otb{display:flex;align-items:center;gap:.8vmin;padding:.4vmin 1.2vmin .4vmin .4vmin;background:rgba(0,0,0,.45);border-bottom:.5vmin solid var(--pc);font-family:${FONT};font-weight:900;color:#fff;font-size:clamp(.75rem,2.3vmin,1.4rem);text-transform:uppercase;transition:transform .5s}
+.otb .pos{color:#ffd23f;min-width:1.2em;text-align:center}
+.otb img,.otb .ini{width:4.6vmin;height:4.6vmin;object-fit:cover;background:#fff;display:flex;align-items:center;justify-content:center;color:#2a0a4d;font-weight:900}
+.otb .sc{color:#ffd23f;font-size:1.25em;min-width:1.6em;text-align:right;font-variant-numeric:tabular-nums}
+.otb.up{background:#1a7a3a}
+.otres{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4vmin}
+.otres h3{margin:0;font-family:${FONT};font-weight:900;color:#ffd23f;text-transform:uppercase;font-size:clamp(1.4rem,5.4vmin,3.4rem);letter-spacing:.06em}
+.otres .ans{font-family:${FONT};font-weight:800;color:#e9d7ff;text-transform:uppercase;font-size:clamp(.8rem,2.4vmin,1.5rem);letter-spacing:.08em;text-align:center}
+.otlist{display:grid;gap:.8vmin 1.6vmin;width:min(1100px,96%);grid-template-columns:1fr}
+.otlist.two{grid-template-columns:1fr 1fr}
+.otrow{display:flex;align-items:center;gap:1.6vmin;background:rgba(0,0,0,.4);border-left:1vmin solid var(--pc);padding:.6vmin 1.6vmin .6vmin .8vmin;font-family:${FONT};font-weight:900;color:#fff;text-transform:uppercase;font-size:var(--rs,3.2vmin);animation:otpop .45s both}
+.otrow .pl{font-size:1.5em;color:#ffd23f;min-width:1.1em;text-align:center}
+.otrow img,.otrow .ini{width:var(--av,8vmin);height:var(--av,8vmin);object-fit:cover;background:#fff;display:flex;align-items:center;justify-content:center;color:#2a0a4d;font-weight:900;flex:none}
+.otrow b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.otrow .tm{opacity:.85;font-size:.7em}.otrow .gn{color:#7dff9b;font-size:1.2em;min-width:2.4em;text-align:right}
+.otrow.bad{background:rgba(122,20,38,.55)}.otrow.bad .gn{color:#ff9aa8}
+.otrow.first{background:#ffd23f;color:#2a0a4d}.otrow.first .pl,.otrow.first .gn{color:#2a0a4d}
+.otrow .tot{color:#ffd23f;min-width:2.6em;text-align:right;font-size:.9em}.otrow.first .tot{color:#2a0a4d}
 #playOT{background:linear-gradient(160deg,#6a2cb0,#0d031f)!important;border-color:#ffd23f!important}
 #playOT .otart{display:flex;align-items:center;justify-content:center;gap:6px;height:100%}
 #playOT .otart i{font-style:normal;font:900 2rem/1 system-ui;color:#2a0a4d;background:#ffd23f;width:2.4rem;height:2.4rem;display:flex;align-items:center;justify-content:center}
@@ -137,13 +156,31 @@ function begin(list){
   later(nextQ,2200);
 }
 const chip=p=>{let a="";try{a=avatarSrc(p.slot)}catch(e){}return `<div class="otp wait" id="otP${p.slot}" style="--pc:${p.color}"><img alt="" src="${esc(a)}" onerror="this.outerHTML='<span class=ini>${esc((p.name||"?").charAt(0).toUpperCase())}</span>'"><span>${esc2(p.name)}</span><span class="pt"></span></div>`};
+const avs=p=>{try{return avatarSrc(p.slot)}catch(e){return ""}};
+const avEl=p=>`<img alt="" src="${esc(avs(p))}" onerror="this.outerHTML='<span class=ini>${esc((p.name||"?").charAt(0).toUpperCase())}</span>'">`;
+function boardHTML(gain){
+  const o=OT.players.slice().sort((a,b)=>b.pts-a.pts);
+  return o.map((p,i)=>`<div class="otb${gain&&p.got?" up":""}" style="--pc:${p.color}"><span class="pos">${i+1}</span>${avEl(p)}<span>${esc2(p.name)}</span><span class="sc">${p.pts}</span></div>`).join("");
+}
+function showResults(){
+  if(OT.phase!=="reveal")return;
+  const n=OT.players.length;
+  const ord=OT.players.slice().sort((a,b)=>(b.ok?1:0)-(a.ok?1:0)||(a.ok&&b.ok?a.t-b.t:(a.t!=null?0:1)-(b.t!=null?0:1)));
+  const two=n>5,rs=n<=3?"4.4vmin":n<=5?"3.6vmin":n<=8?"3vmin":"2.7vmin",av=n<=3?"11vmin":n<=5?"9vmin":n<=8?"7vmin":"6vmin";
+  $("otBoard").innerHTML=boardHTML(true);
+  $("otStage").querySelector(".otcards,.otres").outerHTML=`<div class="otres"><h3>Round ${OT.n} results</h3><div class="ans">Correct order: ${OT.order.map(o=>esc2(o[0])).join("  →  ")}</div>
+  <div class="otlist${two?" two":""}" style="--rs:${rs};--av:${av}">${ord.map((p,i)=>`<div class="otrow${p.ok&&i===0?" first":""}${p.ok?"":" bad"}" style="--pc:${p.color};animation-delay:${i*.12}s"><span class="pl">${p.ok?i+1:"–"}</span>${avEl(p)}<b>${esc2(p.name)}</b><span class="tm">${p.ok?(p.t/1000).toFixed(1)+"s":p.t!=null?"wrong order":"no answer"}</span><span class="gn">${p.got?"+"+p.got:"0"}</span><span class="tot">${p.pts}</span></div>`).join("")}</div></div>`;
+  const msg=$("otMsg");if(msg)msg.textContent=OT.n>=CFG.rounds?"Final round done!":"Next question coming up";
+  const who=$("otWho");if(who)who.remove();
+  SFX.win&&ord.some(p=>p.ok)&&SFX.win();
+}
 function nextQ(){
   clearT();OT.n++;
   if(OT.n>CFG.rounds)return finish();
   build();OT.phase="ask";OT.left=CFG.secs;OT.t0=Date.now();
   OT.players.forEach(p=>{p.seq=[];p.t=null;p.got=0;p.ok=false});
   $("otCount").textContent=`Question ${OT.n} of ${CFG.rounds}`;
-  $("otStage").innerHTML=`<div class="othud"><span>${OT.players.length} players</span><span class="otclock" id="otClock">${OT.left}</span><span>Tap in order</span></div>
+  $("otStage").innerHTML=`<div class="otboard" id="otBoard">${boardHTML(false)}</div><div class="othud"><span>${OT.players.length} players</span><span class="otclock" id="otClock">${OT.left}</span><span>Tap in order</span></div>
   <div class="otq"><small>${esc2(OT.pool.t)}</small><b>${esc2(OT.pool[OT.dir])}</b></div>
   <div class="otcards">${OT.opts.map(o=>`<div class="otcard"><div class="nm">${esc2(o[0])}</div></div>`).join("")}</div>
   <div class="otmsg" id="otMsg">Order them on your phone</div>
@@ -178,14 +215,9 @@ function reveal(){
   $("otStage").querySelector(".otcards").innerHTML=OT.order.map((o,i)=>`<div class="otcard pop" style="animation-delay:${i*.35}s"><div class="rk">${i+1}</div><div class="nm">${esc2(o[0])}</div><div class="vl">${esc2(fmtV(OT.pool,o[1]))}</div></div>`).join("");
   SFX.ok&&SFX.ok();
   const msg=$("otMsg");if(msg)msg.textContent=right.length?`${esc2(right[0].name)} was fastest!`:"Nobody got it!";
-  later(()=>{
-    const who=$("otWho");
-    const ord=OT.players.slice().sort((a,b)=>(b.ok?1:0)-(a.ok?1:0)||(a.ok&&b.ok?a.t-b.t:0));
-    who.innerHTML=ord.map(p=>{const s=p.t!=null?(p.t/1000).toFixed(1)+"s":"no answer";return `<div class="otp${p.ok?" done":" bad"}" style="--pc:${p.color}"><span>${esc2(p.name)}</span><span>${p.ok?s:p.t!=null?"wrong":"no answer"}</span><span class="pt">${p.ok?"+"+p.got:"0"}</span></div>`}).join("");
-    right.length?SFX.win&&SFX.win():SFX.buzz&&SFX.buzz();
-  },1700);
-  later(()=>{OT.phase="result"},1800);
-  later(nextQ,7500+(OT.players.length>6?1500:0));
+  later(showResults,3600);
+  later(()=>{OT.phase="result"},3700);
+  later(nextQ,3600+8500+(OT.players.length>6?3000:0));
 }
 function finish(){
   clearT();OT.phase="final";
@@ -215,7 +247,7 @@ function sceneFor(p){
       btns:OT.opts.map((o,i)=>{const k=me.seq.indexOf(i);return {t:(k>=0?(k+1)+".  ":"")+o[0],a:"pick",v:i,d:k>=0?1:0,on:k>=0?1:0}}).concat(me.seq.length?[{t:"Start again",cls:"ghost",a:"reset"}]:[])};
   }
   if(OT.phase==="reveal"||OT.phase==="result"){
-    return {...base,head:{e,t:me.t==null?"Too slow":me.ok?"Right! +"+me.got:"Wrong order",s:me.ok?"You were "+(me.t/1000).toFixed(1)+"s":"Correct: "+OT.order.map(o=>o[0]).join(", ")}};
+    return {...base,head:{e,t:me.t==null?"Too slow":me.ok?"Right! +"+me.got:"Wrong order",s:me.ok?"Place "+(OT.players.filter(x=>x.ok&&x.t<=me.t).length)+" of "+OT.players.length+" at "+(me.t/1000).toFixed(1)+"s":"Correct: "+OT.order.map(o=>o[0]).join(", ")}};
   }
   return {...base,head:{e:"Order This",t:"Get ready",s:"Watch the TV"}};
 }
