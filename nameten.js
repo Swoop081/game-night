@@ -2,8 +2,8 @@
    A category appears ("Name 10 AFL clubs"), the player has a clock to name as many as they can (up to 10).
    Answers come by voice or by typing, so it works on the TV and on a single phone passed around. */
 (function(){
-const GROUPS=["Aussie","General","Sport","Entertainment","Food & drink","Geography"];
-const GROUP_ICON={"Aussie":"🇦🇺","General":"💡","Sport":"🏅","Entertainment":"🎬","Food & drink":"🍕","Geography":"🌏"};
+const GROUPS=["Geography","Science","History & Language","Sport","Entertainment"];
+const GROUP_ICON={"Geography":"🌏","Science":"🔬","History & Language":"📜","Sport":"🏅","Entertainment":"🎬"};
 const IS_TV=/GameNightTV/.test(navigator.userAgent);
 
 const PROMPTS=(window.NT_RAW||[]).map(line=>{
@@ -12,7 +12,7 @@ const PROMPTS=(window.NT_RAW||[]).map(line=>{
 }).filter(p=>p.title&&p.items.length>=10);
 
 const CFG={count:2,rounds:2,secs:60,groups:GROUPS.slice()};
-try{const j=JSON.parse(localStorage.getItem("gn.nt")||"null");if(j){Object.assign(CFG,j);if(!Array.isArray(CFG.groups)||!CFG.groups.length)CFG.groups=GROUPS.slice()}}catch(e){}
+try{const j=JSON.parse(localStorage.getItem("gn.nt")||"null");if(j){Object.assign(CFG,j);CFG.groups=Array.isArray(CFG.groups)?CFG.groups.filter(g=>GROUPS.includes(g)):[];if(!CFG.groups.length)CFG.groups=GROUPS.slice()}}catch(e){}
 const saveCfg=()=>{try{localStorage.setItem("gn.nt",JSON.stringify(CFG))}catch(e){}};
 
 const css=`
@@ -194,16 +194,11 @@ function take(text,typed){
   if(!typed)return;
   if(r.dup)feedback("bad","Already said");
   else if(r.amb)feedback("bad","Be more specific");
-  else{SFX.pass();NT.lastMiss=norm2(text);feedback("bad","Not on my list",true)}
+  else{SFX.pass();feedback("bad","Not on the list")}
 }
-function feedback(kind,msg,offerCount){
+function feedback(kind,msg){
   const el=$("ntFb");if(!el)return;
   el.className="ntfb "+kind;el.textContent=msg;
-  if(offerCount){
-    const b=document.createElement("button");b.className="btn";b.type="button";b.textContent="Count it anyway";
-    b.onclick=()=>{const t=NT.lastMiss;if(!t||!NT.live)return;const nm=t.replace(/\b\w/g,c=>c.toUpperCase());addFound({idx:null,name:nm,custom:true});el.className="ntfb ok";el.textContent="✓ "+nm;$("ntIn")&&$("ntIn").focus({preventScroll:true})};
-    el.appendChild(b);
-  }
 }
 function onVoice(texts,final){
   if(!NT.live)return;
