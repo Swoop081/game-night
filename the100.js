@@ -1,4 +1,4 @@
-/* =================== THE 100 (or less) ===================
+/* =================== LAST ONE STANDING ===================
    As many players as you like, all on phones. One question, two answers (a red square and a blue square).
    Everyone locks in an answer on their phone, then the TV slides every player's photo onto the square they picked.
    Wrong answer = you're out. Right answer = on to the next question. Every 5 questions the difficulty steps up.
@@ -59,7 +59,7 @@ const st=document.createElement("style");st.textContent=css;document.head.append
 const hub=document.querySelector(".games");
 if(!hub||!QS.length)return;
 const tile=document.createElement("button");tile.className="game live";tile.id="playCR";
-tile.innerHTML=`<span class="art"><span class="crart"><svg viewBox="0 0 200 120" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="20" width="85" height="40" fill="${ZC[0]}"/><rect x="105" y="20" width="85" height="40" fill="${ZC[1]}"/><rect x="10" y="68" width="85" height="40" fill="${ZC[2]}"/><rect x="105" y="68" width="85" height="40" fill="${ZC[3]}"/>${[[28,38],[52,38],[28,62],[52,62],[40,84],[122,38],[146,38],[170,38],[134,62],[158,62]].map(([x,y])=>`<rect x="${x}" y="${y}" width="16" height="16" fill="#fff" fill-opacity=".92"/>`).join("")}</svg></span><span class="pill">Play</span></span><h2>The 100</h2><p>Unlimited players. Four answers. Get it wrong and you're out.</p>`;
+tile.innerHTML=`<span class="art"><span class="crart"><svg viewBox="0 0 200 120" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="20" width="85" height="40" fill="${ZC[0]}"/><rect x="105" y="20" width="85" height="40" fill="${ZC[1]}"/><rect x="10" y="68" width="85" height="40" fill="${ZC[2]}"/><rect x="105" y="68" width="85" height="40" fill="${ZC[3]}"/>${[[28,38],[52,38],[28,62],[52,62],[40,84],[122,38],[146,38],[170,38],[134,62],[158,62]].map(([x,y])=>`<rect x="${x}" y="${y}" width="16" height="16" fill="#fff" fill-opacity=".92"/>`).join("")}</svg></span><span class="pill">Play</span></span><h2>Last One Standing</h2><p>Unlimited players. Four answers. Get it wrong and you're out.</p>`;
 hub.insertBefore(tile,hub.children[1]||null);
 const hn=hub.children.length;hub.classList.remove("five","six","seven");if(hn>=7)hub.classList.add("seven");
 
@@ -67,13 +67,13 @@ const app=$("app");
 const secS=document.createElement("section");secS.className="screen";secS.id="crSetup";secS.hidden=true;
 const sec=document.createElement("section");sec.className="screen";sec.id="cr";sec.hidden=true;
 app.insertBefore(secS,$("overlay"));app.insertBefore(sec,$("overlay"));
-sec.innerHTML=`<div class="floorbar"><span class="brand">GAME NIGHT<small>THE 100</small></span><span class="spacer"></span><span class="count" id="crCount"></span><button class="btn ghost" id="crQuit">Quit</button></div><div id="crStage"></div>`;
+sec.innerHTML=`<div class="floorbar"><span class="brand">GAME NIGHT<small>LAST ONE STANDING</small></span><span class="spacer"></span><span class="count" id="crCount"></span><button class="btn ghost" id="crQuit">Quit</button></div><div id="crStage"></div>`;
 tile.onclick=()=>{ac();openSetup()};
 $("crQuit").onclick=()=>confirmSheet("Quit this game?","Everyone will be back in the lobby.","Quit",()=>{closeOverlay();endGame();show("hub")});
 const esc2=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 
 function openSetup(){
-  secS.innerHTML=`<div class="topbar"><button class="btn ghost" id="crBack">← Back</button><h2>The 100</h2><button class="btn gold" id="crStart">Start game</button></div>
+  secS.innerHTML=`<div class="topbar"><button class="btn ghost" id="crBack">← Back</button><h2>Last One Standing</h2><button class="btn gold" id="crStart">Start game</button></div>
   <div class="setup-grid"><div class="panel">
     <div class="field"><span class="eyebrow">How to play</span><ul class="rules">
       <li>Everyone joins on their phone. <b>As many players as you like.</b></li>
@@ -120,7 +120,7 @@ function pickQ(){
 function startGame(){
   const L=window.LINK&&LINK.pull?LINK.pull(2,100,{cpu:true}):null;
   if(!L||L.length<2){
-    openOverlay(`<span class="eyebrow">The 100</span><h2>Need 2 players</h2><p class="score">Scan the join code with your phones${L&&L.length?` (${L.length} in so far)`:""}. CPU players count as players.</p><div class="row"><button class="btn" id="crAddCpu">Add a CPU player</button><button class="btn gold" id="crOk">OK</button></div>`);
+    openOverlay(`<span class="eyebrow">Last One Standing</span><h2>Need 2 players</h2><p class="score">Scan the join code with your phones${L&&L.length?` (${L.length} in so far)`:""}. CPU players count as players.</p><div class="row"><button class="btn" id="crAddCpu">Add a CPU player</button><button class="btn gold" id="crOk">OK</button></div>`);
     $("crAddCpu").onclick=()=>{window.LINK&&LINK.addCpu&&LINK.addCpu();closeOverlay()};$("crOk").onclick=closeOverlay;return;
   }
   begin(L.map((p,i)=>({name:p.name,color:DISTINCT[i%DISTINCT.length],slot:i,pid:p.pid,cpu:!!p.cpu})));
@@ -131,7 +131,7 @@ function begin(list){
   CR.n=0;CR.used=new Set();CR.winners=[];CR.phase="idle";
   Object.keys(T).forEach(k=>delete T[k]);
   show("cr");
-  $("crStage").innerHTML=`<div class="crend"><div class="big">The 100</div><div class="crmsg">${CR.players.length} player${CR.players.length===1?"":"s"}. Get ready!</div></div>`;
+  $("crStage").innerHTML=`<div class="crend"><div class="big">Last One Standing</div><div class="crmsg">${CR.players.length} player${CR.players.length===1?"":"s"}. Get ready!</div></div>`;
   SFX.go&&SFX.go();
   later(nextQ,2000);
 }
@@ -236,8 +236,8 @@ function finish(){
 function sceneFor(p){
   const me=byPid(p.pid),sn=CR.n*10+({ask:1,sort:2,reveal:3,result:4,final:5}[CR.phase]||0)+(me&&me.alive?0:50);
   const base={th:"cr",scores:[],btns:[],sn,me:1};
-  const lv=(CR.n?`Question ${CR.n} · Level ${CR.level}`:"The 100")+(CFG.lives>1&&me&&me.alive?" · "+"♥".repeat(Math.max(0,me.lives)):"");
-  if(!me)return {...base,head:{e:"The 100",t:"Watch the TV",s:"You'll be in the next game"}};
+  const lv=(CR.n?`Question ${CR.n} · Level ${CR.level}`:"Last One Standing")+(CFG.lives>1&&me&&me.alive?" · "+"♥".repeat(Math.max(0,me.lives)):"");
+  if(!me)return {...base,head:{e:"Last One Standing",t:"Watch the TV",s:"You'll be in the next game"}};
   if(CR.phase==="final"){const won=me.alive;return {...base,head:{e:"Game over",t:won?"YOU SURVIVED!":(CR.winners.length===1?CR.winners[0].name+" wins!":"Game over"),s:won?(CR.winners.length===1?"Last one standing. Legend!":"You made it to the end."):"You lasted "+me.out+" question"+(me.out===1?"":"s")}}}
   if(!me.alive)return {...base,head:{e:lv,t:"You're out",s:"You lasted "+me.out+" question"+(me.out===1?"":"s")+". Watch the TV."}};
   if(CR.phase==="ask"){
