@@ -26,7 +26,7 @@ const css=`
 .chactor img,.chactor .ini{width:11vmin;height:11vmin;object-fit:cover;background:#fff;display:flex;align-items:center;justify-content:center;color:#3a0f05;font-weight:900;border:.8vmin solid var(--pc)}
 .chsub{font-family:${FONT};font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#ffe3d1;font-size:clamp(1rem,3.2vmin,2rem)}
 .chcat{display:inline-block;background:#ffc83d;color:#3a0f05;font-family:${FONT};font-weight:900;letter-spacing:.18em;text-transform:uppercase;padding:.5vmin 2vmin;font-size:clamp(.9rem,2.6vmin,1.6rem)}
-.chlen{font-family:${FONT};font-weight:900;letter-spacing:.35em;color:#fff;font-size:clamp(1.4rem,5vmin,3rem)}
+.chlen{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:2.4vmin 4vmin;max-width:94%}.chw{display:inline-flex;gap:.9vmin}.chw i{display:block;width:3.4vmin;height:.7vmin;background:#fff;margin-top:4vmin}.chwc{width:100%;font-size:2.2vmin;letter-spacing:.2em;color:#ffe3d1;font-weight:800;text-transform:uppercase}.chlen{font-family:${FONT};font-weight:900;letter-spacing:.35em;color:#fff;font-size:clamp(1.4rem,5vmin,3rem)}
 .chword{font-family:${FONT};font-weight:900;text-transform:uppercase;color:#ffc83d;font-size:clamp(2.4rem,11vmin,7rem);line-height:1}
 .chfeed{display:flex;flex-wrap:wrap;gap:.8vmin;justify-content:center;max-height:24%;overflow:hidden}
 .chfeed span{background:rgba(0,0,0,.4);color:#ffe3d1;padding:.4vmin 1.2vmin;font-family:${FONT};font-weight:800;font-size:clamp(.8rem,2.2vmin,1.3rem);text-transform:uppercase}
@@ -136,11 +136,11 @@ function paintReady(){
   <div class="chcat">${E(CH.cat)}</div><div class="chsub">${E(a.name)}, press Start on your phone to see your word</div><div class="chsub" style="opacity:.8">Everyone else: get ready to guess!</div></div>`;
   SFX.go&&SFX.go();
 }
+const dashes=w=>w.split(/\s+/).map(x=>`<span class="chw">${x.split("").map(()=>"<i></i>").join("")}</span>`).join("")+`<div class="chwc">${w.split(/\s+/).length} word${w.split(/\s+/).length===1?"":"s"}</div>`;
 function startTurn(){
   if(CH.phase!=="ready")return;CH.phase="play";CH.ready=true;CH.t0=Date.now();
-  const len=CH.word.split(/\s+/).map(w=>w.length);
-  $("chStage").innerHTML=`<div class="chhud"><span>Guess on your phone</span><span class="chclock" id="chClock">${CH.left}</span><span id="chAct">${E(CH.actor.name)} is acting</span></div>
-  <div class="chmain"><div class="chcat">${E(CH.cat)}</div><div class="chlen" id="chLen">${len.map(n=>"_".repeat(n).split("").join(" ")).join("   ")}</div><div class="chsub">${E(CH.actor.name)}: act it out. No talking!</div></div>
+    $("chStage").innerHTML=`<div class="chhud"><span>Guess on your phone</span><span class="chclock" id="chClock">${CH.left}</span><span id="chAct">${E(CH.actor.name)} is acting</span></div>
+  <div class="chmain"><div class="chcat">${E(CH.cat)}</div><div class="chlen" id="chLen">${dashes(CH.word)}</div><div class="chsub">${E(CH.actor.name)}: act it out. No talking!</div></div>
   <div class="chfeed" id="chFeed"></div><div class="chwho" id="chWho">${CH.players.filter(p=>p!==CH.actor).map(chip).join("")}</div>`;
   CH.timer=setInterval(tick,1000);
   CH.players.filter(p=>p.cpu).forEach(p=>{if(Math.random()<.55)later(()=>correct(p),(CFG.secs*(.35+Math.random()*.5))*1000)});
@@ -169,7 +169,7 @@ function skip(pid){
   if(CH.phase!=="play"||!CH.actor||CH.actor.pid!==pid||CH.skips>=2)return;
   CH.skips++;const w=pickWord();CH.cat=w[0];CH.word=w[1];CH.feed=[];
   const c=document.querySelector("#chStage .chcat");if(c)c.textContent=CH.cat;
-  const l=$("chLen");if(l)l.textContent=CH.word.split(/\s+/).map(n=>"_".repeat(n.length).split("").join(" ")).join("   ");
+  const l=$("chLen");if(l)l.innerHTML=dashes(CH.word);
   const f=$("chFeed");if(f)f.innerHTML="";
 }
 function endTurn(){
