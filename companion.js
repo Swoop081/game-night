@@ -67,7 +67,7 @@
       const nm=txt(b.querySelector(".nm")),ph=txt(b.querySelector(".pr")).replace(/\u00a0/g,"");
       const im=b.querySelector("img");
       const t=txt(b)||b.getAttribute("aria-label")||"";
-      out.push({el:b,t:nm?nm:t,nm,rt:txt(b.querySelector(".rt")),pr:ph,im:im?im.src:"",em:txt(b.querySelector(".em")),
+      out.push({el:b,t:nm?nm:t,nm,rt:txt(b.querySelector(".rt")),pr:ph,im:im?im.src:"",io:im&&im.dataset.o||"",em:txt(b.querySelector(".em")),
         cls:(b.className||"").match(/\b(gold|ghost|okb|passb|hi|lo)\b/g)?.join(" ")||"",d:b.disabled?1:0,on:(b.classList.contains("sel")||b.getAttribute("aria-pressed")==="true")?1:0});
     });
     return out;
@@ -111,7 +111,7 @@
     if(g==="cd"){
       const st=$("cdStage"),bl=btnList(st);btnEls=bl.map(b=>b.el);
       let num=null;try{const I=__CD.CD.input;if(I&&$("enDisp"))num={disp:txt($("enDisp")),who:txt($("enWho")),dollars:I.dollarsOnly?1:0}}catch(e){}
-      const prizes=[...st.querySelectorAll("div.prize")].slice(0,4).map(d=>{const im=d.querySelector("img");return {nm:txt(d.querySelector(".nm")),rt:txt(d.querySelector(".rt")),pr:txt(d.querySelector(".pr")).replace(/\u00a0/g,""),im:im?im.src:"",em:txt(d.querySelector(".em"))}});
+      const prizes=[...st.querySelectorAll("div.prize")].slice(0,4).map(d=>{const im=d.querySelector("img");return {nm:txt(d.querySelector(".nm")),rt:txt(d.querySelector(".rt")),pr:txt(d.querySelector(".pr")).replace(/\u00a0/g,""),im:im?im.src:"",io:im&&im.dataset.o||"",em:txt(d.querySelector(".em"))}});
       return {th:g,head:headOf(st),scores:chips("cdScore",P),btns:bl.map(({el,...r})=>r),num,prizes,fb:txt(st.querySelector(".cdmsg"))};
     }
     // games that are not wired for phones yet: just watch

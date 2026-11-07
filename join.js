@@ -117,7 +117,7 @@
     if(m.clock)main+='<div class="cmbig">'+esc(m.clock)+(m.count?' <small style="font-size:1rem;opacity:.7">'+esc(m.count)+'</small>':"")+'</div>';
     if(m.found&&m.found.length)main+='<div class="cmchips">'+m.found.map(f=>'<span>'+esc(f)+'</span>').join("")+'</div>';
     if(m.pts)main+='<div class="cmbig" style="font-size:1.6rem">'+esc(m.pts)+'</div>';
-    if(m.prizes&&m.prizes.length&&!(m.btns||[]).some(b=>b.nm))main+='<div class="cmprizes">'+m.prizes.map(p=>'<div class="cmprize">'+(p.im?'<img alt="" referrerpolicy="no-referrer" src="'+esc(p.im)+'">':'<span class="em">'+esc(p.em)+'</span>')+esc(p.nm)+(p.pr?'<em>'+esc(p.pr)+'</em>':"")+'</div>').join("")+'</div>';
+    if(m.prizes&&m.prizes.length&&!(m.btns||[]).some(b=>b.nm))main+='<div class="cmprizes">'+m.prizes.map(p=>'<div class="cmprize">'+(p.im?'<img alt="" referrerpolicy="no-referrer" src="'+esc(p.im)+'"'+(p.io?' data-o="'+esc(p.io)+'" onerror="if(this.dataset.o&&this.src!==this.dataset.o){this.src=this.dataset.o}"':"")+'>':'<span class="em">'+esc(p.em)+'</span>')+esc(p.nm)+(p.pr?'<em>'+esc(p.pr)+'</em>':"")+'</div>').join("")+'</div>';
     const mm=$("cmMain");
     if(m.pic){
       let im=mm.querySelector("img.cpic");
@@ -133,7 +133,7 @@
       B.className=list.some(b=>b.a==="vote")?"grid big":list.length===2&&!prz&&list[0].cls&&/hi|lo/.test(list[0].cls)?"two big":(prz||list.length>3?"grid":"");
       B.innerHTML="";
       list.forEach((b,i)=>{const e=document.createElement("button");e.className="cb "+(b.cls||"")+(b.nm?" prz":"")+(b.on?" sel":"");
-        if(b.nm)e.innerHTML=(b.im?'<img alt="" referrerpolicy="no-referrer" src="'+esc(b.im)+'">':'<span class="em">'+esc(b.em)+'</span>')+esc(b.nm)+(b.pr?'<em>'+esc(b.pr)+'</em>':"");
+        if(b.nm)e.innerHTML=(b.im?'<img alt="" referrerpolicy="no-referrer" src="'+esc(b.im)+'"'+(b.io?' data-o="'+esc(b.io)+'" onerror="if(this.dataset.o&&this.src!==this.dataset.o){this.src=this.dataset.o}"':"")+'>':'<span class="em">'+esc(b.em)+'</span>')+esc(b.nm)+(b.pr?'<em>'+esc(b.pr)+'</em>':"");
         else e.textContent=b.t;
         if(b.c)e.style.cssText="background:"+b.c+";color:#fff";e.disabled=!m.me||!!b.d;e.onclick=()=>{if(b.a){if(conn&&conn.open)conn.send({k:"act",a:b.a,i:b.v})}else tapBtn(i)};B.appendChild(e)});
     }
@@ -149,7 +149,7 @@
       if(!kp.firstChild){[1,2,3,"⌫",4,5,6,".",7,8,9,0].forEach(k=>{const b=document.createElement("button");b.textContent=k;b.dataset.k=k;kp.appendChild(b)});
         [["Lock in","go"],["Clear","c"]].forEach(([t,k])=>{const b=document.createElement("button");b.textContent=t;b.dataset.k=k;if(k==="go")b.className="go";kp.appendChild(b)});
         kp.onclick=e=>{const b=e.target.closest("button");if(!b)return;const k=b.dataset.k;
-          if(k==="go"){if(numv&&conn&&conn.open)conn.send({k:"num",v:numv});return}
+          if(k==="go"){if(numv&&conn&&conn.open){conn.send({k:"num",v:numv});numv="";$("cmDisp").textContent="$0"}return}
           if(k==="c")numv="";else if(k==="⌫")numv=numv.slice(0,-1);else if(k==="."){if(lastScr&&lastScr.num&&lastScr.num.dollars)return;if(!numv.includes("."))numv=(numv||"0")+"."}
           else{if(numv.includes(".")&&numv.split(".")[1].length>=2)return;if(numv.replace(".","").length>=7)return;numv=(numv==="0"?"":numv)+k}
           $("cmDisp").textContent="$"+(numv||"0")}}

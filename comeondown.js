@@ -55,6 +55,14 @@ button.prize{cursor:pointer}
 .portrait .cdsplit{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
 .cdsplit>div:first-child{display:flex;flex-direction:column;align-items:center;gap:12px}
 .cdmsg{font-weight:800;font-size:clamp(1.1rem,3vmin,1.6rem);text-align:center;min-height:1.4em}
+.cdgate{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.2vmin;text-align:center;padding:3vmin 6vw}
+.cdgate .cdhead h2{font-size:clamp(2.2rem,9vmin,5.5rem);line-height:1.05}
+.cdgate .cdhead p{font-size:clamp(1.1rem,3.6vmin,2.2rem);max-width:28em;margin:1vmin auto 0;line-height:1.3}
+.cdgate .gprize{display:flex;gap:2vmin;flex-wrap:wrap;justify-content:center}
+.cdgate .gprize .prize{max-width:min(44vw,320px)}
+.cdgate.up .cdhead h2{color:var(--ok)}.cdgate.down .cdhead h2{color:var(--hot)}
+.cdgate .btn{font-size:clamp(1.2rem,4vmin,2.2rem);padding:.6em 1.8em}
+.cdgate .gnote{opacity:.75;font-size:clamp(.8rem,2.2vmin,1.2rem)}
 .cdmsg.up{color:var(--ok)}.cdmsg.down{color:var(--hot)}.cdmsg.gold{color:var(--gold)}
 .bigclock{font-family:var(--f-clock);font-size:clamp(2.6rem,9vmin,4.5rem);font-weight:700;color:var(--gold)}
 .bigclock.low{color:var(--hot)}
@@ -185,8 +193,17 @@ function loadCatalogue(){
   return catLoaded;
 }
 function retailerLine(){const r=RETAILERS.slice();const last=r.pop();return `${r.join(", ")} and ${last}`}
-function pic(p,cls){return p.img?`<img class="pimg ${cls||""}" src="${esc(p.img)}" data-e="${p.e}" alt="" referrerpolicy="no-referrer">`:`<span class="em">${p.e}</span>`}
-document.addEventListener("error",e=>{const t=e.target;if(t&&t.classList&&t.classList.contains("pimg")){const sp=document.createElement("span");sp.className="em";sp.textContent=t.dataset.e||"🎁";t.replaceWith(sp)}},true);
+/* the catalogue stores small thumbnails; ask each shop's CDN for a bigger copy, and fall back to the original if that fails */
+function hiRes(u){
+  if(!u)return u;
+  return u.replace(/(cdn\.shopify\.com\/.*?)_(?:\d+x\d*|\d*x\d+)(?:_crop_\w+)?(\.\w+)(\?|$)/,"$1$2$3")
+    .replace(/([?&]f=)(?:xxxs|xxs|xs|s)\b/,"$1l")
+    .replace(/(scaleWidth\/)\d+/,"$1800")
+    .replace(/(width%3A)\d+(%2Cheight%3A)\d+/,"$1800$2900")
+    .replace(/JPEG_\d+x\d+/,"JPEG_1000x1000");
+}
+function pic(p,cls){const hi=hiRes(p.img);return p.img?`<img class="pimg ${cls||""}" src="${esc(hi)}" data-o="${esc(p.img)}" data-e="${p.e}" alt="" referrerpolicy="no-referrer">`:`<span class="em">${p.e}</span>`}
+document.addEventListener("error",e=>{const t=e.target;if(t&&t.classList&&t.classList.contains("pimg")){if(t.dataset.o&&t.getAttribute("src")!==t.dataset.o){t.src=t.dataset.o;return}const sp=document.createElement("span");sp.className="em";sp.textContent=t.dataset.e||"🎁";t.replaceWith(sp)}},true);
 const fmt=p=>"$"+(Number.isInteger(p)?p.toLocaleString("en-AU"):p.toLocaleString("en-AU",{minimumFractionDigits:2,maximumFractionDigits:2}));
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const CD={players:[],round:0,used:new Set(),games:[],start:0,input:null,timer:null,count:3};
@@ -373,9 +390,14 @@ function gameDone(i,won,prizes,msg){
   if(won){prizes.forEach(p=>award(i,p));SFX.win()}else SFX.buzz();
   score(i);
   const box=$("cdStage").querySelector(".cdgameend");
-  const html=`<div class="cdmsg ${won?"up":"down"}">${msg}</div><button class="btn gold" id="cdNext">${CD.round<3?"Next round":"Showcase Showdown"}</button>`;
+  const html=`<div class="cdmsg ${won?"up":"down"}">${msg}</div>`;
   if(box)box.innerHTML=html;else $("cdStage").insertAdjacentHTML("beforeend",html);
-  $("cdNext").onclick=nextRound;setTimeout(()=>{const n=$("cdNext");n&&n.focus({preventScroll:true})},40);
+  /* let the revealed answer sit on screen for a moment, then take over the whole screen */
+  const rd=CD.round;
+  setTimeout(()=>{if(CD.round!==rd||!$("cdStage"))return;
+    gate(i,won?"won this round":"lost this round",won?"You win!":"Not this time",msg,CD.round<3?"Got it, next round":"Got it, on to the Showdown",nextRound,
+      {cls:won?"up":"down",extra:won?`<div class="gprize">${prizes.map(p=>prizeCard(p,{show:true,cls:"good"})).join("")}</div>`:""});
+  },3200);
 }
 function gameHead(g,i,sub){return `<div class="cdhead"><span class="eyebrow">${avatarHTML(CD.players[i],"sm")} ${esc(CD.players[i].name)} plays</span><h2>${GAME_NAMES[g]}</h2><p>${sub}</p></div>`}
 function fakePrice(p){
@@ -383,9 +405,25 @@ function fakePrice(p){
     v=p<100?Math.round(v)-0.01:(Number.isInteger(p)?Math.round(v/10)*10-1:Math.round(v)-0.01);
     if(v>0&&Math.abs(v-p)>p*.1)return Math.round(v*100)/100}
   return Math.round(p*1.4)}
+const GAME_RULES={
+  double:"You'll see a prize and two prices. One is the real price, one is fake. Pick the real one and you win the prize.",
+  most:"Three prizes. Pick the one you think is the most expensive. Get it right and it's yours.",
+  hilo:"Six grocery items. Pick the three you think are the most expensive. Get all three right and you win the big prize.",
+  clock:"Guess the exact price to the dollar. You have 30 seconds, and we'll tell you higher or lower after each guess.",
+  squeeze:"The price has one extra digit squeezed in. Remove the wrong digit to leave the real price. The first and last digits always stay.",
+  grocery:"Buy groceries until your total lands between $20 and $22. Go over $22 and you lose.",
+  lucky:"You have $7. Guess each digit of the car's price. Every guess costs the difference, so keep some money left to win the car."};
+/* full-screen message on the TV that waits for the player to tap Got it on their phone (or the TV button) */
+function gate(i,eyebrow,title,body,label,then,{cls="",extra=""}={}){
+  CD.input=null;clearInterval(CD.timer);score(i);
+  stage(`<div class="cdgate ${cls}"><div class="cdhead"><span class="eyebrow">${avatarHTML(CD.players[i],"sm")} ${esc(CD.players[i].name)} ${eyebrow}</span><h2>${title}</h2><p>${body}</p></div>${extra}
+    <button class="btn gold" id="cdGot" data-focus>${label||"Got it"}</button><span class="gnote">${esc(CD.players[i].name)}: tap Got it on your phone when you're ready</span></div>`);
+  $("cdGot").onclick=()=>{SFX.beep&&SFX.beep();then()};
+}
 function playGame(g,i){
   score(i);
-  ({double:gDouble,most:gMost,hilo:gHilo,clock:gClock,squeeze:gSqueeze,grocery:gGrocery,lucky:gLucky})[g](i);
+  gate(i,"plays",GAME_NAMES[g],GAME_RULES[g],"Got it, let's go",()=>
+    ({double:gDouble,most:gMost,hilo:gHilo,clock:gClock,squeeze:gSqueeze,grocery:gGrocery,lucky:gLucky})[g](i));
 }
 function gDouble(i){
   const p=pick(x=>!x.car&&x.p>=60);const opts=shuffle([p.p,fakePrice(p.p)]);
