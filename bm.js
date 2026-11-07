@@ -39,24 +39,24 @@ const css=`
 .bmwho .av{--s:clamp(24px,4.4vmin,40px);border-radius:0;padding:0;background:#fff;box-shadow:none}
 .bmwho .av img,.bmwho .av .ini{border-radius:0}
 .bmcards{display:flex;gap:1.4vmin;flex-wrap:wrap;justify-content:center;width:100%}
-.bmcard{background:color-mix(in srgb,var(--pc) 35%,#030705);border-top:1vmin solid var(--pc);min-width:clamp(120px,16vmin,260px);flex:1 1 0;max-width:24%;padding:1.4vmin 1vmin;display:flex;flex-direction:column;align-items:center;gap:.8vmin;position:relative}
+.bmcard{background:color-mix(in srgb,var(--pc) 35%,#030705);border-top:1vmin solid var(--pc);min-width:clamp(120px,16vmin,260px);flex:1 1 0;max-width:24%;padding:.8vmin 1vmin;display:flex;flex-direction:column;align-items:center;gap:.5vmin;position:relative}
 .bmcard .av{--s:clamp(34px,7vmin,64px);border-radius:0;padding:0;background:#fff;box-shadow:none}
 .bmcard .av img,.bmcard .av .ini{border-radius:0}
 .bmcard .nm{font-family:${FONT};letter-spacing:.14em;text-transform:uppercase;font-weight:800;font-size:clamp(.7rem,1.8vmin,1.1rem);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bmcard .an{font-family:${FONT};font-weight:900;font-size:clamp(1.6rem,6.5vmin,4rem);line-height:1;color:#fff;overflow-wrap:anywhere;max-width:100%}
-.bmcard .vt{display:flex;gap:.5vmin;flex-wrap:wrap;justify-content:center;min-height:3.4vmin;opacity:0;animation:bmfade .4s ease forwards;animation-delay:.5s}
-.bmcard .vt i{font-style:normal;font-size:clamp(.55rem,1.3vmin,.8rem);background:rgba(255,255,255,.18);padding:.2vmin .8vmin;letter-spacing:.08em;text-transform:uppercase;font-weight:800}
-.bmcard.liar{animation:bmliar 1s ease 4.2s forwards}
-.bmcard .stamp{text-align:center;font-family:${FONT};font-weight:900;font-size:clamp(1rem,3.4vmin,2.2rem);color:#ff2d2d;border:.5vmin solid #ff2d2d;background:rgba(0,0,0,.55);transform:rotate(-4deg) scale(3);opacity:0;letter-spacing:.1em;padding:.1em .6em;animation:bmstamp .35s cubic-bezier(.2,1.4,.4,1) 4.2s forwards}
-.bmcard .stamp.no{display:none}
-@keyframes bmfade{to{opacity:1}}
-@keyframes bmstamp{to{opacity:1;transform:rotate(-4deg) scale(1)}}
-@keyframes bmliar{to{background:#6b0a14;border-top-color:#ff2d2d}}
-.bmgauge{width:min(40vmin,70%);position:relative}
-.bmgauge svg{width:100%;display:block;overflow:visible}
-.bmneedle{transform-origin:100px 100px;transform:rotate(-90deg);animation:bmneedle 2s cubic-bezier(.3,1.3,.5,1) 1.6s forwards}
-@keyframes bmneedle{to{transform:rotate(var(--ang))}}
-.bmsum{font-family:${FONT};font-weight:900;text-transform:uppercase;font-size:clamp(1rem,3.2vmin,2rem);opacity:0;animation:bmfade .5s ease forwards;animation-delay:4.6s;line-height:1.15;max-width:90%}
+.bmcard .an{font-family:${FONT};font-weight:900;font-size:clamp(1.3rem,4.6vmin,3rem);line-height:1;color:#fff;overflow-wrap:anywhere;max-width:100%}
+.bmcard .vt{display:flex;gap:.5vmin;flex-wrap:wrap;justify-content:center;min-height:2.6vmin}
+.bmcard .vt i{font-style:normal;font-size:clamp(.55rem,1.3vmin,.8rem);background:rgba(255,255,255,.18);padding:.2vmin .8vmin;letter-spacing:.08em;text-transform:uppercase;font-weight:800;opacity:0;transform:scale(.4);transition:opacity .25s,transform .35s cubic-bezier(.2,1.6,.4,1)}
+.bmcard .vt i.on{opacity:1;transform:none}.bmcard .vt i.bluff.on{opacity:.45;text-decoration:line-through}
+.bmcard.rev{background:#6b0a14!important;border-top-color:#ff2d2d!important}
+.bmcard .stamp{text-align:center;font-family:${FONT};font-weight:900;font-size:clamp(1rem,3.4vmin,2.2rem);color:#ff2d2d;border:.5vmin solid #ff2d2d;background:rgba(0,0,0,.55);transform:rotate(-4deg) scale(3);opacity:0;letter-spacing:.1em;padding:.1em .6em;transition:opacity .2s,transform .35s cubic-bezier(.2,1.4,.4,1)}
+.bmcard.rev .stamp{opacity:1;transform:rotate(-4deg) scale(1)}
+.bmgwrap{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1vmin}
+.bmgauge{flex:1;min-height:0;width:100%;display:flex;justify-content:center}
+.bmgauge svg{height:100%;width:auto;max-width:96%;display:block;overflow:visible}
+.bmneedle{transform-origin:100px 100px;transform:rotate(0deg);transition:transform .8s cubic-bezier(.3,1.5,.5,1)}
+.bmcount{font-family:${FONT};letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:#8fd4a8;font-size:clamp(.8rem,2.2vmin,1.3rem);flex:none}
+.bmsum{font-family:${FONT};font-weight:900;text-transform:uppercase;font-size:clamp(1rem,3.2vmin,2rem);opacity:0;transition:opacity .5s;line-height:1.15;max-width:90%;flex:none}
+.bmsum.on{opacity:1}
 .bmsum small{display:block;letter-spacing:.14em;font-size:.55em;color:#8fd4a8;margin-top:.4em}
 .bmnext{opacity:0;pointer-events:none}.bmnext.on{opacity:1;pointer-events:auto}
 .bmend .bmrow{display:flex;align-items:center;gap:2vmin;background:color-mix(in srgb,var(--pc) 35%,#030705);border-left:1.2vmin solid var(--pc);padding:1vmin 2vmin;width:min(70vmin,92%);font-family:${FONT};font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:clamp(1rem,3vmin,1.8rem)}
@@ -200,21 +200,33 @@ function showMeter(){
   BM.caught=wrong===0;BM.wrong=wrong;BM.gain={};
   if(BM.caught)det.forEach(p=>{BM.gain[p.pid]=2});else BM.gain[L.pid]=det.length;
   BM.players.forEach(p=>{p.pts+=BM.gain[p.pid]||0});
-  const fooled=det.length?wrong/det.length:0,ang=Math.round(-80+fooled*160);
   const votersFor=pid=>BM.players.filter(p=>p!==byPid(pid)&&BM.votes[p.pid]===pid);
-  stage(`<div class="bmk">The votes are in</div>
-  <div class="bmcards">${BM.players.map(p=>`<div class="bmcard${p===L?" liar":""}" style="--pc:${p.color}">${avatarHTML(p,"sm")}<div class="nm">${esc(p.name)}</div><div class="an">${esc2(BM.answers[p.pid]||"-")}</div>
-    <div class="vt">${votersFor(p.pid).map(v=>`<i>${esc(v.name)}</i>`).join("")||"<i style='opacity:.5'>no votes</i>"}</div>${p===L?`<div class="stamp">LIAR</div>`:""}</div>`).join("")}</div>
-  <div class="bmgauge"><svg viewBox="0 0 200 112"><path d="M10 100A90 90 0 0 1 77 13" fill="none" stroke="#3dff7a" stroke-width="14"/><path d="M77 13A90 90 0 0 1 123 13" fill="none" stroke="#ffd400" stroke-width="14"/><path d="M123 13A90 90 0 0 1 190 100" fill="none" stroke="#ff2d2d" stroke-width="14"/>
+  stage(`<div class="bmk">Counting the votes...</div>
+  <div class="bmcards">${BM.players.map(p=>`<div class="bmcard" id="bmC${p.pid}" style="--pc:${p.color}">${avatarHTML(p,"sm")}<div class="nm">${esc(p.name)}</div><div class="an">${esc2(BM.answers[p.pid]||"-")}</div>
+    <div class="vt">${votersFor(p.pid).map(v=>`<i id="bmV${v.pid}" class="${v===L?"bluff":""}">${esc(v.name)}</i>`).join("")}</div>${p===L?`<div class="stamp">LIAR</div>`:""}</div>`).join("")}</div>
+  <div class="bmgwrap"><div class="bmgauge"><svg viewBox="0 0 200 112"><path d="M10 100A90 90 0 0 1 77 13" fill="none" stroke="#3dff7a" stroke-width="14"/><path d="M77 13A90 90 0 0 1 123 13" fill="none" stroke="#ffd400" stroke-width="14"/><path d="M123 13A90 90 0 0 1 190 100" fill="none" stroke="#ff2d2d" stroke-width="14"/>
   <text x="8" y="111" fill="#8fd4a8" font-size="9" font-weight="800">CAUGHT</text><text x="192" y="111" fill="#ff7a7a" font-size="9" font-weight="800" text-anchor="end">FOOLED</text>
-  <g class="bmneedle" style="--ang:${ang}deg"><rect x="98" y="26" width="4" height="76" fill="#fff"/></g><circle cx="100" cy="100" r="8" fill="#fff"/></svg></div>
-  <div class="bmsum">${BM.caught?`Everyone caught ${esc2(L.name)}!<small>Each detective scores 2</small>`:`${esc2(L.name)} got away with it!<small>${wrong} ${wrong===1?"player was":"players were"} fooled · ${esc2(L.name)} scores ${det.length}</small>`}</div>
+  <g class="bmneedle" id="bmNeedle"><rect x="98" y="22" width="4" height="80" fill="#fff"/></g><circle cx="100" cy="100" r="8" fill="#fff"/></svg></div>
+  <div class="bmcount" id="bmCount">0 of ${det.length} votes counted</div></div>
+  <div class="bmsum" id="bmSum">${BM.caught?`Everyone caught ${esc2(L.name)}!<small>Each detective scores 2</small>`:`${esc2(L.name)} got away with it!<small>${wrong} ${wrong===1?"player was":"players were"} fooled · ${esc2(L.name)} scores ${det.length}</small>`}</div>
   <div class="row"><button class="btn gold bmnext" id="bmNext">${BM.round>=CFG.rounds?"See results":"Next round"}</button></div>`);
   score();
   $("bmNext").onclick=()=>{if(BM.phase==="result")nextRound()};
-  later(()=>{SFX.beep&&SFX.beep()},1600);
-  later(()=>{SFX.go&&SFX.go()},4200);
-  later(()=>{BM.phase="result";const b=$("bmNext");if(b){b.classList.add("on");b.focus({preventScroll:true})}},5400);
+  /* count the detectives' votes one at a time: the needle swings towards CAUGHT for a right guess and FOOLED for a wrong one */
+  const order=det.slice().sort(()=>Math.random()-.5);let net=0,i=0;
+  const STEP=1100,T0=1400;
+  order.forEach((p,k)=>later(()=>{
+    const ok=BM.votes[p.pid]===L.pid;net+=ok?-1:1;i++;
+    const v=$("bmV"+p.pid);if(v)v.classList.add("on");
+    const nd=$("bmNeedle");if(nd)nd.style.transform="rotate("+Math.round(net/det.length*78)+"deg)";
+    const c=$("bmCount");if(c)c.textContent=i+" of "+det.length+" votes counted";
+    ok?(SFX.ok&&SFX.ok()):(SFX.pass&&SFX.pass());
+  },T0+k*STEP));
+  const tEnd=T0+det.length*STEP;
+  later(()=>{const v=$("bmV"+L.pid);const lv=document.querySelector(".bmcard .vt i.bluff");if(lv)lv.classList.add("on")},tEnd);
+  later(()=>{const c=$("bmC"+L.pid);if(c)c.classList.add("rev");const k=document.querySelector("#bmStage .bmk");if(k)k.textContent="The liar is...";SFX.buzz&&SFX.buzz()},tEnd+800);
+  later(()=>{const sm=$("bmSum");if(sm)sm.classList.add("on");BM.caught?(SFX.win&&SFX.win()):(SFX.go&&SFX.go())},tEnd+1900);
+  later(()=>{BM.phase="result";const b=$("bmNext");if(b){b.classList.add("on");b.focus({preventScroll:true})}},tEnd+2600);
 }
 function results(){
   clearT();BM.phase="final";score();
@@ -245,7 +257,8 @@ function sceneFor(p){
     return {...base,liar:isLiar?1:0,head:{e:rl,t:isLiar?"Blend in":voted!=null?"Vote locked in":"Who's the liar?",s:isLiar?"Vote for someone else. Your vote won't count.":voted!=null?"Waiting for the others":"Tap who you think lied. Not yourself!"},clock:String(BM.left),
       btns:BM.players.filter(q=>q.pid!==p.pid).map(q=>({t:q.name+"\n"+(BM.answers[q.pid]||"-"),a:"vote",v:q.pid,d:voted!=null?1:0,on:voted===q.pid?1:0,c:q.color}))};
   }
-  if(BM.phase==="meter"||BM.phase==="result"){
+  if(BM.phase==="meter")return {...base,liar:isLiar?1:0,head:{e:rl,t:"Counting the votes...",s:"Watch the TV"}};
+  if(BM.phase==="result"){
     const L=liarP();
     return {...base,head:{e:rl,t:isLiar?(BM.caught?"You got caught":"You fooled them!"):(BM.votes[p.pid]===L.pid?"You caught the liar!":"You got fooled"),s:"The liar was "+L.name+"."+(BM.caught?" Everyone caught them.":" "+L.name+" scores "+(BM.players.length-1)+".")},big:"",
       btns:BM.phase==="result"?[{t:BM.round>=CFG.rounds?"See results":"Next round",cls:"gold",a:"next"}]:[]};
