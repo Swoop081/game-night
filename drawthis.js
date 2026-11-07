@@ -4,16 +4,16 @@
 (function(){
 const PACKS={
  halloween:["Pumpkin","Ghost","Witch hat","Broomstick","Bat","Spider","Spider web","Skeleton","Zombie","Vampire","Werewolf","Black cat","Haunted house","Cauldron","Mummy","Jack-o'-lantern","Graveyard","Tombstone","Candy corn","Candy","Trick or treat bag","Scarecrow","Skull","Bones","Ribcage","Full moon","Crystal ball","Potion bottle","Coffin","Grim Reaper","Eyeball","Brain","Candle","Lantern","Wizard","Witch","Devil","Monster","Alien","Dracula","Frankenstein","Mask","Cape","Fangs","Claw","Hand","Foot","Tooth","Heart","Bone","Crow","Owl","Rat","Snake","Worm","Maggot","Beetle","Fly","Wolf","Dragon","Toad","Frog","Ghost cat","Tree","Dead tree","Bat wings","Cobweb","Moon","Star","Ladder","Door","Key","Window","Castle","Tower","Bridge","Cross","Gate","Fence","Spooky eyes","Lollipop","Chocolate bar","Apple","Candy cane","Wand","Book","Hat","Broom","Cat","Dog","Pirate","Clown","Robot","Knife","Axe","Spade","Bucket","Pot","Flame","Fire","Lightning","Cloud","Rain","Smoke","Net","Cage","Chain","Padlock","Mouse","Pumpkin face","Funny ghost","Big spider","Tiny ghost","Smiling pumpkin","Scary face"],
- animals:["Elephant","Giraffe","Kangaroo","Koala","Penguin","Octopus","Crocodile","Shark","Snail","Butterfly","Dinosaur","Unicorn","Dragon","Peacock","Flamingo","Hedgehog","Turtle","Snake","Platypus","Wombat","Emu","Camel","Gorilla","Seahorse","Jellyfish","Crab","Frog","Duck","Chicken","Pig","Cow","Horse","Rabbit","Mouse","Lion","Whale","Dolphin","Parrot","Bee","Kookaburra","Owl","Sloth","Llama","Hippo","Rhino","Squirrel","Bear","Fox"],
- food:["Pizza","Hamburger","Ice cream cone","Banana","Watermelon slice","Pineapple","Sausage sizzle","Meat pie","Pavlova","Lamington","Birthday cake","Cupcake","Donut","Hot dog","Taco","Sushi","Spaghetti","Fried egg","Toast","Cheese","Carrot","Broccoli","Corn on the cob","Popcorn","Chocolate bar","Cookie","Pretzel","Cherry","Strawberry","Avocado","Mushroom","Lollipop","Jam jar","Pancakes","Apple","Pear","Lemon","Chips","French fries","Sandwich","Soup bowl","Teapot","Coffee cup","Milkshake","Sauce bottle"],
- things:["Umbrella","Bicycle","Rocket","Lighthouse","Windmill","Guitar","Piano","Camera","Telescope","Hot air balloon","Treasure chest","Key","Clock","Light bulb","Scissors","Toothbrush","Backpack","Sunglasses","Crown","Sword","Shield","Anchor","Sailboat","Submarine","Train","Helicopter","Skateboard","Surfboard","Tent","Campfire","Snowman","Robot","Spaceship","Rainbow","Volcano","Tornado","Lightning bolt","Boomerang","Telephone","Television","Laptop","Headphones","Trophy","Magnet","Ladder","Wheel","Barbecue","Sausage","Thong","Cricket bat"],
- actions:["Brushing teeth","Riding a bike","Swimming","Dancing","Sleeping","Fishing","Playing guitar","Surfing","Skiing","Running","Blowing out candles","Walking a dog","Mowing the lawn","Sandcastle","Painting","Flying a kite","Handstand","Eating spaghetti","Climbing","Juggling","Sneezing","Singing","Pirate","Superhero","Ninja","Astronaut","Cowboy","Mermaid","Wizard","Chef","Waving","Jumping","Crying","Laughing","Kicking a ball","Playing cricket","Driving a car","Reading a book","Taking a photo","Sleeping in bed"],
- places:["Sydney Opera House","Uluru","Eiffel Tower","Pyramid","Great Wall","Statue of Liberty","Big Ben","Leaning Tower","Beach","Island","Igloo","Castle","Farm","Zoo","Circus tent","Pirate ship","Space station","School","Tent","Rainforest","Waterfall","Bridge","Skyscraper","Cinema","Roller coaster","Treehouse","Tram","Lighthouse","Volcano","Mountain","Desert","Cave","House","Church","Windmill","Bus stop"],
- silly:["Dog in sunglasses","Cat in a spacesuit","Fish on a bike","Pizza with legs","Dancing banana","Robot chef","Shark in a bath","Snail on a skateboard","Penguin surfing","Elephant on a tightrope","Octopus drummer","Crocodile in a tutu","Cow on the moon","Dinosaur in a bath","Ghost eating spaghetti","Zombie doing yoga","Witch driving a car","Vampire at the beach","Skeleton on a bike","Pumpkin with a moustache","Alien shopping","Dragon with a cold","Unicorn at the gym","Snowman in summer","Sausage in a hat","Monster brushing teeth","Kangaroo on a trampoline","Chicken in a hat","Dog on a skateboard","Cat in a box","Banana with a face","Flying pig","Duck in a boat","Frog on a log","Bear on a bike"]
+ animals:["Elephant","Giraffe","Kangaroo","Koala","Penguin","Octopus","Crocodile","Shark","Snail","Butterfly","Dinosaur","Unicorn","Dragon","Peacock","Flamingo","Hedgehog","Turtle","Snake","Platypus","Wombat","Emu","Camel","Gorilla","Seahorse","Jellyfish","Crab","Frog","Duck","Chicken","Pig","Cow","Horse","Rabbit","Mouse","Lion","Whale","Dolphin","Parrot","Bee","Kookaburra","Owl","Sloth","Llama","Hippo","Rhino","Squirrel","Bear","Fox","Zebra","Cheetah","Leopard","Tiger","Panda","Monkey","Dog","Cat","Goat","Sheep","Donkey","Deer","Moose","Kiwi bird","Ostrich","Eagle","Seagull","Pelican","Swan","Toucan","Rooster","Turkey","Goose","Bat","Mole","Beaver","Otter","Seal","Walrus","Polar bear","Starfish","Lobster","Prawn","Clam","Stingray","Swordfish","Goldfish","Clownfish","Piranha","Eel","Salmon","Tadpole","Lizard","Chameleon","Gecko","Iguana","Tortoise","Cobra","Bearded dragon","Frilled lizard","Tasmanian devil","Quokka","Echidna","Possum","Dingo","Cassowary","Magpie","Galah","Cockatoo","Lorikeet","Wallaby","Joey","Bilby","Meerkat","Warthog","Buffalo","Bison","Yak","Alpaca","Lamb","Calf","Foal","Puppy","Kitten","Chick","Duckling","Piglet","Ant","Ladybug","Caterpillar","Grasshopper","Dragonfly","Cricket","Mosquito","Spider","Scorpion","Wasp","Moth","Slug","Worm","Crow","Pigeon","Sparrow","Parakeet","Hummingbird","Woodpecker","Puffin","Dodo","T-rex","Triceratops","Stegosaurus","Mammoth","Camel with two humps","Beaver with a log","Rabbit in a hat","Sleeping cat","Barking dog","Hamster on a wheel","Guinea pig","Ferret","Hyena","Wolf howling","Bull","Ram","Rooster crowing","Orangutan","Baboon","Chimpanzee","Lemur","Koala on a tree","Shark fin","Narwhal","Orca","Crab claw"],
+ food:["Pizza","Hamburger","Ice cream cone","Banana","Watermelon slice","Pineapple","Sausage sizzle","Meat pie","Pavlova","Lamington","Birthday cake","Cupcake","Donut","Hot dog","Taco","Sushi","Spaghetti","Fried egg","Toast","Cheese","Carrot","Broccoli","Corn on the cob","Popcorn","Chocolate bar","Cookie","Pretzel","Cherry","Strawberry","Avocado","Mushroom","Lollipop","Jam jar","Pancakes","Apple","Pear","Lemon","Chips","French fries","Sandwich","Soup bowl","Teapot","Coffee cup","Milkshake","Sauce bottle","Bread","Sandwich toastie","Bacon","Sausage","Steak","Chicken drumstick","Roast chicken","Fish and chips","Lasagne","Noodles","Rice bowl","Dumpling","Curry","Burrito","Nachos","Quesadilla","Kebab","Pie","Sausage roll","Vegemite toast","Tim Tam","Anzac biscuit","Fairy bread","Chiko roll","Cheeseburger","Waffle","Muffin","Croissant","Bagel","Cinnamon scroll","Brownie","Cheesecake","Apple pie","Jelly","Pudding","Ice block","Iceberg lettuce","Tomato","Potato","Sweet potato","Onion","Garlic","Pumpkin soup","Capsicum","Cucumber","Cabbage","Peas","Beans","Eggplant","Chilli","Celery","Radish","Peach","Plum","Grapes","Orange","Mandarin","Mango","Kiwi fruit","Coconut","Blueberry","Raspberry","Fig","Rockmelon","Pomegranate","Cherries","Lime","Pineapple ring","Egg in a cup","Scrambled eggs","Boiled egg","Cereal bowl","Porridge","Honey jar","Peanut butter","Butter","Milk carton","Cheese wedge","Yoghurt","Orange juice","Soft drink","Can of drink","Lemonade","Cup of tea","Hot chocolate","Smoothie","Wine glass","Beer glass","Champagne bottle","Cocktail","Pasta shell","Garlic bread","Salad bowl","Soup spoon","Bowl of chips","Popcorn bucket","Candy floss","Jelly beans","Gummy bear","Marshmallow","Chocolate cake","Cake slice","Wedding cake","Pizza slice","Spring roll","Fortune cookie","Pad thai","Ramen","Sushi roll","Hot cross bun","Pie with sauce","Chicken nuggets","Fish finger","Corn chip","Pickle","Olive","Walnut","Peanut","Almond","Acorn","Mushroom soup","Toasted marshmallow","Barbecue ribs","Sausage in bread","Lunch box","Picnic basket"],
+ things:["Umbrella","Bicycle","Rocket","Lighthouse","Windmill","Guitar","Piano","Camera","Telescope","Hot air balloon","Treasure chest","Key","Clock","Light bulb","Scissors","Toothbrush","Backpack","Sunglasses","Crown","Sword","Shield","Anchor","Sailboat","Submarine","Train","Helicopter","Skateboard","Surfboard","Tent","Campfire","Snowman","Robot","Spaceship","Rainbow","Volcano","Tornado","Lightning bolt","Boomerang","Telephone","Television","Laptop","Headphones","Trophy","Magnet","Ladder","Wheel","Barbecue","Sausage","Thong","Cricket bat","Chair","Table","Bed","Couch","Lamp","Mirror","Bookshelf","Fridge","Oven","Kettle","Toaster","Microwave","Washing machine","Vacuum cleaner","Broom","Bucket","Hammer","Screwdriver","Saw","Drill","Paintbrush","Pencil","Pen","Ruler","Book","Envelope","Calculator","Globe","Compass","Map","Flag","Balloon","Present","Candle","Birthday hat","Piano keys","Drum","Trumpet","Violin","Microphone","Radio","Watch","Alarm clock","Hourglass","Calendar","Phone","Smartphone","Remote control","Game controller","Joystick","Computer mouse","Keyboard","Printer","Battery","Plug","Torch","Binoculars","Magnifying glass","Microscope","Rocket ship","Car","Bus","Truck","Ambulance","Fire truck","Tractor","Bulldozer","Motorbike","Scooter","Tram","Plane","Boat","Ship","Canoe","Parachute","Kite","Yo-yo","Dice","Playing cards","Chess piece","Jigsaw piece","Teddy bear","Doll","Lego brick","Rubber duck","Bucket and spade","Beach ball","Football","Basketball","Tennis racket","Cricket ball","Golf club","Boxing glove","Trampoline","Swing","Slide","Seesaw","Bell","Gift box","Lock","Wallet","Handbag","Suitcase","Jacket","Hat","Shoe","Boot","Sock","Glove","Scarf","Tie","Dress","Ring","Necklace","Umbrella with rain","Raincoat","Toilet","Bathtub","Shower","Soap","Towel","Toothpaste","Comb","Razor","Mailbox","Street light","Traffic light","Stop sign","Fire hydrant","Bin","Wheelbarrow","Garden hose","Lawn mower","Flower pot","Watering can","Fence","Gate","Door","Window","Stairs","Chimney","Roof","Satellite","Planet Saturn","Sun","Moon","Star","Cloud","Snowflake","Wave","Diamond","Coin","Money bag","Bone","Feather","Leaf","Flower","Tree","Cactus","Mushroom","Rock","Fan","Heater","Pillow","Blanket"],
+ actions:["Brushing teeth","Riding a bike","Swimming","Dancing","Sleeping","Fishing","Playing guitar","Surfing","Skiing","Running","Blowing out candles","Walking a dog","Mowing the lawn","Sandcastle","Painting","Flying a kite","Handstand","Eating spaghetti","Climbing","Juggling","Sneezing","Singing","Pirate","Superhero","Ninja","Astronaut","Cowboy","Mermaid","Wizard","Chef","Waving","Jumping","Crying","Laughing","Kicking a ball","Playing cricket","Driving a car","Reading a book","Taking a photo","Sleeping in bed","Eating ice cream","Drinking tea","Washing the dishes","Cooking dinner","Making a bed","Doing the washing","Taking a shower","Combing hair","Putting on shoes","Tying a shoelace","Opening a present","Blowing a bubble","Popping a balloon","Blowing a whistle","Ringing a bell","Knocking on a door","Climbing a ladder","Climbing a tree","Falling over","Slipping on a banana","Skateboarding","Snowboarding","Ice skating","Rollerblading","Horse riding","Rowing a boat","Sailing","Scuba diving","Snorkelling","Playing tennis","Playing football","Playing basketball","Playing golf","Playing the drums","Playing the piano","Playing the trumpet","Conducting an orchestra","Taking a selfie","Waving goodbye","Giving a high five","Shaking hands","Giving a hug","Blowing a kiss","Clapping","Yawning","Stretching","Doing yoga","Doing push-ups","Lifting weights","Skipping rope","Hula hooping","Doing a cartwheel","Doing the splits","Karate kick","Throwing a ball","Catching a fish","Digging a hole","Planting a tree","Watering plants","Raking leaves","Shovelling snow","Building a snowman","Making a sandcastle","Flying a plane","Riding a horse","Riding a camel","Riding a scooter","Pushing a trolley","Carrying a suitcase","Waiting for a bus","Catching a train","Texting","Talking on the phone","Watching TV","Playing video games","Typing on a laptop","Writing a letter","Drawing a picture","Taking a bow","Winning a race","Crossing the finish line","Cutting a cake","Making a wish","Singing in the shower","Brushing a horse","Washing a car","Painting a wall","Hammering a nail","Sawing wood","Sweeping the floor","Mopping","Vacuuming","Ironing","Hanging washing","Walking in the rain","Splashing in a puddle","Sunbathing","Camping","Toasting marshmallows","Fishing from a boat","Having a barbecue","Having a picnic","Blowing a dandelion","Sneaking","Tiptoeing","Hiding","Peeking","Pointing","Thinking","Winking","Whispering","Shouting","Snoring","Sleepwalking","Daydreaming","Surfing a wave","Tripping on a rug","Spinning around","Marching","Saluting","Bowing"],
+ places:["Sydney Opera House","Uluru","Eiffel Tower","Pyramid","Great Wall","Statue of Liberty","Big Ben","Leaning Tower","Beach","Island","Igloo","Castle","Farm","Zoo","Circus tent","Pirate ship","Space station","School","Tent","Rainforest","Waterfall","Bridge","Skyscraper","Cinema","Roller coaster","Treehouse","Tram","Lighthouse","Volcano","Mountain","Desert","Cave","House","Church","Windmill","Bus stop","Bondi Beach","Harbour Bridge","Great Barrier Reef","Melbourne tram","Big Banana","Big Pineapple","Ayers Rock","Kangaroo Island","Sky Tower","Taj Mahal","Colosseum","Stonehenge","Pyramids of Giza","Sphinx","Mount Everest","Niagara Falls","Grand Canyon","Mount Rushmore","Golden Gate Bridge","Tower Bridge","Windmill in Holland","Eiffel Tower at night","Statue of Christ","Pisa tower","Santa's workshop","Fairy castle","Haunted house","Lighthouse on a cliff","Desert island","Oasis","Jungle","Swamp","Pond","Lake","River","Beach hut","Pier","Harbour","Marina","Airport","Train station","Bus station","Bridge over a river","Petrol station","Supermarket","Bakery","Butcher","Cafe","Restaurant","Pub","Hotel","Hospital","Fire station","Police station","Library","Museum","Art gallery","Theatre","Stadium","Swimming pool","Gym","Playground","Park","Garden","Football oval","Cricket ground","Tennis court","Golf course","Ski slope","Campsite","Caravan park","Farm barn","Chicken coop","Stable","Windmill farm","Vineyard","Orchard","Bakery shop","Ice cream shop","Fish market","Backyard","Kitchen","Bedroom","Bathroom","Garage","Attic","Cellar","Shed","Cubby house","Classroom","Playground slide","Bus","Cruise ship","Hot air balloon trip","Moon base","Space rocket launch","Underwater city","Pirate island","Wild west town","Medieval castle","Roman arena","Igloo village","Tropical island","Cave with bats","Mountain hut","Fairground","Ferris wheel","Haunted carnival"],
+ silly:["Dog in sunglasses","Cat in a spacesuit","Fish on a bike","Pizza with legs","Dancing banana","Robot chef","Shark in a bath","Snail on a skateboard","Penguin surfing","Elephant on a tightrope","Octopus drummer","Crocodile in a tutu","Cow on the moon","Dinosaur in a bath","Ghost eating spaghetti","Zombie doing yoga","Witch driving a car","Vampire at the beach","Skeleton on a bike","Pumpkin with a moustache","Alien shopping","Dragon with a cold","Unicorn at the gym","Snowman in summer","Sausage in a hat","Monster brushing teeth","Kangaroo on a trampoline","Chicken in a hat","Dog on a skateboard","Cat in a box","Banana with a face","Flying pig","Duck in a boat","Frog on a log","Bear on a bike","Cat riding a unicorn","Dog driving a car","Giraffe in a tiny car","Penguin on a skateboard","Shark on a scooter","Hippo in a tutu","Cow in a bikini","Pig with wings","Cat wearing a hat","Fish with legs","Dog doing yoga","Horse in pyjamas","Lion getting a haircut","Elephant on a bike","Monkey eating spaghetti","Duck with a top hat","Koala on a surfboard","Kangaroo with a backpack","Emu in sunglasses","Wombat DJ","Platypus on a pogo stick","Sloth on a jetpack","Octopus juggling","Whale on a skateboard","Dolphin on a trampoline","Turtle racing a hare","Crab with a guitar","Snail with a rocket","Spider in a bow tie","Bee in a swimsuit","Banana in pyjamas","Hot dog with sunglasses","Burger on roller skates","Pizza riding a bike","Pineapple in a hat","Dancing sausage","Ice cream melting","Carrot with arms","Broccoli superhero","Cupcake monster","Toast with butter wings","Robot dog","Robot dancing","Alien on holiday","Alien riding a bike","Astronaut on a swing","Astronaut fishing","Mermaid with a phone","Pirate on a surfboard","Ninja on a skateboard","Superhero eating pie","Wizard on a scooter","King in the bath","Queen on a skateboard","Teacher on a trampoline","Chef juggling","Clown on a bike","Cowboy on a camel","Granny skateboarding","Baby with a moustache","Dragon blowing bubbles","Dinosaur on roller skates","Dinosaur with a balloon","Unicorn with a cold","Snowman at the beach","Cloud with a face","Sun wearing sunglasses","Moon in pyjamas","Tree with legs","House with legs","Car with wings","Bus with a smile","Boat on a hill","Chair on a rocket","Bed on wheels","Toilet on a boat","Giant toothbrush","Shoe with a face","Sock monster","Spaghetti hair","Pie in the face","Slip on a banana skin","Sleepy sloth","Dancing penguin","Singing frog","Rapping rabbit","Karate kangaroo","Boxing kangaroo","Cat in a bath","Dog in a bath","Cow jumping over the moon","Fish in a bowl wearing glasses","Duck on a surfboard","Chicken on a scooter","Cow on roller skates","Pig on a trampoline","Parrot on a pirate","Bear in a canoe"]
 };
 const PACK_NAMES={halloween:"Halloween",animals:"Animals",food:"Food",things:"Things",actions:"Actions",places:"Places",silly:"Silly mashups"};
 const IS_TV=/GameNightTV/.test(navigator.userAgent);
-const CFG={rounds:10,secs:60,packs:Object.keys(PACKS)};
+const CFG={rounds:10,secs:60,packs:Object.keys(PACKS).filter(k=>k!=="halloween")};
 try{const j=JSON.parse(localStorage.getItem("gn.dt")||"null");if(j){Object.assign(CFG,j);CFG.packs=(CFG.packs||[]).filter(x=>PACKS[x]);if(!CFG.packs.length)CFG.packs=Object.keys(PACKS)}}catch(e){}
 const saveCfg=()=>{try{localStorage.setItem("gn.dt",JSON.stringify(CFG))}catch(e){}};
 const FONT='"Oxanium","Big Shoulders Display",Impact,sans-serif';
@@ -72,7 +72,14 @@ const css=`
 .game.live .dtart::after{content:"";position:absolute;left:10px;top:30px;width:40px;height:4px;background:#ff7a00;box-shadow:0 12px 0 #ff7a00,8px -12px 0 #ff7a00;transform:rotate(-12deg)}
 `;
 const css2=`
-#dt,#dtSetup{background:radial-gradient(120% 80% at 50% 110%,#3b0a52 0%,#14052b 55%,#07010f 100%);position:absolute;overflow:hidden}
+.dtfx .beam{position:absolute;top:-10%;width:34vmin;height:130%;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 80%);transform-origin:50% 0;animation:dtbeam 9s ease-in-out infinite}
+.dtfx .beam.b1{left:8%;--a:-14deg;--b:12deg}.dtfx .beam.b2{left:42%;--a:10deg;--b:-12deg;animation-duration:11s}.dtfx .beam.b3{right:6%;--a:-10deg;--b:14deg;animation-duration:13s}
+@keyframes dtbeam{0%,100%{transform:rotate(var(--a))}50%{transform:rotate(var(--b))}}
+.dtfx .cf{position:absolute;top:-4vmin;opacity:.7;animation:dtcf linear infinite}
+.dtfx .cf.c0{background:#ff4fb0}.dtfx .cf.c1{background:#ffd400}.dtfx .cf.c2{background:#2ec4ff;border-radius:50%}.dtfx .cf.c3{background:#7dff6b;transform:rotate(45deg)}
+@keyframes dtcf{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(112vh) rotate(540deg)}}
+
+#dt,#dtSetup{background:radial-gradient(120% 80% at 50% 110%,#7a1fa8 0%,#2b0f6e 55%,#10053a 100%);position:absolute;overflow:hidden}
 #dt>*,#dtSetup>*{position:relative;z-index:2}
 #dt>.dtfx,#dtSetup>.dtfx{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
 .dtfx .web{position:absolute;width:30vmin;height:30vmin;opacity:.55}
@@ -96,7 +103,7 @@ const css2=`
 @keyframes dtflash{0%,93%,100%{opacity:0}94%{opacity:.22}95%{opacity:0}96%{opacity:.14}97.5%{opacity:0}}
 .dtfx .moon{position:absolute;top:9%;right:11%;width:12vmin;height:12vmin;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6d1,#e9c76a 70%);box-shadow:0 0 6vmin 1vmin rgba(255,220,120,.35);opacity:.75}
 
-#dt,#dtSetup{--stage-2:#1b0a33;--stage-3:#2e1157;--line:#4b1f86;--gold:#ff7a00;--gold-deep:#d95f00;--muted:#c9a8ff}
+#dt,#dtSetup{--stage-2:#241060;--stage-3:#3a1a8a;--line:#5b32b8;--gold:#ff7a00;--gold-deep:#d95f00;--muted:#c9a8ff}
 #dt.photo>.floorbar,#dt.photo>#dtScore{display:none}
 #dt.photo #dtStage{gap:4vmin}
 .dtghostbtn{position:absolute;bottom:2vmin;left:50%;transform:translateX(-50%);opacity:.02;font-size:.6rem!important;padding:.3em 1em!important}
@@ -128,12 +135,12 @@ const WEB='<svg class="web" viewBox="0 0 100 100" fill="none" stroke="#fff" stro
 const GHOST='<svg class="ghost" viewBox="0 0 64 80"><path d="M32 4C15 4 6 17 6 34v38l9-8 8 8 9-8 9 8 8-8 9 8V34C58 17 49 4 32 4z" fill="#fff" fill-opacity=".85"/><ellipse cx="23" cy="32" rx="5" ry="7" fill="#14052b"/><ellipse cx="41" cy="32" rx="5" ry="7" fill="#14052b"/><ellipse cx="32" cy="48" rx="5" ry="6" fill="#14052b"/></svg>';
 const BAT='<svg class="bat" viewBox="0 0 64 32"><path d="M32 8c-3 0-4 4-6 4-4-5-12-8-24-6 6 3 7 8 6 14 5-5 10-4 14 2 3-4 5-5 10-5s7 1 10 5c4-6 9-7 14-2-1-6 0-11 6-14-12-2-20 1-24 6-2 0-3-4-6-4z"/></svg>';
 const SPIDER='<div class="spider"><i></i><svg viewBox="0 0 40 40" width="100%"><g stroke="#e9e1ff" stroke-width="2" fill="none" stroke-linecap="round"><path d="M14 20l-10-8M14 22l-12 2M14 24l-10 10M26 20l10-8M26 22l12 2M26 24l10 10"/></g><circle cx="20" cy="26" r="8" fill="#e9e1ff"/><circle cx="20" cy="16" r="5" fill="#e9e1ff"/><circle cx="18" cy="15" r="1.4" fill="#ff2d2d"/><circle cx="22" cy="15" r="1.4" fill="#ff2d2d"/></svg></div>';
-const fxHTML='<div class="dtfx"><div class="moon"></div><div class="fog f1"></div><div class="fog f2"></div>'+["tl","tr","bl","br"].map(c=>WEB.replace('class="web"','class="web '+c+'"')).join("")+GHOST.replace('class="ghost"','class="ghost g1"')+GHOST.replace('class="ghost"','class="ghost g2"')+GHOST.replace('class="ghost"','class="ghost g3"')+BAT.replace('class="bat"','class="bat b1"')+BAT.replace('class="bat"','class="bat b2"')+BAT.replace('class="bat"','class="bat b3"')+SPIDER+SPIDER.replace('class="spider"','class="spider s2"')+'<div class="flash"></div></div>';
+const fxHTML='<div class="dtfx"><div class="beam b1"></div><div class="beam b2"></div><div class="beam b3"></div>'+Array.from({length:16},(_,i)=>`<i class="cf c${i%4}" style="left:${(i*37+11)%100}%;animation-delay:${-(i*1.7)%14}s;animation-duration:${12+(i%5)*3}s;width:${1.4+(i%3)*.8}vmin;height:${1.4+(i%3)*.8}vmin"></i>`).join("")+'</div>';
 
 /* hub tile + screens */
 const hub=document.querySelector(".games");
 const tile=document.createElement("button");tile.className="game live";tile.id="playDT";
-tile.innerHTML=`<span class="art"><span class="dtart"><svg class="dtsvg" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg"><rect x="54" y="2" width="14" height="20" rx="3" fill="#2f8f3a"/><ellipse cx="36" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="84" cy="62" rx="32" ry="40" fill="#e86a00"/><ellipse cx="60" cy="62" rx="34" ry="42" fill="#ff7a00"/><path d="M22 40l24 6-18 20z" fill="#14052b"/><path d="M98 40l-24 6 18 20z" fill="#14052b"/><path d="M60 58l-7 12h14z" fill="#14052b"/><path d="M26 78q34 30 68 0l-8-4-6 8-8-8-8 8-8-8-6 8-8-8z" fill="#14052b"/></svg></span><span class="pill">Play</span></span><h2>Draw This</h2><p>Same word, whiteboards, spooky fun. Vote for your favourite drawing.</p>`;
+tile.innerHTML=`<span class="art"><span class="dtart"><svg class="dtsvg" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="14" width="104" height="72" rx="6" fill="#fff"/><rect x="8" y="14" width="104" height="72" rx="6" fill="none" stroke="#c9ccd6" stroke-width="4"/><path d="M22 66q10-34 22-8t22-6 20 14 16-24" fill="none" stroke="#ff4fb0" stroke-width="5" stroke-linecap="round"/><circle cx="30" cy="34" r="8" fill="#ffd400"/><path d="M70 30l12 12 12-12z" fill="#2ec4ff"/><g transform="rotate(-35 92 92)"><rect x="70" y="86" width="46" height="12" rx="3" fill="#ff7a00"/><rect x="64" y="86" width="10" height="12" fill="#14052b"/></g></svg></span><span class="pill">Play</span></span><h2>Draw This</h2><p>Same word, whiteboards, big laughs. Vote for your favourite drawing.</p>`;
 hub.insertBefore(tile,hub.firstChild);
 const n=hub.children.length;hub.classList.remove("five","six","seven");if(n>=7)hub.classList.add("seven");
 /* ---------- spooky soundtrack: synthesised, no audio files ---------- */
@@ -156,22 +163,12 @@ const SPK=(()=>{
     s.connect(f);f.connect(g);g.connect(m);s.start(t);s.stop(t+dur);
   }
   const FX={
-    wail(){const c=ac(),t=c.currentTime,o=c.createOscillator(),l=c.createOscillator(),lg=c.createGain(),g=c.createGain();
-      o.type="sine";o.frequency.setValueAtTime(380,t);o.frequency.linearRampToValueAtTime(620,t+1.1);o.frequency.linearRampToValueAtTime(300,t+2.6);
-      l.frequency.value=5.5;lg.gain.value=22;l.connect(lg);lg.connect(o.frequency);
-      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.07,t+.8);g.gain.linearRampToValueAtTime(0,t+2.7);
-      o.connect(g);g.connect(m);o.start(t);l.start(t);o.stop(t+2.8);l.stop(t+2.8)},
-    creak(){env(140,"sawtooth",.9,.05,0,null,60);env(95,"square",.7,.03,.1,null,170)},
-    owl(){[0,.5].forEach(w=>{env(420,"sine",.35,.07,w,null,360)})},
-    thunder(){noise(2.6,.22,500,40);env(48,"sine",1.8,.14,0,null,30)},
-    bats(){for(let i=0;i<7;i++)env(2400+Math.random()*1800,"sine",.07,.025,i*.07+Math.random()*.03)},
-    cackle(){for(let i=0;i<7;i++)env(520-i*30,"sawtooth",.11,.04,i*.13,null,430-i*30)},
-    knock(){[0,.28,.5].forEach(w=>env(140,"triangle",.12,.16,w,null,70))},
-    bell(){[196,293.7,392].forEach((f,i)=>env(f,"sine",2.2,.09-i*.02,0))},
-    boom(){env(70,"sine",1,.2,0,null,35);noise(.7,.12,900,80)},
+    boom(){env(120,"sine",.5,.3,0,null,45);noise(.25,.14,6000,900)},
     sparkle(){[880,1175,1480,1760,2349].forEach((f,i)=>env(f,"triangle",.5,.07,i*.09))},
-    fanfare(){[[440,523.3,659.3],[466.2,587.3,698.5],[523.3,659.3,784]].forEach((c,i)=>c.forEach(f=>env(f,"sawtooth",.55,.05,i*.32)));FX.sparkle()},
-    organ(){[110,165,220,277.2].forEach(f=>env(f,"sawtooth",2.2,.05,0))}
+    fanfare(){[[523.3,659.3,784],[587.3,740,880],[659.3,784,988],[784,988,1175]].forEach((c,i)=>c.forEach(f=>env(f,"square",.4,.035,i*.16)));FX.sparkle()},
+    bell(){[784,988,1175].forEach((f,i)=>env(f,"triangle",1.1,.08,i*.07))},
+    whoosh(){noise(.6,.16,500,5000)},
+    roll(){for(let i=0;i<14;i++)noise(.07,.1+i*.01,4000,1500,i*.07)}
   };
 
   /* countdown layer: separate loud bus so it cuts through the music */
@@ -196,14 +193,38 @@ const SPK=(()=>{
       o.connect(f);f.connect(g);g.connect(cdg);o.start(t);o.stop(t+10.2)}
   }
   function buzzer(){const c=ac();if(!c||!cdg)return;cdEnv(110,"sawtooth",1.1,.5,0);cdEnv(116,"square",1.1,.35,0);cdEnv(220,"sawtooth",1.1,.25,0);noise(.5,.3,2500,200)}
-  const RANDOM=["wail","creak","owl","bats","cackle","knock","thunder"];
+  /* poppy game-show loop: 124 BPM, I-vi-IV-V in C, four-on-the-floor kick, clap, hats, bouncy bass, chord stabs and a catchy lead */
+  const BPM=124,SP=60/BPM/4;
+  const CH=[[261.6,329.6,392],[220,261.6,329.6],[174.6,220,261.6],[196,246.9,293.7]];
+  const BASSF=[65.4,55,43.65,49];
+  const LEAD=[[7,0,2,0,4,0,2,0,7,0,9,0,7,0,4,0],[9,0,7,0,4,0,2,0,4,0,4,0,2,0,0,0],[5,0,4,0,2,0,0,0,5,0,7,0,5,0,4,0],[4,0,2,0,4,0,7,0,9,0,7,0,4,0,2,0]];
+  const PENT=[261.6,293.7,329.6,392,440,523.3,587.3,659.3,784,880,1046.5];  /* C major pentatonic */
+  let nextT=0,stp=0;
+  function sched(t,sn,ph){
+    const w=t-ac().currentTime,bar=(sn>>4)&3,st=sn&15,ch=CH[bar];
+    const draw=ph==="draw",calm=ph==="vote"||ph==="perfect"||ph==="final";
+    /* drums */
+    if(st%4===0)env(150,"sine",.17,.55,w,null,45);
+    if(st===4||st===12){noise(.12,.2,7000,1800,w);env(190,"triangle",.1,.1,w,null,120)}
+    if(st%2===0&&!calm)noise(.035,.05,9000,6000,w+SP*.5*0);
+    if(st%4===2)noise(.04,.06,10000,7000,w);
+    /* bouncy bass */
+    if([0,3,6,8,11,14].includes(st))env(BASSF[bar],"sawtooth",SP*2.2,.12,w);
+    /* chord stabs */
+    if(!calm&&(st===0||st===6||st===10))ch.forEach(f=>env(f,"square",SP*2,.03,w));
+    if(calm&&st===0)ch.forEach(f=>env(f,"triangle",SP*10,.05,w));
+    /* lead hook (every other bar) plus a shimmering arpeggio */
+    const L=LEAD[bar][st];
+    if(!calm&&(sn>>5&1)===1&&L){env(PENT[Math.min(PENT.length-1,L)],"square",SP*1.8,.045,w);env(PENT[Math.min(PENT.length-1,L)]*2,"triangle",SP*1.4,.025,w)}
+    if(!calm&&st%2===1)env(ch[(st>>1)%3]*2,"triangle",SP*1.4,.03,w);
+  }
   function cue(ph){
-    if(ph==="draw"){FX.boom();FX.creak()}
-    else if(ph==="vote"){FX.bell()}
-    else if(ph==="announce"){if(__DT.DT.last){FX.thunder();FX.organ();setTimeout(()=>on()&&FX.wail(),700)}else{FX.fanfare();FX.boom()}}
-    else if(ph==="perfect"){FX.fanfare();setTimeout(()=>on()&&FX.wail(),900)}
+    if(ph==="draw"){FX.whoosh();FX.boom()}
+    else if(ph==="vote"){FX.roll();setTimeout(()=>on()&&FX.bell(),1000)}
+    else if(ph==="announce"){FX.fanfare();FX.boom()}
+    else if(ph==="perfect"){FX.fanfare()}
     else if(ph==="result"){FX.sparkle()}
-    else if(ph==="final"){FX.thunder();FX.organ()}
+    else if(ph==="final"){FX.fanfare();setTimeout(()=>on()&&FX.sparkle(),900)}
   }
   function visible(){const a=$("dt"),b=$("dtSetup");return (a&&!a.hidden)||(b&&!b.hidden)}
   function tick(){
@@ -212,34 +233,20 @@ const SPK=(()=>{
     const ph=(window.__DT&&__DT.DT&&__DT.DT.phase)||"setup";
     if(ph!==lastPh){const was=lastPh;lastPh=ph;if(was&&ph!=="setup"&&ph!=="idle"){if(was==="draw"&&ph==="vote")buzzer();cue(ph)}}
     const draw=ph==="draw",left=draw?__DT.DT.left:99,calm=ph==="perfect"||ph==="final";
-    m.gain.setTargetAtTime(calm?.6:(draw&&left<=10?.35:1),c.currentTime,.3);
-    /* music-box melody */
-    const p=draw?(left<=10?.9:.7):ph==="vote"?.35:.5;
-    if(Math.random()<p){
-      const i=Math.min(SC.length-1,Math.max(0,(tick.i=(tick.i==null?4:tick.i+Math.round(Math.random()*4-2)))));tick.i=Math.min(SC.length-1,Math.max(0,tick.i));
-      const f=SC[tick.i];env(f,"sine",1.1,.06,0);env(f*2,"triangle",.6,.02,0)
-    }
-    /* bass pulse every 4th step, heartbeat when time is low */
-    if(step%4===0)env(BASS[(step>>2)%BASS.length],"triangle",1.2,.09,0);
-    /* random spooky one-shots */
-    sfxT--;if(sfxT<=0&&ph!=="perfect"){sfxT=draw?18+Math.random()*14:12+Math.random()*10;FX[RANDOM[Math.floor(Math.random()*RANDOM.length)]]()}
-    step++;
-    clearTimeout(timer);timer=setTimeout(tick,draw?(left<=10?330:380):480);
+    m.gain.setTargetAtTime(calm?.55:(draw&&left<=10?.3:.9),c.currentTime,.3);
+    if(nextT<c.currentTime)nextT=c.currentTime+.05;
+    while(nextT<c.currentTime+.4){sched(nextT,stp,ph);nextT+=SP;stp++}
+    clearTimeout(timer);timer=setTimeout(tick,100);
   }
   function start(){
     if(timer||!S.prefs.sound)return;const c=ac();if(!c)return;
-    m=c.createGain();m.gain.value=0;m.connect(c.destination);cdg=c.createGain();cdg.gain.value=1;cdg.connect(c.destination);lastS=-1;clearInterval(cdT);cdT=setInterval(cdTick,100);m.gain.linearRampToValueAtTime(1,c.currentTime+2);
-    /* dark pad: detuned low saws through a slow wobbling filter */
-    const f=c.createBiquadFilter();f.type="lowpass";f.frequency.value=260;f.Q.value=3;
-    const lfo=c.createOscillator(),lg=c.createGain();lfo.frequency.value=.12;lg.gain.value=140;lfo.connect(lg);lg.connect(f.frequency);lfo.start();
-    const pg=c.createGain();pg.gain.value=.06;f.connect(pg);pg.connect(m);
-    drone=[55,55.4,82.4,110.3].map(hz=>{const o=c.createOscillator();o.type="sawtooth";o.frequency.value=hz;o.connect(f);o.start();return o});drone.push(lfo);
-    step=0;sfxT=3;lastPh="";tick.i=null;tick();
+    m=c.createGain();m.gain.value=0;m.connect(c.destination);cdg=c.createGain();cdg.gain.value=1;cdg.connect(c.destination);lastS=-1;clearInterval(cdT);cdT=setInterval(cdTick,100);m.gain.linearRampToValueAtTime(.9,c.currentTime+1.2);
+    stp=0;nextT=0;lastPh="";tick();
   }
   function stop(){
     clearTimeout(timer);timer=null;clearInterval(cdT);if(!m)return;
-    const mm=m,d=drone;m=null;drone=[];try{mm.gain.setTargetAtTime(0,ac().currentTime,.25)}catch(e){}
-    setTimeout(()=>{d.forEach(o=>{try{o.stop()}catch(e){}});try{mm.disconnect()}catch(e){}},1200);
+    const mm=m;m=null;try{mm.gain.setTargetAtTime(0,ac().currentTime,.25)}catch(e){}
+    setTimeout(()=>{try{mm.disconnect()}catch(e){}},1200);
   }
   return {start,stop};
 })();

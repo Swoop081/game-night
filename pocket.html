@@ -73,7 +73,7 @@ let wl=null;const keepAwake=async()=>{try{if(navigator.wakeLock)wl=await navigat
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&ST)keepAwake()});
 
 /* ---------- host engine ---------- */
-const H={players:[],conns:{},CFG:{rounds:8,secs:60,packs:["halloween","animals","food","things","actions","places","silly"]},phase:"lobby",round:0,mult:1,word:"",left:0,votes:{},gain:{},tmr:null,used:new Set(),hostId:"",countN:0};
+const H={players:[],conns:{},CFG:{rounds:8,secs:60,packs:["animals","food","things","actions","places","silly"]},phase:"lobby",round:0,mult:1,word:"",left:0,votes:{},gain:{},tmr:null,used:new Set(),hostId:"",countN:0};
 try{const j=JSON.parse(ls.get("gnp.cfg")||"null");if(j){Object.assign(H.CFG,j);H.CFG.packs=(H.CFG.packs||[]).filter(x=>PACKS[x]);if(!H.CFG.packs.length)H.CFG.packs=Object.keys(PACKS)}}catch(e){}
 const saveCfg=()=>ls.set("gnp.cfg",JSON.stringify(H.CFG));
 const view=()=>({code,phase:H.phase,round:H.round,rounds:H.CFG.rounds,secs:H.CFG.secs,packs:H.CFG.packs,mult:H.mult,word:H.phase==="draw"||H.phase==="vote"||H.phase==="result"?H.word:"",left:H.left,count:H.countN,hostId:H.hostId,
