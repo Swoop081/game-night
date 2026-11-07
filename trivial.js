@@ -172,8 +172,9 @@ function onVoice(texts,final){
 
 /* ---------- flow ---------- */
 function startGame(){
-  S.count=CFG.count;ensureSlots();save();saveCfg();
-  TP.players=[];for(let i=0;i<CFG.count;i++)TP.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],slot:i,wedges:new Set()});
+  const LL=window.LINK&&LINK.pull&&LINK.pull(1,8);if(LL)CFG.count=LL.length;
+  S.count=CFG.count;ensureSlots();save();saveCfg();TP.phones=!!LL;
+  TP.players=[];for(let i=0;i<CFG.count;i++)TP.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],slot:i,wedges:new Set(),pid:(LL&&S.pids&&S.pids[i])||null});
   TP.turn=0;TP.used=new Set();TP.streak=0;
   show("tp");score();stage("");
   introContestants(TP.players,"Trivial Pursuit",()=>{voiceStart(onVoice,$("tpMic"));if(!S.prefs.voice)$("tpMic").innerHTML="";rollScreen()});
@@ -182,7 +183,7 @@ function keys(){return `<div class="tpkeys">${CATS.map(c=>`<span style="--cc:${c
 function rollScreen(){
   const p=cur();TP.live=false;score(TP.turn%TP.players.length);
   $("tpInfo").textContent=`${CFG.wedges} wedges to win`;
-  stage(`<div class="tphead"><span class="eyebrow">${avatarHTML(p,"sm")} <span style="color:${p.color}">${esc(p.name)}</span>, ${TP.streak?"roll again":"you're up"}${TP.players.length>1&&!TP.streak?" · pass the phone":""}</span><h2>Roll for a category</h2></div>
+  stage(`<div class="tphead"><span class="eyebrow">${avatarHTML(p,"sm")} <span style="color:${p.color}">${esc(p.name)}</span>, ${TP.streak?"roll again":"you're up"}${TP.players.length>1&&!TP.streak&&!TP.phones?" · pass the phone":""}</span><h2>Roll for a category</h2></div>
     <div class="tpwheel" id="tpWheel">${CATS.map(c=>`<i style="--cc:${c.color}" title="${c.name}">${c.icon}</i>`).join("")}</div>
     ${pie(p,Math.min(150,Math.max(90,Math.round(Math.min(innerWidth,innerHeight)*.2))))}
     <button class="btn gold" id="tpRoll">Roll</button>`);

@@ -10,9 +10,9 @@
   const txt=el=>el?String(el.textContent||"").replace(/\s+/g," ").trim():"";
   const vis=el=>!!el&&el.isConnected&&!el.closest("[hidden]");
   const GAME_IDS=["hl","nt","pb","cd","dt","bm","cr","floor","ff","tp","wf"];
-  const WIRED={hl:1,nt:1,pb:1,cd:1};
+  const WIRED={hl:1,nt:1,pb:1,cd:1,tp:1};
   const gameNow=()=>{for(const id of GAME_IDS){const e=$(id);if(e&&!e.hidden)return id}return null};
-  const players=g=>{try{if(g==="hl")return HL.players;if(g==="nt")return __NT.NT.players;if(g==="pb")return __PB.PB.players;if(g==="cd")return __CD.CD.players}catch(e){}return null};
+  const players=g=>{try{if(g==="hl")return HL.players;if(g==="nt")return __NT.NT.players;if(g==="pb")return __PB.PB.players;if(g==="cd")return __CD.CD.players;if(g==="tp")return __TP.TP.players}catch(e){}return null};
   const avs=p=>{try{return avatarSrc(p.slot!=null?p.slot:p.id)}catch(e){return ""}};
   const open=()=>[...L.phones.values()].filter(p=>p.conn&&p.conn.open);
 
@@ -30,10 +30,10 @@
   };
 
   /* ---------- who is up? ---------- */
-  const chipOn=g=>{const sc=$(g==="nt"?"ntstageScore":g==="pb"?"pbScore":"cdScore");if(!sc)return -1;return [...sc.children].findIndex(c=>c.classList.contains("on"))};
+  const chipOn=g=>{const sc=$(g==="nt"?"ntstageScore":g==="pb"?"pbScore":g==="tp"?"tpScore":"cdScore");if(!sc)return -1;return [...sc.children].findIndex(c=>c.classList.contains("on"))};
   const nameIdx=(g,P)=>{
-    const st=$(g==="nt"?"ntStage":g==="pb"?"pbStage":"cdStage");if(!st||!P)return -1;
-    const e=txt(st.querySelector(".cdhead .eyebrow, .nthead .eyebrow, .pbhead .eyebrow, .entry .who")).toLowerCase();
+    const st=$(g==="nt"?"ntStage":g==="pb"?"pbStage":g==="tp"?"tpStage":"cdStage");if(!st||!P)return -1;
+    const e=txt(st.querySelector(".cdhead .eyebrow, .nthead .eyebrow, .pbhead .eyebrow, .tphead .eyebrow, .entry .who")).toLowerCase();
     if(!e)return -1;return P.findIndex(p=>p.name&&e.includes(String(p.name).toLowerCase()));
   };
   const actorOf=g=>{
@@ -101,6 +101,12 @@
         clock:txt($("ntClock")),count:inp?txt($("ntFound"))+"/10":"",found:[...st.querySelectorAll(".ntslot.hit span")].map(txt),fb:txt($("ntFb")).replace("Count it anyway","").trim(),
         inp:inp&&vis(inp)?{ph:"Type an answer"}:null};
     }
+    if(g==="tp"){
+      const st=$("tpStage"),bl=btnList(st);btnEls=bl.map(b=>b.el);
+      const inp=$("tpIn"),showInp=inp&&vis(inp);
+      return {th:g,head:headOf(st),scores:chips("tpScore",P),btns:bl.map(({el,...r})=>r),clock:txt($("tpClock")),
+        big:txt(st.querySelector(".tpq")),fb:txt($("tpFb")),inp:showInp?{ph:"Type your answer"}:null};
+    }
     if(g==="pb"){
       const st=$("pbStage"),bl=btnList(st);btnEls=bl.map(b=>b.el);
       const inp=$("pbIn");let pic=null;
@@ -164,7 +170,7 @@
       if(!g||!mayAct(g,p)){log("input ignored",{k:m.k,from:p.name});return}
       try{
         if(m.k==="tap"){const sc=scene(g);const el=btnEls[m.i];if(el&&vis(el)&&!el.disabled&&m.sn===serial){log("tap",{from:p.name,t:txt(el).slice(0,30)});el.click()}else log("tap stale",{i:m.i,sn:m.sn,serial})}
-        else if(m.k==="txt"){const inp=$(g==="nt"?"ntIn":"pbIn");if(inp&&vis(inp)){inp.value=String(m.v||"").slice(0,60);const f=inp.closest("form");if(f)f.requestSubmit?f.requestSubmit():f.dispatchEvent(new Event("submit",{cancelable:true}));log("txt",{from:p.name,v:inp.value})}}
+        else if(m.k==="txt"){const inp=$(g==="nt"?"ntIn":g==="tp"?"tpIn":"pbIn");if(inp&&vis(inp)){inp.value=String(m.v||"").slice(0,60);const f=inp.closest("form");if(f)f.requestSubmit?f.requestSubmit():f.dispatchEvent(new Event("submit",{cancelable:true}));log("txt",{from:p.name,v:inp.value})}}
         else if(m.k==="num"){const I=__CD.CD.input;if(I){I.val=String(m.v).replace(/[^0-9.]/g,"").slice(0,9);I.show&&I.show();__CD.key("go");log("num",{from:p.name,v:m.v})}}
       }catch(e){log("input error",String(e))}
       return;
@@ -173,7 +179,7 @@
   };
 
   /* ---------- phone panel on each game's setup screen ---------- */
-  const SETUPS={hlSetup:"hlPlayers",ntSetup:"ntPlayers",pbSetup:"pbPlayers",cdSetup:"cdPlayers",dtSetup:"dtPlayers",bmSetup:"bmPlayers",crSetup:"crPlayers"};
+  const SETUPS={hlSetup:"hlPlayers",ntSetup:"ntPlayers",pbSetup:"pbPlayers",cdSetup:"cdPlayers",tpSetup:"tpPlayers",dtSetup:"dtPlayers",bmSetup:"bmPlayers",crSetup:"crPlayers"};
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"");
   const joinUrl=()=>base+"join.html?c="+L.code+(new URLSearchParams(location.search).get("peerhost")?"&peerhost="+new URLSearchParams(location.search).get("peerhost")+"&peerport="+(new URLSearchParams(location.search).get("peerport")||9000):"");
   const paintPanel=(id,pl)=>{
