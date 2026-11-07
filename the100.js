@@ -111,11 +111,15 @@ function tok(p){
   d.appendChild(im);if(CFG.lives>1){const b=document.createElement("b");b.className="lv";b.textContent="♥"+(p.lives!=null?p.lives:CFG.lives);d.appendChild(b)}return d;
 }
 const T={};   // pid -> token element
+let SEEN=null;
+const seenLoad=()=>{if(SEEN)return SEEN;try{SEEN=new Set(JSON.parse(localStorage.getItem("gn.cr.seen")||"[]"))}catch(e){SEEN=new Set()}return SEEN};
+const seenSave=()=>{try{localStorage.setItem("gn.cr.seen",JSON.stringify([...SEEN].slice(-6000)))}catch(e){}};
 function pickQ(){
-  const lvl=lvlOf(CR.n);
-  let pool=QS.map((q,i)=>[q,i]).filter(([q,i])=>q[0]===lvl&&!CR.used.has(i));
-  if(!pool.length)pool=QS.map((q,i)=>[q,i]).filter(([q])=>q[0]===lvl);
-  const [q,i]=pool[Math.floor(Math.random()*pool.length)];CR.used.add(i);return q;
+  const lvl=lvlOf(CR.n),seen=seenLoad();
+  let pool=QS.filter(q=>q[0]===lvl&&!CR.used.has(q[1])&&!seen.has(q[1]));
+  if(!pool.length){QS.forEach(q=>{if(q[0]===lvl)seen.delete(q[1])});pool=QS.filter(q=>q[0]===lvl&&!CR.used.has(q[1]))}
+  if(!pool.length)pool=QS.filter(q=>q[0]===lvl);
+  const q=pool[Math.floor(Math.random()*pool.length)];CR.used.add(q[1]);seen.add(q[1]);seenSave();return q;
 }
 function startGame(){
   const L=window.LINK&&LINK.pull?LINK.pull(2,100,{cpu:true}):null;
