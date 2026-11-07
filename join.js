@@ -112,6 +112,8 @@
     $("cmE").textContent=m.head.e||"";$("cmT").textContent=m.head.t||"";$("cmS").textContent=m.head.s||"";
     // main area per game
     let main="";
+    if(m.rows){let h='<div class="wrb">';for(let r=0;r<(m.nr||6);r++){const g=m.rows[r];h+='<div class="wrr">';for(let c=0;c<5;c++)h+='<span class="wt s'+(g?g.s[c]:"x")+'">'+(g?esc(g.w[c]):"")+'</span>';h+='</div>'}h+='</div>';
+      if(m.kb){h+='<div class="wkb">'+"qwertyuiopasdfghjklzxcvbnm".split("").map(l=>'<i class="s'+(m.kb[l]==null?"x":m.kb[l])+'">'+l+'</i>').join("")+'</div>'}main+=h}
     if(m.big)main+='<div class="cmword">'+esc(m.big)+'</div>';
     if(m.cards&&m.cards.length)main='<div class="cmcards">'+m.cards.map(c=>c.b!==undefined?'<div class="pk back">'+esc(c.b)+'</div>':'<div class="pk '+(c.r||"")+'">'+esc(c.n)+'</div>').join("")+'</div>';
     if(m.clock)main+='<div class="cmbig">'+esc(m.clock)+(m.count?' <small style="font-size:1rem;opacity:.7">'+esc(m.count)+'</small>':"")+'</div>';

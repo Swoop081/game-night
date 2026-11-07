@@ -9,7 +9,7 @@
   const log=L.log||(()=>{});
   const txt=el=>el?String(el.textContent||"").replace(/\s+/g," ").trim():"";
   const vis=el=>!!el&&el.isConnected&&!el.closest("[hidden]");
-  const GAME_IDS=["ct","ot","hl","nt","pb","cd","dt","bm","cr","floor","ff","tp","wf"];
+  const GAME_IDS=["wr","ch","ct","ot","hl","nt","pb","cd","dt","bm","cr","floor","ff","tp","wf"];
   const WIRED={hl:1,nt:1,pb:1,cd:1,tp:1};
   const gameNow=()=>{for(const id of GAME_IDS){const e=$(id);if(e&&!e.hidden)return id}return null};
   const players=g=>{try{if(g==="hl")return HL.players;if(g==="nt")return __NT.NT.players;if(g==="pb")return __PB.PB.players;if(g==="cd")return __CD.CD.players;if(g==="tp")return __TP.TP.players}catch(e){}return null};
@@ -138,6 +138,8 @@
     if(g==="wf"&&window.__WF&&__WF.active()){open().forEach(p=>{const m={k:"scr",...__WF.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     if(g==="ot"&&window.__OT&&__OT.active()){open().forEach(p=>{const m={k:"scr",...__OT.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     if(g==="ct"&&window.__CT&&__CT.active()){open().forEach(p=>{const m={k:"scr",...__CT.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
+    if(g==="ch"&&window.__CH&&__CH.active()){open().forEach(p=>{const m={k:"scr",...__CH.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
+    if(g==="wr"&&window.__WR&&__WR.active()){open().forEach(p=>{const m={k:"scr",...__WR.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     if(g==="dt"&&window.__DT){open().forEach(p=>{const m={k:"scr",...__DT.sceneFor(p)};const s=JSON.stringify(m);if(p.scr===s)return;p.scr=s;L.send(p,m)});return}
     let sc;try{sc=scene(g)}catch(e){log("scene error",String(e));return}
     const bs=g+"|"+sc.btns.map(b=>b.t).join("~")+"|"+JSON.stringify(sc.head);
@@ -170,6 +172,8 @@
     if(window.__CR&&__CR.active()){if(m.k==="act"){try{__CR.act(p,m)}catch(e){log("act error",String(e))}}return}
     if(window.__OT&&__OT.active()){if(m.k==="act"){try{__OT.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"&&__OT.text){try{__OT.text(p,m.v)}catch(e){log("txt error",String(e))}return}return}
     if(window.__CT&&__CT.active()){if(m.k==="act"){try{__CT.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"&&__CT.text){try{__CT.text(p,m.v)}catch(e){log("txt error",String(e))}return}return}
+    if(window.__CH&&__CH.active()){if(m.k==="act"){try{__CH.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"&&__CH.text){try{__CH.text(p,m.v)}catch(e){log("txt error",String(e))}return}return}
+    if(window.__WR&&__WR.active()){if(m.k==="act"){try{__WR.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"&&__WR.text){try{__WR.text(p,m.v)}catch(e){log("txt error",String(e))}return}return}
     if(window.__BM&&__BM.active()){if(m.k==="act"){try{__BM.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"){try{__BM.text(p,m.v)}catch(e){log("txt error",String(e))}return}}
     if(window.__PB&&__PB.active()){if(m.k==="act"){try{__PB.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"){try{__PB.text(p,m.v)}catch(e){log("txt error",String(e))}return}}
     if(window.__WF&&__WF.active()){if(m.k==="act"){try{__WF.act(p,m)}catch(e){log("act error",String(e))}return}if(m.k==="txt"){try{__WF.text(p,m.v)}catch(e){log("txt error",String(e))}return}}
