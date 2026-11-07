@@ -106,7 +106,7 @@
     const C=$("cmp");if(!C)return;
     if(m.off){lastScr=null;C.classList.add("hide");document.body.classList.remove("incmp");if(!$("duel")||$("duel").classList.contains("hide"))$("play").classList.remove("hide");document.body.style.overflow="";return}
     lastScr=m;
-    C.className="th-"+m.th;document.body.classList.add("incmp");document.body.style.overflow="hidden";
+    C.className="th-"+m.th+(m.liar?" liar":"");document.body.classList.add("incmp");document.body.style.overflow="hidden";
     $("play").classList.add("hide");$("duel")&&$("duel").classList.add("hide");
     $("cmScores").innerHTML=(m.scores||[]).map(s=>'<div class="cs'+(s.on?" on":"")+'" style="--c:'+esc(s.c||"#555")+'">'+(s.av?'<img alt="" src="'+esc(avr(s.av))+'">':"")+'<div><b>'+esc(s.n)+(s.pid&&s.pid===pid?" · you":"")+'</b><i>'+esc(s.s)+'</i></div></div>').join("");
     $("cmE").textContent=m.head.e||"";$("cmT").textContent=m.head.t||"";$("cmS").textContent=m.head.s||"";
@@ -139,7 +139,7 @@
     }
     // type-in box
     const F=$("cmForm");const showIn=!!m.inp&&!!m.me;F.classList.toggle("hide",!showIn);
-    if(showIn&&F.dataset.p!==(m.inp.ph||"")){F.dataset.p=m.inp.ph||"";$("cmIn").placeholder=m.inp.ph||""}
+    if(showIn&&F.dataset.p!==(m.inp.ph||"")){F.dataset.p=m.inp.ph||"";$("cmIn").placeholder=m.inp.ph||"";$("cmIn").setAttribute("inputmode",m.inp.num?"decimal":"text")}
     // number pad
     const N=$("cmNum");const showNum=!!m.num;N.classList.toggle("hide",!showNum);
     if(m.sn!==sn){sn=m.sn;numv="";}
