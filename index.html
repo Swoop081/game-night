@@ -353,7 +353,7 @@ button{cursor:pointer}
       <div class="field"><span class="eyebrow">Players</span>
         <div class="stepper"><button id="minus" aria-label="Fewer players">−</button><output id="pcount">2</output><button id="plus" aria-label="More players">+</button></div>
       </div>
-      <div class="field" id="multiField"><span class="eyebrow">Categories each (only with 4 players)</span><div class="seg" id="segMulti"></div></div>
+      <div class="field" id="multiField"><span class="eyebrow">Categories each (only with 3 or 4 players)</span><div class="seg" id="segMulti"></div></div>
       <div id="rulesBox"></div>
       <div class="field"><span class="eyebrow">Voice answers</span><div class="seg" id="segVoice"></div></div>
       <div class="field"><span class="eyebrow">Sound</span><div class="seg" id="segSound"></div></div>
@@ -445,7 +445,7 @@ button{cursor:pointer}
 <canvas id="confetti" hidden></canvas>
 </div>
 
-<script src="questions.js?v=69"></script>
+<script src="questions.js?v=70"></script>
 <script>
 /* =================== CATEGORIES =================== */
 const CATS={};
@@ -724,15 +724,16 @@ function ensureSlots(){
     S.colors[i]=DISTINCT[i%DISTINCT.length];
   }
 }
-function buildMulti(src){
+function buildMulti(src,n){n=n||(src&&src.length===3?3:4);
   const used=new Set(),out=[];
-  for(let i=0;i<4;i++){const l=[];((src&&src[i])||[]).forEach(c=>{if(CATS[c]&&!used.has(c)&&l.length<4){l.push(c);used.add(c)}});out.push(l)}
+  for(let i=0;i<n;i++){const l=[];((src&&src[i])||[]).forEach(c=>{if(CATS[c]&&!used.has(c)&&l.length<4){l.push(c);used.add(c)}});out.push(l)}
   const free=shuffle(CAT_IDS.filter(c=>!used.has(c)));out.forEach(l=>{while(l.length<4)l.push(free.pop())});return out;
 }
-const isMulti=()=>!!S.prefs.multi&&S.count===4;
+const multiOK=n=>n===3||n===4;
+const isMulti=()=>!!S.prefs.multi&&multiOK(S.count);
 function renderSetup(){
   $("pcount").textContent=S.count;
-  if(isMulti()&&(!S.mcats||S.mcats.length!==4))S.mcats=buildMulti([]);
+  if(isMulti()&&(!S.mcats||S.mcats.length!==S.count))S.mcats=buildMulti([],S.count);
   $("minus").disabled=S.count<=2;$("plus").disabled=S.count>=20;
   ensureSlots();
   const wrap=$("players");
@@ -760,7 +761,7 @@ function pickColour(i,after){return;
 }
 $("minus").onclick=()=>{S.count=Math.max(2,S.count-1);renderSetup()};
 $("plus").onclick=()=>{S.count=Math.min(20,S.count+1);renderSetup()};
-$("shuffleCats").onclick=()=>{if(isMulti()){S.mcats=buildMulti([]);renderSetup();return}const p=shuffle(CAT_IDS);for(let i=0;i<S.count;i++)S.cats[i]=p[i%p.length];save();renderSetup()};
+$("shuffleCats").onclick=()=>{if(isMulti()){S.mcats=buildMulti([],S.count);renderSetup();return}const p=shuffle(CAT_IDS);for(let i=0;i<S.count;i++)S.cats[i]=p[i%p.length];save();renderSetup()};
 $("startGame").onclick=()=>{ac();startGame()};
 
 /* =================== GAME =================== */
@@ -772,17 +773,17 @@ function startGame(){
   let ph=null;
   try{if(window.LINK&&LINK.pull){ph=LINK.pull(2,20,{cpu:false});if(ph&&ph.length>=2){S.count=ph.length;ph.forEach((p,i)=>{S.names[i]=p.name;if(p.cats&&p.cats[0])S.cats[i]=p.cats[0]})}else ph=null}}catch(e){ph=null}
   ensureSlots();save();
-  S.multi=!!S.prefs.multi&&S.count===4;
-  const mc=S.multi?((ph&&S.mcats&&S.mcats.length===4&&S.mcatsSig===JSON.stringify(ph.map(p=>p.cats||[])))?S.mcats.map(l=>l.slice()):buildMulti(ph?ph.map((p,i)=>(p.cats&&p.cats.length?p.cats:[S.cats[i]])):(S.mcats||[]))):null;
+  S.multi=!!S.prefs.multi&&multiOK(S.count);
+  const mc=S.multi?((ph&&S.mcats&&S.mcats.length===S.count&&S.mcatsSig===JSON.stringify(ph.map(p=>p.cats||[])))?S.mcats.map(l=>l.slice()):buildMulti(ph?ph.map((p,i)=>(p.cats&&p.cats.length?p.cats:[S.cats[i]])):(S.mcats||[]),S.count)):null;
   if(S.multi)mc.forEach((l,i)=>{S.cats[i]=l[0]});
   S.players=[];for(let i=0;i<S.count;i++)S.players.push({id:i,name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],cat:S.cats[i],alive:true,duels:0,streak:0,boost:false});
   const {rows,cols}=gridDims(S.count);
   const order=shuffle(S.players.map(p=>p.id));
   S.grid={rows,cols,owner:Array.from({length:rows*cols},(_,i)=>i<order.length?order[i]:-1)};
   if(S.multi){
-    const cells=shuffle(Array.from({length:16},(_,i)=>i)),owner=Array(16).fill(-1),cat=Array(16).fill(null);
+    const NC=S.count*4,cells=shuffle(Array.from({length:NC},(_,i)=>i)),owner=Array(NC).fill(-1),cat=Array(NC).fill(null);
     mc.forEach((l,i)=>l.forEach((c,k)=>{const cell=cells[i*4+k];owner[cell]=i;cat[cell]=c}));
-    S.grid={rows:4,cols:4,owner,cat};
+    S.grid={rows:S.count===3?3:4,cols:4,owner,cat};
   }
   S.played=new Set();S.phase="idle";S.challenger=null;S.defender=null;S.final=null;S.origin=null;
   $("floorMode").textContent=S.mode==="tv"?"THE FLOOR · TV GAME":"THE FLOOR · CUSTOM";
@@ -1305,37 +1306,37 @@ window.__gnBack=()=>{
 if(/GameNightTV/.test(navigator.userAgent))addEventListener("load",()=>document.querySelectorAll('.seg[id*="Screen"]').forEach(e=>{const h=e.closest(".hubtop,.field")||e.parentElement;h.style.display="none"}));
 window.__GN={S,CATS,heardMatches,norm,neighbours,gridDims,applyScreen};
 </script>
-<script src="avatars.js?v=69"></script>
-<script src="prices.js?v=69"></script>
-<script src="comeondown.js?v=69"></script>
-<script src="nameten-data.js?v=69"></script>
-<script src="nameten.js?v=69"></script>
-<script src="feud-data.js?v=69"></script>
-<script src="feud.js?v=69"></script>
-<script src="trivial-data.js?v=69"></script>
-<script src="trivial.js?v=69"></script>
-<script src="picblitz.js?v=69"></script>
-<script src="drawthis.js?v=69"></script>
-<script src="bmdata.js?v=69"></script>
-<script src="bm.js?v=69"></script>
-<script src="the100data.js?v=69"></script>
-<script src="the100.js?v=69"></script>
-<script src="gamemusic.js?v=69"></script>
-<script src="setupfit.js?v=69"></script>
-<script src="wheel-data.js?v=69"></script>
-<script src="wheel.js?v=69"></script>
-<script src="showkit.js?v=69"></script>
-<script src="floor-theme.js?v=69"></script>
-<script src="leaderboard.js?v=69"></script>
-<script src="link.js?v=69"></script>
-<script src="companion.js?v=69"></script>
-<script src="floorphone.js?v=69"></script>
-<script src="floordraft.js?v=69"></script>
-<script src="voice.js?v=69"></script>
-<script src="tvlook.js?v=69"></script>
-<script src="photos.js?v=69"></script>
-<script src="gamelook.js?v=69"></script>
-<script src="autoupdate.js?v=69"></script>
-<script src="tvui.js?v=69"></script>
+<script src="avatars.js?v=70"></script>
+<script src="prices.js?v=70"></script>
+<script src="comeondown.js?v=70"></script>
+<script src="nameten-data.js?v=70"></script>
+<script src="nameten.js?v=70"></script>
+<script src="feud-data.js?v=70"></script>
+<script src="feud.js?v=70"></script>
+<script src="trivial-data.js?v=70"></script>
+<script src="trivial.js?v=70"></script>
+<script src="picblitz.js?v=70"></script>
+<script src="drawthis.js?v=70"></script>
+<script src="bmdata.js?v=70"></script>
+<script src="bm.js?v=70"></script>
+<script src="the100data.js?v=70"></script>
+<script src="the100.js?v=70"></script>
+<script src="gamemusic.js?v=70"></script>
+<script src="setupfit.js?v=70"></script>
+<script src="wheel-data.js?v=70"></script>
+<script src="wheel.js?v=70"></script>
+<script src="showkit.js?v=70"></script>
+<script src="floor-theme.js?v=70"></script>
+<script src="leaderboard.js?v=70"></script>
+<script src="link.js?v=70"></script>
+<script src="companion.js?v=70"></script>
+<script src="floorphone.js?v=70"></script>
+<script src="floordraft.js?v=70"></script>
+<script src="voice.js?v=70"></script>
+<script src="tvlook.js?v=70"></script>
+<script src="photos.js?v=70"></script>
+<script src="gamelook.js?v=70"></script>
+<script src="autoupdate.js?v=70"></script>
+<script src="tvui.js?v=70"></script>
 </body>
 </html>

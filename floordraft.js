@@ -26,7 +26,7 @@
   }
   D.start=()=>{
     const h=humans();if(h.length<2)return;
-    D.per=(S.prefs.multi&&h.length===4)?4:1;
+    D.per=(S.prefs.multi&&(h.length===3||h.length===4))?4:1;
     const order=shuffle(h.map(p=>p.pid)),seq=[];
     for(let r=0;r<D.per;r++)(r%2?order.slice().reverse():order).forEach(x=>seq.push(x));
     h.forEach(p=>p.cats=[]);D.seq=seq;D.i=0;D.taken={};D.on=true;arm();broadcast();
@@ -40,7 +40,7 @@
   function sync(){
     const h=humans(),picks=h.map(p=>p.cats||[]),sig=JSON.stringify([picks,!!S.prefs.multi,h.length]);
     if(sig===lastSig)return;lastSig=sig;
-    if(S.prefs.multi&&h.length===4){S.mpicks=picks;S.mcats=buildMulti(picks);S.mcatsSig=JSON.stringify(picks)}
+    if(S.prefs.multi&&(h.length===3||h.length===4)){S.mpicks=picks;S.mcats=buildMulti(picks,h.length);S.mcatsSig=JSON.stringify(picks)}
     else picks.forEach((c,i)=>{if(c[0])S.cats[i]=c[0]});
   }
   setInterval(()=>{try{const s=$("setup");if(s&&!s.hidden){const before=lastSig;sync();if(before!==lastSig&&typeof renderSetup==="function")renderSetup()}}catch(e){}},700);
@@ -56,7 +56,7 @@
       if(D.on){
         const cur=byPid(D.seq[D.i]);
         bar.innerHTML=`<b style="color:var(--gold)">Category draft: ${cur?cur.name:"…"} is picking (${D.i+1} of ${D.seq.length})</b><button class="btn ghost" data-a="skip">Skip turn</button><button class="btn ghost" data-a="cancel">Cancel</button>`;
-      }else bar.innerHTML=`<button class="btn gold" data-a="start">Start category draft</button><span class="note" style="opacity:.8">Players take turns picking on their phones${S.prefs.multi&&h.length===4?" (4 each)":""}. Or skip it and everyone picks freely.</span>`;
+      }else bar.innerHTML=`<button class="btn gold" data-a="start">Start category draft</button><span class="note" style="opacity:.8">Players take turns picking on their phones${S.prefs.multi&&(h.length===3||h.length===4)?" (4 each)":""}. Or skip it and everyone picks freely.</span>`;
       bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{const a=b.dataset.a;a==="start"?D.start():a==="skip"?D.skip():D.cancel()});
     }catch(e){}
     return r;
