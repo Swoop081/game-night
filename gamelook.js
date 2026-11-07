@@ -116,6 +116,11 @@ body #pb .pbinput input{border:0;border-radius:0;background:#1a1a26;color:#fff}
 body #pb .pbgroups button{border-radius:0}
 body #pb .ntrank .r{border:0;border-radius:0;background:#1a1a26}body #pb .ntrank .r.win{background:#ff2d95;color:#fff;box-shadow:none}
 body #pb .ntrank .r.win em,body #pb .ntrank .r.win b{color:#fff!important}
+body.portrait #hl .hlgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+body.portrait #hl .hlp{padding-top:2vmin;justify-content:center}
+body.portrait #hl .hlbtns{display:grid;grid-template-columns:1fr 1fr;gap:2vmin;width:100%;padding:1.5vmin 2vmin}
+body.portrait #hl .hlbtns .btn{width:100%;padding:1.8vmin 0}
+body.portrait #hl .tracker{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));width:100%}
 `;
   const st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 })();
