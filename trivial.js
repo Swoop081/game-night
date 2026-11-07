@@ -65,13 +65,29 @@ const css=`
 .game.live .tppieart{width:64px;height:64px;border-radius:50%;background:conic-gradient(#3b9dff 0 60deg,#ff5fb0 60deg 120deg,#ffd23f 120deg 180deg,#b9772c 180deg 240deg,#3ddc84 240deg 300deg,#ff8a3d 300deg 360deg);border:4px solid #fffdf6;box-shadow:0 0 0 3px #1a1636 inset}
 .games.six{grid-template-columns:repeat(3,minmax(0,1fr));width:min(1100px,100%)}
 .portrait .games.six{grid-template-columns:repeat(2,minmax(0,1fr));max-height:none;flex:none;grid-auto-rows:auto}
+
+.tptrack{display:grid;grid-template-columns:repeat(13,1fr);gap:clamp(2px,.6vmin,6px);width:min(1100px,100%);align-items:end;padding-top:14px}
+.tpsq{position:relative;aspect-ratio:1;border-radius:22%;background:var(--cc);display:grid;place-items:center;font-style:normal;color:#1a1636;font-weight:900;opacity:.55;font-size:clamp(.7rem,2.6vmin,1.6rem)}
+.tpsq i{font-style:normal}
+.tpsq.tW{opacity:1;box-shadow:0 0 0 3px #fffdf6 inset,0 0 14px -2px var(--cc)}
+.tpsq.tR{opacity:.9;background:#4a4768;color:#fffdf6}
+.tpsq.me{opacity:1;outline:3px solid var(--pc);outline-offset:2px;transform:scale(1.18);z-index:2}
+.tpsq.cand{opacity:1;outline:3px dashed #fffdf6;outline-offset:2px;transform:scale(1.12);z-index:2}
+.tpmk{position:absolute;top:-1.5em;left:0;right:0;text-align:center;color:#fffdf6;font-size:.9em}
+.tptok{position:absolute;bottom:-9px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;border:2px solid #fffdf6}
+.tpdots{position:absolute;top:2px;right:2px;display:flex;gap:2px}.tpdots u{width:8px;height:8px;border-radius:50%;border:1px solid #fffdf6}
+.tpleg{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;color:var(--muted);font-size:.8rem;font-weight:700}
+.tpdie{width:clamp(70px,16vmin,130px);height:clamp(70px,16vmin,130px);border-radius:22%;background:#fffdf6;color:#1a1636;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:clamp(2.6rem,9vmin,5rem);box-shadow:0 8px 0 #bdb7a3}
+.tpdie.done{background:var(--gold)}
+.tpmv{min-width:12em}
+.portrait .tptrack{padding-top:12px}
 `;
 const st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
 /* ---------- hub tile + screens ---------- */
 const hub=document.querySelector(".games");
 const tile=document.createElement("button");tile.className="game live";tile.id="playTP";
-tile.innerHTML=`<span class="art"><span class="tppieart"></span><span class="pill">Play</span></span><h2>Trivial Pursuit</h2><p>Roll, answer, win wedges. Fill the pie first.</p>`;
+tile.innerHTML=`<span class="art"><span class="tppieart"></span><span class="pill">Play</span></span><h2>Trivial Pursuit</h2><p>Roll the die, land on a wedge square, win it.</p>`;
 const soonPB=[...hub.children].find(c=>c.classList.contains("soon")&&c.textContent.includes("Picture Blitz"));
 if(soonPB)hub.replaceChild(tile,soonPB);else hub.appendChild(tile);
 hub.classList.remove("five");
@@ -92,10 +108,10 @@ function openSetup(){
   <div class="setup-grid"><div class="panel">
     <div class="field"><span class="eyebrow">Players</span><div class="stepper"><button id="tpMinus" aria-label="Fewer players">−</button><output id="tpCount">${CFG.count}</output><button id="tpPlus" aria-label="More players">+</button></div></div>
     <div class="field"><span class="eyebrow">How to play</span><ul class="rules">
-      <li>On your turn, <b>roll</b> to land on a category.</li>
-      <li>Answer by <b>voice or typing</b> before the clock runs out.</li>
-      <li>Right: you win that category’s <b>wedge</b> and roll again. Wrong: pass to the next player.</li>
-      <li>First to collect the target number of wedges wins.</li></ul></div>
+      <li>Each turn, <b>roll the die</b> and move that many squares forward <i>or</i> back around the track.</li>
+      <li>You answer a question in the category of the square you land on. <b>Wedge squares (★)</b> are the only ones that win a wedge.</li>
+      <li>Right answer: <b>roll again once</b>. Wrong answer, or after your bonus roll: the next player's turn. Everyone plays in order.</li>
+      <li>↻ squares: roll again for free. First to the target number of wedges wins.</li></ul></div>
     <div class="field"><span class="eyebrow">Wedges to win</span><div class="seg" id="tpWedgeSeg"></div></div>
     <div class="field"><span class="eyebrow">Seconds per question</span><div class="seg" id="tpSecsSeg"></div></div>
     <div class="field"><span class="eyebrow">Voice answers</span><div class="seg" id="tpVoiceSeg"></div></div>
@@ -126,7 +142,7 @@ function renderPlayers(){
 }
 
 /* ---------- state ---------- */
-const TP={players:[],turn:0,q:null,cat:null,live:false,left:0,timer:null,used:new Set(),rolling:false,streak:0};
+const TP={players:[],turn:0,q:null,cat:null,live:false,left:0,timer:null,used:new Set(),rolling:false,streak:0,extra:0,sn:0,ph:"idle"};
 const stage=(html,cls)=>{$("tpStage").className="tpstage"+(cls?" "+cls:"");$("tpStage").innerHTML=html;$("tpStage").scrollTop=0};
 function pie(p,size){
   const r=size/2,c=r;let s="";
@@ -174,51 +190,93 @@ function onVoice(texts,final){
 function startGame(){
   const LL=window.LINK&&LINK.pull&&LINK.pull(1,8);if(LL)CFG.count=LL.length;
   S.count=CFG.count;ensureSlots();save();saveCfg();TP.phones=!!LL;
-  TP.players=[];for(let i=0;i<CFG.count;i++)TP.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],slot:i,wedges:new Set(),pid:(LL&&S.pids&&S.pids[i])||null});
-  TP.turn=0;TP.used=new Set();TP.streak=0;
+  TP.players=[];for(let i=0;i<CFG.count;i++)TP.players.push({name:(S.names[i]||"").trim()||`Player ${i+1}`,color:S.colors[i],slot:i,wedges:new Set(),pos:(i*5+2)%30,pid:(LL&&S.pids&&S.pids[i])||null});
+  TP.turn=0;TP.used=new Set();TP.extra=0;
   show("tp");score();stage("");
   introContestants(TP.players,"Trivial Pursuit",()=>{voiceStart(onVoice,$("tpMic"));if(!S.prefs.voice)$("tpMic").innerHTML="";rollScreen()});
 }
-function keys(){return `<div class="tpkeys">${CATS.map(c=>`<span style="--cc:${c.color}"><em></em>${c.name}</span>`).join("")}</div>`}
+/* ---------- the track: a ring of squares instead of a board ---------- */
+const N=30;
+const sqAt=i=>{i=((i%N)+N)%N;
+  if(i%5===0)return {i,t:"W",cat:CATS[(i/5)%6]};
+  if(i%10===7)return {i,t:"R",cat:null};
+  return {i,t:"Q",cat:CATS[i%6]};};
+const sqName=s=>s.t==="R"?"Roll again":s.t==="W"?s.cat.name+" wedge square":s.cat.name;
+function track(p,cand){
+  let h="";
+  for(let o=-6;o<=6;o++){
+    const s=sqAt(p.pos+o),here=TP.players.filter(q=>q!==p&&q.pos%N===s.i);
+    const c=(cand||[]).find(x=>x.o===o);
+    h+=`<div class="tpsq t${s.t}${o===0?" me":""}${c?" cand":""}" style="--cc:${s.cat?s.cat.color:"#6c6a85"};--pc:${p.color}">
+      <span class="tpmk">${c?c.lab:""}</span><i>${s.t==="W"?"★":s.t==="R"?"↻":""}</i>
+      <span class="tpdots">${here.map(q=>`<u style="background:${q.color}"></u>`).join("")}</span>${o===0?`<span class="tptok" style="background:${p.color}"></span>`:""}</div>`;
+  }
+  return `<div class="tptrack">${h}</div><div class="tpleg"><span>★ wedge square: win the wedge</span><span>↻ roll again</span><span>colour = category</span></div>`;
+}
+const pieSz=()=>Math.min(150,Math.max(90,Math.round(Math.min(innerWidth,innerHeight)*.2)));
+const eyeb=(p,t)=>`<span class="eyebrow">${avatarHTML(p,"sm")} <span style="color:${p.color}">${esc(p.name)}</span>${t?", "+t:""}</span>`;
+const phase=(ph)=>{TP.ph=ph;TP.sn++};
 function rollScreen(){
-  const p=cur();TP.live=false;score(TP.turn%TP.players.length);
+  const p=cur();TP.live=false;score(TP.turn%TP.players.length);phase("roll");
   $("tpInfo").textContent=`${CFG.wedges} wedges to win`;
-  stage(`<div class="tphead"><span class="eyebrow">${avatarHTML(p,"sm")} <span style="color:${p.color}">${esc(p.name)}</span>, ${TP.streak?"roll again":"you're up"}${TP.players.length>1&&!TP.streak&&!TP.phones?" · pass the phone":""}</span><h2>Roll for a category</h2></div>
-    <div class="tpwheel" id="tpWheel">${CATS.map(c=>`<i style="--cc:${c.color}" title="${c.name}">${c.icon}</i>`).join("")}</div>
-    ${pie(p,Math.min(150,Math.max(90,Math.round(Math.min(innerWidth,innerHeight)*.2))))}
+  stage(`<div class="tphead">${eyeb(p,TP.extra?"bonus roll":"your turn")}<h2>Roll the die</h2></div>
+    ${track(p)}
+    ${pie(p,pieSz())}
     <button class="btn gold" id="tpRoll">Roll</button>`);
-  $("tpRoll").onclick=roll;
+  $("tpRoll").onclick=doRoll;
   setTimeout(()=>{const b=$("tpRoll");b&&b.focus({preventScroll:true})},40);
 }
-function roll(){
-  if(TP.rolling)return;TP.rolling=true;
+function doRoll(){
+  if(TP.ph!=="roll"||TP.rolling)return;TP.rolling=true;
   const p=cur();
-  // Prefer categories this player still needs, but any can come up (like the board).
-  const need=CATS.filter(c=>!p.wedges.has(c.id));
-  const pool=need.length&&Math.random()<.7?need:CATS;
-  const target=pool[Math.floor(Math.random()*pool.length)];
-  const idx=CATS.indexOf(target),els=[...$("tpWheel").children];
-  $("tpRoll").disabled=true;
-  let step=0,total=CATS.length*2+((idx-0+CATS.length)%CATS.length);
+  const d=1+Math.floor(Math.random()*6);
+  TP.die=d;phase("rolling");
+  stage(`<div class="tphead">${eyeb(p)}<h2>Rolling…</h2></div><div class="tpdie" id="tpDie">?</div>${track(p)}`);
+  let k=0;const el=$("tpDie");
   const tick=()=>{
-    els.forEach(e=>e.classList.remove("on"));els[step%CATS.length].classList.add("on");SFX.tick();
-    if(step>=total){TP.rolling=false;setTimeout(()=>question(target),500);return}
-    step++;setTimeout(tick,60+step*step*.7);
+    const e=$("tpDie");if(!e)return;
+    if(k>=12){e.textContent=d;e.classList.add("done");SFX.win&&SFX.win();TP.rolling=false;setTimeout(()=>moveScreen(),900);return}
+    e.textContent=1+Math.floor(Math.random()*6);SFX.tick();k++;setTimeout(tick,60+k*14);
   };tick();
 }
+function moveScreen(){
+  const p=cur(),d=TP.die;phase("move");
+  const opts=[{o:d,lab:"▶"},{o:-d,lab:"◀"}].map(x=>({...x,s:sqAt(p.pos+x.o)}));
+  TP.opts=opts;
+  const lab=x=>(x.o>0?"Forward ":"Back ")+d+": "+sqName(x.s);
+  stage(`<div class="tphead">${eyeb(p)}<h2>You rolled a ${d}</h2><p>Pick which way to move</p></div>
+    <div class="tpdie done">${d}</div>
+    ${track(p,opts)}
+    <div class="tpbtns">${opts.map((x,i)=>`<button class="btn gold tpmv" data-i="${i}" style="${x.s.cat?"background:"+x.s.cat.color+";color:#1a1636":""}">${lab(x)}</button>`).join("")}</div>`);
+  [...document.querySelectorAll(".tpmv")].forEach(b=>b.onclick=()=>doMove(+b.dataset.i));
+  TP.moveLabels=opts.map(lab);
+}
+function doMove(i){
+  if(TP.ph!=="move")return;const x=TP.opts[i];if(!x)return;
+  const p=cur();p.pos=((p.pos+x.o)%N+N)%N;phase("land");SFX.go&&SFX.go();
+  const s=sqAt(p.pos);TP.sq=s;
+  if(s.t==="R"){
+    stage(`<div class="tphead">${eyeb(p)}<h2>Roll again!</h2></div>${track(p)}`);
+    setTimeout(()=>{if(TP.ph==="land")rollScreen()},1400);return;
+  }
+  stage(`<div class="tphead">${eyeb(p)}<h2>${s.t==="W"?"Wedge square":"You landed on"}</h2><span class="tpcat" style="--cc:${s.cat.color}">${s.cat.name}</span></div>${track(p)}`);
+  setTimeout(()=>{if(TP.ph==="land")question(s.cat)},1300);
+}
 function question(cat){
-  const p=cur();TP.cat=cat;TP.q=pickQ(cat.id);TP.live=false;
-  const has=p.wedges.has(cat.id);
-  stage(`<div class="tphead"><span class="eyebrow">${avatarHTML(p,"sm")} <span style="color:${p.color}">${esc(p.name)}</span></span>
-      <span class="tpcat" style="--cc:${cat.color}">${cat.icon} ${cat.name}</span><p>${has?"You already have this wedge":"Win the "+cat.name+" wedge"} · ${CFG.secs} seconds</p></div>
+  const p=cur();TP.cat=cat;TP.q=pickQ(cat.id);TP.live=false;phase("q");
+  const w=TP.sq&&TP.sq.t==="W",has=p.wedges.has(cat.id);
+  TP.note=w?(has?"You already own this wedge, just a normal question":"WEDGE QUESTION: answer to win the "+cat.name+" wedge"):"Normal question: no wedge here, but a right answer earns a bonus roll";
+  stage(`<div class="tphead">${eyeb(p)}
+      <span class="tpcat" style="--cc:${cat.color}">${w?"★ ":""}${cat.name}</span><p>${TP.note} · ${CFG.secs} seconds</p></div>
     <p class="tpq">${esc(TP.q.q)}</p>
     <button class="btn gold" id="tpGo">Start the clock</button>`);
-  $("tpGo").onclick=()=>play();
+  $("tpGo").onclick=doGo;
   setTimeout(()=>{const b=$("tpGo");b&&b.focus({preventScroll:true})},40);
 }
+function doGo(){if(TP.ph==="q")play()}
 function play(){
-  const p=cur(),cat=TP.cat;
-  stage(`<div class="tphead"><span class="tpcat" style="--cc:${cat.color}">${cat.icon} ${cat.name}</span></div>
+  const p=cur(),cat=TP.cat;phase("play");
+  stage(`<div class="tphead"><span class="tpcat" style="--cc:${cat.color}">${TP.sq&&TP.sq.t==="W"?"★ ":""}${cat.name}</span></div>
     <p class="tpq">${esc(TP.q.q)}</p>
     <div class="tpclockrow" style="--cc:${cat.color}"><div class="tpclock" id="tpClock">${CFG.secs}</div><div class="tpbar"><i id="tpBar"></i></div></div>
     <form class="tpinput" id="tpForm" autocomplete="off"><input id="tpIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="Type your answer" aria-label="Type your answer"><button class="btn gold" type="submit">Answer</button></form>
@@ -241,32 +299,73 @@ function play(){
 function finish(right,why){
   if(!TP.live)return;
   TP.live=false;clearInterval(TP.timer);
-  const p=cur(),cat=TP.cat,pi=TP.turn%TP.players.length;
+  const p=cur(),cat=TP.cat,pi=TP.turn%TP.players.length,wsq=TP.sq&&TP.sq.t==="W";
   let gained=false;
-  if(right){SFX.win();gained=!p.wedges.has(cat.id);if(gained)p.wedges.add(cat.id)}
+  if(right){SFX.win();gained=wsq&&!p.wedges.has(cat.id);if(gained)p.wedges.add(cat.id)}
   else why==="time"?SFX.buzz():SFX.pass();
-  score(pi);
+  score(pi);phase("result");TP.ok=right;TP.gained=gained;TP.why=why;
   const won=right&&p.wedges.size>=CFG.wedges;
-  stage(`<div class="tphead"><span class="tpcat" style="--cc:${cat.color}">${cat.icon} ${cat.name}</span>
-      <h2>${right?(gained?"Wedge won!":"Correct!"):why==="time"?"Time's up!":"Not this time"}</h2></div>
+  TP.bonus=right&&!won&&TP.extra<1;
+  TP.nextLab=won?"See results":TP.bonus?"Roll again":TP.players.length>1?"Next player":"Roll again";
+  stage(`<div class="tphead"><span class="tpcat" style="--cc:${cat.color}">${wsq?"★ ":""}${cat.name}</span>
+      <h2>${right?(gained?"Wedge won!":"Correct!"):why==="time"?"Time's up!":"Not this time"}</h2>${right&&!gained&&wsq?`<p>You already had this wedge</p>`:right&&!wsq?`<p>No wedge on a normal square</p>`:""}</div>
     <p class="tpq" style="font-size:clamp(1rem,2.6vmin,1.4rem);color:var(--muted)">${esc(TP.q.q)}</p>
     <p class="tpans">${esc(TP.q.a)}</p>
-    ${right&&gained?pie(p,Math.min(150,Math.max(90,Math.round(Math.min(innerWidth,innerHeight)*.2)))):""}
+    ${right&&gained?pie(p,pieSz()):""}
     <div class="tpbtns">
       ${right?"":`<button class="btn" id="tpRight" type="button">We got it right</button>`}
-      <button class="btn gold" id="tpNext" type="button">${won?"See results":right?"Roll again":TP.players.length>1?"Next player":"Roll again"}</button>
+      <button class="btn gold" id="tpNext" type="button">${TP.nextLab}</button>
     </div>`);
-  const advance=ok=>{
-    if(ok&&p.wedges.size>=CFG.wedges)return results(p);
-    if(ok){TP.streak=1}else{TP.streak=0;TP.turn++}
-    rollScreen();
-  };
   if(won){confetti([cat.color,"#ffc94a","#fffdf6"])}
-  $("tpNext").onclick=()=>{stopConfetti();advance(right)};
+  $("tpNext").onclick=doNext;
   const r=$("tpRight");
   if(r)r.onclick=()=>{ // judge override for a spoken answer the mic missed
-    stopConfetti();SFX.win();if(!p.wedges.has(cat.id))p.wedges.add(cat.id);score(pi);advance(true)};
+    SFX.win();TP.ok=true;if(wsq&&!p.wedges.has(cat.id)){p.wedges.add(cat.id);TP.gained=true}score(pi);
+    TP.bonus=p.wedges.size<CFG.wedges&&TP.extra<1;doNext()};
   setTimeout(()=>{const b=$("tpNext");b&&b.focus({preventScroll:true})},60);
+}
+function doNext(){
+  if(TP.ph!=="result")return;
+  stopConfetti();const p=cur();
+  if(TP.ok&&p.wedges.size>=CFG.wedges)return results(p);
+  if(TP.ok&&TP.bonus){TP.extra=1}else{TP.extra=0;TP.turn++}
+  rollScreen();
+}
+/* ---------- phone companion ---------- */
+const active=()=>{const e=$("tp");return !!e&&!e.hidden&&TP.players.length>0};
+function sceneFor(ph){
+  const P=TP.players,cu=P.length?cur():null,me=P.find(q=>q.pid&&q.pid===ph.pid);
+  const sc=P.map(q=>({n:q.name,s:q.wedges.size,c:q.color,on:q===cu?1:0,pid:q.pid,av:avatarSrcSafe(q)}));
+  const base={th:"tp",scores:sc,btns:[],sn:TP.sn,me:0};
+  if(!me)return {...base,head:{e:"Trivial Pursuit",t:"Watch the TV",s:"You'll be in the next game"}};
+  const mine=me===cu,wc=me.wedges.size+" of "+CFG.wedges+" wedges";
+  if(!mine){
+    const pn=cu.name;
+    if(TP.ph==="play")return {...base,head:{e:"Trivial Pursuit",t:pn+" is answering",s:"Shout it out if you know it. "+wc},clock:String(Math.ceil(TP.left))};
+    return {...base,head:{e:"Trivial Pursuit",t:pn+"'s turn",s:"Your turn is coming. "+wc}};
+  }
+  const b={...base,me:1};
+  switch(TP.ph){
+    case "roll":return {...b,head:{e:wc,t:TP.extra?"Bonus roll":"Your turn",s:"Roll the die to move"},btns:[{t:"Roll the die",a:"roll",v:0}]};
+    case "rolling":return {...b,head:{e:wc,t:"Rolling…",s:""}};
+    case "move":return {...b,head:{e:wc,t:"You rolled a "+TP.die,s:"Pick which way to move"},btns:TP.opts.map((x,i)=>({t:TP.moveLabels[i],a:"move",v:i,c:x.s.cat?x.s.cat.color:null}))};
+    case "land":return {...b,head:{e:wc,t:TP.sq&&TP.sq.t==="R"?"Roll again!":"Landed on "+sqName(TP.sq),s:"Watch the TV"}};
+    case "q":return {...b,head:{e:TP.cat.name,t:TP.q.q,s:TP.note},btns:[{t:"Start the clock",a:"go",v:0}]};
+    case "play":return {...b,head:{e:TP.cat.name+(TP.sq&&TP.sq.t==="W"?" · wedge question":""),t:TP.q.q,s:""},clock:String(Math.ceil(TP.left)),inp:{ph:"Type your answer"},btns:[{t:"Pass",a:"pass",v:0}],fb:txt0("tpFb")};
+    case "result":return {...b,head:{e:TP.cat.name,t:TP.ok?(TP.gained?"Wedge won!":"Correct!"):(TP.why==="time"?"Time's up!":"Not this time"),s:"Answer: "+TP.q.a},btns:[{t:TP.nextLab,a:"next",v:0}]};
+  }
+  return {...b,head:{e:"Trivial Pursuit",t:"Get ready",s:"Watch the TV"}};
+}
+function avatarSrcSafe(q){try{return avatarSrc(q.slot!=null?q.slot:0)}catch(e){return ""}}
+function txt0(id){const e=$(id);return e?(e.textContent||"").trim():""}
+function act(p,m){
+  const cu=TP.players.length&&cur();if(!cu||!cu.pid||cu.pid!==p.pid)return;
+  if(m.a==="roll")doRoll();else if(m.a==="move")doMove(+m.i);else if(m.a==="go")doGo();
+  else if(m.a==="pass"){if(TP.ph==="play")finish(false,"pass")}else if(m.a==="next")doNext();
+}
+function text(p,v){
+  const cu=TP.players.length&&cur();if(!cu||!cu.pid||cu.pid!==p.pid||TP.ph!=="play")return;
+  const s=String(v||"").slice(0,60);if(s.trim())take(s,true);
 }
 function results(winner){
   window.LB&&LB.record("tp",TP.players.map(p=>({name:p.name,color:p.color,score:p.wedges.size,win:p===winner})));
@@ -278,8 +377,8 @@ function results(winner){
     <div class="row"><button class="btn" id="tpMenu">Game Night menu</button><button class="btn gold" id="tpAgain">Play again</button></div>`);
   confetti([winner.color,"#ffc94a","#fffdf6"]);
   $("tpMenu").onclick=()=>{stopConfetti();endGame();show("hub")};
-  $("tpAgain").onclick=()=>{stopConfetti();TP.players.forEach(p=>p.wedges=new Set());TP.turn=0;TP.streak=0;TP.used=new Set();rollScreen()};
+  $("tpAgain").onclick=()=>{stopConfetti();TP.players.forEach(p=>p.wedges=new Set());TP.turn=0;TP.extra=0;TP.used=new Set();rollScreen()};
   setTimeout(()=>{const b=$("tpAgain");b&&b.focus({preventScroll:true})},60);
 }
-window.__TP={QS,TP,CFG,take,correct};
+window.__TP={QS,TP,CFG,take,correct,sceneFor,act,text,active};
 })();
