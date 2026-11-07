@@ -46,6 +46,7 @@ const css=`
 .portrait .wfchip .tt{display:none}.portrait .wfkeys button{width:clamp(28px,8.6vw,40px);height:clamp(32px,5.2vh,42px)}
 .wfdisc{width:100%;height:100%;transition:transform 4.2s cubic-bezier(.12,.62,.12,1)}
 .wfdisc svg{width:100%;height:100%;display:block;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+.wfclock{font-family:var(--f-clock);font-size:clamp(1.6rem,5vmin,2.8rem);color:var(--gold);text-align:center;line-height:1;font-variant-numeric:tabular-nums}.wfclock.low{color:var(--hot)}
 .wfptr{position:absolute;left:50%;top:-3%;transform:translateX(-50%);width:9%;z-index:2;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
 .wfbig{font-family:var(--f-display);font-weight:900;font-size:clamp(1.8rem,6vh,3.4rem);color:var(--gold);line-height:1}
 .game.live .wfart{width:64px;height:64px;border-radius:50%;background:conic-gradient(#e0457b 0 18deg,#3b9dff 0 36deg,#111 0 54deg,#ffd23f 0 72deg,#3ddc84 0 90deg,#ff8a3d 0 108deg,#fffdf6 0 126deg,#a259ff 0 144deg,#ff5fb0 0 162deg,#2bc4c4 0 180deg,#ffb020 0 198deg,#111 0 216deg,#6c8cff 0 234deg,#e0457b 0 252deg,#3ddc84 0 270deg,#ffd23f 0 288deg,#ff8a3d 0 306deg,#3b9dff 0 324deg,#fffdf6 0 342deg,#f0c419 0);border:4px solid #fffdf6}
@@ -124,7 +125,20 @@ const W={players:[],turn:0,round:0,puz:null,rev:new Set(),called:new Set(),phase
 const cur=()=>W.players[W.turn%W.players.length];
 const letterCount=l=>W.puz.text.split("").filter(c=>c===l).length;
 const puzLetters=()=>new Set(W.puz.text.split("").filter(c=>c>="A"&&c<="Z"));
-function endGame(){W.phase="";W.busy=false;voiceStop();stopConfetti()}
+const PICK_SECS=60;
+function stopClock(){clearInterval(W.tm);W.tm=null}
+function startClock(){
+  stopClock();W.left=PICK_SECS;
+  W.tm=setInterval(()=>{
+    if(!$("overlay").hidden)return;
+    if(W.phase!=="cons"&&W.phase!=="vowel"){stopClock();return}
+    W.left=Math.max(0,W.left-1);
+    const c=$("wfClock");if(c){c.textContent=W.left;c.classList.toggle("low",W.left<=10)}
+    if(W.left<=5&&W.left>0)SFX.low&&SFX.low();
+    if(W.left<=0){stopClock();const p=cur();SFX.buzz();W.phase="reveal";W.busy=true;$("wfCtl").innerHTML="";msg("Time's up, "+p.name+"! Turn lost.","bad");nextPlayer("")}
+  },1000);
+}
+function endGame(){stopClock();W.phase="";W.busy=false;voiceStop();stopConfetti()}
 const $m=()=>$("wfMsg");
 function msg(t,k){const el=$m();if(el){el.className="wfmsg"+(k?" "+k:"");el.textContent=t}}
 
@@ -182,6 +196,7 @@ function nextPuzzle(){
   $("wfMain").innerHTML=mainHTML("");sizeBoard();turnStart(true);
 }
 function turnStart(first){
+  stopClock();
   const p=cur();score();W.phase="act";W.busy=false;
   const noCons=![...puzLetters()].some(l=>!VOWELS.includes(l)&&!W.called.has(l));
   const noVow=![...puzLetters()].some(l=>VOWELS.includes(l)&&!W.called.has(l));
@@ -191,7 +206,7 @@ function turnStart(first){
   $("wfSpin").onclick=spin;$("wfVowel").onclick=()=>keys("vowel");$("wfSolveB").onclick=solveOpen;
   setTimeout(()=>{const b=$("wfSpin")&&!$("wfSpin").disabled?$("wfSpin"):$("wfSolveB");b&&b.focus({preventScroll:true})},40);
 }
-function nextPlayer(why){
+function nextPlayer(why){stopClock();
   W.turn++;W.phase="";W.busy=true;
   setTimeout(()=>{if($("wf").hidden)return;turnStart(false);if(why)msg(why+" "+cur().name+"'s turn.")},1300);
 }
@@ -217,14 +232,15 @@ function keys(kind){
   if(vow){if(p.rc<VCOST)return;}
   W.phase=vow?"vowel":"cons";
   const letters=ALL.split("").filter(l=>vow?VOWELS.includes(l):!VOWELS.includes(l));
-  $("wfCtl").innerHTML=`<div class="wfkeys">${letters.map(l=>`<button data-l="${l}" class="${vow?"v":""}"${W.called.has(l)?" disabled":""}>${l}</button>`).join("")}</div>${vow?`<button class="btn ghost" id="wfCancelV">Back</button>`:""}`;
+  $("wfCtl").innerHTML=`<div class="wfclock" id="wfClock">${PICK_SECS}</div><div class="wfkeys">${letters.map(l=>`<button data-l="${l}" class="${vow?"v":""}"${W.called.has(l)?" disabled":""}>${l}</button>`).join("")}</div>${vow?`<button class="btn ghost" id="wfCancelV">Back</button>`:""}`;
   msg(vow?`Pick a vowel for $${VCOST}`:`$${W.val.toLocaleString("en-AU")}: pick a consonant`);
   $("wfCtl").querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>callLetter(b.dataset.l));
   const cv=$("wfCancelV");if(cv)cv.onclick=()=>turnStart(false);
+  startClock();
   setTimeout(()=>{const f=$("wfCtl").querySelector("[data-l]:not([disabled])");f&&f.focus({preventScroll:true})},40);
 }
 function callLetter(l){
-  if(W.phase!=="cons"&&W.phase!=="vowel")return;
+  if(W.phase!=="cons"&&W.phase!=="vowel")return;stopClock();
   if(W.called.has(l)||(W.phase==="vowel")!==VOWELS.includes(l))return;
   const p=cur(),vow=W.phase==="vowel";
   W.called.add(l);W.phase="reveal";W.busy=true;$("wfCtl").innerHTML="";
@@ -242,7 +258,7 @@ function callLetter(l){
   },n*420+700);
 }
 function solveOpen(){
-  if(W.phase!=="act"&&W.phase!=="cons"&&W.phase!=="vowel")return;
+  if(W.phase!=="act"&&W.phase!=="cons"&&W.phase!=="vowel")return;stopClock();
   W.phase="solve";
   $("wfCtl").innerHTML=`<form class="wfsolve" id="wfForm" autocomplete="off"><input id="wfIn" type="text" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="Type the puzzle" aria-label="Solve the puzzle"><button class="btn gold" type="submit">Solve</button></form><button class="btn ghost" id="wfCancelS" type="button">Back</button>`;
   msg(`${cur().name}: say or type the whole puzzle`);
@@ -329,7 +345,7 @@ function sceneFor(p){
   if(W.phase==="cons"||W.phase==="vowel"){
     const vow=W.phase==="vowel";
     const letters=ALL.split("").filter(l=>vow?VOWELS.includes(l):!VOWELS.includes(l));
-    return {...base,head:{e,t:vow?"Pick a vowel":"$"+W.val.toLocaleString("en-AU")+": pick a consonant",s:"Look at the board on the TV"},
+    return {...base,head:{e,t:vow?"Pick a vowel":"$"+W.val.toLocaleString("en-AU")+": pick a consonant",s:"Look at the board on the TV"},clock:String(W.left),
       btns:letters.map(l=>({t:l,a:"letter",v:l,d:W.called.has(l)?1:0})).concat([{t:"Back",cls:"ghost",a:"back"}])};
   }
   if(W.phase==="solve")return {...base,head:{e,t:"Solve it!",s:"Type the whole puzzle"},inp:{ph:"Type the puzzle"},btns:[{t:"Back",cls:"ghost",a:"back"}]};
