@@ -3,7 +3,7 @@
    phone, except one randomly chosen player (only they are told) who types a believable lie.
    Then everyone votes for who they think the liar is.
    - If every detective picks the liar: each detective scores 2.
-   - Otherwise the liar scores 1 for every detective who guessed wrong. */
+   - Otherwise the liar scores 1 for every detective, even those who guessed right. */
 (function(){
 const QS=window.BM_QS||[];
 const CFG={rounds:8,ask:45,vote:30};
@@ -91,7 +91,7 @@ function openSetup(){
       <li>A very general question appears, like <b>how many times a week do you go to the gym?</b></li>
       <li>Everyone types their <b>honest answer</b> on their phone. <b>One random player</b> is secretly told to type a <b>believable lie</b> instead.</li>
       <li>Everyone votes for who they think the liar is.</li>
-      <li>If <b>everyone</b> picks the liar, each detective scores <b>2</b>. If not, the liar scores <b>1 for every player who guessed wrong</b>.</li>
+      <li>If <b>everyone</b> picks the liar, each detective scores <b>2</b>. If it isn't unanimous, the liar scores <b>1 for every other player</b>, even the ones who guessed right.</li>
       <li>The liar is chosen at random every round, so it can be you again and again.</li></ul></div>
     <div class="field"><span class="eyebrow">Rounds</span><div class="seg" id="bmRoundsSeg"></div></div>
     <div class="field"><span class="eyebrow">Seconds to answer</span><div class="seg" id="bmAskSeg"></div></div>
@@ -198,7 +198,7 @@ function showMeter(){
   const L=liarP();const det=BM.players.filter(p=>p!==L);
   const right=det.filter(p=>BM.votes[p.pid]===L.pid),wrong=det.length-right.length;
   BM.caught=wrong===0;BM.wrong=wrong;BM.gain={};
-  if(BM.caught)det.forEach(p=>{BM.gain[p.pid]=2});else BM.gain[L.pid]=wrong;
+  if(BM.caught)det.forEach(p=>{BM.gain[p.pid]=2});else BM.gain[L.pid]=det.length;
   BM.players.forEach(p=>{p.pts+=BM.gain[p.pid]||0});
   const fooled=det.length?wrong/det.length:0,ang=Math.round(-80+fooled*160);
   const votersFor=pid=>BM.players.filter(p=>p!==byPid(pid)&&BM.votes[p.pid]===pid);
@@ -208,7 +208,7 @@ function showMeter(){
   <div class="bmgauge"><svg viewBox="0 0 200 112"><path d="M10 100A90 90 0 0 1 77 13" fill="none" stroke="#3dff7a" stroke-width="14"/><path d="M77 13A90 90 0 0 1 123 13" fill="none" stroke="#ffd400" stroke-width="14"/><path d="M123 13A90 90 0 0 1 190 100" fill="none" stroke="#ff2d2d" stroke-width="14"/>
   <text x="8" y="111" fill="#8fd4a8" font-size="9" font-weight="800">CAUGHT</text><text x="192" y="111" fill="#ff7a7a" font-size="9" font-weight="800" text-anchor="end">FOOLED</text>
   <g class="bmneedle" style="--ang:${ang}deg"><rect x="98" y="26" width="4" height="76" fill="#fff"/></g><circle cx="100" cy="100" r="8" fill="#fff"/></svg></div>
-  <div class="bmsum">${BM.caught?`Everyone caught ${esc2(L.name)}!<small>Each detective scores 2</small>`:`${esc2(L.name)} fooled ${wrong} ${wrong===1?"player":"players"}!<small>${esc2(L.name)} scores ${wrong}</small>`}</div>
+  <div class="bmsum">${BM.caught?`Everyone caught ${esc2(L.name)}!<small>Each detective scores 2</small>`:`${esc2(L.name)} got away with it!<small>${wrong} ${wrong===1?"player was":"players were"} fooled · ${esc2(L.name)} scores ${det.length}</small>`}</div>
   <div class="row"><button class="btn gold bmnext" id="bmNext">${BM.round>=CFG.rounds?"See results":"Next round"}</button></div>`);
   score();
   $("bmNext").onclick=()=>{if(BM.phase==="result")nextRound()};
@@ -247,7 +247,7 @@ function sceneFor(p){
   }
   if(BM.phase==="meter"||BM.phase==="result"){
     const L=liarP();
-    return {...base,head:{e:rl,t:isLiar?(BM.caught?"You got caught":"You fooled them!"):(BM.votes[p.pid]===L.pid?"You caught the liar!":"You got fooled"),s:"The liar was "+L.name+"."+(BM.caught?" Everyone caught them.":" "+L.name+" fooled "+BM.wrong+".")},big:"",
+    return {...base,head:{e:rl,t:isLiar?(BM.caught?"You got caught":"You fooled them!"):(BM.votes[p.pid]===L.pid?"You caught the liar!":"You got fooled"),s:"The liar was "+L.name+"."+(BM.caught?" Everyone caught them.":" "+L.name+" scores "+(BM.players.length-1)+".")},big:"",
       btns:BM.phase==="result"?[{t:BM.round>=CFG.rounds?"See results":"Next round",cls:"gold",a:"next"}]:[]};
   }
   if(BM.phase==="final"){const o=BM.players.slice().sort((a,b)=>b.pts-a.pts);return {...base,head:{e:"Final",t:o[0].name+" wins!",s:o.map(q=>q.name+" "+q.pts).join("  ·  ")}}}
