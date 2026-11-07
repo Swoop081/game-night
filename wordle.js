@@ -137,7 +137,6 @@ function submit(pid,raw){
   const p=byPid(pid);if(!p||WR.phase!=="play"||p.done)return;
   const w=String(raw||"").trim().toLowerCase();
   if(!/^[a-z]{5}$/.test(w)){p.fb="Type a 5 letter word";return}
-  if(!WR_OK.has(w)&&!p.cpu){p.fb=w.toUpperCase()+" isn't in the word list";return}
   p.fb="";const s=feedback(w,WR.word);p.rows.push({w,s});
   for(let i=0;i<5;i++){const l=w[i],v=+s[i];if(p.kb[l]==null||v>p.kb[l])p.kb[l]=v}
   SFX.tick&&SFX.tick();
@@ -177,8 +176,8 @@ function sceneFor(p){
   if(WR.phase==="final")return {...base,head:{e:"Game over",t:WR.winners.includes(me)?"YOU WIN!":WR.winners.map(x=>x.name).join(" & ")+" wins!",s:"You scored "+me.pts}};
   if(WR.phase==="play"){
     const rows=me.rows.map(r=>({w:r.w,s:r.s}));
-    if(me.done)return {...base,rows,kb:me.kb,clock:String(WR.left),head:{e,t:me.ok?"Solved! +"+me.gain:"Out of guesses",s:me.ok?"In "+me.rows.length+" guess"+(me.rows.length===1?"":"es"):"Waiting for the others"}};
-    return {...base,rows,kb:me.kb,clock:String(WR.left),fb:me.fb||"",head:{e,t:"Guess the word",s:"Guess "+(me.rows.length+1)+" of 6"},inp:{ph:"5 letter word"}};
+    if(me.done)return {...base,rows,kb:me.kb,head:{e,t:me.ok?"Solved! +"+me.gain:"Out of guesses",s:me.ok?"In "+me.rows.length+" guess"+(me.rows.length===1?"":"es"):"Waiting for the others"}};
+    return {...base,rows,kb:me.kb,kbd:1,fb:me.fb||"",head:{e,t:"Guess the word",s:"Guess "+(me.rows.length+1)+" of 6  ·  "+WR.left+"s left"},inp:{ph:"5 letter word"}};
   }
   if(WR.phase==="reveal")return {...base,rows:me.rows.map(r=>({w:r.w,s:r.s})),head:{e,t:me.ok?"+"+me.gain+" points":"No points",s:"The word was "+WR.word.toUpperCase()}};
   return {...base,head:{e:"Wordle Race",t:"Get ready",s:"Watch the TV"}};

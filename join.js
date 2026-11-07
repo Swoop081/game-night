@@ -100,7 +100,7 @@
 
   /* ----- companion screen: mirrors the TV game and sends taps back ----- */
   const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  let sn=-1,numv="",lastBtn="",picU="",lastScr=null;
+  let wbuf="",wcount=-1,sn=-1,numv="",lastBtn="",picU="",lastScr=null;
   const tapBtn=i=>{if(conn&&conn.open&&lastScr)conn.send({k:"tap",i,sn:lastScr.sn})};
   const scr=m=>{
     const C=$("cmp");if(!C)return;
@@ -112,8 +112,12 @@
     $("cmE").textContent=m.head.e||"";$("cmT").textContent=m.head.t||"";$("cmS").textContent=m.head.s||"";
     // main area per game
     let main="";
-    if(m.rows){let h='<div class="wrb">';for(let r=0;r<(m.nr||6);r++){const g=m.rows[r];h+='<div class="wrr">';for(let c=0;c<5;c++)h+='<span class="wt s'+(g?g.s[c]:"x")+'">'+(g?esc(g.w[c]):"")+'</span>';h+='</div>'}h+='</div>';
-      if(m.kb){h+='<div class="wkb">'+"qwertyuiopasdfghjklzxcvbnm".split("").map(l=>'<i class="s'+(m.kb[l]==null?"x":m.kb[l])+'">'+l+'</i>').join("")+'</div>'}main+=h}
+    if(m.rows){
+      if(m.rows.length!==wcount){wcount=m.rows.length;wbuf=""}if(!m.kbd)wbuf="";
+      let h='<div class="wrb">';for(let r=0;r<(m.nr||6);r++){const g=m.rows[r];const act=m.kbd&&r===m.rows.length;h+='<div class="wrr">';for(let c=0;c<5;c++)h+='<span class="wt s'+(g?g.s[c]:"x")+(act&&wbuf[c]?" typed":"")+'">'+(g?esc(g.w[c]):act&&wbuf[c]?esc(wbuf[c]):"")+'</span>';h+='</div>'}h+='</div>';
+      if(m.kbd){h+='<div class="wkb big">'+["qwertyuiop","asdfghjkl","*zxcvbnm#"].map(row=>'<div class="wkr">'+row.split("").map(l=>l==="*"?'<b data-k="enter" class="wide">ENTER</b>':l==="#"?'<b data-k="back" class="wide">&#9003;</b>':'<b data-k="'+l+'" class="s'+(m.kb&&m.kb[l]!=null?m.kb[l]:"x")+'">'+l+'</b>').join("")+'</div>').join("")+'</div>'}
+      else if(m.kb){h+='<div class="wkb">'+"qwertyuiopasdfghjklzxcvbnm".split("").map(l=>'<i class="s'+(m.kb[l]==null?"x":m.kb[l])+'">'+l+'</i>').join("")+'</div>'}
+      main+=h}
     if(m.big)main+='<div class="cmword">'+esc(m.big)+'</div>';
     if(m.cards&&m.cards.length)main='<div class="cmcards">'+m.cards.map(c=>c.b!==undefined?'<div class="pk back">'+esc(c.b)+'</div>':'<div class="pk '+(c.r||"")+'">'+esc(c.n)+'</div>').join("")+'</div>';
     if(m.clock)main+='<div class="cmbig">'+esc(m.clock)+(m.count?' <small style="font-size:1rem;opacity:.7">'+esc(m.count)+'</small>':"")+'</div>';
@@ -140,7 +144,7 @@
         if(b.c)e.style.cssText="background:"+b.c+";color:#fff";e.disabled=!m.me||!!b.d;e.onclick=()=>{if(b.a){if(conn&&conn.open)conn.send({k:"act",a:b.a,i:b.v})}else tapBtn(i)};B.appendChild(e)});
     }
     // type-in box
-    const F=$("cmForm");const showIn=!!m.inp&&!!m.me;F.classList.toggle("hide",!showIn);
+    const F=$("cmForm");const showIn=!!m.inp&&!!m.me&&!m.kbd;F.classList.toggle("hide",!showIn);
     if(showIn&&F.dataset.p!==(m.inp.ph||"")){F.dataset.p=m.inp.ph||"";$("cmIn").placeholder=m.inp.ph||"";$("cmIn").setAttribute("inputmode",m.inp.num?"decimal":"text")}
     // number pad
     const N=$("cmNum");const showNum=!!m.num;N.classList.toggle("hide",!showNum);
@@ -166,6 +170,9 @@
     el.textContent=lastScr.th==="dt"?"":live?(h?"🎤 "+h:"🎤 Your turn: say it out loud"):(lastScr.me?"Your turn":(lastScr.view?"Watch the TV":"Watch the TV · "+($("st").textContent||""))).replace(/ · $/,"");
   };
   setInterval(paintMic,300);
+  if($("cmMain"))$("cmMain").addEventListener("click",e=>{const k=e.target&&e.target.dataset&&e.target.dataset.k;if(!k||!lastScr||!lastScr.kbd||!lastScr.me)return;
+    if(k==="back")wbuf=wbuf.slice(0,-1);else if(k==="enter"){if(wbuf.length===5){if(conn&&conn.open)conn.send({k:"txt",v:wbuf});wbuf=""}else{$("cmFb").textContent="Type a 5 letter word"}}else if(wbuf.length<5)wbuf+=k;
+    const m=lastScr;scr(m)});
   if($("cmForm"))$("cmForm").onsubmit=e=>{e.preventDefault();const v=$("cmIn").value.trim();$("cmIn").value="";if(v&&conn&&conn.open)conn.send({k:"txt",v});$("cmIn").focus({preventScroll:true})};
 
   /* ----- connection (keeps retrying if the TV or wifi blips) ----- */
