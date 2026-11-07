@@ -72,6 +72,11 @@ const css=`
 .game.live .dtart::after{content:"";position:absolute;left:10px;top:30px;width:40px;height:4px;background:#ff7a00;box-shadow:0 12px 0 #ff7a00,8px -12px 0 #ff7a00;transform:rotate(-12deg)}
 `;
 const css2=`
+.dtstag{display:flex;flex-wrap:wrap;gap:1vmin;justify-content:center}
+.dtsi{display:flex;align-items:center;gap:1vmin;padding:.6vmin 1.6vmin .6vmin .6vmin;background:color-mix(in srgb,var(--pc) 30%,#10053a);border-left:.8vmin solid var(--pc);font-family:${FONT};font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:clamp(.7rem,1.9vmin,1.1rem)}
+.dtsi span{background:#ff7a00;color:#14052b;padding:.1em .5em;font-weight:900}.dtsi em{font-style:normal;opacity:.8;min-width:7ch}
+.dtsi .av{--s:clamp(24px,4.6vmin,44px)}
+
 .dtfx .beam{position:absolute;top:-10%;width:34vmin;height:130%;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 80%);transform-origin:50% 0;animation:dtbeam 9s ease-in-out infinite}
 .dtfx .beam.b1{left:8%;--a:-14deg;--b:12deg}.dtfx .beam.b2{left:42%;--a:10deg;--b:-12deg;animation-duration:11s}.dtfx .beam.b3{right:6%;--a:-10deg;--b:14deg;animation-duration:13s}
 @keyframes dtbeam{0%,100%{transform:rotate(var(--a))}50%{transform:rotate(var(--b))}}
@@ -265,7 +270,7 @@ function openSetup(){
   secS.innerHTML=`<div class="topbar"><button class="btn ghost" id="dtBack">← Back</button><h2>Draw This</h2><button class="btn gold" id="dtStart">Start game</button></div>
   <div class="setup-grid"><div class="panel">
     <div class="field"><span class="eyebrow">How to play</span><ul class="rules">
-      <li>Everyone draws the <b>same word</b> on their whiteboard before the timer ends.</li>
+      <li>Everyone draws the <b>same word</b> on their whiteboard, but the word only appears on <b>your phone</b>. Everyone stops at the same moment, but the <b>player in last place gets the word first</b> (the full time) and the <b>leader gets it last</b> (the least time).</li>
       <li>Then <b>vote on your phone</b> for your favourite drawing. You can't vote for yourself.</li>
       <li>Every vote is a <b>point</b>. Most points after the last round wins.</li>
       <li>Every <b>4th round</b> is a <b>head to head</b>: with 4 players, two pairs each get a different secret word on their phones, then each pair judges the other. Every vote is a point.</li>
@@ -363,17 +368,29 @@ function renderReady(){
   stage(isDuel()
    ?`<div class="dtk">${mtag()}Head to head</div>${DT.duels.map(vsHTML).join("")}<div class="dtword s">Word hidden until you start</div><p class="dtp">${DT.duels.length>1?"Press Start and each pair's secret word appears on their phones only. Then the other pair votes.":"Press Start and the two players' secret word appears on their phones. The other player watches, then votes."}</p>
       <div class="row"><button class="btn gold" id="dtGo">Start</button></div>`
-   :`<div class="dtk">${mtag()}Everyone draw</div><div class="dtword s">Word hidden until you start</div><p class="dtp">${CFG.secs} seconds · grab your marker</p>
+   :`<div class="dtk">${mtag()}Everyone draw</div><div class="dtword s">Words appear on phones only</div><p class="dtp">${CFG.secs} seconds · grab your marker. Players lower on the leaderboard get the word first, so the leader gets the least time.</p>
       <div class="row"><button class="btn gold" id="dtGo">Start</button></div>`);
   $("dtGo").onclick=startDraw;
   setTimeout(()=>{const b=$("dtGo");b&&b.focus({preventScroll:true})},40);
 }
+/* Staggered start: everyone's round ends at the same moment, but the player in last place gets the word first (the full time),
+   and each place above them gets it later, so the leader gets the least time. Tied scores share the same time. */
+function allocTimes(){
+  const full=CFG.secs,drawers=DT.players.filter(p=>!isDuel()||drawsIn(p.pid)>=0);
+  const lv=[...new Set(drawers.map(p=>p.pts))].sort((a,b)=>a-b),L=lv.length,out={};
+  drawers.forEach(p=>{const j=lv.indexOf(p.pts);out[p.pid]=L<=1?full:Math.min(full,Math.max(10,Math.round(full*(L-j)/L)))});
+  return out;
+}
+const stagHTML=()=>{const a=DT.alloc||{};const ps=DT.players.filter(p=>a[p.pid]!=null).sort((x,y)=>a[y.pid]-a[x.pid]);
+  const allSame=ps.every(p=>a[p.pid]===CFG.secs);
+  return `<div class="dtstag">${ps.map(p=>`<div class="dtsi" style="--pc:${p.color}">${avatarHTML(p,"sm")}<b>${esc2(p.name)}</b><span>${a[p.pid]}s</span><em id="dtS${p.pid}">${a[p.pid]===CFG.secs?"Drawing":"Waiting"}</em></div>`).join("")}</div>${allSame?"":`<p class="dtp" style="margin:0">Last place gets the word first. The leader gets it last.</p>`}`};
+function stagTick(){const a=DT.alloc||{},el=CFG.secs-DT.left;DT.players.forEach(p=>{if(a[p.pid]==null)return;const e=document.getElementById("dtS"+p.pid);if(!e)return;const d=CFG.secs-a[p.pid];e.textContent=el>=d?"Drawing":"Starts in "+Math.ceil(d-el)+"s"})}
 function startDraw(){
   if(DT.phase!=="ready")return;
-  DT.phase="draw";DT.left=CFG.secs;SFX.go&&SFX.go();score();
+  DT.phase="draw";DT.left=CFG.secs;DT.alloc=allocTimes();SFX.go&&SFX.go();score();
   stage(isDuel()
-   ?`<div class="dtk">${mtag()}Head to head · draw!</div>${DT.duels.map(vsHTML).join("")}<div class="dtword s">Check your phone</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div><div class="row"><button class="btn ghost" id="dtDone">Everyone's done</button></div>`
-   :`<div class="dtk">${mtag()}Draw!</div><div class="dtword s">${esc2(DT.word)}</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div>
+   ?`<div class="dtk">${mtag()}Head to head · draw!</div>${DT.duels.map(vsHTML).join("")}<div class="dtword s">Check your phone</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div>${stagHTML()}<div class="row"><button class="btn ghost" id="dtDone">Everyone's done</button></div>`
+   :`<div class="dtk">${mtag()}Draw!</div><div class="dtword s">Check your phone</div><div class="dtclock" id="dtClock">${CFG.secs}</div><div class="dtbar"><i id="dtBar"></i></div>${stagHTML()}
     <div class="row"><button class="btn ghost" id="dtDone">Everyone's done</button></div>`);
   $("dtDone").onclick=startVote;
   clearInterval(DT.timer);let last=CFG.secs;
@@ -381,6 +398,7 @@ function startDraw(){
     if(!$("overlay").hidden)return;
     DT.left=Math.max(0,DT.left-.1);const c=$("dtClock"),b=$("dtBar");if(!c){clearInterval(DT.timer);return}
     const s=Math.ceil(DT.left);c.textContent=s;b.style.width=(DT.left/CFG.secs*100)+"%";if(s<=10)c.classList.add("low");
+    stagTick();
     if(s!==last){last=s;if(s<=5&&s>0)SFX.low&&SFX.low()}
     if(DT.left<=0){SFX.buzz&&SFX.buzz();startVote()}
   },100);
@@ -397,7 +415,7 @@ function startVote(){
 }
 function paintVote(){
   stage(`<div class="dtk">${mtag()}${isDuel()?"Head to head · vote on your phone":"Time's up · hold up your boards"}</div>
-    ${isDuel()?DT.duels.map(d=>`<div class="dtword s">${esc2(d.word)}</div>${vsHTML(d)}`).join(""):`<div class="dtword s">${esc2(DT.word)}</div>`}
+    ${isDuel()?DT.duels.map(d=>vsHTML(d)).join(""):""}
     <p class="dtp">${isDuel()?"Judge the other pair's drawings. Each vote is a point.":"Vote on your phone for your favourite drawing. Not your own! Each vote is a point."}</p>
     <div class="dtvotes">${voters().map(p=>`<span class="${DT.votes[p.pid]!=null?"ok":""}" style="${DT.votes[p.pid]!=null?"":"opacity:.8"}">${esc2(p.name)} ${DT.votes[p.pid]!=null?"✓":"…"}</span>`).join("")}</div>
     <div class="row"><button class="btn ghost" id="dtSkipVote">Skip voting</button></div>`);
@@ -430,7 +448,7 @@ function renderPerfect(){
   SFX.win&&SFX.win();setTimeout(()=>SFX.win&&SFX.win(),700);
   const P=DT.perfect;
   stage(`<div class="dtperfect">Perfect score!</div>
-    <div class="dtstars">${P.map(p=>`<div class="dtstar" style="--pc:${p.color}">${avatarHTML(p,"lg")}<b>${esc2(p.name)}</b><small>${esc2(wordOf(p))}</small></div>`).join("")}</div>
+    <div class="dtstars">${P.map(p=>`<div class="dtstar" style="--pc:${p.color}">${avatarHTML(p,"lg")}<b>${esc2(p.name)}</b></div>`).join("")}</div>
     <button class="btn gold dtghostbtn" id="dtPhoto" aria-label="Continue">Continue</button>`);
   confetti(P.map(p=>p.color).concat(["#ff7a00","#ffd400","#fffdf6"]));
   $("dtPhoto").onclick=()=>{stopConfetti();renderResult()};
@@ -442,11 +460,11 @@ function renderResult(){
   const card=(p,top)=>`<div class="${top>0&&DT.gain[p.pid]===top?"win":""}">${esc2(p.name)}<em>+${DT.gain[p.pid]}</em></div>`;
   let body,title;
   if(isDuel()){
-    body=DT.duels.map(d=>{const ps=duoPlayers(d),top=Math.max(...ps.map(p=>DT.gain[p.pid]));return `<div class="dtword s">${esc2(d.word)}</div><div class="dtres sm">${ps.map(p=>card(p,top)).join("")}</div>`}).join("");
+    body=DT.duels.map(d=>{const ps=duoPlayers(d),top=Math.max(...ps.map(p=>DT.gain[p.pid]));return `<div class="dtres sm">${ps.map(p=>card(p,top)).join("")}</div>`}).join("");
     title="Head to head · results";
   }else{
     const top=Math.max(...DT.players.map(p=>DT.gain[p.pid])),tie=DT.players.filter(p=>DT.gain[p.pid]===top).length;
-    body=`<div class="dtword s">${esc2(DT.word)}</div><div class="dtres">${DT.players.map(p=>card(p,top)).join("")}</div>`;
+    body=`<div class="dtres">${DT.players.map(p=>card(p,top)).join("")}</div>`;
     title=top===0?"No votes this round":tie>1?"A tie for favourite drawing":"Favourite drawing";
   }
   stage(`<div class="dtk">${mtag()}${title}</div>${body}<div class="row"><button class="btn gold" id="dtNext">${DT.round>=CFG.rounds?"See results":"Next round"}</button></div>`);
@@ -478,11 +496,21 @@ function sceneFor(p){
   if(DT.phase==="announce")return {...base,head:{e:rl,t:annTitle(),s:annSub()},big:DT.mult>1?"×"+DT.mult:"FINAL"};
   if(DT.phase==="ready"){
     if(isDuel())return {...base,head:{e:rl,t:myDuel?"You're up!":"Head to head",s:myDuel?"You and "+partner+" draw the same secret word. Tap Start to see it":names},big:"",btns:[{t:"Start",cls:"gold",a:"start"}]};
-    return {...base,head:{e:rl,t:"Get your marker ready",s:"The word appears when you press Start"},big:"",btns:[{t:"Start",cls:"gold",a:"start"}]};
+    return {...base,head:{e:rl,t:"Get your marker ready",s:"The word appears on your phone after you press Start. Lower on the leaderboard = word first."},big:"",btns:[{t:"Start",cls:"gold",a:"start"}]};
   }
   if(DT.phase==="draw"){
-    if(isDuel())return {...base,head:{e:rl,t:myDuel?"Draw it!":"Watch the duel",s:myDuel?"Keep it secret":names},big:myDuel?myDuel.word:"",clock:String(Math.ceil(DT.left))};
-    return {...base,head:{e:rl,t:"Draw it!",s:"On your whiteboard"},big:DT.word,clock:String(Math.ceil(DT.left))};
+    if(isDuel()){
+      const a=DT.alloc||{},mt=a[p.pid];
+      if(!myDuel||mt==null)return {...base,head:{e:rl,t:"Watch the duel",s:names},big:"",clock:String(Math.ceil(DT.left))};
+      const wait=Math.ceil((CFG.secs-mt)-(CFG.secs-DT.left));
+      if(wait>0)return {...base,head:{e:rl,t:"Get ready...",s:"Your secret word appears in "+wait+"s. You get "+mt+" seconds."},big:"",clock:String(wait)};
+      return {...base,head:{e:rl,t:"Draw it!",s:"Keep it secret · "+mt+" seconds"},big:myDuel.word,clock:String(Math.ceil(DT.left))};
+    }
+    const a=DT.alloc||{},mt=a[p.pid];
+    if(mt==null)return {...base,head:{e:rl,t:"Everyone else is drawing",s:"You'll be voting"},big:"",clock:String(Math.ceil(DT.left))};
+    const wait=Math.ceil((CFG.secs-mt)-(CFG.secs-DT.left));
+    if(wait>0)return {...base,head:{e:rl,t:"Get ready...",s:"Your word appears in "+wait+"s. You get "+mt+" seconds."},big:"",clock:String(wait)};
+    return {...base,head:{e:rl,t:"Draw it!",s:"On your whiteboard · "+mt+" seconds"},big:DT.word,clock:String(Math.ceil(DT.left))};
   }
   if(DT.phase==="vote"){
     const voted=DT.votes[p.pid];
