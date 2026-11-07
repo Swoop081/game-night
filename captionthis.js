@@ -227,7 +227,7 @@ function sceneFor(p){
   if(CT.phase==="final"){const w=CT.winners.includes(me);return {...base,head:{e:"Game over",t:w?"YOU WIN!":CT.winners.map(x=>x.name).join(" & ")+" wins!",s:"You scored "+me.pts}}}
   if(CT.phase==="write"){
     if(me.cap)return {...base,head:{e,t:"Caption locked in",s:"Waiting for the others"},clock:String(CT.left)};
-    return {...base,head:{e,t:"Caption this!",s:"Look at the photo on the TV and write something funny"},clock:String(CT.left),inp:{ph:"Your caption"}};
+    return {...base,head:{e,t:"Caption this!",s:"Look at the photo on the TV and write something funny"},clock:String(CT.left),inp:{ph:"Type your caption here",big:1}};
   }
   if(CT.phase==="vote"){
     const voted=me.vote!=null;

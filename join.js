@@ -144,8 +144,8 @@
         if(b.c)e.style.cssText="background:"+b.c+";color:#fff";e.disabled=!m.me||!!b.d;e.onclick=()=>{if(b.a){if(conn&&conn.open)conn.send({k:"act",a:b.a,i:b.v})}else tapBtn(i)};B.appendChild(e)});
     }
     // type-in box
-    const F=$("cmForm");const showIn=!!m.inp&&!!m.me&&!m.kbd;F.classList.toggle("hide",!showIn);
-    if(showIn&&F.dataset.p!==(m.inp.ph||"")){F.dataset.p=m.inp.ph||"";$("cmIn").placeholder=m.inp.ph||"";$("cmIn").setAttribute("inputmode",m.inp.num?"decimal":"text")}
+    const F=$("cmForm");const showIn=!!m.inp&&!!m.me&&!m.kbd;F.classList.toggle("hide",!showIn);F.classList.toggle("big",!!(m.inp&&m.inp.big));
+    if(showIn&&F.dataset.p!==(m.inp.ph||"")){F.dataset.p=m.inp.ph||"";$("cmIn").placeholder=m.inp.ph||"";$("cmIn").setAttribute("autocapitalize",m.inp.big?"sentences":"off");$("cmIn").setAttribute("inputmode",m.inp.num?"decimal":"text")}
     // number pad
     const N=$("cmNum");const showNum=!!m.num;N.classList.toggle("hide",!showNum);
     if(m.sn!==sn){sn=m.sn;numv="";}
@@ -173,6 +173,7 @@
   if($("cmMain"))$("cmMain").addEventListener("click",e=>{const k=e.target&&e.target.dataset&&e.target.dataset.k;if(!k||!lastScr||!lastScr.kbd||!lastScr.me)return;
     if(k==="back")wbuf=wbuf.slice(0,-1);else if(k==="enter"){if(wbuf.length===5){if(conn&&conn.open)conn.send({k:"txt",v:wbuf});wbuf=""}else{$("cmFb").textContent="Type a 5 letter word"}}else if(wbuf.length<5)wbuf+=k;
     const m=lastScr;scr(m)});
+  if($("cmIn"))$("cmIn").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("cmForm").requestSubmit?$("cmForm").requestSubmit():$("cmForm").dispatchEvent(new Event("submit",{cancelable:true}))}});
   if($("cmForm"))$("cmForm").onsubmit=e=>{e.preventDefault();const v=$("cmIn").value.trim();$("cmIn").value="";if(v&&conn&&conn.open)conn.send({k:"txt",v});$("cmIn").focus({preventScroll:true})};
 
   /* ----- connection (keeps retrying if the TV or wifi blips) ----- */
