@@ -25,7 +25,7 @@ const css=`
 .chactor{display:flex;align-items:center;gap:2vmin;font-family:${FONT};font-weight:900;text-transform:uppercase;color:#fff;font-size:clamp(1.6rem,7vmin,4.5rem);line-height:1}
 .chactor img,.chactor .ini{width:11vmin;height:11vmin;object-fit:cover;background:#fff;display:flex;align-items:center;justify-content:center;color:#3a0f05;font-weight:900;border:.8vmin solid var(--pc)}
 .chsub{font-family:${FONT};font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#ffe3d1;font-size:clamp(1rem,3.2vmin,2rem)}
-.chcat{display:inline-block;background:#ffc83d;color:#3a0f05;font-family:${FONT};font-weight:900;letter-spacing:.18em;text-transform:uppercase;padding:.5vmin 2vmin;font-size:clamp(.9rem,2.6vmin,1.6rem)}
+.chcat.big{font-size:clamp(2rem,9vmin,5.5rem);padding:1vmin 4vmin}.chcat{display:inline-block;background:#ffc83d;color:#3a0f05;font-family:${FONT};font-weight:900;letter-spacing:.18em;text-transform:uppercase;padding:.5vmin 2vmin;font-size:clamp(.9rem,2.6vmin,1.6rem)}
 .chlen{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:2.4vmin 4vmin;max-width:94%}.chw{display:inline-flex;gap:.9vmin}.chw i{display:block;width:3.4vmin;height:.7vmin;background:#fff;margin-top:4vmin}.chwc{width:100%;font-size:2.2vmin;letter-spacing:.2em;color:#ffe3d1;font-weight:800;text-transform:uppercase}.chlen{font-family:${FONT};font-weight:900;letter-spacing:.35em;color:#fff;font-size:clamp(1.4rem,5vmin,3rem)}
 .chword{font-family:${FONT};font-weight:900;text-transform:uppercase;color:#ffc83d;font-size:clamp(2.4rem,11vmin,7rem);line-height:1}
 .chfeed{display:flex;flex-wrap:wrap;gap:.8vmin;justify-content:center;max-height:24%;overflow:hidden}
@@ -133,14 +133,15 @@ function nextTurn(){
 function paintReady(){
   const a=CH.actor;
   $("chStage").innerHTML=`<div class="chmain"><div class="chsub">Up next</div><div class="chactor" style="--pc:${a.color}"><img alt="" src="${esc(av(a))}" onerror="this.outerHTML='<span class=ini>${esc(a.name.charAt(0).toUpperCase())}</span>'">${E(a.name)}</div>
-  <div class="chcat">${E(CH.cat)}</div><div class="chsub">${E(a.name)}, press Start on your phone to see your word</div><div class="chsub" style="opacity:.8">Everyone else: get ready to guess!</div></div>`;
+  <div class="chsub">The category is</div><div class="chcat big">${E(one(CH.cat))}</div><div class="chsub">${E(a.name)}, press Start on your phone to see your word</div><div class="chsub" style="opacity:.8">Everyone else: get ready to guess!</div></div>`;
   SFX.go&&SFX.go();
 }
+const ONE={"Animals":"Animal","Actions":"Action","Movies":"Movie","Jobs":"Job","Phrases":"Phrase","Everyday things":"Everyday thing"};const one=c=>ONE[c]||c;
 const dashes=w=>w.split(/\s+/).map(x=>`<span class="chw">${x.split("").map(()=>"<i></i>").join("")}</span>`).join("")+`<div class="chwc">${w.split(/\s+/).length} word${w.split(/\s+/).length===1?"":"s"}</div>`;
 function startTurn(){
   if(CH.phase!=="ready")return;CH.phase="play";CH.ready=true;CH.t0=Date.now();
     $("chStage").innerHTML=`<div class="chhud"><span>Guess on your phone</span><span class="chclock" id="chClock">${CH.left}</span><span id="chAct">${E(CH.actor.name)} is acting</span></div>
-  <div class="chmain"><div class="chcat">${E(CH.cat)}</div><div class="chlen" id="chLen">${dashes(CH.word)}</div><div class="chsub">${E(CH.actor.name)}: act it out. No talking!</div></div>
+  <div class="chmain"><div class="chsub">It's a</div><div class="chcat big">${E(one(CH.cat))}</div><div class="chlen" id="chLen">${dashes(CH.word)}</div><div class="chsub">${E(CH.actor.name)}: act it out. No talking!</div></div>
   <div class="chfeed" id="chFeed"></div><div class="chwho" id="chWho">${CH.players.filter(p=>p!==CH.actor).map(chip).join("")}</div>`;
   CH.timer=setInterval(tick,1000);
   CH.players.filter(p=>p.cpu).forEach(p=>{if(Math.random()<.55)later(()=>correct(p),(CFG.secs*(.35+Math.random()*.5))*1000)});
@@ -168,7 +169,7 @@ function guess(pid,v){
 function skip(pid){
   if(CH.phase!=="play"||!CH.actor||CH.actor.pid!==pid||CH.skips>=2)return;
   CH.skips++;const w=pickWord();CH.cat=w[0];CH.word=w[1];CH.feed=[];
-  const c=document.querySelector("#chStage .chcat");if(c)c.textContent=CH.cat;
+  const c=document.querySelector("#chStage .chcat");if(c)c.textContent=one(CH.cat);
   const l=$("chLen");if(l)l.innerHTML=dashes(CH.word);
   const f=$("chFeed");if(f)f.innerHTML="";
 }
@@ -201,11 +202,11 @@ function sceneFor(p){
   if(!me)return {...base,head:{e:"Charades",t:"Watch the TV",s:"You'll be in the next game"}};
   if(CH.phase==="final")return {...base,head:{e:"Game over",t:CH.winners.includes(me)?"YOU WIN!":CH.winners.map(x=>x.name).join(" & ")+" wins!",s:"You scored "+me.pts}};
   const act=CH.actor===me;
-  if(CH.phase==="ready")return act?{...base,head:{e,t:"You're up!",s:"Category: "+CH.cat+". Everyone is watching, no talking!"},btns:[{t:"Show my word and start",a:"go",cls:"gold"}]}:{...base,head:{e,t:CH.actor.name+" is up",s:"Category: "+CH.cat+". Get ready to guess"}};
+  if(CH.phase==="ready")return act?{...base,head:{e,t:"You're up!",s:"It's a "+one(CH.cat).toLowerCase()+". Everyone is watching, no talking!"},btns:[{t:"Show my word and start",a:"go",cls:"gold"}]}:{...base,head:{e,t:CH.actor.name+" is up",s:"It's a "+one(CH.cat).toLowerCase()+". Get ready to guess"}};
   if(CH.phase==="play"){
     if(act)return {...base,head:{e,t:"Act it out!",s:"Category: "+CH.cat+". No talking, no spelling"},clock:String(CH.left),big:CH.word,btns:CH.skips<2?[{t:"Skip this word ("+(2-CH.skips)+" left)",a:"skip",cls:"ghost"}]:[]};
     if(CH.got[me.pid])return {...base,head:{e,t:"You got it! +"+CH.got[me.pid],s:"Waiting for the others"},clock:String(CH.left)};
-    return {...base,head:{e,t:"Guess the "+CH.cat.toLowerCase().replace(/s$/,""),s:CH.actor.name+" is acting"},clock:String(CH.left),fb:CH.fb[me.pid]||"",inp:{ph:"Type your guess"}};
+    return {...base,head:{e,t:"Guess the "+one(CH.cat).toLowerCase(),s:CH.actor.name+" is acting"},clock:String(CH.left),big:one(CH.cat),fb:CH.fb[me.pid]||"",inp:{ph:"Type your guess"}};
   }
   if(CH.phase==="reveal")return {...base,head:{e,t:act?"Turn over":(CH.got[me.pid]?"+"+CH.got[me.pid]:"No points"),s:"It was: "+CH.word}};
   return {...base,head:{e:"Charades",t:"Get ready",s:"Watch the TV"}};
