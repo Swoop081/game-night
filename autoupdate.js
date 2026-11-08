@@ -1,7 +1,7 @@
 /* Keeps the app current: checks version.txt (never cached) and reloads at a quiet moment when a newer build is published.
    Needed because the TV browser caches files for ~10 minutes. */
 (function(){
-  const BUILD=90;
+  const BUILD=91;
   let last=Date.now();["keydown","pointerdown","touchstart","wheel","scroll","click"].forEach(ev=>addEventListener(ev,()=>{last=Date.now()},{capture:true,passive:true}));
   const quiet=()=>{if(Date.now()-last<120000)return false;const on=id=>{const e=document.getElementById(id);return e&&!e.hidden};return on("hub")||on("setup")};
   const check=()=>{
