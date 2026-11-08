@@ -48,8 +48,8 @@
 
   /* ---------- join card: the only QR code, top left of the main menu ---------- */
   const jc=document.createElement("div");jc.id="joinCard";
-  jc.style.cssText="position:absolute;top:10px;left:12px;z-index:6;width:min(210px,30vw);background:rgba(10,6,40,.78);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:10px;color:#fff;font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center";
-  jc.innerHTML='<div style="font:800 .8rem system-ui;letter-spacing:.12em;text-transform:uppercase;color:#ffd84a">Scan to join</div><img alt="" style="width:100%;max-width:128px;aspect-ratio:1;background:#fff;padding:5px;border-radius:8px"><div style="font:700 .72rem system-ui;opacity:.85">code <b id="jcCode" style="letter-spacing:.2em;color:#ffd84a;font-size:1rem"></b></div><div id="jcList" style="width:100%;font:700 .72rem system-ui;text-align:left;column-count:2;column-gap:8px"></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center"><button class="btn" id="jcCpu" style="font-size:.7rem;padding:5px 10px">+ CPU</button><button class="btn ghost" id="jcCpuX" style="font-size:.7rem;padding:5px 10px;display:none">- CPU</button></div>';
+  jc.style.cssText="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99997;display:none;width:min(420px,88vw);background:rgba(10,6,40,.97);box-shadow:0 0 0 100vmax rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:10px;color:#fff;font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center";
+  jc.innerHTML='<div style="font:800 1.1rem system-ui;letter-spacing:.12em;text-transform:uppercase;color:#ffd84a">Scan to join</div><img alt="" style="width:100%;max-width:min(300px,55vh);aspect-ratio:1;background:#fff;padding:5px;border-radius:8px"><div style="font:700 1rem system-ui;opacity:.85">code <b id="jcCode" style="letter-spacing:.2em;color:#ffd84a;font-size:1.6rem"></b></div><div id="jcList" style="width:100%;font:700 1rem system-ui;text-align:left;column-count:2;column-gap:8px"></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center"><button class="btn gold" id="jcClose" style="font-size:.9rem;padding:8px 18px">Close</button><button class="btn" id="jcCpu" style="font-size:.7rem;padding:5px 10px">+ CPU</button><button class="btn ghost" id="jcCpuX" style="font-size:.7rem;padding:5px 10px;display:none">- CPU</button></div>';
   let jcKey="";
   const paintJc=()=>{
     const lob=[...LINK.lobby?LINK.lobby():[]];const k=LINK.code+"|"+JSON.stringify(lob.map(p=>[p.pid,p.name,!!p.cpu]));
@@ -60,11 +60,18 @@
     jc.querySelector("#jcCpuX").style.display=lob.some(p=>p.cpu)?"":"none";
   };
   jc.querySelector("#jcCpu").onclick=()=>LINK.addCpu&&LINK.addCpu();jc.querySelector("#jcCpuX").onclick=()=>LINK.removeCpu&&LINK.removeCpu();
-  const mountJc=()=>{const h=hubEl();if(h&&!jc.parentNode)h.appendChild(jc)};
-  mountJc();setTimeout(mountJc,500);addEventListener("DOMContentLoaded",mountJc);setInterval(()=>{mountJc();paintJc()},800);
+  const jb=document.createElement("button");jb.className="btn";jb.id="joinBtn";
+  jb.style.cssText="position:absolute;top:12px;left:16px;z-index:5;font-size:.85rem;padding:8px 16px";
+  const jcOpen=()=>jc.style.display==="flex";
+  const jcToggle=()=>{if(jcOpen()){jc.style.display="none";jb.focus&&jb.focus()}else{jcKey="";paintJc();jc.style.display="flex";const c=jc.querySelector("#jcClose");c&&c.focus()}};
+  jb.onclick=jcToggle;jc.querySelector("#jcClose").onclick=jcToggle;
+  const paintJb=()=>{const n=(LINK.lobby?LINK.lobby():[]).length;jb.textContent=n?"📱 Join · "+n+" in":"📱 Join with phones"};
+  const mountJb=()=>{const h=hubEl();if(h&&!jb.parentNode)h.appendChild(jb);if(!jc.parentNode)document.body.appendChild(jc);paintJb()};
+  mountJb();setTimeout(mountJb,500);addEventListener("DOMContentLoaded",mountJb);setInterval(()=>{mountJb();if(jcOpen())paintJc()},800);
+  addEventListener("keydown",e=>{if(jcOpen()&&(e.key==="Escape"||e.key==="Backspace"||e.keyCode===4)){e.preventDefault();e.stopPropagation();jcToggle()}},true);
   document.addEventListener("keydown",e=>{if([403,404,405,406,183,184,185,186,82,93].includes(e.keyCode)||e.key==="ContextMenu"||e.key==="p"&&e.altKey){e.preventDefault();toggle()}},true);
   const ob=window.__gnBack;
-  window.__gnBack=function(){if(dlg.style.display==="flex"){dlg.style.display="none";return true}return ob?ob.apply(this,arguments):false};
+  window.__gnBack=function(){if(typeof jcOpen==="function"&&jcOpen()){jcToggle();return true}if(dlg.style.display==="flex"){dlg.style.display="none";return true}return ob?ob.apply(this,arguments):false};
   chip.onclick=toggle;chip.onkeydown=e=>{if(e.key==="Enter")toggle()};
   document.addEventListener("keydown",e=>{if(dlg.style.display==="flex"&&(e.key==="Escape"||e.key==="Backspace"||e.keyCode===4)){dlg.style.display="none";e.preventDefault();e.stopPropagation()}},true);
 
