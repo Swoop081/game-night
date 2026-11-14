@@ -1,5 +1,5 @@
 {
- "checked": "8 November 2026",
+ "checked": "15 November 2026",
  "retailers": {
   "Woolworths": {
    "ok": false,
@@ -26,15 +26,15 @@
    "notes": [
     "tim tam: 4 (raw 12, \"Search tim tam | Coles\")",
     "vegemite: 4 (raw 15, \"Search vegemite | Coles\")",
-    "milo: 4 (raw 21, \"Search milo | Coles\")",
-    "weet-bix: 4 (raw 18, \"Search weet-bix | Coles\")",
+    "milo: 4 (raw 20, \"Search milo | Coles\")",
+    "weet-bix: 4 (raw 19, \"Search weet-bix | Coles\")",
     "pepsi max: 4 (raw 14, \"Search pepsi max | Coles\")",
     "kit kat: 4 (raw 19, \"Search kit kat | Coles\")",
     "doritos: 4 (raw 27, \"Search doritos | Coles\")",
-    "ice cream: 4 (raw 55, \"Search ice cream | Coles\")",
+    "ice cream: 4 (raw 57, \"Search ice cream | Coles\")",
     "coffee pods: 4 (raw 49, \"Search coffee pods | Coles\")",
     "dishwasher tablets: 4 (raw 41, \"Search dishwasher tablets | Coles\")",
-    "sausages: 4 (raw 49, \"Search sausages | Coles\")",
+    "sausages: 4 (raw 51, \"Search sausages | Coles\")",
     "nutella: 4 (raw 11, \"Search nutella | Coles\")"
    ]
   },
@@ -95,25 +95,25 @@
   },
   "JB Hi-Fi": {
    "ok": true,
-   "count": 28,
+   "count": 39,
    "notes": [
-    "65 inch tv: 4 (raw 7, \"Search results: '65 inch tv' | JB Hi-Fi\")",
-    "noise cancelling headphones: 2 (raw 2, \"Search results: 'noise cancelling headphones' | JB Hi-Fi\")",
-    "playstation 5: 0 (raw 0, \"Search results: 'playstation 5' | JB Hi-Fi\")",
-    "xbox: 0 (raw 0, \"Search results: 'xbox' | JB Hi-Fi\")",
-    "laptop: 4 (raw 13, \"Search results: 'laptop' | JB Hi-Fi\")",
-    "soundbar: 4 (raw 8, \"Search results: 'soundbar' | JB Hi-Fi\")",
-    "airpods: 2 (raw 8, \"Search results: 'airpods' | JB Hi-Fi\")",
-    "smartwatch: 4 (raw 10, \"Search results: 'smartwatch' | JB Hi-Fi\")",
-    "robot vacuum: 4 (raw 10, \"Search results: 'robot vacuum' | JB Hi-Fi\")",
-    "coffee machine: 4 (raw 9, \"Search results: 'coffee machine' | JB Hi-Fi\")"
+    "65 inch tv: 4 (raw 10, \"Search results: '65 inch tv' | JB Hi-Fi\")",
+    "noise cancelling headphones: 4 (raw 26, \"Search results: 'noise cancelling headphones' | JB Hi-Fi\")",
+    "playstation 5: 3 (raw 4, \"Search results: 'playstation 5' | JB Hi-Fi\")",
+    "xbox: 4 (raw 11, \"Search results: 'xbox' | JB Hi-Fi\")",
+    "laptop: 4 (raw 27, \"Search results: 'laptop' | JB Hi-Fi\")",
+    "soundbar: 4 (raw 21, \"Search results: 'soundbar' | JB Hi-Fi\")",
+    "airpods: 4 (raw 13, \"Search results: 'airpods' | JB Hi-Fi\")",
+    "smartwatch: 4 (raw 24, \"Search results: 'smartwatch' | JB Hi-Fi\")",
+    "robot vacuum: 4 (raw 18, \"Search results: 'robot vacuum' | JB Hi-Fi\")",
+    "coffee machine: 4 (raw 21, \"Search results: 'coffee machine' | JB Hi-Fi\")"
    ]
   },
   "Officeworks": {
    "ok": true,
    "count": 16,
    "notes": [
-    "office chair: 4 (raw 72, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
+    "office chair: 4 (raw 96, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "printer: 4 (raw 96, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "standing desk: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
     "calculator: 4 (raw 48, \"Officeworks | Stationery, Laptops, Furniture, Paper at Low P\")",
@@ -123,13 +123,13 @@
   },
   "Target": {
    "ok": true,
-   "count": 16,
+   "count": 12,
    "notes": [
-    "bath towel: 4 (raw 42, \"Search Results | Target Australia\")",
-    "pyjamas: 4 (raw 46, \"Search Results | Target Australia\")",
-    "toy: 4 (raw 45, \"Search Results | Target Australia\")",
-    "sneakers: 4 (raw 43, \"Search Results | Target Australia\")",
-    "bedding: 0 (raw 46, \"Search Results | Target Australia\")"
+    "bath towel: 4 (raw 43, \"Search Results | Target Australia\")",
+    "pyjamas: 4 (raw 47, \"Search Results | Target Australia\")",
+    "toy: 4 (raw 46, \"Search Results | Target Australia\")",
+    "sneakers: 0 (raw 0, \"Hmm... That’s not supposed to happen – Target Australia\")",
+    "bedding: 0 (raw 47, \"Search Results | Target Australia\")"
    ]
   },
   "Aldi": {
@@ -147,7 +147,7 @@
    "ok": true,
    "count": 40,
    "notes": [
-    "https://www.ikea.com/au/en/cat/sofas-fu003/: 8 (raw 26, \"Sofas, Couches, and Lounges: Create a Relaxing Living Space \")",
+    "https://www.ikea.com/au/en/cat/sofas-fu003/: 8 (raw 28, \"Sofas, Couches, and Lounges: Create a Relaxing Living Space \")",
     "https://www.ikea.com/au/en/cat/beds-bm003/: 8 (raw 23, \"Beds and Bed Frames: Get a Good Night's Sleep - IKEA\")",
     "https://www.ikea.com/au/en/cat/dining-tables-21825/: 8 (raw 25, \"Dining Room Tables | Round, Square, Wooden & All Sorts - IKE\")",
     "https://www.ikea.com/au/en/cat/armchairs-fu006/: 8 (raw 23, \"Armchairs - Accent Chairs - Affordable & Comfortable - IKEA\")",
@@ -156,9 +156,9 @@
   }
  },
  "official": {
-  "iPhone 17": "https://www.apple.com/v/iphone-17/i/images/meta/iphone-17_overview__cg0rlzmbhl7m_og.png?202610291839",
+  "iPhone 17": "https://www.apple.com/v/iphone-17/j/images/meta/iphone-17_overview__cg0rlzmbhl7m_og.png?202611101944",
   "iPad ": "https://www.apple.com/au/ipad-11/images/meta/ipad-11_overview__xfht9uzr5k2i_og.png?202610252224",
-  "iPad mini": "https://www.apple.com/v/ipad-mini/a/images/meta/ipad_mini__e7xl5m9es5ea_og.png?202610252224",
+  "iPad mini": "https://www.apple.com/v/ipad-mini/a/images/meta/ipad_mini__e7xl5m9es5ea_og.png?202611111958",
   "iPad Air": "https://www.apple.com/v/ipad-air/ah/images/meta/ipad-air_overview__bc2fd15uec0y_og.png?202610202050",
   "iPad Pro": "https://www.apple.com/v/ipad-pro/aw/images/meta/ipad-pro_overview__bu4cql27diaa_og.png?202610202050",
   "MG3": "https://dealers.virtualyard.com.au/vydata/485843481a7edacbfce101ecb1e4d2a8/d843d37ddf105e87e013c56d7afc8a08.jpg",
